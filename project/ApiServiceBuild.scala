@@ -21,7 +21,7 @@ import uk.gov.hmrc.versioning.SbtGitVersioning
 
 object ApiServiceBuild extends Build with MicroService {
 
-  val appName = "trust-registration"
+  val appName = "trust-registration-api"
 
   override lazy val plugins: Seq[Plugins] = Seq(
     SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin
