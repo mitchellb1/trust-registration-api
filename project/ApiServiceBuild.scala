@@ -30,7 +30,6 @@ private object AppDependencies {
   private val playReactivemongoVersion = "4.8.0"
   private val scalaTestPlusVersion = "1.2.0"
 
-
   val compile = Seq(
     "uk.gov.hmrc" %% "play-reactivemongo" % playReactivemongoVersion,
 
