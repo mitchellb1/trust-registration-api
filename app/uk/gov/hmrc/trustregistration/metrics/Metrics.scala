@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.controllers
+package uk.gov.hmrc.trustregistration.metrics
 
-import uk.gov.hmrc.play.microservice.controller.BaseController
-import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
-import play.api.mvc._
-import scala.concurrent.Future
+import java.util.concurrent.TimeUnit
 
-trait ApiHelloWorld extends BaseController {
+import com.kenshoo.play.metrics.MetricsRegistry
 
-	def hello() = Action.async { implicit request =>
-		Future.successful(Ok("Hello world"))
-	}
+trait Metrics {
+  def desConnectorTimer(diff: Long, unit: TimeUnit, method: String): Unit
 }
 
-object ApiHelloWorld extends ApiHelloWorld
+object Metrics extends Metrics {
+  override def desConnectorTimer(diff: Long, unit: TimeUnit, method: String) =
+    MetricsRegistry.defaultRegistry.timer(s"des-connector-${method}-timer").update(diff, unit)
+}

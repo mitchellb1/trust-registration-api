@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.controllers
+package uk.gov.hmrc.trustregistration.models
 
-import uk.gov.hmrc.play.microservice.controller.BaseController
-import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
-import play.api.mvc._
-import scala.concurrent.Future
+import play.api.libs.json.Json
 
-trait ApiHelloWorld extends BaseController {
 
-	def hello() = Action.async { implicit request =>
-		Future.successful(Ok("Hello world"))
-	}
+case class RegistrationDocument(value: String)
+
+object RegistrationDocument {
+  implicit val formats = Json.format[RegistrationDocument]
 }
-
-object ApiHelloWorld extends ApiHelloWorld

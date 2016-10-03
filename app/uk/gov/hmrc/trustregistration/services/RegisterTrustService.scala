@@ -14,18 +14,24 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.controllers
+package uk.gov.hmrc.trustregistration.services
 
-import uk.gov.hmrc.play.microservice.controller.BaseController
-import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
-import play.api.mvc._
+import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.trustregistration.models.{RegistrationDocument, TRN}
+import uk.gov.hmrc.trustregistration.connectors.DesConnector
+
 import scala.concurrent.Future
 
-trait ApiHelloWorld extends BaseController {
+trait RegisterTrustService {
 
-	def hello() = Action.async { implicit request =>
-		Future.successful(Ok("Hello world"))
-	}
+  val desConnector: DesConnector
+
+  def registerTrust(regDoc: RegistrationDocument)(implicit hc : HeaderCarrier) : Future[Either[String,TRN]] = {
+    desConnector.registerTrust(regDoc)(hc)
+  }
+
 }
 
-object ApiHelloWorld extends ApiHelloWorld
+object RegisterTrustService extends RegisterTrustService {
+  override val desConnector: DesConnector = DesConnector
+}
