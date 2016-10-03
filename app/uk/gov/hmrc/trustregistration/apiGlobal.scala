@@ -38,7 +38,7 @@ trait ServiceLocatorRegistration extends GlobalSettings with RunMode {
   override def onStart(app: Application): Unit = {
     Logger.debug("Registering with service-locator")
     ServiceLocatorConnector(WSHttp).register map { result =>
-      Logger.debug(s"service-locator registration result: $result")
+      Logger.debug(s"service-locator registraion result: $result")
     }
   }
 }
