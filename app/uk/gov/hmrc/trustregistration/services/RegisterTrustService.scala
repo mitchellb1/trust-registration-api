@@ -24,7 +24,7 @@ import scala.concurrent.Future
 
 trait RegisterTrustService {
 
-  val desConnector = DesConnector
+  val desConnector: DesConnector
 
   def registerTrust(regDoc: RegistrationDocument)(implicit hc : HeaderCarrier) : Future[Either[String,TRN]] = {
     desConnector.registerTrust(regDoc)(hc)
@@ -32,4 +32,6 @@ trait RegisterTrustService {
 
 }
 
-object RegisterTrustService extends RegisterTrustService
+object RegisterTrustService extends RegisterTrustService {
+  override val desConnector: DesConnector = DesConnector
+}

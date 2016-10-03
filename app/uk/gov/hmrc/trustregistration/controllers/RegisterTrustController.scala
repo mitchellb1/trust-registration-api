@@ -31,8 +31,7 @@ trait RegisterTrustController extends BaseController {
 
   def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     val jsonBody: JsResult[RegistrationDocument] = request.body.validate[RegistrationDocument]
-    jsonBody.map {
-      case regDoc: RegistrationDocument => {
+    jsonBody.map { regDoc: RegistrationDocument => {
         val futureEither: Future[Either[String, TRN]] = registerTrustService.registerTrust(regDoc)
         futureEither.flatMap {
           case Right(identifier) => Future.successful(Created(identifier.toString))
@@ -47,32 +46,6 @@ trait RegisterTrustController extends BaseController {
   }
 }
 
-
-
-
-//    try {
-//      val jsonJsValue: JsValue = Json.parse(regDoc)
-//
-//      val returnVal = jsonJsValue.validate[RegistrationDocument] match {
-//        case s: JsSuccess[String] => {
-//          // Save the trustSchema Here
-//          registerTrustService.registerTrust(returnVal).map {
-//            case Right(identifier) => Future.successful(Created(identifier))
-//            case Left(message) => Future.successful(BadRequest(message))
-//          }
-//        }
-//        case e: JsError => {
-//          println("Errors: " )
-//          Future.successful(BadRequest("Failed to validate."))
-//        }
-//      }
-//    }
-//    catch {
-//      case e: Exception => Future.successful(Ok("Failed to parse : "+e.getMessage))
-//    }
-//    Future.successful(Created(""))
-//  }
-//}
 
 object RegisterTrustController extends RegisterTrustController {
   override val registerTrustService = RegisterTrustService

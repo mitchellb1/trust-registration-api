@@ -17,8 +17,12 @@
 package uk.gov.hmrc.trustregistration.services
 
 import org.mockito.Matchers._
+import org.mockito.Mockito.when
+import org.mockito.Mockito.mock
+import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.trustregistration.connectors.DesConnector
 import uk.gov.hmrc.trustregistration.models.{RegistrationDocument, TRN}
 
 import scala.concurrent.duration.Duration
@@ -26,17 +30,30 @@ import scala.concurrent.{Await, Future}
 import scala.util.Right
 
 class RegisterTrustServiceSpec extends PlaySpec
+  with MockitoSugar
   with OneAppPerSuite {
 
   "RegisterTrustService" must {
     "Return a TRN" when {
       "Given a valid registration" in {
-        val registration = RegistrationDocument("TRN-1234")
+
+        when(mockDesConnector.registerTrust(any())(any())).thenReturn(Future.successful(Right(TRN(testTRN))))
+        val registration = RegistrationDocument(testTRN)
+
         val result = Await.result(SUT.registerTrust(registration)(HeaderCarrier()), Duration.Inf)
-        result mustBe Right(TRN("TRN-1234"))
+        result mustBe Right(testTRN)
       }
     }
   }
-  val SUT = RegisterTrustService
+  val mockDesConnector = mock[DesConnector]
+  object TestRegisterTrustService extends RegisterTrustService {
+    override val desConnector: DesConnector = mockDesConnector
+  }
+
+  val testTRN: String = "TRN-1234"
+  val SUT = TestRegisterTrustService
 }
+
+
+
 
