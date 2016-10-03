@@ -38,7 +38,7 @@ class DesConnectorSpec extends PlaySpec
       "given a RegisterDocument" in {
         when (mockHttpPost.POST[RegistrationDocument,HttpResponse](Matchers.any(),Matchers.any(),Matchers.any())
           (Matchers.any(),Matchers.any(),Matchers.any())).
-        thenReturn(Future.successful(HttpResponse(200)))
+        thenReturn(Future.successful(HttpResponse(201)))
         val doc = RegistrationDocument("1234")
         val result = Await.result(SUT.registerTrust(doc),Duration.Inf)
         result mustBe Right(TRN("TRN-1234"))

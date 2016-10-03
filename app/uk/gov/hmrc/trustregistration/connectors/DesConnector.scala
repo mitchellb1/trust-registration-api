@@ -38,7 +38,7 @@ trait DesConnector extends ServicesConfig {
 
     result.map(f=> {
       f.status match{
-        case 200 => Right(TRN("TRN-1234"))
+        case 201 => Right(TRN("TRN-1234"))
         case _ => Left("503")
       }
     }).recover({
