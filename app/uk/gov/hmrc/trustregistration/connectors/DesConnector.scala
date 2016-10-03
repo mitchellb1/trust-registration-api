@@ -19,15 +19,22 @@ package uk.gov.hmrc.trustregistration.connectors
 import uk.gov.hmrc.play.http.{HeaderCarrier, HttpPost, HttpResponse, Upstream4xxResponse}
 import uk.gov.hmrc.trustregistration.WSHttp
 import uk.gov.hmrc.trustregistration.models.{RegistrationDocument, TRN}
+import uk.gov.hmrc.play.config.ServicesConfig
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-trait DesConnector {
+trait DesConnector extends ServicesConfig {
   val httpPost: HttpPost = WSHttp
 
+  lazy val desUrl = baseUrl("des")
+  lazy val serviceUrl = s"$desUrl/trust-registration-stub"
+
   def registerTrust(doc: RegistrationDocument)(implicit hc : HeaderCarrier) = {
-    val result: Future[HttpResponse] = httpPost.POST[RegistrationDocument,HttpResponse]("http://hello.co.uk",doc)
+
+    val uri: String = s"$serviceUrl/hello-world"
+
+    val result: Future[HttpResponse] = httpPost.POST[RegistrationDocument,HttpResponse](uri,doc)
 
     result.map(f=> {
       f.status match{

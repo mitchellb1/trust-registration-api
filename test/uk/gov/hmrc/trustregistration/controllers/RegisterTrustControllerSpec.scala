@@ -33,8 +33,8 @@ import uk.gov.hmrc.trustregistration.services.RegisterTrustService
 import scala.concurrent.Future
 
 
-class RegisterTrustControllerSpec extends PlaySpec with OneAppPerSuite
-
+class RegisterTrustControllerSpec extends PlaySpec
+  with OneAppPerSuite
   with MockitoSugar
   with BeforeAndAfter {
 

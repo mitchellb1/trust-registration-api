@@ -27,7 +27,9 @@ import org.mockito.Matchers
 import org.mockito.Mockito._
 import org.mockito.Matchers.any
 import play.api.libs.json.Writes
-class DesConnectorSpec extends PlaySpec with OneAppPerSuite with MockitoSugar {
+class DesConnectorSpec extends PlaySpec
+  with OneAppPerSuite
+  with MockitoSugar {
 
   implicit val hc = HeaderCarrier()
 

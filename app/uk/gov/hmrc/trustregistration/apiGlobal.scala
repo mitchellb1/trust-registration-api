@@ -82,4 +82,5 @@ object ApiGlobal extends DefaultMicroserviceGlobal with RunMode with ServiceLoca
   override val authFilter = Some(ApiAuthFilter)
 
   override implicit val hc: HeaderCarrier = HeaderCarrier()
+
 }
