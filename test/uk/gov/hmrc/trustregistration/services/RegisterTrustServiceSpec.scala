@@ -38,10 +38,10 @@ class RegisterTrustServiceSpec extends PlaySpec
       "Given a valid registration" in {
 
         when(mockDesConnector.registerTrust(any())(any())).thenReturn(Future.successful(Right(TRN(testTRN))))
-        val registration = RegistrationDocument(testTRN)
+        val registration = RegistrationDocument("this is the input")
 
         val result = Await.result(SUT.registerTrust(registration)(HeaderCarrier()), Duration.Inf)
-        result mustBe Right(testTRN)
+        result mustBe Right(TRN(testTRN))
       }
     }
   }

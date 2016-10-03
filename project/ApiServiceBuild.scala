@@ -5,7 +5,7 @@ import uk.gov.hmrc.versioning.SbtGitVersioning
 
 object ApiServiceBuild extends Build with MicroService {
 
-  val appName = "trust-registration"
+  val appName = "trust-registration-api"
 
   override lazy val plugins: Seq[Plugins] = Seq(
     SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin
@@ -29,7 +29,6 @@ private object AppDependencies {
   private val playHmrcApiVersion = "0.5.0"
   private val playReactivemongoVersion = "4.8.0"
   private val scalaTestPlusVersion = "1.2.0"
-
 
   val compile = Seq(
     "uk.gov.hmrc" %% "play-reactivemongo" % playReactivemongoVersion,
