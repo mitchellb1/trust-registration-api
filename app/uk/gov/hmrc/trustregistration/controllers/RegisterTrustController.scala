@@ -36,9 +36,9 @@ trait RegisterTrustController extends BaseController {
     val jsonBody: JsResult[RegistrationDocument] = request.body.validate[RegistrationDocument]
     jsonBody.map { regDoc: RegistrationDocument => {
         val futureEither: Future[Either[String, TRN]] = registerTrustService.registerTrust(regDoc)
-        futureEither.flatMap {
-          case Right(identifier) => Future.successful(Created(Json.toJson(identifier)))
-          case _ => Future.successful(BadRequest("Error:"))
+        futureEither.map {
+          case Right(identifier) => Created(Json.toJson(identifier))
+          case _ => BadRequest("Error:")
         }
       }
     }.recoverTotal {
