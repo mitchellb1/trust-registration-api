@@ -17,7 +17,7 @@
 package uk.gov.hmrc.trustregistration.controllers
 
 import play.api.Logger
-import play.api.libs.json.{JsError, JsResult, JsValue}
+import play.api.libs.json.{JsError, JsResult, JsValue, Json}
 import play.api.mvc.Action
 import uk.gov.hmrc.play.microservice.controller.BaseController
 import uk.gov.hmrc.trustregistration.models.{RegistrationDocument, TRN}
@@ -36,9 +36,9 @@ trait RegisterTrustController extends BaseController {
     val jsonBody: JsResult[RegistrationDocument] = request.body.validate[RegistrationDocument]
     jsonBody.map { regDoc: RegistrationDocument => {
         val futureEither: Future[Either[String, TRN]] = registerTrustService.registerTrust(regDoc)
-        futureEither.flatMap {
-          case Right(identifier) => Future.successful(Created(identifier.toString))
-          case _ => Future.successful(BadRequest("Error:"))
+        futureEither.map {
+          case Right(identifier) => Created(Json.toJson(identifier))
+          case _ => BadRequest("Error:")
         }
       }
     }.recoverTotal {
