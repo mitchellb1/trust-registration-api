@@ -11,6 +11,8 @@ documentation:
 mediaType: application/hal+json
 resourceTypes:
   base: !include resourceTypes/base.raml
+types:
+  Trustees: !include types/trustees.json
 /trusts:
   type: base
   get:
@@ -52,6 +54,10 @@ resourceTypes:
         description: Retrieves a set of links to the trustees of the Trust
       put:
         description: Updates ALL the trustees of the Trust
+        body:
+          application/json:
+              type: Trustees
+              example: !include examples/trustees-put.json
     /beneficiaries:
       type: base
       get:

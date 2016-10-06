@@ -1,0 +1,10 @@
+{
+	"title": "TODO - Trustees Schema",
+	"type": "object",
+	"properties": {
+		"message": {
+				"type": "string"
+		}
+	},
+	"required": ["message"]
+}
