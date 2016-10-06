@@ -1,7 +1,5 @@
 #%RAML 1.0
-
 title: HMRC Trust Registration Service
-
 version: Beta 1.0
 protocols: [ HTTPS ]
 baseUri: https://api.service.hmrc.gov.uk/
@@ -12,7 +10,7 @@ mediaType: application/hal+json
 resourceTypes:
   base: !include resourceTypes/base.raml
 types:
-  Trustees: !include types/trustees.json
+  Trustees: !include schemas/trust.json#/properties/trustees
 /trusts:
   type: base
   get:
@@ -52,12 +50,19 @@ types:
       type: base
       get:
         description: Retrieves a set of links to the trustees of the Trust
+        responses:
+          200:
+            description: Returns all trustees for a given trust
+            body:
+              application/json:
+                type: Trustees
+                example: !include examples/trustees.json
       put:
         description: Updates ALL the trustees of the Trust
         body:
           application/json:
               type: Trustees
-              example: !include examples/trustees-put.json
+              example: !include examples/trustees.json
     /beneficiaries:
       type: base
       get:
