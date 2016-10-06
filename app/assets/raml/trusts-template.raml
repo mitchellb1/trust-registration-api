@@ -1,6 +1,7 @@
 #%RAML 1.0
 
 title: HMRC Trust Registration Service
+
 version: Beta 1.0
 protocols: [ HTTPS ]
 baseUri: https://api.service.hmrc.gov.uk/
@@ -8,13 +9,17 @@ documentation:
   - title: Trust Registration Service
     content: An API for registering and updating trusts.
 mediaType: application/hal+json
+resourceTypes:
+  base: !include resourceTypes/base.raml
 /trusts:
+  type: base
   get:
     description: Retrieves a list of links to the trusts available to the user
   post:
     description: Submits an entire set of data for a trust
   /utr:
     /{trn}:
+        type: base
         uriParameters:
           trn:
             type: string
@@ -22,6 +27,7 @@ mediaType: application/hal+json
         get:
           description: Retrieves the UTR of the trust
   /{utr}:
+    type: base
     uriParameters:
       utr:
         type: string
@@ -29,49 +35,60 @@ mediaType: application/hal+json
     get:
       description: Retrieves a specific trust
     /lead-trustee-individual:
+      type: base
       get:
         description: Retrieves the information for an lead Trustee as an individual
       put:
         description: Updates the information for an lead Trustee as an individual
     /lead-trustee-company:
+      type: base
       get:
         description: Retrieves the information for an lead Trustee as an company
       put:
         description: Updates the information for an lead Trustee as an company
     /trustees:
+      type: base
       get:
         description: Retrieves a set of links to the trustees of the Trust
       put:
         description: Updates ALL the trustees of the Trust
     /beneficiaries:
+      type: base
       get:
         description: Retrieves a set of links to the beneficiaries of the Trust
       put:
         description: Updates ALL the beneficiaries of the Trust
     /settlors:
+      type: base
       get:
         description: Retrieves a set of links to the settlors for the Trust
       put:
         description: Updates ALL the settlors for the Trust
     /natural-persons:
+      type: base
       get:
         description: Retrieves a set of links to the "natural persons" for the Trust
       put:
         description: Updates ALL the "natural persons" for the Trust
     /protectors:
+      type: base
       get:
         description: Retrieves a set of links to the protectors for the Trust
       put:
         description: Updates ALL the protectors for the Trust
     /confirmation:
+      type: base
       post:
         description: Confirms no change to the trust
     /delete:
+      type: base
       delete:
         description: Deletes the Trust
   /lead-trustee-individual:
+    type: base
     post:
       description: Registers a lead Trustee as an individual
   /lead-trustee-company:
+    type: base
     post:
       description: Registers a lead Trustee as an company
