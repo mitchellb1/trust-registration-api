@@ -14,7 +14,7 @@ types:
 /trusts:
   type: base
   get:
-    description: Retrieves a list of links to the trusts available to the user
+    description: Retrieves all the trusts available to the user
   post:
     description: Submits an entire set of data for a trust
   /utr:
@@ -49,16 +49,15 @@ types:
     /trustees:
       type: base
       get:
-        description: Retrieves a set of links to the trustees of the Trust
+        description: Retrieves all the trustees of the Trust
         responses:
           200:
-            description: Returns all trustees for a given trust
             body:
               application/json:
                 type: Trustees
                 example: !include examples/trustees.json
       put:
-        description: Updates ALL the trustees of the Trust
+        description: Updates all the trustees of the Trust
         body:
           application/json:
               type: Trustees
@@ -66,27 +65,27 @@ types:
     /beneficiaries:
       type: base
       get:
-        description: Retrieves a set of links to the beneficiaries of the Trust
+        description: Retrieves all the beneficiaries of the Trust
       put:
-        description: Updates ALL the beneficiaries of the Trust
+        description: Updates all the beneficiaries of the Trust
     /settlors:
       type: base
       get:
-        description: Retrieves a set of links to the settlors for the Trust
+        description: Retrieves all the settlors for the Trust
       put:
-        description: Updates ALL the settlors for the Trust
+        description: Updates all the settlors for the Trust
     /natural-persons:
       type: base
       get:
-        description: Retrieves a set of links to the "natural persons" for the Trust
+        description: Retrieves all the "natural persons" for the Trust
       put:
-        description: Updates ALL the "natural persons" for the Trust
+        description: Updates all the "natural persons" for the Trust
     /protectors:
       type: base
       get:
-        description: Retrieves a set of links to the protectors for the Trust
+        description: Retrieves all the protectors for the Trust
       put:
-        description: Updates ALL the protectors for the Trust
+        description: Updates all the protectors for the Trust
     /confirmation:
       type: base
       post:
