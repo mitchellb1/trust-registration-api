@@ -11,6 +11,7 @@ resourceTypes:
   base: !include resourceTypes/base.raml
 types:
   Trustees: !include schemas/trust.json#/properties/trustees
+  Protectors: !include schemas/trust.json#/properties/protector
 /trusts:
   type: base
   get:
@@ -84,8 +85,18 @@ types:
       type: base
       get:
         description: Retrieves all the protectors for the Trust
+        responses:
+          200:
+            body:
+              application/json:
+                type: Protectors
+                example: !include examples/protectors.json
       put:
         description: Updates all the protectors for the Trust
+        body:
+          application/json:
+            type: Protectors
+            example: !include examples/protectors.json
     /confirmation:
       type: base
       post:
