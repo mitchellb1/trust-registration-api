@@ -1,10 +1,10 @@
-headers:
-  Content-Type:
-    description: The content type of the request
-    type: string
-    required: false
-    enum: [ application/vnd.hmrc.1.0+json ]
 post?:
+  headers:
+    Content-Type:
+      description: The content type of the request
+      type: string
+      required: false
+      enum: [ application/vnd.hmrc.1.0+json ]
   responses:
     200:
       description: Success
@@ -14,14 +14,14 @@ post?:
         error message will explain further.
       body:
         application/json:
-          schema: !include schemas/error.json
-          example: !include examples/error-400.json
+          schema: !include ../schemas/error.json
+          example: !include ../examples/error-400.json
     401:
       description: Authentication credentials were missing or incorrect.
       body:
         application/json:
-          schema: !include schemas/error.json
-          example: !include examples/error-401.json
+          schema: !include ../schemas/error.json
+          example: !include ../examples/error-401.json
     403:
       description: |
         The request has been refused. An error message will explain further. It
@@ -29,8 +29,8 @@ post?:
         for the trust.
       body:
         application/json:
-          schema: !include schemas/error.json
-          example: !include examples/error-403.json
+          schema: !include ../schemas/error.json
+          example: !include ../examples/error-403.json
     404:
       description: |
         The URI requested is invalid or the resource (i.e. trust) requested
@@ -45,16 +45,22 @@ post?:
         support.
       body:
         application/json:
-          schema: !include schemas/error.json
-          example: !include examples/error-500.json
+          schema: !include ../schemas/error.json
+          example: !include ../examples/error-500.json
     503:
       description: |
         The API is unavailable. Try again later.
       body:
         application/json:
-          schema: !include schemas/error.json
-          example: !include examples/error-503.json
+          schema: !include ../schemas/error.json
+          example: !include ../examples/error-503.json
 get?:
+  headers:
+    Content-Type:
+      description: The content type of the request
+      type: string
+      required: false
+      enum: [ application/vnd.hmrc.1.0+json ]
   responses:
     200:
       description: Success
@@ -64,14 +70,14 @@ get?:
         error message will explain further.
       body:
         application/json:
-          schema: !include schemas/error.json
-          example: !include examples/error-400.json
+          schema: !include ../schemas/error.json
+          example: !include ../examples/error-400.json
     401:
       description: Authentication credentials were missing or incorrect.
       body:
         application/json:
-          schema: !include schemas/error.json
-          example: !include examples/error-401.json
+          schema: !include ../schemas/error.json
+          example: !include ../examples/error-401.json
     403:
       description: |
         The request has been refused. An error message will explain further. It
@@ -79,32 +85,38 @@ get?:
         for the trust.
       body:
         application/json:
-          schema: !include schemas/error.json
-          example: !include examples/error-403.json
+          schema: !include ../schemas/error.json
+          example: !include ../examples/error-403.json
     404:
       description: |
         The URI requested is invalid or the resource (i.e. trust) requested
         does not exist.
       body:
         application/json:
-          schema: !include schemas/error.json
-          example: !include examples/error-404.json
+          schema: !include ../schemas/error.json
+          example: !include ../examples/error-404.json
     500:
       description: |
         Something is broken. Try again later. If the problem persists contact
         support.
       body:
         application/json:
-          schema: !include schemas/error.json
-          example: !include examples/error-500.json
+          schema: !include ../schemas/error.json
+          example: !include ../examples/error-500.json
     503:
       description: |
         The API is unavailable. Try again later.
       body:
         application/json:
-          schema: !include schemas/error.json
-          example: !include examples/error-503.json
+          schema: !include ../schemas/error.json
+          example: !include ../examples/error-503.json
 put?:
+  headers:
+    Content-Type:
+      description: The content type of the request
+      type: string
+      required: false
+      enum: [ application/vnd.hmrc.1.0+json ]
   responses:
     200:
       description: Success
@@ -114,14 +126,14 @@ put?:
         error message will explain further.
       body:
         application/json:
-          schema: !include schemas/error.json
-          example: !include examples/error-400.json
+          schema: !include ../schemas/error.json
+          example: !include ../examples/error-400.json
     401:
       description: Authentication credentials were missing or incorrect.
       body:
         application/json:
-          schema: !include schemas/error.json
-          example: !include examples/error-401.json
+          schema: !include ../schemas/error.json
+          example: !include ../examples/error-401.json
     403:
       description: |
         The request has been refused. An error message will explain further. It
@@ -129,32 +141,38 @@ put?:
         for the trust.
       body:
         application/json:
-          schema: !include schemas/error.json
-          example: !include examples/error-403.json
+          schema: !include ../schemas/error.json
+          example: !include ../examples/error-403.json
     404:
       description: |
         The URI requested is invalid or the resource (i.e. trust) requested
         does not exist.
       body:
         application/json:
-          schema: !include schemas/error.json
-          example: !include examples/error-404.json
+          schema: !include ../schemas/error.json
+          example: !include ../examples/error-404.json
     500:
       description: |
         Something is broken. Try again later. If the problem persists contact
         support.
       body:
         application/json:
-          schema: !include schemas/error.json
-          example: !include examples/error-500.json
+          schema: !include ../schemas/error.json
+          example: !include ../examples/error-500.json
     503:
       description: |
         The API is unavailable. Try again later
       body:
         application/json:
-          schema: !include schemas/error.json
-          example: !include examples/error-503.json
+          schema: !include ../schemas/error.json
+          example: !include ../examples/error-503.json
 delete?:
+  headers:
+    Content-Type:
+      description: The content type of the request
+      type: string
+      required: false
+      enum: [ application/vnd.hmrc.1.0+json ]
   responses:
     200:
       description: Success
@@ -164,14 +182,14 @@ delete?:
         error message will explain further.
       body:
         application/json:
-          schema: !include schemas/.json
-          example: !include examples/error-400.json
+          schema: !include ../schemas/error.json
+          example: !include ../examples/error-400.json
     401:
       description: Authentication credentials were missing or incorrect.
       body:
         application/json:
-          schema: !include schemas/error.json
-          example: !include examples/error-401.json
+          schema: !include ../schemas/error.json
+          example: !include ../examples/error-401.json
     403:
       description: |
         The request has been refused. An error message will explain further. It
@@ -179,28 +197,28 @@ delete?:
         for the trust.
       body:
         application/json:
-          schema: !include schemas/error.json
-          example: !include examples/error-403.json
+          schema: !include ../schemas/error.json
+          example: !include ../examples/error-403.json
     404:
       description: |
         The URI requested is invalid or the resource (i.e. trust) requested
         does not exist.
       body:
         application/json:
-          schema: !include schemas/error.json
-          example: !include examples/error-404.json
+          schema: !include ../schemas/error.json
+          example: !include ../examples/error-404.json
     500:
       description: |
         Something is broken. Try again later. If the problem persists contact
         support.
       body:
         application/json:
-          schema: !include schemas/error.json
-          example: !include examples/error-500.json
+          schema: !include ../schemas/error.json
+          example: !include ../examples/error-500.json
     503:
       description: |
         The API is unavailable. Try again later.
       body:
         application/json:
-          schema: !include schemas/error.json
-          example: !include examples/error-503.json
+          schema: !include ../schemas/error.json
+          example: !include ../examples/error-503.json
