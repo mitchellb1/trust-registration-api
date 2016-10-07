@@ -11,6 +11,7 @@ resourceTypes:
   base: !include resourceTypes/base.raml
 types:
   Trustees: !include schemas/trust.json#/properties/trustees
+  Beneficiaries: !include schemas/trust.json#/properties/beneficiaries
   Protectors: !include schemas/trust.json#/properties/protector
 /trusts:
   type: base
@@ -67,8 +68,18 @@ types:
       type: base
       get:
         description: Retrieves all the beneficiaries of the Trust
+        responses:
+          200:
+            body:
+              application/json:
+                type: Beneficiaries
+                example: !include examples/beneficiaries.json
       put:
         description: Updates all the beneficiaries of the Trust
+        body:
+          application/json:
+              type: Beneficiaries
+              example: !include examples/beneficiaries.json
     /settlors:
       type: base
       get:
