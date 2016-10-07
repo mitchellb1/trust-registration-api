@@ -3,7 +3,7 @@ post?:
     Content-Type:
       description: The content type of the request
       type: string
-      required: false
+      required: true
       enum: [ application/vnd.hmrc.1.0+json ]
   responses:
     200:
@@ -37,8 +37,8 @@ post?:
         does not exist.
       body:
         application/json:
-          schema: !include schemas/error.json
-          example: !include examples/error-404.json
+          schema: !include ../schemas/error.json
+          example: !include ../examples/error-404.json
     500:
       description: |
         Something is broken. Try again later. If the problem persists contact
@@ -59,7 +59,7 @@ get?:
     Content-Type:
       description: The content type of the request
       type: string
-      required: false
+      required: true
       enum: [ application/vnd.hmrc.1.0+json ]
   responses:
     200:
@@ -115,7 +115,7 @@ put?:
     Content-Type:
       description: The content type of the request
       type: string
-      required: false
+      required: true
       enum: [ application/vnd.hmrc.1.0+json ]
   responses:
     200:
@@ -171,7 +171,7 @@ delete?:
     Content-Type:
       description: The content type of the request
       type: string
-      required: false
+      required: true
       enum: [ application/vnd.hmrc.1.0+json ]
   responses:
     200:
