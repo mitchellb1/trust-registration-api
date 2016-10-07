@@ -1,0 +1,44 @@
+[
+  {
+    "individual": {
+      "title": "Mr",
+      "firstName": "John",
+      "middleName": "",
+      "surname": "Doe",
+      "country": "UK",
+      "isUkNational": true,
+      "nino": "WA123456C",
+      "passport": {
+        "identifier": "123456789",
+        "date": "2015-01-20"
+      }
+    },
+    "isSettlorUkNational": true,
+    "isVulnerableBeneficiary": true,
+    "income": {
+        "benDiscretion": "sample",
+        "benPercent": "sample"
+    }
+  },
+  {
+    "individual": {
+      "title": "Mr",
+      "firstName": "John",
+      "middleName": "",
+      "surname": "Doe",
+      "country": "UK",
+      "isUkNational": true,
+      "nino": "WA123456C",
+      "passport": {
+        "identifier": "123456789",
+        "date": "2015-01-20"
+      }
+    },
+    "isSettlorUkNational": true,
+    "isVulnerableBeneficiary": true,
+    "income": {
+        "benDiscretion": "sample",
+        "benPercent": "sample"
+      }
+    }
+]
