@@ -12,6 +12,7 @@ resourceTypes:
 types:
   Trustees: !include schemas/trust.json#/properties/trustees
   Beneficiaries: !include schemas/trust.json#/properties/beneficiaries
+  Settlors: !include schemas/trust.json#/properties/settlor
 /trusts:
   type: base
   get:
@@ -83,8 +84,18 @@ types:
       type: base
       get:
         description: Retrieves all the settlors for the Trust
+        responses:
+          200:
+            body:
+              application/json:
+                type: Settlors
+                example: !include examples/settlors.json
       put:
         description: Updates all the settlors for the Trust
+        body:
+          application/json:
+              type: Settlors
+              example: !include examples/settlors.json
     /natural-persons:
       type: base
       get:
