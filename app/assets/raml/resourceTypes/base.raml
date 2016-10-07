@@ -12,24 +12,48 @@ post?:
       description: |
         The request was invalid or cannot be otherwise served. An accompanying
         error message will explain further.
+      body:
+        application/json:
+          schema: !include schemas/error.json
+          example: !include examples/error-400.json
     401:
       description: Authentication credentials were missing or incorrect.
+      body:
+        application/json:
+          schema: !include schemas/error.json
+          example: !include examples/error-401.json
     403:
       description: |
         The request has been refused. An error message will explain further. It
         is likely the current user does not have permission to update the data
         for the trust.
+      body:
+        application/json:
+          schema: !include schemas/error.json
+          example: !include examples/error-403.json
     404:
       description: |
         The URI requested is invalid or the resource (i.e. trust) requested
         does not exist.
+      body:
+        application/json:
+          schema: !include schemas/error.json
+          example: !include examples/error-404.json
     500:
       description: |
         Something is broken. Try again later. If the problem persists contact
         support.
+      body:
+        application/json:
+          schema: !include schemas/error.json
+          example: !include examples/error-500.json
     503:
       description: |
         The API is unavailable. Try again later.
+      body:
+        application/json:
+          schema: !include schemas/error.json
+          example: !include examples/error-503.json
 get?:
   responses:
     200:
@@ -38,24 +62,48 @@ get?:
       description: |
         The request was invalid or cannot be otherwise served. An accompanying
         error message will explain further.
+      body:
+        application/json:
+          schema: !include schemas/error.json
+          example: !include examples/error-400.json
     401:
       description: Authentication credentials were missing or incorrect.
+      body:
+        application/json:
+          schema: !include schemas/error.json
+          example: !include examples/error-401.json
     403:
       description: |
         The request has been refused. An error message will explain further. It
         is likely the current user does not have permission to update the data
         for the trust.
+      body:
+        application/json:
+          schema: !include schemas/error.json
+          example: !include examples/error-403.json
     404:
       description: |
         The URI requested is invalid or the resource (i.e. trust) requested
         does not exist.
+      body:
+        application/json:
+          schema: !include schemas/error.json
+          example: !include examples/error-404.json
     500:
       description: |
         Something is broken. Try again later. If the problem persists contact
         support.
+      body:
+        application/json:
+          schema: !include schemas/error.json
+          example: !include examples/error-500.json
     503:
       description: |
         The API is unavailable. Try again later.
+      body:
+        application/json:
+          schema: !include schemas/error.json
+          example: !include examples/error-503.json
 put?:
   responses:
     200:
@@ -64,24 +112,48 @@ put?:
       description: |
         The request was invalid or cannot be otherwise served. An accompanying
         error message will explain further.
+      body:
+        application/json:
+          schema: !include schemas/error.json
+          example: !include examples/error-400.json
     401:
       description: Authentication credentials were missing or incorrect.
+      body:
+        application/json:
+          schema: !include schemas/error.json
+          example: !include examples/error-401.json
     403:
       description: |
         The request has been refused. An error message will explain further. It
         is likely the current user does not have permission to update the data
         for the trust.
+      body:
+        application/json:
+          schema: !include schemas/error.json
+          example: !include examples/error-403.json
     404:
       description: |
         The URI requested is invalid or the resource (i.e. trust) requested
         does not exist.
+      body:
+        application/json:
+          schema: !include schemas/error.json
+          example: !include examples/error-404.json
     500:
       description: |
         Something is broken. Try again later. If the problem persists contact
         support.
+      body:
+        application/json:
+          schema: !include schemas/error.json
+          example: !include examples/error-500.json
     503:
       description: |
-        The API is unavailable. Try again later.
+        The API is unavailable. Try again later
+      body:
+        application/json:
+          schema: !include schemas/error.json
+          example: !include examples/error-503.json
 delete?:
   responses:
     200:
@@ -90,21 +162,45 @@ delete?:
       description: |
         The request was invalid or cannot be otherwise served. An accompanying
         error message will explain further.
+      body:
+        application/json:
+          schema: !include schemas/.json
+          example: !include examples/error-400.json
     401:
       description: Authentication credentials were missing or incorrect.
+      body:
+        application/json:
+          schema: !include schemas/error.json
+          example: !include examples/error-401.json
     403:
       description: |
         The request has been refused. An error message will explain further. It
         is likely the current user does not have permission to update the data
         for the trust.
+      body:
+        application/json:
+          schema: !include schemas/error.json
+          example: !include examples/error-403.json
     404:
       description: |
         The URI requested is invalid or the resource (i.e. trust) requested
         does not exist.
+      body:
+        application/json:
+          schema: !include schemas/error.json
+          example: !include examples/error-404.json
     500:
       description: |
         Something is broken. Try again later. If the problem persists contact
         support.
+      body:
+        application/json:
+          schema: !include schemas/error.json
+          example: !include examples/error-500.json
     503:
       description: |
         The API is unavailable. Try again later.
+      body:
+        application/json:
+          schema: !include schemas/error.json
+          example: !include examples/error-503.json

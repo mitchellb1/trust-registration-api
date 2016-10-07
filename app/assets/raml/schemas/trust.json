@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema",
-  "id": "http://uk/gov/hmrc/trustregistration/raml/schemas/trustschema.json",
+  "id": "http://uk/gov/hmrc/trustregistration/raml/schemas/trust.json",
   "type": "object",
   "properties": {
     "41gOptions": {
