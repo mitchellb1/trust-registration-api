@@ -153,6 +153,10 @@ types:
     type: base
     post:
       description: Registers a lead Trustee as an individual
+      body:
+        application/json:
+          type: LeadTrustee
+          example: !include examples/leadTrustee.json
   /lead-trustee-company:
     type: base
     post:
