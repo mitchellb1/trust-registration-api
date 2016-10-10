@@ -1,0 +1,52 @@
+[
+  {
+    "individual": {
+      "title": "Mr",
+      "firstName": "John",
+      "middleName": "",
+      "surname": "Doe",
+      "country": "UK",
+      "isUkNational": true,
+      "nino": "WA123456C",
+      "passport": {
+        "identifier": "123456789",
+        "date": "2015-01-20"
+      }
+    },
+    "dateOfBirth": "1950-01-20",
+    "correspondenceAddress": {
+      "isNonUkAddress": false,
+      "addressLine1": "1 Any Street",
+      "addressLine2": "",
+      "addressLine3": "",
+      "addressLine4": "Any Town",
+      "postcode":  "NE30 21BR",
+      "Country": "UK"
+    }
+  },
+  {
+    "individual": {
+      "title": "Mrs",
+      "firstName": "Jane",
+      "middleName": "",
+      "surname": "Doe",
+      "country": "UK",
+      "isUkNational": true,
+      "nino": "WA123458A",
+      "passport": {
+        "identifier": "123412349",
+        "date": "2015-01-20"
+      }
+    },
+    "dateOfBirth": "1950-01-20",
+    "correspondenceAddress": {
+      "isNonUkAddress": false,
+      "addressLine1": "1 Any Road",
+      "addressLine2": "",
+      "addressLine3": "",
+      "addressLine4": "Any Village",
+      "postcode": "NE1 31BR",
+      "Country": "UK"
+    }
+  }
+]
