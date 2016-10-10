@@ -15,6 +15,7 @@ types:
   Settlors: !include schemas/trust.json#/properties/settlor
   Protectors: !include schemas/trust.json#/properties/protector
   LeadTrustee: !include schemas/trust.json#/properties/leadTrustee
+  NaturalPersons: !include schemas/trust.json#/properties/naturalPersons
 /trusts:
   type: base
   get:
@@ -112,8 +113,18 @@ types:
       type: base
       get:
         description: Retrieves all the "natural persons" for the Trust
+        responses:
+          200:
+            body:
+              application/json:
+                type: NaturalPersons
+                example: !include examples/natural-persons.json
       put:
         description: Updates all the "natural persons" for the Trust
+        body:
+          application/json:
+              type: NaturalPersons
+              example: !include examples/natural-persons.json
     /protectors:
       type: base
       get:
