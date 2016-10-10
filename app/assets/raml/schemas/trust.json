@@ -329,10 +329,14 @@
           ]
         }
       },
-      "required": [
-        "person",
-        "company"
-      ]
+     "oneOf" : [
+       {
+         "required" : ["person"]
+       },
+       {
+         "required" : ["company"]
+       }
+     ]
     },
     "protector": {
       "type": "object",
