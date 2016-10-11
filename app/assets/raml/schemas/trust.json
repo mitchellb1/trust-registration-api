@@ -269,7 +269,7 @@
         "person": {
           "type": "object",
           "properties": {
-            "individual1": {
+            "individual": {
               "$ref": "#/definitions/individual"
             },
             "dateOfBirth": {
@@ -286,7 +286,7 @@
             }
           },
           "required": [
-            "individual1",
+            "individual",
             "dateOfBirth",
             "correspondenceAddress",
             "leadTrusteeDate",
@@ -329,10 +329,14 @@
           ]
         }
       },
-      "required": [
-        "person",
-        "company"
-      ]
+     "oneOf" : [
+       {
+         "required" : ["person"]
+       },
+       {
+         "required" : ["company"]
+       }
+     ]
     },
     "protector": {
       "type": "object",

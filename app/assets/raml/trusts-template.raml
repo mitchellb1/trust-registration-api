@@ -14,7 +14,8 @@ types:
   Beneficiaries: !include schemas/trust.json#/properties/beneficiaries
   Settlors: !include schemas/trust.json#/properties/settlor
   Protectors: !include schemas/trust.json#/properties/protector
-  LeadTrustee: !include schemas/trust.json#/properties/leadTrustee
+  LeadTrusteeIndividual: !include schemas/trust.json#/properties/leadTrustee/properties/person
+  LeadTrusteeCompany: !include schemas/trust.json#/properties/leadTrustee/properties/company
   NaturalPersons: !include schemas/trust.json#/properties/naturalPersons
 /trusts:
   type: base
@@ -47,20 +48,30 @@ types:
           200:
             body:
               application/json:
-                type: LeadTrustee
-                example: !include examples/leadTrustee.json
+                type: LeadTrusteeIndividual
+                example: !include examples/lead-trustee-individual.json
       put:
         description: Updates the information for an lead Trustee as an individual
         body:
           application/json:
-            type: LeadTrustee
-            example: !include examples/leadTrustee.json
+            type: LeadTrusteeIndividual
+            example: !include examples/lead-trustee-individual.json
     /lead-trustee-company:
       type: base
       get:
         description: Retrieves the information for an lead Trustee as an company
+        responses:
+          200:
+            body:
+              application/json:
+                type: LeadTrusteeCompany
+                example: !include examples/lead-trustee-company.json
       put:
         description: Updates the information for an lead Trustee as an company
+        body:
+          application/json:
+            type: LeadTrusteeCompany
+            example: !include examples/lead-trustee-company.json
     /trustees:
       type: base
       get:
@@ -155,9 +166,13 @@ types:
       description: Registers a lead Trustee as an individual
       body:
         application/json:
-          type: LeadTrustee
-          example: !include examples/leadTrustee.json
+          type: LeadTrusteeIndividual
+          example: !include examples/lead-trustee-individual.json
   /lead-trustee-company:
     type: base
     post:
       description: Registers a lead Trustee as an company
+      body:
+        application/json:
+          type: LeadTrusteeCompany
+          example: !include examples/lead-trustee-company.json
