@@ -181,3 +181,17 @@ types:
         application/json:
           type: LeadTrusteeCompany
           example: !include examples/lead-trustee-company.json
+/estates:
+  type: base
+  get:
+    description: Retrieves all the estates available to the user
+  post:
+    description: Submits an entire set of data for a estate
+  /{utr}:
+    type: base
+    uriParameters:
+      utr:
+        type: string
+        displayName: The SA UTR of the estate.
+    delete:
+      description: Deletes a specific estate
