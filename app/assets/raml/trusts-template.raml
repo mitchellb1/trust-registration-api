@@ -17,6 +17,7 @@ types:
   LeadTrusteeIndividual: !include schemas/trust.json#/properties/leadTrustee/properties/person
   LeadTrusteeCompany: !include schemas/trust.json#/properties/leadTrustee/properties/company
   NaturalPersons: !include schemas/trust.json#/properties/naturalPersons
+  NoChange: !include schemas/no-change.json
 /trusts:
   type: base
   get:
@@ -40,6 +41,8 @@ types:
         displayName: The SA UTR of the trust.
     get:
       description: Retrieves a specific trust
+    delete:
+      description: Deletes a specific trust
     /lead-trustee-individual:
       type: base
       get:
@@ -156,10 +159,12 @@ types:
       type: base
       post:
         description: Confirms no change to the trust
-    /delete:
-      type: base
-      delete:
-        description: Deletes the Trust
+        responses:
+          200:
+            body:
+              application/json:
+                type: NoChange
+                example: !include examples/no-change.json
   /lead-trustee-individual:
     type: base
     post:
