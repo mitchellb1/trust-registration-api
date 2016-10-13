@@ -10,6 +10,7 @@ mediaType: application/hal+json
 resourceTypes:
   base: !include resourceTypes/base.raml
 types:
+  Trust: !include schemas/trust.json
   Trustees: !include schemas/trust.json#/properties/trustees
   Beneficiaries: !include schemas/trust.json#/properties/beneficiaries
   Settlors: !include schemas/trust.json#/properties/settlor
@@ -22,8 +23,18 @@ types:
   type: base
   get:
     description: Retrieves all the trusts available to the user
+    responses:
+      200:
+        body:
+          application/json:
+            type: Trust
+            example: !include examples/trust.json
   post:
     description: Submits an entire set of data for a trust
+    body:
+      application/json:
+        type: Trust
+        example: !include examples/trust.json
   /utr:
     /{trn}:
         type: base
