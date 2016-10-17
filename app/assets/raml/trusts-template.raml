@@ -10,14 +10,15 @@ mediaType: application/hal+json
 resourceTypes:
   base: !include resourceTypes/base.raml
 types:
-  Trust: !include schemas/trust.json
-  Trustees: !include schemas/trust.json#/properties/trustees
-  Beneficiaries: !include schemas/trust.json#/properties/beneficiaries
-  Settlors: !include schemas/trust.json#/properties/settlor
-  Protectors: !include schemas/trust.json#/properties/protector
-  LeadTrusteeIndividual: !include schemas/trust.json#/properties/leadTrustee/properties/person
-  LeadTrusteeCompany: !include schemas/trust.json#/properties/leadTrustee/properties/company
-  NaturalPersons: !include schemas/trust.json#/properties/naturalPersons
+  Estate: !include schemas/trust.json#/properties/estate
+  Trust: !include schemas/trust.json#/properties/trust
+  Trustees: !include schemas/trust.json#/properties/trust/properties/trustees
+  Beneficiaries: !include schemas/trust.json#/properties/trust/properties/beneficiaries
+  Settlors: !include schemas/trust.json#/properties/trust/properties/settlor
+  Protectors: !include schemas/trust.json#/properties/trust/properties/protector
+  LeadTrusteeIndividual: !include schemas/trust.json#/properties/trust/properties/leadTrustee/properties/person
+  LeadTrusteeCompany: !include schemas/trust.json#/properties/trust/properties/leadTrustee/properties/company
+  NaturalPersons: !include schemas/trust.json#/properties/trust/properties/naturalPersons
   NoChange: !include schemas/no-change.json
 /trusts:
   type: base
@@ -196,6 +197,12 @@ types:
   type: base
   get:
     description: Retrieves all the estates available to the user
+    responses:
+      200:
+        body:
+          application/json:
+            type: Estate
+            example: !include examples/estate.json
   post:
     description: Submits an entire set of data for a estate
   /{utr}:
