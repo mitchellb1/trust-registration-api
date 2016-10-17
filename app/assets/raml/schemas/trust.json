@@ -798,15 +798,15 @@
            "description": "Is the total Income Tax and Capital Gains Tax due for the administration period more than £10000",
            "type" :"boolean"
          },
-         "saleOfEstateAssetsMoreThan250000": {
+         "saleOfEstateAssetsBefore06April2016MoreThan250000": {
            "description": "If the date of death was before 5 April 2016, did more than £250000 come from the sale of the estate's assets by administrators or executors, in any one tax year?",
            "type" :"boolean"
          },
-         "saleOfEstateAssetsMoreThan500000": {
+         "saleOfEstateAssetsAfter06April2016MoreThan500000": {
            "description": "If the date of death was before 5 April 2016, did more than £500000 come from the sale of the estate's assets by administrators or executors in any one tax year?",
            "type" :"boolean"
          },
-         "worthMoreThanTwoAndHalfMillionAtTimeOfDeath": {
+         "worthMoreThan2500000AtTimeOfDeath": {
            "description": "Was the estate worth more than £2.5 million at the date of death?",
            "type" :"boolean"
          },
