@@ -211,5 +211,13 @@ types:
       utr:
         type: string
         displayName: The SA UTR of the estate.
+    get:
+      description: Retrieve a specific estate
+      responses:
+        200:
+          body:
+            application/json:
+              type: Estate
+              example: !include examples/estate.json
     delete:
       description: Deletes a specific estate
