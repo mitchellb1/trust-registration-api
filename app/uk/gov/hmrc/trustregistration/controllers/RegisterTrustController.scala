@@ -18,9 +18,10 @@ package uk.gov.hmrc.trustregistration.controllers
 
 import play.api.Logger
 import play.api.libs.json.{JsError, JsResult, JsValue, Json}
-import play.api.mvc.Action
+import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.microservice.controller.BaseController
-import uk.gov.hmrc.trustregistration.models.{RegistrationDocument, TRN}
+import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -47,8 +48,22 @@ trait RegisterTrustController extends BaseController {
       }
     }
   }
-}
 
+  def noChange(identifier: String): Action[AnyContent] = Action.async{ implicit request =>
+
+    val authorised: Option[(String, String)] = hc.headers.find((tup) => tup._1 == AUTHORIZATION)
+
+    authorised match {
+      case Some((key, "NOT_AUTHORISED")) => Future.successful(Unauthorized)
+      case _ => registerTrustService.noChange(identifier) map {
+        case SuccessResponse => Ok
+        case BadRequestResponse => BadRequest
+        case NotFoundResponse => NotFound
+        case _ => InternalServerError
+      }
+    }
+  }
+}
 
 object RegisterTrustController extends RegisterTrustController {
   override val registerTrustService = RegisterTrustService

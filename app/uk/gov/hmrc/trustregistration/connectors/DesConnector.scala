@@ -16,25 +16,26 @@
 
 package uk.gov.hmrc.trustregistration.connectors
 
-import uk.gov.hmrc.play.http.{HeaderCarrier, HttpPost, HttpResponse, Upstream4xxResponse}
+import uk.gov.hmrc.play.http._
 import uk.gov.hmrc.trustregistration.WSHttp
-import uk.gov.hmrc.trustregistration.models.{RegistrationDocument, TRN}
+import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.play.config.ServicesConfig
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-trait DesConnector extends ServicesConfig {
+trait DesConnector extends ServicesConfig with RawResponseReads {
   val httpPost: HttpPost = WSHttp
+  val httpPut: HttpPut = WSHttp
 
   lazy val desUrl = baseUrl("des")
-  lazy val serviceUrl = s"$desUrl/trust-registration-stub"
+  lazy val serviceUrl = s"$desUrl/trust-registration-stub/trusts"
 
   def registerTrust(doc: RegistrationDocument)(implicit hc : HeaderCarrier) = {
 
     val uri: String = s"$serviceUrl/hello-world"
 
-    val result: Future[HttpResponse] = httpPost.POST[RegistrationDocument,HttpResponse](uri,doc)
+    val result: Future[HttpResponse] = httpPost.POST[RegistrationDocument,HttpResponse](uri,doc)(implicitly, httpReads, implicitly)
 
     result.map(f=> {
       f.status match{
@@ -44,6 +45,23 @@ trait DesConnector extends ServicesConfig {
     }).recover({
       case _ => Left("400")
     })
+  }
+
+  def noChange(identifier: String)(implicit hc : HeaderCarrier): Future[TrustResponse] = {
+    val uri: String = s"$serviceUrl/$identifier/no-change"
+
+    val result: Future[HttpResponse] = httpPut.PUT[String, HttpResponse](uri, identifier)(implicitly, httpReads, implicitly)
+
+    result.map(f=> {
+      f.status match {
+        case 204 => SuccessResponse
+        case 400 => BadRequestResponse
+        case 404 => NotFoundResponse
+        case _ => InternalServerErrorResponse
+      }
+    }).recover {
+      case _ => InternalServerErrorResponse
+    }
   }
 }
 

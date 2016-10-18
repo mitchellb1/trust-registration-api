@@ -3,3 +3,4 @@
 GET        /hello-world             uk.gov.hmrc.trustregistration.controllers.ApiHelloWorld.hello
 
 POST       /register                uk.gov.hmrc.trustregistration.controllers.RegisterTrustController.register()
+PUT        /:identifier/no-change   uk.gov.hmrc.trustregistration.controllers.RegisterTrustController.noChange(identifier)
