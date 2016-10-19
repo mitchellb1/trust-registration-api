@@ -1,0 +1,232 @@
+{
+  "scopes": [
+    {
+      "key": "read:trusts-and-estates",
+      "name": "Access trusts and estates information",
+      "description": "Access information for managing trusts and estates"
+    },
+    {
+      "key": "write:trusts-and-estates",
+      "name": "Add and update trusts and estates information",
+      "description": "Add and Update information for trusts and estates"
+    },
+    {
+      "key": "delete:trusts-and-estates",
+      "name": "Delete trusts and estates information",
+      "description": "Delete information for trusts and estates"
+    }
+  ],
+  "api": {
+    "name": "Trusts and Estates",
+    "description": "Trusts and Estates services, such as registering and retrieving Trust information.",
+    "context": "trusts-estates",
+    "versions": [
+      {
+        "version": "1.0",
+        "status": "PROTOTYPED",
+        "endpoints": [
+          {
+            "uriPattern": "/trusts/",
+            "endpointName": "Fetch trusts the user has access to",
+            "method": "GET",
+            "authType": "USER",
+            "throttlingTier": "UNLIMITED",
+            "scope": "read:trusts-and-estates"
+          },
+          {
+            "uriPattern": "/trusts/",
+            "endpointName": "Submit a trust",
+            "method": "POST",
+            "authType": "USER",
+            "throttlingTier": "UNLIMITED",
+            "scope": "write:trusts-and-estates"
+          },
+          {
+            "uriPattern": "/trusts/{identifier}",
+            "endpointName": "Fetch individual trust the user has access to",
+            "method": "GET",
+            "authType": "USER",
+            "throttlingTier": "UNLIMITED",
+            "scope": "read:trusts-and-estates"
+          },
+          {
+            "uriPattern": "/trusts/{identifier}",
+            "endpointName": "Deletes a specific trust",
+            "method": "DELETE",
+            "authType": "USER",
+            "throttlingTier": "UNLIMITED",
+            "scope": "delete:trusts-and-estates"
+          },
+          {
+            "uriPattern": "/trusts/{identifier}/lead-trustee-individual",
+            "endpointName": "Retrieves the information for an lead Trustee as an individual",
+            "method": "GET",
+            "authType": "USER",
+            "throttlingTier": "UNLIMITED",
+            "scope": "read:trusts-and-estates"
+          },
+          {
+            "uriPattern": "/trusts/{identifier}/lead-trustee-individual",
+            "endpointName": "Updates the information for an lead Trustee as an individual",
+            "method": "PUT",
+            "authType": "USER",
+            "throttlingTier": "UNLIMITED",
+            "scope": "write:trusts-and-estates"
+          },
+          {
+            "uriPattern": "/trusts/{identifier}/lead-trustee-company",
+            "endpointName": "Retrieves the information for an lead Trustee as an company",
+            "method": "GET",
+            "authType": "USER",
+            "throttlingTier": "UNLIMITED",
+            "scope": "read:trusts-and-estates"
+          },
+          {
+            "uriPattern": "/trusts/{identifier}/lead-trustee-company",
+            "endpointName": "Updates the information for an lead Trustee as an company",
+            "method": "PUT",
+            "authType": "USER",
+            "throttlingTier": "UNLIMITED",
+            "scope": "write:trusts-and-estates"
+          },
+          {
+            "uriPattern" : "/trusts/{identifier}/trustees",
+            "endpointName" : "Retrieves all the trustees of the Trust",
+            "method" : "GET",
+            "authType" : "USER",
+            "throttlingTier" : "UNLIMITED",
+            "scope" : "read:trusts-and-estates"
+          },
+          {
+            "uriPattern" : "/trusts/{identifier}/trustees",
+            "endpointName" : "Updates all the trustees of the Trust",
+            "method" : "PUT",
+            "authType" : "USER",
+            "throttlingTier" : "UNLIMITED",
+            "scope" : "write:trusts-and-estates"
+          },
+          {
+            "uriPattern" : "/trusts/{identifier}/beneficiaries",
+            "endpointName" : "Retrieves all the beneficiaries of the Trust",
+            "method" : "GET",
+            "authType" : "USER",
+            "throttlingTier" : "UNLIMITED",
+            "scope" : "read:trusts-and-estates"
+          },
+          {
+            "uriPattern" : "/trusts/{identifier}/beneficiaries",
+            "endpointName" : "Updates all the beneficiaries of the Trust",
+            "method" : "PUT",
+            "authType" : "USER",
+            "throttlingTier" : "UNLIMITED",
+            "scope" : "write:trusts-and-estates"
+          },
+          {
+            "uriPattern" : "/trusts/{identifier}/settlors",
+            "endpointName" : "Retrieves all the settlors of the Trust",
+            "method" : "GET",
+            "authType" : "USER",
+            "throttlingTier" : "UNLIMITED",
+            "scope" : "read:trusts-and-estates"
+          },
+          {
+            "uriPattern" : "/trusts/{identifier}/settlors",
+            "endpointName" : "Updates all the settlors of the Trust",
+            "method" : "PUT",
+            "authType" : "USER",
+            "throttlingTier" : "UNLIMITED",
+            "scope" : "write:trusts-and-estates"
+          },
+          {
+            "uriPattern" : "/trusts/{identifier}/natural-persons",
+            "endpointName" : "Retrieves all the natural persons of the Trust",
+            "method" : "GET",
+            "authType" : "USER",
+            "throttlingTier" : "UNLIMITED",
+            "scope" : "read:trusts-and-estates"
+          },
+          {
+            "uriPattern" : "/trusts/{identifier}/natural-persons",
+            "endpointName" : "Updates all the natural persons of the Trust",
+            "method" : "PUT",
+            "authType" : "USER",
+            "throttlingTier" : "UNLIMITED",
+            "scope" : "write:trusts-and-estates"
+          },
+          {
+            "uriPattern" : "/trusts/{identifier}/protectors",
+            "endpointName" : "Retrieves all the protectors of the Trust",
+            "method" : "GET",
+            "authType" : "USER",
+            "throttlingTier" : "UNLIMITED",
+            "scope" : "read:trusts-and-estates"
+          },
+          {
+            "uriPattern" : "/trusts/{identifier}/protectors",
+            "endpointName" : "Updates all the protectors of the Trust",
+            "method" : "PUT",
+            "authType" : "USER",
+            "throttlingTier" : "UNLIMITED",
+            "scope" : "write:trusts-and-estates"
+          },
+          {
+            "uriPattern" : "/trusts/{identifier}/no-change",
+            "endpointName" : "Confirms no change to the trust",
+            "method" : "PUT",
+            "authType" : "USER",
+            "throttlingTier" : "UNLIMITED",
+            "scope" : "write:trusts-and-estates"
+          },
+          {
+            "uriPattern" : "/trusts/lead-trustee-individual",
+            "endpointName" : "Registers a lead Trustee as an individual",
+            "method" : "POST",
+            "authType" : "USER",
+            "throttlingTier" : "UNLIMITED",
+            "scope" : "write:trusts-and-estates"
+          },
+          {
+            "uriPattern" : "/trusts/lead-trustee-company",
+            "endpointName" : "Registers a lead Trustee as an company",
+            "method" : "POST",
+            "authType" : "USER",
+            "throttlingTier" : "UNLIMITED",
+            "scope" : "write:trusts-and-estates"
+          },
+          {
+            "uriPattern" : "/estates",
+            "endpointName" : "Retrieves all the estates available to the user",
+            "method" : "GET",
+            "authType" : "USER",
+            "throttlingTier" : "UNLIMITED",
+            "scope" : "read:trusts-and-estates"
+          },
+          {
+            "uriPattern" : "/estates",
+            "endpointName" : "Submits an entire set of data for a estate",
+            "method" : "POST",
+            "authType" : "USER",
+            "throttlingTier" : "UNLIMITED",
+            "scope" : "write:trusts-and-estates"
+          },
+          {
+            "uriPattern" : "/estates/{identifier}",
+            "endpointName" : "Retrieve a specific estate",
+            "method" : "GET",
+            "authType" : "USER",
+            "throttlingTier" : "UNLIMITED",
+            "scope" : "read:trusts-and-estates"
+          },
+          {
+            "uriPattern" : "/estates/{identifier}",
+            "endpointName" : "Deletes a specific estate",
+            "method" : "DELETE",
+            "authType" : "USER",
+            "throttlingTier" : "UNLIMITED",
+            "scope" : "delete:trusts-and-estates"
+          }
+        ]
+      }
+    ]
+  }
+}
