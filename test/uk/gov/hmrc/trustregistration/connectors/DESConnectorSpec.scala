@@ -16,17 +16,25 @@
 
 package uk.gov.hmrc.trustregistration.connectors
 
+import com.codahale.metrics
+import com.codahale.metrics.Timer
+import com.codahale.metrics.Timer.Context
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import uk.gov.hmrc.play.http._
 import uk.gov.hmrc.trustregistration.models._
 
-import scala.concurrent.{Await, Future}
+import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration.Duration
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import org.mockito.Matchers.any
 import play.api.libs.json.Writes
+import uk.gov.hmrc.trustregistration.TestMetrics
+import uk.gov.hmrc.trustregistration.audit.TrustsAudit
+import uk.gov.hmrc.trustregistration.metrics.Metrics
+
+
 class DesConnectorSpec extends PlaySpec
   with OneAppPerSuite
   with MockitoSugar {
@@ -125,11 +133,18 @@ class DesConnectorSpec extends PlaySpec
       }
     }
   }
+
   val mockHttpPost = mock[HttpPost]
   val mockHttpPut = mock[HttpPut]
   object DesConnector extends DesConnector {
     override val httpPost: HttpPost = mockHttpPost
     override val httpPut: HttpPut = mockHttpPut
+    override val audit: TrustsAudit = new TrustsAudit {
+      override def doAudit(eventTypelMessage: String, auditTag: String)(implicit headerCarrier: HeaderCarrier, ec: ExecutionContext): Unit = ()
+    }
+    override val metrics: Metrics = TestMetrics
   }
-  val SUT = DesConnector
+  lazy val SUT = DesConnector
+
+
 }

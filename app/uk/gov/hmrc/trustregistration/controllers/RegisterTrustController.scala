@@ -21,6 +21,7 @@ import play.api.libs.json.{JsError, JsResult, JsValue, Json}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.microservice.controller.BaseController
+import uk.gov.hmrc.trustregistration.metrics.Metrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
 
@@ -29,7 +30,9 @@ import scala.concurrent.Future
 
 trait RegisterTrustController extends BaseController {
 
+  val metrics: Metrics = Metrics
   val registerTrustService: RegisterTrustService
+  val className: String = getClass.getSimpleName
 
   def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     Logger.info("Register API invoked")
@@ -51,20 +54,52 @@ trait RegisterTrustController extends BaseController {
 
   def noChange(identifier: String): Action[AnyContent] = Action.async{ implicit request =>
 
+    Logger.info(s"$className:noChange API invoked")
+    Logger.debug(s"$className:noChange($identifier) API invoked")
+
     val authorised: Option[(String, String)] = hc.headers.find((tup) => tup._1 == AUTHORIZATION)
 
     authorised match {
-      case Some((key, "NOT_AUTHORISED")) => Future.successful(Unauthorized)
-      case _ => registerTrustService.noChange(identifier) map {
-        case SuccessResponse => Ok
-        case BadRequestResponse => BadRequest
-        case NotFoundResponse => NotFound
-        case _ => InternalServerError
+      case Some((key, "NOT_AUTHORISED")) => {
+        Logger.info(s"$className:noChange API returned unauthorised")
+        metrics.incrementUnauthorisedRequest("noChange")
+
+        Future.successful(Unauthorized)
+      }
+      case _ => {
+        Logger.info(s"$className:noChange API authorised")
+        metrics.incrementAuthorisedRequest("noChange")
+
+        registerTrustService.noChange(identifier) map {
+          case SuccessResponse => {
+            Logger.info(s"$className:noChange API returned OK")
+            metrics.incrementApiSuccessResponse("noChange")
+            Ok
+          }
+          case BadRequestResponse => {
+            Logger.info(s"$className:noChange API returned Bad Request")
+            metrics.incrementBadRequestResponse("noChange")
+            BadRequest
+          }
+          case NotFoundResponse => {
+            Logger.info(s"$className:noChange API returned Not Found")
+            metrics.incrementNotFoundResponse("noChange")
+            NotFound
+          }
+          case _ => {
+            Logger.info(s"$className:noChange API returned Internal Server Error")
+            metrics.incrementInternalServerErrorResponse("noChange")
+            InternalServerError
+          }
+        }
       }
     }
   }
+
+
 }
 
 object RegisterTrustController extends RegisterTrustController {
   override val registerTrustService = RegisterTrustService
+  override val metrics = Metrics
 }
