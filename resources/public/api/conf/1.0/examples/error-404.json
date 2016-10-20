@@ -1,0 +1,4 @@
+{
+  "message" : "The URI requested is invalid or the resource (i.e. trust) requested does not exist.",
+  "code" : "404"
+}

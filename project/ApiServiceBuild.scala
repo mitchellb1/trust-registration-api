@@ -29,6 +29,7 @@ private object AppDependencies {
   private val playHmrcApiVersion = "0.5.0"
   private val playReactivemongoVersion = "4.8.0"
   private val scalaTestPlusVersion = "1.2.0"
+  private val wireMockVersion = "1.57"
 
   val compile = Seq(
     "uk.gov.hmrc" %% "play-reactivemongo" % playReactivemongoVersion,
@@ -41,7 +42,8 @@ private object AppDependencies {
     "uk.gov.hmrc" %% "play-config" % playConfigVersion,
     "uk.gov.hmrc" %% "play-json-logger" % playJsonLoggerVersion,
     "uk.gov.hmrc" %% "domain" % domainVersion,
-    "uk.gov.hmrc" %% "play-hmrc-api" % playHmrcApiVersion
+    "uk.gov.hmrc" %% "play-hmrc-api" % playHmrcApiVersion,
+    "com.github.tomakehurst" % "wiremock" % wireMockVersion % "test,it"
   )
 
   trait TestDependencies {
