@@ -18,12 +18,13 @@ package uk.gov.hmrc.trustregistration.utils
 
 import play.api.Play
 import play.api.test.FakeApplication
+import uk.gov.hmrc.trustregistration.ApiGlobal
 
 trait MicroserviceLocalRunSugar {
 
   val additionalConfiguration: Map[String, Any]
 
-  lazy val fakeApplication = FakeApplication(additionalConfiguration = additionalConfiguration)
+  lazy val fakeApplication = FakeApplication(withGlobal = Some(ApiGlobal), additionalConfiguration = additionalConfiguration)
 
   def run(block: () => Unit) = {
     Play.start(fakeApplication)

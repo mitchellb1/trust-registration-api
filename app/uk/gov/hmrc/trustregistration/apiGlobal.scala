@@ -17,12 +17,13 @@
 package uk.gov.hmrc.trustregistration
 
 import com.typesafe.config.Config
+import config.AppContext
 import play.api._
 import uk.gov.hmrc.trustregistration.connectors.ServiceLocatorConnector
 import uk.gov.hmrc.play.audit.filters.AuditFilter
 import uk.gov.hmrc.play.auth.controllers.AuthParamsControllerConfig
 import uk.gov.hmrc.play.config.{AppName, ControllerConfig, RunMode}
-import uk.gov.hmrc.play.http.{HeaderCarrier}
+import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.http.logging.filters.LoggingFilter
 import uk.gov.hmrc.play.microservice.bootstrap.DefaultMicroserviceGlobal
 import uk.gov.hmrc.play.auth.microservice.filters.AuthorisationFilter

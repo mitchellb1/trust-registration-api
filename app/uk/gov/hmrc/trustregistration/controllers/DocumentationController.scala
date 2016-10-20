@@ -23,6 +23,7 @@ trait DocumentationController extends AssetsBuilder with BaseController {
 
   def documentation(version: String, endpointName: String) = {
     super.at(s"/public/api/documentation/$version", s"${endpointName.replaceAll(" ", "-")}.xml")
+    //super.at(s"/public/api/documentation/$version", "Fetch-Trusts.xml")
   }
 
   def definition() = {

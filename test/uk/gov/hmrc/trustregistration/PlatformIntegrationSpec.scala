@@ -16,7 +16,8 @@
 
 package uk.gov.hmrc.trustregistration
 
-import controllers.{DocumentationController}
+import com.github.tomakehurst.wiremock.client.WireMock._
+import controllers.DocumentationController
 import org.scalatest.BeforeAndAfter
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mock.MockitoSugar
@@ -29,7 +30,7 @@ class PlatformIntegrationSpec extends UnitSpec with MockitoSugar with ScalaFutur
 
   before {
     startMockServer()
-    stubRegisterEndpoint(204)
+    stubRegisterEndpoint(200)
   }
 
   after {
@@ -41,35 +42,81 @@ class PlatformIntegrationSpec extends UnitSpec with MockitoSugar with ScalaFutur
     val request = FakeRequest()
   }
 
-  "provide definition endpoint and documentation endpoint for each api" in new MicroserviceLocalRunSugar with Setup {
-    override val additionalConfiguration: Map[String, Any] = Map(
-      "Test.microservice.services.service-locator.host" -> stubHost,
-      "Test.microservice.services.service-locator.port" -> stubPort
-    )
-    run {
-      () => {
-        def normalizeEndpointName(endpointName: String): String = endpointName.replaceAll(" ", "-")
+  "microservice" should {
 
-       /*def verifyDocumentationPresent(version: String, endpointName: String) {
-          withClue(s"Getting documentation version '$version' of endpoint '$endpointName'") {
-            val documentationResult = documentationController.documentation(version, endpointName)(request)
-            status(documentationResult) shouldBe 200
-          }
-        }*/
-
-        val result = documentationController.definition()(request)
-        status(result) shouldBe 200
-
-      /*  val jsonResponse = jsonBodyOf(result).futureValue
-
-        val versions: Seq[String] = (jsonResponse \\ "version") map (_.as[String])
-        val endpointNames: Seq[Seq[String]] = (jsonResponse \\ "endpoints").map(_ \\ "endpointName").map(_.map(_.as[String]))
-
-        versions.zip(endpointNames).flatMap { case (version, endpoint) => {
-          endpoint.map(endpointName => (version, endpointName))
+    /*
+    "register itself to service-locator" in new MicroserviceLocalRunSugar with Setup {
+      override val additionalConfiguration: Map[String, Any] = Map(
+        "appName" -> "trust-registration-api",
+        "appUrl" -> "http://trust-registration-api.service",
+        "Test.microservice.services.service-locator.host" -> stubHost,
+        "Test.microservice.services.service-locator.port" -> stubPort
+      )
+      run {
+        () => {
+          verify(
+            1,
+            postRequestedFor(urlMatching("/registration"))
+            //.withHeader("content-type", equalTo("application/json"))
+            //.withRequestBody(equalTo(regPayloadStringFor("trust-registration-api", "http://trust-registration.service"))))
+          )
         }
-        }.foreach { case (version, endpointName) => verifyDocumentationPresent(version, endpointName) }*/
+      }
+    }
+    */
+
+    "provide definition endpoint and documentation endpoint for each api" in new MicroserviceLocalRunSugar with Setup {
+      override val additionalConfiguration: Map[String, Any] = Map(
+        "Test.microservice.services.service-locator.host" -> stubHost,
+        "Test.microservice.services.service-locator.port" -> stubPort
+      )
+      run {
+        () => {
+          def normalizeEndpointName(endpointName: String): String = endpointName.replaceAll(" ", "-")
+
+          def verifyDocumentationPresent(version: String, endpointName: String) {
+            withClue(s"Getting documentation version '$version' of endpoint '$endpointName'") {
+              val documentationResult = documentationController.documentation(version, endpointName)(request)
+              status(documentationResult) shouldBe 200
+            }
+          }
+
+          val result = documentationController.definition()(request)
+          status(result) shouldBe 200
+
+          val jsonResponse = jsonBodyOf(result).futureValue
+
+          val versions: Seq[String] = (jsonResponse \\ "version") map (_.as[String])
+          val endpointNames: Seq[Seq[String]] = (jsonResponse \\ "endpoints").map(_ \\ "endpointName").map(_.map(_.as[String]))
+
+          versions.zip(endpointNames).flatMap {
+            case (version, endpoint) => {
+              endpoint.map(endpointName => (version, endpointName))
+            }
+          }.foreach { case (version, endpointName) => {
+            verifyDocumentationPresent(version, endpointName)
+          } }
+        }
+      }
+    }
+
+
+    "provide raml documentation" in new MicroserviceLocalRunSugar with Setup {
+      override val additionalConfiguration: Map[String, Any] = Map(
+        "Test.microservice.services.service-locator.host" -> stubHost,
+        "Test.microservice.services.service-locator.port" -> stubPort
+      )
+      run {
+        () => {
+
+          val result = documentationController.raml("1.0", "trusts-template.raml")(request)
+
+          status(result) shouldBe 200
+          bodyOf(result).futureValue should startWith("#%RAML 1.0")
+        }
       }
     }
   }
+
+
 }
