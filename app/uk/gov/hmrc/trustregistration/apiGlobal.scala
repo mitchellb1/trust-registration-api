@@ -44,9 +44,7 @@ trait ServiceLocatorRegistration extends GlobalSettings with RunMode {
     registrationEnabled match {
       case true => {
         Logger.debug("Registering with service-locator")
-        slConnector.register map { result =>
-          Logger.debug(s"service-locator registration result: $result")
-        }
+        slConnector.register
       }
       case false => Logger.warn("Registration in Service Locator is disabled")
     }

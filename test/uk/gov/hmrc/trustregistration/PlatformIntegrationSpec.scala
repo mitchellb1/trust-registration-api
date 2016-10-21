@@ -44,7 +44,6 @@ class PlatformIntegrationSpec extends UnitSpec with MockitoSugar with ScalaFutur
 
   "microservice" should {
 
-    /*
     "register itself to service-locator" in new MicroserviceLocalRunSugar with Setup {
       override val additionalConfiguration: Map[String, Any] = Map(
         "appName" -> "trust-registration-api",
@@ -57,13 +56,12 @@ class PlatformIntegrationSpec extends UnitSpec with MockitoSugar with ScalaFutur
           verify(
             1,
             postRequestedFor(urlMatching("/registration"))
-            //.withHeader("content-type", equalTo("application/json"))
-            //.withRequestBody(equalTo(regPayloadStringFor("trust-registration-api", "http://trust-registration.service"))))
+              .withHeader("Content-Type", equalTo("application/json"))
+              .withRequestBody(equalTo(regPayloadStringFor("trust-registration-api", "http://trust-registration-api.service")))
           )
         }
       }
     }
-    */
 
     "provide definition endpoint and documentation endpoint for each api" in new MicroserviceLocalRunSugar with Setup {
       override val additionalConfiguration: Map[String, Any] = Map(
