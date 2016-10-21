@@ -22,15 +22,17 @@ import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfter
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
+import play.api.http.HeaderNames.{AUTHORIZATION => _, CONTENT_TYPE => _, _}
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Request, Result}
+import play.api.mvc.{Action, Request, RequestHeader, Result}
 import play.api.test.{FakeHeaders, FakeRequest}
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.trustregistration.models.{RegistrationDocument, TRN}
+import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
 
-import scala.concurrent.Future
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
 
 
 class RegisterTrustControllerSpec extends PlaySpec
@@ -39,8 +41,11 @@ class RegisterTrustControllerSpec extends PlaySpec
   with BeforeAndAfter {
 
   before {
-    when(MockRegisterTrustService.registerTrust(any[RegistrationDocument])(any[HeaderCarrier]))
+    when(mockRegisterTrustService.registerTrust(any[RegistrationDocument])(any[HeaderCarrier]))
       .thenReturn(Future.successful(Right(TRN("TRN-1234"))))
+
+    when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "AUTHORISED"))
+
   }
 
   "RegisterTrustController" must {
@@ -64,6 +69,59 @@ class RegisterTrustControllerSpec extends PlaySpec
         }
       }
     }
+    "return 200 ok" when {
+      "the no change endpoint is called with a valid identifier" in {
+        when(mockRegisterTrustService.noChange(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(SuccessResponse))
+
+        val result = SUT.noChange("sadfg").apply(FakeRequest("PUT", ""))
+
+        status(result) mustBe OK
+      }
+    }
+
+    "return 400" when {
+      "the no change endpoint is called with an invalid identifier" in {
+        when(mockRegisterTrustService.noChange(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(BadRequestResponse))
+
+        val result = SUT.noChange("sadfg").apply(FakeRequest("PUT", ""))
+
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
+    "return 401" when {
+      "authentication credentials are missing or incorrect" in {
+
+        when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "NOT_AUTHORISED"))
+        val result = SUT.noChange("12345").apply(FakeRequest("PUT", ""))
+
+        status(result) mustBe UNAUTHORIZED
+      }
+    }
+
+    "return 404" when {
+      "we pass an identifier that does not return a trust" in {
+        when(mockRegisterTrustService.noChange(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(NotFoundResponse))
+
+        val result = SUT.noChange("sadfg").apply(FakeRequest("PUT", ""))
+
+        status(result) mustBe NOT_FOUND
+      }
+    }
+
+
+    "return 500" when {
+      "something is broken" in {
+        when(mockRegisterTrustService.noChange(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(InternalServerErrorResponse))
+
+        val result = SUT.noChange("sadfg").apply(FakeRequest("PUT", ""))
+        status(result) mustBe INTERNAL_SERVER_ERROR
+      }
+    }
   }
 
   private val regDocPayload = Json.obj(
@@ -73,11 +131,15 @@ class RegisterTrustControllerSpec extends PlaySpec
     "wrongIdentifier" -> "Trust Name"
   )
 
-  private val MockRegisterTrustService = mock[RegisterTrustService]
+  private val mockRegisterTrustService = mock[RegisterTrustService]
+  private val mockHC = mock[HeaderCarrier]
 
   object TestRegisterTrustController extends RegisterTrustController {
-    override val registerTrustService: RegisterTrustService = MockRegisterTrustService
+    override implicit def hc(implicit rh: RequestHeader): HeaderCarrier = mockHC
+
+    override val registerTrustService: RegisterTrustService = mockRegisterTrustService
   }
+
   private val SUT = TestRegisterTrustController
 
 

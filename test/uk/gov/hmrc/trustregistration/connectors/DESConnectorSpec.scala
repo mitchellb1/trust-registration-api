@@ -16,17 +16,25 @@
 
 package uk.gov.hmrc.trustregistration.connectors
 
+import com.codahale.metrics
+import com.codahale.metrics.Timer
+import com.codahale.metrics.Timer.Context
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import uk.gov.hmrc.play.http._
-import uk.gov.hmrc.trustregistration.models.{RegistrationDocument, TRN}
+import uk.gov.hmrc.trustregistration.models._
 
-import scala.concurrent.{Await, Future}
+import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration.Duration
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import org.mockito.Matchers.any
 import play.api.libs.json.Writes
+import uk.gov.hmrc.trustregistration.TestMetrics
+import uk.gov.hmrc.trustregistration.audit.TrustsAudit
+import uk.gov.hmrc.trustregistration.metrics.Metrics
+
+
 class DesConnectorSpec extends PlaySpec
   with OneAppPerSuite
   with MockitoSugar {
@@ -64,10 +72,79 @@ class DesConnectorSpec extends PlaySpec
         result mustBe Left("400")
       }
     }
+
+    "Return a BadRequestResponse" when {
+      "a bad requested is returned from DES for the call to no-change" in {
+        when (mockHttpPut.PUT[String,HttpResponse](Matchers.any(),Matchers.any())
+          (Matchers.any(),Matchers.any(),Matchers.any())).
+          thenReturn(Future.successful(HttpResponse(400)))
+        val result = Await.result(SUT.noChange("1234"),Duration.Inf)
+        result mustBe BadRequestResponse
+      }
+    }
+
+    "Return a NotFoundResponse" when {
+      "a 404 is returned from DES for the call to no-change" in {
+        when (mockHttpPut.PUT[String,HttpResponse](Matchers.any(),Matchers.any())
+          (Matchers.any(),Matchers.any(),Matchers.any())).
+          thenReturn(Future.successful(HttpResponse(404)))
+        val result = Await.result(SUT.noChange("1234"),Duration.Inf)
+        result mustBe NotFoundResponse
+      }
+    }
+
+    "Return a InternalServerError" when {
+      "a 500 is returned from DES for the call to no-change" in {
+        when (mockHttpPut.PUT[String,HttpResponse](Matchers.any(),Matchers.any())
+          (Matchers.any(),Matchers.any(),Matchers.any())).
+          thenReturn(Future.successful(HttpResponse(500)))
+        val result = Await.result(SUT.noChange("1234"),Duration.Inf)
+        result mustBe InternalServerErrorResponse
+      }
+    }
+
+    "Return a InternalServerError" when {
+      "a 418 is returned from DES for the call to no-change" in {
+        when (mockHttpPut.PUT[String,HttpResponse](Matchers.any(),Matchers.any())
+          (Matchers.any(),Matchers.any(),Matchers.any())).
+          thenReturn(Future.successful(HttpResponse(418)))
+        val result = Await.result(SUT.noChange("1234"),Duration.Inf)
+        result mustBe InternalServerErrorResponse
+      }
+    }
+
+    "Return a SuccessResponse" when {
+      "a 204 is returned from DES for the call to no-change" in {
+        when (mockHttpPut.PUT[String,HttpResponse](Matchers.any(),Matchers.any())
+          (Matchers.any(),Matchers.any(),Matchers.any())).
+          thenReturn(Future.successful(HttpResponse(204)))
+        val result = Await.result(SUT.noChange("1234"),Duration.Inf)
+        result mustBe SuccessResponse
+      }
+    }
+
+    "Return an InternalServerErrorResponse" when {
+      "the call to DES fails on the call to no-change" in {
+        when (mockHttpPut.PUT[String,HttpResponse](Matchers.any(),Matchers.any())
+          (Matchers.any(),Matchers.any(),Matchers.any())).
+          thenReturn(Future.failed(Upstream4xxResponse("Error", 418, 400)))
+        val result = Await.result(SUT.noChange("1234"),Duration.Inf)
+        result mustBe InternalServerErrorResponse
+      }
+    }
   }
+
   val mockHttpPost = mock[HttpPost]
+  val mockHttpPut = mock[HttpPut]
   object DesConnector extends DesConnector {
     override val httpPost: HttpPost = mockHttpPost
+    override val httpPut: HttpPut = mockHttpPut
+    override val audit: TrustsAudit = new TrustsAudit {
+      override def doAudit(eventTypelMessage: String, auditTag: String)(implicit headerCarrier: HeaderCarrier, ec: ExecutionContext): Unit = ()
+    }
+    override val metrics: Metrics = TestMetrics
   }
-  val SUT = DesConnector
+  lazy val SUT = DesConnector
+
+
 }

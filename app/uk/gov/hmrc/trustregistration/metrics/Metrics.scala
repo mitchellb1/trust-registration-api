@@ -18,13 +18,31 @@ package uk.gov.hmrc.trustregistration.metrics
 
 import java.util.concurrent.TimeUnit
 
+import com.codahale.metrics.Timer
+import com.codahale.metrics.Timer.Context
 import com.kenshoo.play.metrics.MetricsRegistry
 
 trait Metrics {
-  def desConnectorTimer(diff: Long, unit: TimeUnit, method: String): Unit
+
+  def incrementUnauthorisedRequest(api: String): Unit
+  def incrementAuthorisedRequest(api: String): Unit
+  def incrementApiSuccessResponse(api: String): Unit
+  def incrementBadRequestResponse(api: String): Unit
+  def incrementNotFoundResponse(api: String) : Unit
+  def incrementInternalServerErrorResponse(api: String) : Unit
+  def startDesConnectorTimer(api: String): Timer.Context
+
 }
 
 object Metrics extends Metrics {
-  override def desConnectorTimer(diff: Long, unit: TimeUnit, method: String) =
-    MetricsRegistry.defaultRegistry.timer(s"des-connector-${method}-timer").update(diff, unit)
+
+  override def incrementUnauthorisedRequest(api: String): Unit = MetricsRegistry.defaultRegistry.counter(s"unauthorised-$api").inc()
+  override def incrementAuthorisedRequest(api: String): Unit = MetricsRegistry.defaultRegistry.counter(s"authorised-$api").inc()
+  override def incrementApiSuccessResponse(api: String): Unit = MetricsRegistry.defaultRegistry.counter(s"success-$api").inc()
+  override def incrementBadRequestResponse(api: String): Unit = MetricsRegistry.defaultRegistry.counter(s"bad-request-$api").inc()
+  override def incrementNotFoundResponse(api: String): Unit = MetricsRegistry.defaultRegistry.counter(s"not-found-$api").inc()
+  override def incrementInternalServerErrorResponse(api: String): Unit = MetricsRegistry.defaultRegistry.counter(s"internal-server-error-$api").inc()
+  override def startDesConnectorTimer(api: String): Context = MetricsRegistry.defaultRegistry.timer(s"des-$api-timer").time()
+
+
 }

@@ -23,7 +23,7 @@ import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustregistration.connectors.DesConnector
-import uk.gov.hmrc.trustregistration.models.{RegistrationDocument, TRN}
+import uk.gov.hmrc.trustregistration.models.{BadRequestResponse, RegistrationDocument, SuccessResponse, TRN}
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
@@ -44,7 +44,26 @@ class RegisterTrustServiceSpec extends PlaySpec
         result mustBe Right(TRN(testTRN))
       }
     }
+    "Return a SuccessResponse" when {
+      "a successful response is returned from DES for the call to no-change" in {
+        when(mockDesConnector.noChange(any())(any())).thenReturn(Future.successful(SuccessResponse))
+
+        val result = Await.result(SUT.noChange("1234567890")(HeaderCarrier()), Duration.Inf)
+        result mustBe SuccessResponse
+      }
+    }
+
+    "Return a BadRequestResponse" when {
+      "a bad requested is returned from DES for the call to no-change" in {
+        when(mockDesConnector.noChange(any())(any())).thenReturn(Future.successful(BadRequestResponse))
+
+        val result = Await.result(SUT.noChange("400BadRequest")(HeaderCarrier()), Duration.Inf)
+        result mustBe BadRequestResponse
+      }
+    }
   }
+
+
   val mockDesConnector = mock[DesConnector]
   object TestRegisterTrustService extends RegisterTrustService {
     override val desConnector: DesConnector = mockDesConnector

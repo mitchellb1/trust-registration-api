@@ -18,18 +18,16 @@ package uk.gov.hmrc.trustregistration.controllers
 
 import play.api.Logger
 import play.api.libs.json.{JsError, JsResult, JsValue, Json}
-import play.api.mvc.Action
-import uk.gov.hmrc.play.microservice.controller.BaseController
-import uk.gov.hmrc.trustregistration.models.{RegistrationDocument, TRN}
+import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.trustregistration.metrics.Metrics
+import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-trait RegisterTrustController extends BaseController {
 
-  val registerTrustService: RegisterTrustService
-
+trait RegisterTrustController extends TrustBaseController {
   def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     Logger.info("Register API invoked")
 
@@ -47,9 +45,30 @@ trait RegisterTrustController extends BaseController {
       }
     }
   }
-}
 
+  def noChange(identifier: String): Action[AnyContent] = Action.async{ implicit request =>
+
+    Logger.info(s"$className:noChange API invoked")
+    Logger.debug(s"$className:noChange($identifier) API invoked")
+
+    val authorised: Option[(String, String)] = hc.headers.find((tup) => tup._1 == AUTHORIZATION)
+
+    authorised match {
+      case Some((key, "AUTHORISED")) => {
+        Logger.info(s"$className:noChange API authorised")
+        metrics.incrementAuthorisedRequest("noChange")
+        respond("noChange", registerTrustService.noChange(identifier))
+      }
+      case _ => {
+        Logger.info(s"$className:noChange API returned unauthorised")
+        metrics.incrementUnauthorisedRequest("noChange")
+        Future.successful(Unauthorized)
+      }
+    }
+  }
+}
 
 object RegisterTrustController extends RegisterTrustController {
   override val registerTrustService = RegisterTrustService
+  override val metrics = Metrics
 }

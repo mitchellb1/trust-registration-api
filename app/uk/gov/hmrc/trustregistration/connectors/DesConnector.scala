@@ -16,25 +16,32 @@
 
 package uk.gov.hmrc.trustregistration.connectors
 
-import uk.gov.hmrc.play.http.{HeaderCarrier, HttpPost, HttpResponse, Upstream4xxResponse}
+import uk.gov.hmrc.play.http._
 import uk.gov.hmrc.trustregistration.WSHttp
-import uk.gov.hmrc.trustregistration.models.{RegistrationDocument, TRN}
+import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.play.config.ServicesConfig
+import uk.gov.hmrc.trustregistration.audit.TrustsAudit
+import uk.gov.hmrc.trustregistration.metrics.Metrics
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-trait DesConnector extends ServicesConfig {
+trait DesConnector extends ServicesConfig with RawResponseReads {
   val httpPost: HttpPost = WSHttp
+  val httpPut: HttpPut = WSHttp
+
+  val audit: TrustsAudit = TrustsAudit
+  val AuditNoChangeIdentifier: String = "trustRegistration_noAnnualChangeTrust"
+  val metrics : Metrics
 
   lazy val desUrl = baseUrl("des")
-  lazy val serviceUrl = s"$desUrl/trust-registration-stub"
+  lazy val serviceUrl = s"$desUrl/trust-registration-stub/trusts"
 
   def registerTrust(doc: RegistrationDocument)(implicit hc : HeaderCarrier) = {
 
     val uri: String = s"$serviceUrl/hello-world"
 
-    val result: Future[HttpResponse] = httpPost.POST[RegistrationDocument,HttpResponse](uri,doc)
+    val result: Future[HttpResponse] = httpPost.POST[RegistrationDocument,HttpResponse](uri,doc)(implicitly, httpReads, implicitly)
 
     result.map(f=> {
       f.status match{
@@ -45,6 +52,44 @@ trait DesConnector extends ServicesConfig {
       case _ => Left("400")
     })
   }
+
+  def noChange(identifier: String)(implicit hc : HeaderCarrier): Future[TrustResponse] = {
+    val uri: String = s"$serviceUrl/$identifier/no-change"
+
+    val timerStart = metrics.startDesConnectorTimer("no-change")
+
+    val result: Future[HttpResponse] = httpPut.PUT[String, HttpResponse](uri, identifier)(implicitly, httpReads, implicitly)
+
+    result.map(f=> {
+      timerStart.stop()
+      f.status match {
+        case 204 => {
+          audit.doAudit("noChangeTrustSuccessful", AuditNoChangeIdentifier)
+          SuccessResponse
+        }
+        case 400 => {
+          audit.doAudit("noChangeTrustFailure", AuditNoChangeIdentifier)
+          BadRequestResponse
+        }
+        case 404 => {
+          audit.doAudit("noChangeTrustFailure", AuditNoChangeIdentifier)
+          NotFoundResponse
+        }
+        case _ => {
+          audit.doAudit("noChangeTrustFailure", AuditNoChangeIdentifier)
+          InternalServerErrorResponse
+        }
+      }
+    }).recover {
+      case _ => {
+        audit.doAudit("noChangeTrustFailure", AuditNoChangeIdentifier)
+        InternalServerErrorResponse
+      }
+    }
+  }
 }
 
-object DesConnector extends DesConnector
+object DesConnector extends DesConnector {
+  override val audit: TrustsAudit = TrustsAudit
+  override val metrics: Metrics = Metrics
+}
