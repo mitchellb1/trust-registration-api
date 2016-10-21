@@ -71,7 +71,6 @@ class RegisterTrustControllerSpec extends PlaySpec
     }
     "return 200 ok" when {
       "the no change endpoint is called with a valid identifier" in {
-
         when(mockRegisterTrustService.noChange(any[String])(any[HeaderCarrier]))
           .thenReturn(Future.successful(SuccessResponse))
 
