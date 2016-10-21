@@ -48,8 +48,8 @@ class PlatformIntegrationSpec extends UnitSpec with MockitoSugar with ScalaFutur
       override val additionalConfiguration: Map[String, Any] = Map(
         "appName" -> "trust-registration-api",
         "appUrl" -> "http://trust-registration-api.service",
-        "Test.microservice.services.service-locator.host" -> stubHost,
-        "Test.microservice.services.service-locator.port" -> stubPort
+        "microservice.services.service-locator.host" -> stubHost,
+        "microservice.services.service-locator.port" -> stubPort
       )
       run {
         () => {
@@ -65,8 +65,8 @@ class PlatformIntegrationSpec extends UnitSpec with MockitoSugar with ScalaFutur
 
     "provide definition endpoint and documentation endpoint for each api" in new MicroserviceLocalRunSugar with Setup {
       override val additionalConfiguration: Map[String, Any] = Map(
-        "Test.microservice.services.service-locator.host" -> stubHost,
-        "Test.microservice.services.service-locator.port" -> stubPort
+        "microservice.services.service-locator.host" -> stubHost,
+        "microservice.services.service-locator.port" -> stubPort
       )
       run {
         () => {
@@ -101,8 +101,8 @@ class PlatformIntegrationSpec extends UnitSpec with MockitoSugar with ScalaFutur
 
     "provide raml documentation" in new MicroserviceLocalRunSugar with Setup {
       override val additionalConfiguration: Map[String, Any] = Map(
-        "Test.microservice.services.service-locator.host" -> stubHost,
-        "Test.microservice.services.service-locator.port" -> stubPort
+        "microservice.services.service-locator.host" -> stubHost,
+        "microservice.services.service-locator.port" -> stubPort
       )
       run {
         () => {
