@@ -16,22 +16,24 @@
 
 package uk.gov.hmrc.trustregistration.controllers
 
-import controllers.AssetsBuilder
-import uk.gov.hmrc.play.microservice.controller.BaseController
+import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
+import play.api.test.FakeRequest
+import play.api.test.Helpers._
 
-trait DocumentationController extends AssetsBuilder with BaseController {
 
-  def documentation(version: String, endpointName: String) = {
-    super.at(s"/public/api/documentation/$version", s"${endpointName.replaceAll(" ", "-")}.xml")
+class SandboxControllerSpec extends PlaySpec with OneAppPerSuite {
+
+  "SandboxController" should {
+    "not return a NotFound response" when {
+      "/no-change is accessed through the routes" in {
+        val result = route(FakeRequest(PUT, "/sandbox/trusts/1234567890/no-change"))
+        status(result.get) must not be (NOT_FOUND)
+      }
+      "/register is accessed through the routes" in {
+        val result = route(FakeRequest(POST, "/sandbox/trusts/register"))
+        status(result.get) must not be (NOT_FOUND)
+      }
+    }
   }
 
-  def definition() = {
-    super.at(s"/public/api", "definition.json")
-  }
-
-  def raml(version: String, file: String) = {
-    super.at(s"/public/api/conf/$version", file)
-  }
 }
-
-object DocumentationController extends DocumentationController
