@@ -54,15 +54,15 @@ trait RegisterTrustController extends TrustBaseController {
     val authorised: Option[(String, String)] = hc.headers.find((tup) => tup._1 == AUTHORIZATION)
 
     authorised match {
-      case Some((key, "NOT_AUTHORISED")) => {
-        Logger.info(s"$className:noChange API returned unauthorised")
-        metrics.incrementUnauthorisedRequest("noChange")
-        Future.successful(Unauthorized)
-      }
-      case _ => {
+      case Some((key, "AUTHORISED")) => {
         Logger.info(s"$className:noChange API authorised")
         metrics.incrementAuthorisedRequest("noChange")
         respond("noChange", registerTrustService.noChange(identifier))
+      }
+      case _ => {
+        Logger.info(s"$className:noChange API returned unauthorised")
+        metrics.incrementUnauthorisedRequest("noChange")
+        Future.successful(Unauthorized)
       }
     }
   }
