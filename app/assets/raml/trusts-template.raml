@@ -36,16 +36,7 @@ types:
       application/json:
         type: Trust
         example: !include examples/trust.json
-  /utr:
-    /{trn}:
-        type: base
-        uriParameters:
-          trn:
-            type: string
-            displayName: The TRN of the trust.
-        get:
-          description: Retrieves the UTR of the trust
-  /{utr}:
+  /{identifier}:
     type: base
     uriParameters:
       utr:
@@ -167,9 +158,9 @@ types:
           application/json:
             type: Protectors
             example: !include examples/protectors.json
-    /confirmation:
+    /no-change:
       type: base
-      post:
+      put:
         description: Confirms no change to the trust
         responses:
           200:
@@ -205,7 +196,7 @@ types:
             example: !include examples/estate.json
   post:
     description: Submits an entire set of data for a estate
-  /{utr}:
+  /{identifier}:
     type: base
     uriParameters:
       utr:
