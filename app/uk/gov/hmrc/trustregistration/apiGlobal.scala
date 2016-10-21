@@ -17,28 +17,36 @@
 package uk.gov.hmrc.trustregistration
 
 import com.typesafe.config.Config
+import config.AppContext
 import play.api._
-import uk.gov.hmrc.api.connector.ServiceLocatorConnector
+import uk.gov.hmrc.trustregistration.connectors.ServiceLocatorConnector
 import uk.gov.hmrc.play.audit.filters.AuditFilter
 import uk.gov.hmrc.play.auth.controllers.AuthParamsControllerConfig
 import uk.gov.hmrc.play.config.{AppName, ControllerConfig, RunMode}
-import uk.gov.hmrc.play.http.{HttpPost, HeaderCarrier}
+import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.http.logging.filters.LoggingFilter
 import uk.gov.hmrc.play.microservice.bootstrap.DefaultMicroserviceGlobal
 import uk.gov.hmrc.play.auth.microservice.filters.AuthorisationFilter
 import net.ceedubs.ficus.Ficus._
+
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 
 trait ServiceLocatorRegistration extends GlobalSettings with RunMode {
 
   val registrationEnabled: Boolean
+  val slConnector: ServiceLocatorConnector
   implicit val hc: HeaderCarrier
 
   override def onStart(app: Application): Unit = {
-    Logger.debug("Registering with service-locator")
-    ServiceLocatorConnector(WSHttp).register map { result =>
-      Logger.debug(s"service-locator registration result: $result")
+    super.onStart(app)
+    registrationEnabled match {
+      case true => {
+        Logger.debug("Registering with service-locator")
+        slConnector.register
+      }
+      case false => Logger.warn("Registration in Service Locator is disabled")
     }
   }
 }
@@ -68,6 +76,8 @@ object ApiAuthFilter extends AuthorisationFilter {
 }
 
 object ApiGlobal extends DefaultMicroserviceGlobal with RunMode with ServiceLocatorRegistration {
+
+  override val slConnector = ServiceLocatorConnector
 
   override val registrationEnabled = true
 
