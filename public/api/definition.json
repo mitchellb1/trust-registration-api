@@ -29,7 +29,7 @@
             "uriPattern": "/trusts/",
             "endpointName": "Fetch Trusts",
             "method": "GET",
-            "authType": "USER",
+            "authType": "APPLICATION",
             "throttlingTier": "UNLIMITED",
             "scope": "read:trusts-and-estates"
           },
@@ -37,7 +37,7 @@
             "uriPattern": "/trusts/",
             "endpointName": "Submit Trust",
             "method": "POST",
-            "authType": "USER",
+            "authType": "APPLICATION",
             "throttlingTier": "UNLIMITED",
             "scope": "write:trusts-and-estates"
           }
