@@ -1,15 +1,14 @@
 <endpoint>
-    <name>Say Hello Application</name>
-    <description>A simple example for integrating with an application-restricted service, using your <code>server_token</code>.</description>
-    <description>Any authorised request to this endpoint initiates a 'Hello Application' response. </description>
+    <name>Trust Registration Service</name>
+    <description>Submit a full Trust registration</description>
     <section id="resource">
         <title>Resource</title>
-        <resource>GET /hello/application</resource>
+        <resource>POST /trusts</resource>
     </section>
     <section id="authorisation">
         <title>Authorisation</title>
         <authorisation>
-            <type>APPLICATION</type>
+            <type>USER</type>
         </authorisation>
     </section>
     <section id="content-types">
@@ -25,7 +24,7 @@
         <httpStatus>200 (OK)</httpStatus>
         <json><![CDATA[
 {
-  "message": "Hello Application"
+  "message": "Hello"
 }
 		]]></json>
     </section>
