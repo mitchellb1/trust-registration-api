@@ -1,2 +1,2 @@
-POST       /register                uk.gov.hmrc.trustregistration.controllers.SandboxTrustController.register()
-PUT        /:identifier/no-change   uk.gov.hmrc.trustregistration.controllers.SandboxTrustController.noChange(identifier)
+POST       /trusts                         uk.gov.hmrc.trustregistration.controllers.SandboxTrustController.register()
+PUT        /trusts/:identifier/no-change   uk.gov.hmrc.trustregistration.controllers.SandboxTrustController.noChange(identifier)
