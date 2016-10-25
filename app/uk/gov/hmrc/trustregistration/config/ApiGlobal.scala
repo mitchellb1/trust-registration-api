@@ -17,20 +17,18 @@
 package uk.gov.hmrc.trustregistration
 
 import com.typesafe.config.Config
-import config.AppContext
+import config.{MicroserviceAuditConnector, MicroserviceAuthConnector}
 import play.api._
 import uk.gov.hmrc.trustregistration.connectors.ServiceLocatorConnector
 import uk.gov.hmrc.play.audit.filters.AuditFilter
 import uk.gov.hmrc.play.auth.controllers.AuthParamsControllerConfig
-import uk.gov.hmrc.play.config.{AppName, ControllerConfig, RunMode}
+import uk.gov.hmrc.play.config.{AppName, ControllerConfig, RunMode, ServicesConfig}
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.http.logging.filters.LoggingFilter
 import uk.gov.hmrc.play.microservice.bootstrap.DefaultMicroserviceGlobal
 import uk.gov.hmrc.play.auth.microservice.filters.AuthorisationFilter
 import net.ceedubs.ficus.Ficus._
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import play.api.Play._
 
 
 trait ServiceLocatorRegistration extends GlobalSettings with RunMode {
@@ -93,4 +91,11 @@ object ApiGlobal extends DefaultMicroserviceGlobal with RunMode with ServiceLoca
 
   override implicit val hc: HeaderCarrier = HeaderCarrier()
 
+}
+
+object AppContext extends ServicesConfig {
+  lazy val appName = current.configuration.getString("appName").getOrElse(throw new RuntimeException("appName is not configured"))
+  lazy val appUrl = current.configuration.getString("appUrl").getOrElse(throw new RuntimeException("appUrl is not configured"))
+  lazy val serviceLocatorUrl: String = baseUrl("service-locator")
+  lazy val registrationEnabled: Boolean = current.configuration.getBoolean(s"${env}.microservice.services.service-locator.enabled").getOrElse(true)
 }

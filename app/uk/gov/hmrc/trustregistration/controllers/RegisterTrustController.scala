@@ -68,6 +68,27 @@ trait RegisterTrustController extends TrustBaseController {
       }
     }
   }
+
+  def closeTrust(identifier: String): Action[AnyContent] = Action.async{ implicit request =>
+
+    Logger.info(s"$className:closeTrust API invoked")
+    Logger.debug(s"$className:closeTrust($identifier) API invoked")
+
+    val authorised: Option[(String, String)] = hc.headers.find((tup) => tup._1 == AUTHORIZATION)
+
+    authorised match {
+      case Some((key, "AUTHORISED")) => {
+        Logger.info(s"$className:closeTrust API authorised")
+        metrics.incrementAuthorisedRequest("closeTrust")
+        respond("closeTrust", registerTrustService.closeTrust(identifier))
+      }
+      case _ => {
+        Logger.info(s"$className:closeTrust API returned unauthorised")
+        metrics.incrementUnauthorisedRequest("closeTrust")
+        Future.successful(Unauthorized)
+      }
+    }
+  }
 }
 
 object SandboxTrustController extends RegisterTrustController{
@@ -78,6 +99,10 @@ object SandboxTrustController extends RegisterTrustController{
     Future.successful(Ok(Json.toJson(TRN("TRN-1234"))))
   }
   override def noChange(id: String) = Action.async { implicit request =>
+    Future.successful(Ok)
+  }
+
+  override def closeTrust(id: String) = Action.async { implicit request =>
     Future.successful(Ok)
   }
 }

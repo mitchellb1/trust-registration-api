@@ -18,8 +18,8 @@ package uk.gov.hmrc.trustregistration.connectors
 
 import play.api.Logger
 import uk.gov.hmrc.play.http.{HeaderCarrier, HttpPost}
-import uk.gov.hmrc.trustregistration.WSHttp
-import uk.gov.hmrc.trustregistration.config.AppContext
+import uk.gov.hmrc.trustregistration.AppContext
+import uk.gov.hmrc.trustregistration.config.WSHttp
 import uk.gov.hmrc.trustregistration.models.TrustApiServiceRegistration
 
 import scala.concurrent.ExecutionContext.Implicits.global
