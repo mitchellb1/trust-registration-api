@@ -20,6 +20,7 @@ types:
   LeadTrusteeCompany: !include schemas/trust.json#/properties/trust/properties/leadTrustee/properties/company
   NaturalPersons: !include schemas/trust.json#/properties/trust/properties/naturalPersons
   NoChange: !include schemas/no-change.json
+  Close: !include schemas/close.json
 /trusts:
   type: base
   get:
@@ -44,8 +45,16 @@ types:
         displayName: The SA UTR of the trust.
     get:
       description: Retrieves a specific trust
-    delete:
-      description: Deletes a specific trust
+    /close:
+      type: base
+      put:
+        description: Closes the specified trust
+        responses:
+          200:
+            body:
+              application/json:
+                type: Close
+                example: !include examples/close.json
     /lead-trustee-individual:
       type: base
       get:

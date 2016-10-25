@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "id": "http://uk/gov/hmrc/trustregistration/raml/schemas/close.json",
+  "title": "Close a trust",
+  "description": "A HATEOAS response linking back to the Trust data itself",
+  "type": "object",
+  "properties": {
+    "_links": {
+      "type": "object",
+      "properties": {
+        "trust": {
+          "type": "object",
+          "properties": {
+            "href": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}
