@@ -1,6 +1,6 @@
 # Add all the application routes to the app.routes file
 ->         /trusts-estates                  live.Routes
-->         /sandbox/trusts-estates          sandbox.Routes
+->         /trusts-estates/sandbox          sandbox.Routes
 
 ->         /                                definition.Routes
 ->         /                                health.Routes
