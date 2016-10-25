@@ -39,7 +39,7 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
 
   def registerTrust(doc: RegistrationDocument)(implicit hc : HeaderCarrier) = {
 
-    val uri: String = s"$serviceUrl/hello-world"
+    val uri: String = s"$serviceUrl/register"
 
     val result: Future[HttpResponse] = httpPost.POST[RegistrationDocument,HttpResponse](uri,doc)(implicitly, httpReads, implicitly)
 
