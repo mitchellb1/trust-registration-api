@@ -26,11 +26,11 @@ class SandboxControllerSpec extends PlaySpec with OneAppPerSuite {
   "SandboxController" should {
     "not return a NotFound response" when {
       "/no-change is accessed through the routes" in {
-        val result = route(FakeRequest(PUT, "/sandbox/trusts-estates/trusts/1234567890/no-change"))
+        val result = route(FakeRequest(PUT, "/trusts-estates/sandbox/trusts/1234567890/no-change"))
         status(result.get) must not be (NOT_FOUND)
       }
       "/register is accessed through the routes" in {
-        val result = route(FakeRequest(POST, "/sandbox/trusts-estates/trusts/"))
+        val result = route(FakeRequest(POST, "/trusts-estates/sandbox/trusts/"))
         status(result.get) must not be (NOT_FOUND)
       }
     }
