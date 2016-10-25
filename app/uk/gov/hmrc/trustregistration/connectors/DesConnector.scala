@@ -17,10 +17,10 @@
 package uk.gov.hmrc.trustregistration.connectors
 
 import uk.gov.hmrc.play.http._
-import uk.gov.hmrc.trustregistration.WSHttp
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.trustregistration.audit.TrustsAudit
+import uk.gov.hmrc.trustregistration.config.WSHttp
 import uk.gov.hmrc.trustregistration.metrics.Metrics
 
 import scala.concurrent.Future
@@ -32,6 +32,7 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
 
   val audit: TrustsAudit = TrustsAudit
   val AuditNoChangeIdentifier: String = "trustRegistration_noAnnualChangeTrust"
+  val AuditCloseTrustIdentifier: String = "trustRegistration_CloseTrust"
   val metrics : Metrics
 
   lazy val desUrl = baseUrl("des")
@@ -83,6 +84,41 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
     }).recover {
       case _ => {
         audit.doAudit("noChangeTrustFailure", AuditNoChangeIdentifier)
+        InternalServerErrorResponse
+      }
+    }
+  }
+
+  def closeTrust(identifier: String)(implicit hc : HeaderCarrier): Future[TrustResponse] = {
+    val uri: String = s"$serviceUrl/$identifier/closeTrust"
+
+    val timerStart = metrics.startDesConnectorTimer("closeTrust")
+
+    val result: Future[HttpResponse] = httpPut.PUT[String, HttpResponse](uri, identifier)(implicitly, httpReads, implicitly)
+
+    result.map(f=> {
+      timerStart.stop()
+      f.status match {
+        case 204 => {
+          audit.doAudit("closeTrustSuccessful", AuditCloseTrustIdentifier)
+          SuccessResponse
+        }
+        case 400 => {
+          audit.doAudit("closeTrustFailure", AuditCloseTrustIdentifier)
+          BadRequestResponse
+        }
+        case 404 => {
+          audit.doAudit("closeTrustFailure", AuditCloseTrustIdentifier)
+          NotFoundResponse
+        }
+        case _ => {
+          audit.doAudit("closeTrustFailure", AuditCloseTrustIdentifier)
+          InternalServerErrorResponse
+        }
+      }
+    }).recover {
+      case _ => {
+        audit.doAudit("ncloseTrustFailure", AuditCloseTrustIdentifier)
         InternalServerErrorResponse
       }
     }

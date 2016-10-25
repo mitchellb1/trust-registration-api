@@ -69,6 +69,7 @@ class RegisterTrustControllerSpec extends PlaySpec
         }
       }
     }
+    //no change tests
     "return 200 ok" when {
       "the no change endpoint is called with a valid identifier" in {
         when(mockRegisterTrustService.noChange(any[String])(any[HeaderCarrier]))
@@ -112,13 +113,57 @@ class RegisterTrustControllerSpec extends PlaySpec
       }
     }
 
+    //Close trust test
+    "return 200 ok" when {
+      "the closeTrust endpoint is called with a valid identifier" in {
+        when(mockRegisterTrustService.closeTrust(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(SuccessResponse))
+
+        val result = SUT.closeTrust("sadfg").apply(FakeRequest("PUT", ""))
+
+        status(result) mustBe OK
+      }
+    }
+
+    "return 400" when {
+      "the closeTrust endpoint is called with an invalid identifier" in {
+        when(mockRegisterTrustService.closeTrust(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(BadRequestResponse))
+
+        val result = SUT.closeTrust("sadfg").apply(FakeRequest("PUT", ""))
+
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
+    "return 401" when {
+      "the closeTrust endpoint is called and authentication credentials are missing or incorrect" in {
+
+        when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "NOT_AUTHORISED"))
+        val result = SUT.closeTrust("12345").apply(FakeRequest("PUT", ""))
+
+        status(result) mustBe UNAUTHORIZED
+      }
+    }
+
+    "return 404" when {
+      "the closeTrust endpoint is called and we pass an identifier that does not return a trust" in {
+        when(mockRegisterTrustService.closeTrust(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(NotFoundResponse))
+
+        val result = SUT.closeTrust("sadfg").apply(FakeRequest("PUT", ""))
+
+        status(result) mustBe NOT_FOUND
+      }
+    }
+
 
     "return 500" when {
       "something is broken" in {
-        when(mockRegisterTrustService.noChange(any[String])(any[HeaderCarrier]))
+        when(mockRegisterTrustService.closeTrust(any[String])(any[HeaderCarrier]))
           .thenReturn(Future.successful(InternalServerErrorResponse))
 
-        val result = SUT.noChange("sadfg").apply(FakeRequest("PUT", ""))
+        val result = SUT.closeTrust("sadfg").apply(FakeRequest("PUT", ""))
         status(result) mustBe INTERNAL_SERVER_ERROR
       }
     }
@@ -134,13 +179,11 @@ class RegisterTrustControllerSpec extends PlaySpec
   private val mockRegisterTrustService = mock[RegisterTrustService]
   private val mockHC = mock[HeaderCarrier]
 
-  object TestRegisterTrustController extends RegisterTrustController {
+  object SUT extends RegisterTrustController {
     override implicit def hc(implicit rh: RequestHeader): HeaderCarrier = mockHC
 
     override val registerTrustService: RegisterTrustService = mockRegisterTrustService
   }
-
-  private val SUT = TestRegisterTrustController
 
 
   private def withCallToPOST(payload: JsValue)(handler: Future[Result] => Any) = {

@@ -61,6 +61,23 @@ class RegisterTrustServiceSpec extends PlaySpec
         result mustBe BadRequestResponse
       }
     }
+    "Return a SuccessResponse" when {
+      "a successful response is returned from DES for the call to closeTrust" in {
+        when(mockDesConnector.noChange(any())(any())).thenReturn(Future.successful(SuccessResponse))
+
+        val result = Await.result(SUT.noChange("1234567890")(HeaderCarrier()), Duration.Inf)
+        result mustBe SuccessResponse
+      }
+    }
+
+    "Return a BadRequestResponse" when {
+      "a bad requested is returned from DES for the call to closeTrust" in {
+        when(mockDesConnector.noChange(any())(any())).thenReturn(Future.successful(BadRequestResponse))
+
+        val result = Await.result(SUT.noChange("400BadRequest")(HeaderCarrier()), Duration.Inf)
+        result mustBe BadRequestResponse
+      }
+    }
   }
 
 
