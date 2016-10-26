@@ -1,0 +1,17 @@
+[
+	{
+	  "key": "read:trusts-estates",
+	  "name": "Access trusts and estates information",
+	  "description": "Access information for managing trusts and estates"
+	},
+	{
+	  "key": "write:trusts-estates",
+	  "name": "Add and update trusts and estates information",
+	  "description": "Add and Update information for trusts and estates"
+	},
+	{
+	  "key": "delete:trusts-estates",
+	  "name": "Delete trusts and estates information",
+	  "description": "Delete information for trusts and estates"
+	}
+]

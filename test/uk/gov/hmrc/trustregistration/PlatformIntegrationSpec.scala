@@ -107,7 +107,7 @@ class PlatformIntegrationSpec extends UnitSpec with MockitoSugar with ScalaFutur
       run {
         () => {
 
-          val result = documentationController.raml("1.0", "trusts-template.raml")(request)
+          val result = documentationController.raml("1.0", "application.raml")(request)
 
           status(result) shouldBe 200
           bodyOf(result).futureValue should startWith("#%RAML 1.0")
