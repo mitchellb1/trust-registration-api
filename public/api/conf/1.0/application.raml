@@ -1,11 +1,9 @@
 #%RAML 1.0
-title: HMRC Trust Registration Service
+title: Trust Registration Service
+description: An API for registering and updating trusts.
 version: Beta 1.0
 protocols: [ HTTPS ]
 baseUri: https://api.service.hmrc.gov.uk/
-documentation:
-  - title: Trust Registration Service
-    content: An API for registering and updating trusts.
 mediaType: application/hal+json
 resourceTypes:
   base: !include resourceTypes/base.raml
@@ -20,9 +18,11 @@ types:
   LeadTrusteeCompany: !include schemas/trust.json#/properties/trust/properties/leadTrustee/properties/company
   NaturalPersons: !include schemas/trust.json#/properties/trust/properties/naturalPersons
   NoChange: !include schemas/no-change.json
+  Close: !include schemas/close.json
 /trusts:
   type: base
   get:
+    displayName: My Trusts
     description: Retrieves all the trusts available to the user
     responses:
       200:
@@ -31,33 +31,36 @@ types:
             type: Trust
             example: !include examples/trust.json
   post:
+    displayName: Full Trust Registration
     description: Submits an entire set of data for a trust
     body:
       application/json:
         type: Trust
         example: !include examples/trust.json
-  /utr:
-    /{trn}:
-        type: base
-        uriParameters:
-          trn:
-            type: string
-            displayName: The TRN of the trust.
-        get:
-          description: Retrieves the UTR of the trust
-  /{utr}:
+  /{identifier}:
     type: base
     uriParameters:
       utr:
         type: string
         displayName: The SA UTR of the trust.
     get:
+      displayName: Get Trust
       description: Retrieves a specific trust
-    delete:
-      description: Deletes a specific trust
+    /close:
+      type: base
+      put:
+        displayName: Close Trust
+        description: Closes the specified trust
+        responses:
+          200:
+            body:
+              application/json:
+                type: Close
+                example: !include examples/close.json
     /lead-trustee-individual:
       type: base
       get:
+        displayName: Get Lead Trustee Individual
         description: Retrieves the information for an lead Trustee as an individual
         responses:
           200:
@@ -66,6 +69,7 @@ types:
                 type: LeadTrusteeIndividual
                 example: !include examples/lead-trustee-individual.json
       put:
+        displayName: Update Lead Trustee Individual
         description: Updates the information for an lead Trustee as an individual
         body:
           application/json:
@@ -74,6 +78,7 @@ types:
     /lead-trustee-company:
       type: base
       get:
+        displayName: Get Lead Trustee Company
         description: Retrieves the information for an lead Trustee as an company
         responses:
           200:
@@ -82,6 +87,7 @@ types:
                 type: LeadTrusteeCompany
                 example: !include examples/lead-trustee-company.json
       put:
+        displayName: Update Lead Trustee Company
         description: Updates the information for an lead Trustee as an company
         body:
           application/json:
@@ -90,6 +96,7 @@ types:
     /trustees:
       type: base
       get:
+        displayName: Get Trustees
         description: Retrieves all the trustees of the Trust
         responses:
           200:
@@ -98,6 +105,7 @@ types:
                 type: Trustees
                 example: !include examples/trustees.json
       put:
+        displayName: Update Trustees
         description: Updates all the trustees of the Trust
         body:
           application/json:
@@ -106,6 +114,7 @@ types:
     /beneficiaries:
       type: base
       get:
+        displayName: Get Beneficiaries
         description: Retrieves all the beneficiaries of the Trust
         responses:
           200:
@@ -114,6 +123,7 @@ types:
                 type: Beneficiaries
                 example: !include examples/beneficiaries.json
       put:
+        displayName: Update Beneficiaries
         description: Updates all the beneficiaries of the Trust
         body:
           application/json:
@@ -122,6 +132,7 @@ types:
     /settlors:
       type: base
       get:
+        displayName: Get Settlors
         description: Retrieves all the settlors for the Trust
         responses:
           200:
@@ -130,6 +141,7 @@ types:
                 type: Settlors
                 example: !include examples/settlors.json
       put:
+        displayName: Update Beneficiaries
         description: Updates all the settlors for the Trust
         body:
           application/json:
@@ -138,6 +150,7 @@ types:
     /natural-persons:
       type: base
       get:
+        displayName: Get Natural Persons
         description: Retrieves all the "natural persons" for the Trust
         responses:
           200:
@@ -146,6 +159,7 @@ types:
                 type: NaturalPersons
                 example: !include examples/natural-persons.json
       put:
+        displayName: Update Beneficiaries
         description: Updates all the "natural persons" for the Trust
         body:
           application/json:
@@ -154,6 +168,7 @@ types:
     /protectors:
       type: base
       get:
+        displayName: Get Protectors
         description: Retrieves all the protectors for the Trust
         responses:
           200:
@@ -162,14 +177,16 @@ types:
                 type: Protectors
                 example: !include examples/protectors.json
       put:
+        displayName: Update Protectors
         description: Updates all the protectors for the Trust
         body:
           application/json:
             type: Protectors
             example: !include examples/protectors.json
-    /confirmation:
+    /no-change:
       type: base
-      post:
+      put:
+        displayName: No Change
         description: Confirms no change to the trust
         responses:
           200:
@@ -180,6 +197,7 @@ types:
   /lead-trustee-individual:
     type: base
     post:
+      displayName: Register Lead Trustee Individual
       description: Registers a lead Trustee as an individual
       body:
         application/json:
@@ -188,6 +206,7 @@ types:
   /lead-trustee-company:
     type: base
     post:
+      displayName: Register Lead Trustee Company
       description: Registers a lead Trustee as an company
       body:
         application/json:
@@ -196,6 +215,7 @@ types:
 /estates:
   type: base
   get:
+    displayName: My Estates
     description: Retrieves all the estates available to the user
     responses:
       200:
@@ -204,14 +224,16 @@ types:
             type: Estate
             example: !include examples/estate.json
   post:
+    displayName: Register Estate
     description: Submits an entire set of data for a estate
-  /{utr}:
+  /{identifier}:
     type: base
     uriParameters:
       utr:
         type: string
         displayName: The SA UTR of the estate.
     get:
+      displayName: Get Estate
       description: Retrieve a specific estate
       responses:
         200:
@@ -220,4 +242,5 @@ types:
               type: Estate
               example: !include examples/estate.json
     delete:
+      displayName: Delete Estate
       description: Deletes a specific estate
