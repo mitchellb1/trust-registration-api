@@ -1,9 +1,9 @@
 <endpoint>
     <name>Trust Registration Service</name>
-    <description>Submit a full Trust registration</description>
+    <description>This is sample documentation</description>
     <section id="resource">
         <title>Resource</title>
-        <resource>POST /trusts</resource>
+        <resource>GET /trusts</resource>
     </section>
     <section id="authorisation">
         <title>Authorisation</title>
@@ -23,9 +23,9 @@
         <title>Response</title>
         <httpStatus>200 (OK)</httpStatus>
         <json><![CDATA[
-{
-  "message": "Hello"
-}
+            {
+              "message": "Hello"
+            }
 		]]></json>
     </section>
 </endpoint>

@@ -22,7 +22,7 @@ import uk.gov.hmrc.play.microservice.controller.BaseController
 trait DocumentationController extends AssetsBuilder with BaseController {
 
   def documentation(version: String, endpointName: String) = {
-    super.at(s"/public/api/documentation/$version", s"${endpointName.replaceAll(" ", "-")}.xml")
+    super.at(s"/public/api/documentation/$version", "Sample-Trusts.xml")
   }
 
   def definition() = {
