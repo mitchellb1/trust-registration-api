@@ -16,9 +16,10 @@
 
 package uk.gov.hmrc.trustregistration.models
 
-trait TrustResponse
-object SuccessResponse extends TrustResponse
-object BadRequestResponse extends TrustResponse
-object NotFoundResponse extends TrustResponse
-object InternalServerErrorResponse extends TrustResponse
-case class GetTrusteeSuccessResponse(trustees:List[Trustee]) extends TrustResponse
+import play.api.libs.json.Json
+
+case class Trustee(givenName: String)
+
+object Trustee {
+  implicit val formats = Json.format[Trustee]
+}
