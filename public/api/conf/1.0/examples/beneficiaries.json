@@ -1,126 +1,67 @@
 {
-  "individual" : [
-  {
-    "individual": {
-      "title": "Mr",
-      "firstName": "John",
-      "middleName": "",
-      "surname": "Doe",
-      "country": "UK",
-      "isUkNational": true,
-      "nino": "WA123456C",
-      "passport": {
-        "identifier": "123456789",
-        "date": "2015-01-20"
-      }
-    },
-    "isSettlorUkNational": true,
-    "isVulnerableBeneficiary": true,
-    "income": {
-        "benDiscretion": "sample",
-        "benPercent": "sample"
-    }
-  },
-  {
-    "individual": {
-      "title": "Mr",
-      "firstName": "John",
-      "middleName": "",
-      "surname": "Doe",
-      "country": "UK",
-      "isUkNational": true,
-      "nino": "WA123456C",
-      "passport": {
-        "identifier": "123456789",
-        "date": "2015-01-20"
-      }
-    },
-    "isSettlorUkNational": true,
-    "isVulnerableBeneficiary": true,
-    "income": {
-        "benDiscretion": "sample",
-        "benPercent": "sample"
-      }
-    }
-  ],
-  "charity" : [
-    {
-      "charityBenName" : "sample",
-      "charityBenNumber" : "000 00 000",
-      "correspondenceAddress": {
-        "isNonUkAddress": false,
-        "addressLine1": "1 Any Street",
-        "addressLine2": "",
-        "addressLine3": "",
-        "addressLine4": "Any Town",
-        "postcode":  "NE30 21BR",
-        "Country": "UK"
-      },
-      "income" : {
-        "benDiscretion" : "sample",
-        "benPercent" : "sample"
-      }
-    }
-  ],
-  "director" : [
-    {
-      "individual" :   {
-            "title": "Mr",
-            "firstName": "John",
-            "middleName": "",
-            "surname": "Doe",
-            "country": "UK",
-            "isUkNational": true,
-            "nino": "WA123456C",
-            "passport": {
-              "identifier": "123456789",
-              "date": "2015-01-20"
-            }
+  "beneficiaries": {
+    "individualBeneficiaries": [
+      {
+        "individual": {
+          "title": "Mr",
+          "givenName": "Joe",
+          "otherName": "Fred",
+          "familyName": "Bloggs",
+          "dateOfBirth": "10/10/1967",
+          "nino": "WA123456A",
+          "passport": {
+            "identifier": "123435egxb",
+            "expiryDate": "12/12/2017",
+            "countryOfIssue": "UK"
           },
-        "income" : {
-          "benDiscretion" : "sample",
-          "benPercent" : "sample"
-        }
-    }
-  ],
-  "employee" : [
-    {
-      "individual" :   {
-            "title": "Mr",
-            "firstName": "John",
-            "middleName": "",
-            "surname": "Doe",
-            "country": "UK",
-            "isUkNational": true,
-            "nino": "WA123456C",
-            "passport": {
-              "identifier": "123456789",
-              "date": "2015-01-20"
-            }
+          "correspondenceAddress": {
+            "isNonUkAddress": false,
+            "addressLine1": "Line 1",
+            "addressLine2": "Line 2",
+            "addressLine3": "Line 3",
+            "addressLine4": "Line 4",
+            "postcode": "NE1 2BR",
+            "country": "UK"
+          },
+          "telephoneNumber": "0191 234 5678"
         },
-        "isVulnerableBeneficiary": true,
-        "income": {
-            "benDiscretion": "sample",
-            "benPercent": "sample"
-        }
-    }
-  ],
-  "other" : [
-    {
-      "otherBenType" : "sample",
-      "correspondenceAddress": {
-        "isNonUkAddress": false,
-        "addressLine1": "1 Any Street",
-        "addressLine2": "",
-        "addressLine3": "",
-        "addressLine4": "Any Town",
-        "postcode":  "NE30 21BR",
-        "Country": "UK"
-      },
-      "income": {
-          "benDiscretion": "sample",
-          "benPercent": "sample"
+        "isVulnerable": false,
+        "isIncomeAtTrusteeDiscretion": true,
+        "shareOfIncome": 30
       }
-    }
-  ]
+    ],
+    "charityBeneficiaries": [
+      {
+        "name": "Charity Name",
+        "number": "123456789087654",
+        "correspondenceAddress": {
+          "isNonUkAddress": false,
+          "addressLine1": "Line 1",
+          "addressLine2": "Line 2",
+          "addressLine3": "Line 3",
+          "addressLine4": "Line 4",
+          "postcode": "NE1 2BR",
+          "country": "UK"
+        },
+        "isIncomeAtTrusteeDiscretion": false,
+        "shareOfIncome": 20
+      }
+    ],
+    "otherBeneficiaries": [
+      {
+        "description": "Beneficiary Description",
+        "correspondenceAddress": {
+          "isNonUkAddress": false,
+          "addressLine1": "Line 1",
+          "addressLine2": "Line 2",
+          "addressLine3": "Line 3",
+          "addressLine4": "Line 4",
+          "postcode": "NE1 2BR",
+          "country": "UK"
+        },
+        "isIncomeAtTrusteeDiscretion": false,
+        "shareOfIncome": 50
+      }
+    ]
+  }
 }
