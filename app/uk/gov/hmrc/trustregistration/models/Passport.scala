@@ -16,10 +16,14 @@
 
 package uk.gov.hmrc.trustregistration.models
 
-import play.api.libs.json.Json
+import org.joda.time.DateTime
+import play.api.libs.json._
 
-case class Trustee(givenName: String, passport: Option[Passport] = None, correspondenceAddress: Option[Address] = None)
+case class Passport(identifier: String, expiryDate: DateTime, countryOfIssue: String)
 
-object Trustee {
-  implicit val formats = Json.format[Trustee]
+object Passport {
+
+  implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
+  implicit val passportFormat = Json.format[Passport]
+
 }
