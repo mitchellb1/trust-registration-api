@@ -167,6 +167,70 @@ class RegisterTrustControllerSpec extends PlaySpec
         status(result) mustBe INTERNAL_SERVER_ERROR
       }
     }
+
+  }
+
+  "Trustees endpoint" must {
+
+    "not return a NotFound response" when {
+      "the endpoint is called with a routed fake request" in {
+        val result = route(FakeRequest(GET, "/trusts/1234567890/trustees"))
+        status(result.get) must not be (NOT_FOUND)
+      }
+    }
+
+    "return 200 ok" when {
+      "the endpoint is called with a valid identifier" in {
+        when(mockRegisterTrustService.getTrustees(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(SuccessResponse))
+
+        val result = SUT.getTrustees("sadfg").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe OK
+      }
+    }
+
+    "return 404 not found" when {
+      "the endpoint is called with an identifier that can't be found" in {
+        when(mockRegisterTrustService.getTrustees(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(NotFoundResponse))
+
+        val result = SUT.getTrustees("404NotFound").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe NOT_FOUND
+      }
+    }
+
+    "return 400" when {
+      "the closeTrust endpoint is called with an invalid identifier" in {
+        when(mockRegisterTrustService.getTrustees(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(BadRequestResponse))
+
+        val result = SUT.getTrustees("sadfg").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
+    "return 500" when {
+      "something is broken" in {
+        when(mockRegisterTrustService.getTrustees(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(InternalServerErrorResponse))
+
+        val result = SUT.getTrustees("sadfg").apply(FakeRequest("GET", ""))
+        status(result) mustBe INTERNAL_SERVER_ERROR
+      }
+    }
+
+    "return 401" when {
+      "the getTrustees endpoint is called and authentication credentials are missing or incorrect" in {
+
+        when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "NOT_AUTHORISED"))
+        val result = SUT.getTrustees("12345").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe UNAUTHORIZED
+      }
+    }
   }
 
   private val regDocPayload = Json.obj(
