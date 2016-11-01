@@ -1,75 +1,43 @@
 {
-  "person": [
+  "individuals": [
     {
-      "individual": {
-        "title": "Mr",
-        "firstName": "John",
-        "middleName": "",
-        "surname": "Doe",
-        "country": "UK",
-        "isUkNational": true,
-        "nino": "WA123456C",
-        "passport": {
-          "identifier": "123456789",
-          "date": "2015-01-20"
-        }
+      "title": "Mr",
+      "givenName": "Joe",
+      "otherName": "Fred",
+      "familyName": "Bloggs",
+      "dateOfBirth": "10/10/1967",
+      "nino": "WA123456A",
+      "passport": {
+        "identifier": "123435egxb",
+        "expiryDate": "12/12/2017",
+        "countryOfIssue": "UK"
       },
-      "dateOfBirth": "1950-01-20",
       "correspondenceAddress": {
         "isNonUkAddress": false,
-        "addressLine1": "1 Any Street",
-        "addressLine2": "",
-        "addressLine3": "",
-        "addressLine4": "Any Town",
-        "postcode":  "NE30 21BR",
-        "Country": "UK"
+        "addressLine1": "Line 1",
+        "addressLine2": "Line 2",
+        "addressLine3": "Line 3",
+        "addressLine4": "Line 4",
+        "postcode": "NE1 2BR",
+        "country": "UK"
       },
-      "isSettlorUkNational": true
-    },
-    {
-      "individual": {
-        "title": "Mr",
-        "firstName": "John",
-        "middleName": "",
-        "surname": "Doe",
-        "country": "UK",
-        "isUkNational": true,
-        "nino": "WA123456C",
-        "passport": {
-          "identifier": "123456789",
-          "date": "2015-01-20"
-        }
-      },
-      "dateOfBirth": "1950-01-20",
-      "correspondenceAddress": {
-        "isNonUkAddress": false,
-        "addressLine1": "1 Any Street",
-        "addressLine2": "",
-        "addressLine3": "",
-        "addressLine4": "Any Town",
-        "postcode":  "NE30 21BR",
-        "Country": "UK"
-      },
-      "isSettlorUkNational": true
+      "telephoneNumber": "0191 234 5678"
     }
   ],
-  "company": [
+  "companies": [
     {
-      "settlorType": "dummy settlor type value",
-      "company": {
-        "name": "company name value",
-        "referenceNumber": "company reference number value",
-        "correspondenceAddress": {
-          "isNonUkAddress": true,
-          "addressLine1": "address line 1 value",
-          "addressLine2": "address line 2 value",
-          "addressLine3": "address line 3 value",
-          "addressLine4": "address line 4 value",
-          "postcode": "NE83QW",
-          "Country": "India"
-        }
+      "name": "Protector Company",
+      "referenceNumber": "123456789",
+      "correspondenceAddress": {
+        "isNonUkAddress": false,
+        "addressLine1": "Line 1",
+        "addressLine2": "Line 2",
+        "addressLine3": "Line 3",
+        "addressLine4": "Line 4",
+        "postcode": "NE1 2BR",
+        "country": "UK"
       },
-      "companyTelephoneNumber": "0123456789"
+      "telephoneNumber": "0191 234 5678"
     }
   ]
 }

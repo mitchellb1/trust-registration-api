@@ -409,7 +409,7 @@
       "items": {
         "type": "object",
         "properties": {
-          "$ref": "#/definitions/individual",
+          "individual" : {"$ref": "#/definitions/individual"},
           "isVulnerable": {
             "type": "boolean"
           },
@@ -484,7 +484,7 @@
     "willIntestacyTrust": {
       "type": "object",
       "properties": {
-        "assets" : {
+        "assets": {
           "type": "object",
           "properties": {
             "monetaryAssets": {
@@ -503,42 +503,68 @@
               "$ref": "#/definitions/otherAssets"
             }
           },
-          "anyOf" :[
-            {"required" : ["monetaryAssets"]},
-            {"required" : ["propertyAssets"]},
-            {"required" : ["shareAssets"]},
-            {"required" : ["businessAssets"]},
-            {"required" : ["otherAssets"]}
+          "anyOf": [
+            {
+              "required": [
+                "monetaryAssets"
+              ]
+            },
+            {
+              "required": [
+                "propertyAssets"
+              ]
+            },
+            {
+              "required": [
+                "shareAssets"
+              ]
+            },
+            {
+              "required": [
+                "businessAssets"
+              ]
+            },
+            {
+              "required": [
+                "otherAssets"
+              ]
+            }
           ]
         },
-        "beneficiaries" : {
+        "beneficiaries": {
           "type": "object",
           "properties": {
             "individualBeneficiaries": {
               "$ref": "#/definitions/individualBeneficiaries"
             },
-            "charityBeneficiaries":{
+            "charityBeneficiaries": {
               "$ref": "#/definitions/charityBeneficiaries"
             },
             "otherBeneficiaries": {
               "$ref": "#/definitions/otherBeneficiaries"
             }
           },
-          "anyOf" :[
-            {"required" : ["individualBeneficiaries"]},
-            {"required" : ["charityBeneficiaries"]},
-            {"required" : ["otherBeneficiaries"]}
+          "anyOf": [
+            {
+              "required": ["individualBeneficiaries"]
+            },
+            {
+              "required": ["charityBeneficiaries"]
+            },
+            {
+              "required": ["otherBeneficiaries"]
+            }
           ]
         },
-        "deceased" : {
+        "deceased": {
           "$ref": "#/definitions/individual"
-        },
-        "required" : [
-          "assets",
-          "beneficiaries",
-          "deceased"
-        ]
-      }
+        }
+      },
+      "required" : [
+        "assets",
+        "beneficiaries",
+        "deceased"
+      ]
     },
     "interVivoTrust": {
       "type": "object",
@@ -863,7 +889,6 @@
         "declaration": {
           "$ref": "#/definitions/declaration"
         },
-
         "willIntestacyTrust" :{
           "$ref": "#/definitions/willIntestacyTrust"
         },
