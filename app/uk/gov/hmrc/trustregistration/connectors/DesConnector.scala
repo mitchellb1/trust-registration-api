@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.trustregistration.connectors
 
+import play.api.libs.json.JsValue
 import uk.gov.hmrc.play.http._
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.play.config.ServicesConfig
@@ -29,6 +30,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 trait DesConnector extends ServicesConfig with RawResponseReads {
   val httpPost: HttpPost = WSHttp
   val httpPut: HttpPut = WSHttp
+  val httpGet: HttpGet = WSHttp
 
   val audit: TrustsAudit
   val metrics: TrustMetrics
@@ -124,6 +126,32 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
       }
     }
   }
+
+  def getTrustees(identifier: String)(implicit hc : HeaderCarrier): Future[TrustResponse] = {
+
+    val uri: String = s"$serviceUrl/$identifier/trustees"
+
+    val result: Future[HttpResponse] = httpGet.GET[HttpResponse](uri)(httpReads, implicitly)
+
+    result.map(f => {
+      f.status match {
+        case 200 => {
+          val trustees = f.json.asOpt[List[Individual]]
+
+          trustees match {
+            case Some(value: List[Individual]) => GetSuccessResponse(value)
+            case _ => InternalServerErrorResponse
+          }
+        }
+        case 404 => NotFoundResponse
+      }
+    }).recover {
+      case _ => {
+        InternalServerErrorResponse
+      }
+    }
+  }
+
 }
 
 object DesConnector extends DesConnector {

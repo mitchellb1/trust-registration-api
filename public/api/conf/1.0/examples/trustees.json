@@ -1,52 +1,54 @@
-[
-  {
-    "individual": {
-      "title": "Mr",
-      "firstName": "John",
-      "middleName": "",
-      "surname": "Doe",
-      "country": "UK",
-      "isUkNational": true,
-      "nino": "WA123456C",
-      "passport": {
-        "identifier": "123456789",
-        "date": "2015-01-20"
-      }
-    },
-    "dateOfBirth": "1950-01-20",
-    "correspondenceAddress": {
-      "isNonUkAddress": false,
-      "addressLine1": "1 Any Street",
-      "addressLine2": "",
-      "addressLine3": "",
-      "addressLine4": "Any Town",
-      "postcode":  "NE30 21BR",
-      "Country": "UK"
-    }
-  },
-  {
-    "individual": {
+{
+  "trustees": [
+    {
       "title": "Mrs",
-      "firstName": "Jane",
-      "middleName": "",
-      "surname": "Doe",
-      "country": "UK",
-      "isUkNational": true,
-      "nino": "WA123458A",
+      "givenName": "Jane",
+      "otherName": "",
+      "familyName": "Doe",
+      "dateOfBirth": "12/08/1965",
+      "nino": "WA123456A",
+      "dateOfDeath": "",
       "passport": {
-        "identifier": "123412349",
-        "date": "2015-01-20"
-      }
+        "identifier": "79685556467575",
+        "expiryDate": "30/12/2016",
+        "countryOfIssue": "UK"
+      },
+      "correspondenceAddress": {
+        "isNonUkAddress": false,
+        "addressLine1": "Line 1",
+        "addressLine2": "Line 2",
+        "addressLine3": "Line 3",
+        "addressLine4": "Line 4",
+        "postcode": "NE1 2BR",
+        "country": "UK"
+      },
+      "telephoneNumber": "0191 289 4563"
     },
-    "dateOfBirth": "1950-01-20",
-    "correspondenceAddress": {
-      "isNonUkAddress": false,
-      "addressLine1": "1 Any Road",
-      "addressLine2": "",
-      "addressLine3": "",
-      "addressLine4": "Any Village",
-      "postcode": "NE1 31BR",
-      "Country": "UK"
+    {
+      "title": "Dr",
+      "givenName": "Fiona",
+      "otherName": "Jane",
+      "familyName": "Bloggs",
+      "dateOfBirth": "12/12/1945",
+      "nino": "WR4356645A",
+      "dateOfDeath": "",
+      "passport": {
+        "identifier": "3454657687686",
+        "expiryDate": "12/06/2020",
+        "countryOfIssue": "UK"
+      },
+      "correspondenceAddress": {
+        "isNonUkAddress": false,
+        "addressLine1": "Line 1",
+        "addressLine2": "Line 2",
+        "addressLine3": "Line 3",
+        "addressLine4": "Line 4",
+        "postcode": "NE1 2BR",
+        "country": "UK"
+      },
+      "telephoneNumber": "0121 558 9999"
     }
-  }
-]
+  ]
+}
+
+

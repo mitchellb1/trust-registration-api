@@ -1,17 +1,27 @@
 {
-  "leadTrusteeType" : "sample",
-  "company" : {
-    "name" : "sample",
-    "referenceNumber" : "sample",
-    "correspondenceAddress" : {
-      "isNonUkAddress": true,
-      "addressLine1": "address line 1 value",
-      "addressLine2": "address line 2 value",
-      "addressLine3": "address line 3 value",
-      "addressLine4": "address line 4 value",
-      "postcode": "sample",
-      "Country": "sample"
+  "leadTrustee": {
+    "individual": {
+      "title": "Mr",
+      "givenName": "Joe",
+      "otherName": "Fred",
+      "familyName": "Bloggs",
+      "dateOfBirth": "10/10/1967",
+      "nino": "WA123456A",
+      "passport": {
+        "identifier": "123435egxb",
+        "expiryDate": "12/12/2017",
+        "countryOfIssue": "UK"
+      },
+      "correspondenceAddress": {
+        "isNonUkAddress": false,
+        "addressLine1": "Line 1",
+        "addressLine2": "Line 2",
+        "addressLine3": "Line 3",
+        "addressLine4": "Line 4",
+        "postcode": "NE1 2BR",
+        "country": "UK"
+      },
+      "telephoneNumber": "0191 234 5678"
     }
-  },
-  "leadTrusteeCompanyTelephoneNumber" : "00-000-000"
+  }
 }

@@ -88,6 +88,27 @@ trait RegisterTrustController extends TrustBaseController {
       }
     }
   }
+
+  def getTrustees(identifier: String): Action[AnyContent] = Action.async{ implicit request =>
+
+    Logger.info(s"$className:getTrustees API invoked")
+    Logger.debug(s"$className:getTrustees($identifier) API invoked")
+
+    val authorised: Option[(String, String)] = hc.headers.find((tup) => tup._1 == AUTHORIZATION)
+
+    authorised match {
+      case Some((key, "AUTHORISED")) => {
+        Logger.info(s"$className:getTrustees API authorised")
+        metrics.incrementAuthorisedRequest("getTrustees")
+        respond("getTrustees", registerTrustService.getTrustees(identifier))
+      }
+      case _ => {
+        Logger.info(s"$className:getTrustees API returned unauthorised")
+        metrics.incrementUnauthorisedRequest("getTrustees")
+        Future.successful(Unauthorized)
+      }
+    }
+  }
 }
 
 object RegisterTrustController extends RegisterTrustController {

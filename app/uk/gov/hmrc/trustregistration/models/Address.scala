@@ -16,9 +16,17 @@
 
 package uk.gov.hmrc.trustregistration.models
 
-trait TrustResponse
-object SuccessResponse extends TrustResponse
-object BadRequestResponse extends TrustResponse
-object NotFoundResponse extends TrustResponse
-object InternalServerErrorResponse extends TrustResponse
-case class GetSuccessResponse[T](payload:T) extends TrustResponse
+import play.api.libs.json.{Json, Reads}
+
+case class Address (
+     isNonUkAddress: Boolean,
+     addressLine1: String,
+     addressLine2: Option[String] = None,
+     addressLine3: Option[String] = None,
+     addressLine4: Option[String] = None,
+     postcode: Option[String] = None,
+     country: Option[String] = None)
+
+object Address {
+  implicit val formats = Json.format[Address]
+}
