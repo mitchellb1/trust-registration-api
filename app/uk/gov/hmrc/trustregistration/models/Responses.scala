@@ -21,4 +21,4 @@ object SuccessResponse extends TrustResponse
 object BadRequestResponse extends TrustResponse
 object NotFoundResponse extends TrustResponse
 object InternalServerErrorResponse extends TrustResponse
-case class GetTrusteeSuccessResponse[T](payload:T) extends TrustResponse
+case class GetSuccessResponse[T](payload:T) extends TrustResponse

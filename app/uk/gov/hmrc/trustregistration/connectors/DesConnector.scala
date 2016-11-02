@@ -138,7 +138,7 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
           val trustees = f.json.asOpt[List[Trustee]]
 
           trustees match {
-            case Some(value: List[Trustee]) => GetTrusteeSuccessResponse(value)
+            case Some(value: List[Trustee]) => GetSuccessResponse(value)
             case _ => InternalServerErrorResponse
           }
         }
