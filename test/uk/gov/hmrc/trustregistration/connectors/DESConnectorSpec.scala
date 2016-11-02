@@ -19,6 +19,7 @@ package uk.gov.hmrc.trustregistration.connectors
 import com.codahale.metrics
 import com.codahale.metrics.Timer
 import com.codahale.metrics.Timer.Context
+import org.scalatest.{ BeforeAndAfter, BeforeAndAfterAll }
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import uk.gov.hmrc.play.http._
@@ -30,16 +31,21 @@ import org.mockito.Matchers
 import org.mockito.Mockito._
 import org.mockito.Matchers.any
 import play.api.libs.json.Writes
-import uk.gov.hmrc.trustregistration.TestMetrics
 import uk.gov.hmrc.trustregistration.audit.TrustsAudit
-import uk.gov.hmrc.trustregistration.metrics.Metrics
+import uk.gov.hmrc.trustregistration.metrics.TrustMetrics
 
 
 class DesConnectorSpec extends PlaySpec
-  with OneAppPerSuite
-  with MockitoSugar {
+    with OneAppPerSuite
+    with MockitoSugar 
+    with BeforeAndAfter {
 
   implicit val hc = HeaderCarrier()
+  val mockContext = new com.codahale.metrics.Timer().time()
+
+  before {
+    when (mockMetrics.startDesConnectorTimer(any())).thenReturn(mockContext)
+  }
 
   "DesConnector" must {
     "return an identifier" when {
@@ -72,7 +78,9 @@ class DesConnectorSpec extends PlaySpec
         result mustBe Left("400")
       }
     }
-//no change tests
+
+
+    //no change tests
     "Return a BadRequestResponse" when {
       "a bad requested is returned from DES for the call to no-change" in {
         when (mockHttpPut.PUT[String,HttpResponse](Matchers.any(),Matchers.any())
@@ -101,17 +109,15 @@ class DesConnectorSpec extends PlaySpec
         val result = Await.result(SUT.noChange("1234"),Duration.Inf)
         result mustBe InternalServerErrorResponse
       }
-    }
-
-    "Return a InternalServerError" when {
       "a 418 is returned from DES for the call to no-change" in {
         when (mockHttpPut.PUT[String,HttpResponse](Matchers.any(),Matchers.any())
           (Matchers.any(),Matchers.any(),Matchers.any())).
           thenReturn(Future.successful(HttpResponse(418)))
         val result = Await.result(SUT.noChange("1234"),Duration.Inf)
-        result mustBe InternalServerErrorResponse
+          result mustBe InternalServerErrorResponse
       }
     }
+
 
     "Return a SuccessResponse" when {
       "a 204 is returned from DES for the call to no-change" in {
@@ -162,24 +168,24 @@ class DesConnectorSpec extends PlaySpec
         val result = Await.result(SUT.closeTrust("1234"),Duration.Inf)
         result mustBe InternalServerErrorResponse
       }
-    }
-
-    "Return a InternalServerError" when {
       "a 418 is returned from DES for the call to close-trust" in {
         when (mockHttpPut.PUT[String,HttpResponse](Matchers.any(),Matchers.any())
           (Matchers.any(),Matchers.any(),Matchers.any())).
           thenReturn(Future.successful(HttpResponse(418)))
         val result = Await.result(SUT.closeTrust("1234"),Duration.Inf)
-        result mustBe InternalServerErrorResponse
+          result mustBe InternalServerErrorResponse
       }
     }
+
 
     "Return a SuccessResponse" when {
       "a 204 is returned from DES for the call to close-trust" in {
         when (mockHttpPut.PUT[String,HttpResponse](Matchers.any(),Matchers.any())
           (Matchers.any(),Matchers.any(),Matchers.any())).
           thenReturn(Future.successful(HttpResponse(204)))
+
         val result = Await.result(SUT.closeTrust("1234"),Duration.Inf)
+
         result mustBe SuccessResponse
       }
     }
@@ -197,15 +203,18 @@ class DesConnectorSpec extends PlaySpec
 
   val mockHttpPost = mock[HttpPost]
   val mockHttpPut = mock[HttpPut]
-  object DesConnector extends DesConnector {
+
+  val mockMetrics = mock[TrustMetrics]
+
+  object SUT extends DesConnector {
     override val httpPost: HttpPost = mockHttpPost
     override val httpPut: HttpPut = mockHttpPut
+
     override val audit: TrustsAudit = new TrustsAudit {
       override def doAudit(eventTypelMessage: String, auditTag: String)(implicit headerCarrier: HeaderCarrier, ec: ExecutionContext): Unit = ()
     }
-    override val metrics: Metrics = TestMetrics
-  }
-  lazy val SUT = DesConnector
 
+    override val metrics: TrustMetrics = mockMetrics
+  }
 
 }

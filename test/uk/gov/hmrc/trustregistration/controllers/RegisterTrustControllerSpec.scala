@@ -28,6 +28,7 @@ import play.api.mvc.{Action, Request, RequestHeader, Result}
 import play.api.test.{FakeHeaders, FakeRequest}
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.trustregistration.metrics.TrustMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
 
@@ -178,11 +179,14 @@ class RegisterTrustControllerSpec extends PlaySpec
 
   private val mockRegisterTrustService = mock[RegisterTrustService]
   private val mockHC = mock[HeaderCarrier]
+  private val mockMetrics = mock[TrustMetrics]
 
   object SUT extends RegisterTrustController {
     override implicit def hc(implicit rh: RequestHeader): HeaderCarrier = mockHC
-
+    
+    override val metrics: TrustMetrics = mockMetrics
     override val registerTrustService: RegisterTrustService = mockRegisterTrustService
+
   }
 
 

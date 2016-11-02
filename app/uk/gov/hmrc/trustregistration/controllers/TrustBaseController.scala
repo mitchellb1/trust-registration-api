@@ -18,16 +18,17 @@ package uk.gov.hmrc.trustregistration.controllers
 import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.Logger
 import uk.gov.hmrc.play.microservice.controller.BaseController
-import uk.gov.hmrc.trustregistration.metrics.Metrics
-import uk.gov.hmrc.trustregistration.models.{BadRequestResponse, NotFoundResponse, SuccessResponse, TrustResponse}
+import uk.gov.hmrc.trustregistration.metrics.TrustMetrics
+import uk.gov.hmrc.trustregistration.models.{ BadRequestResponse, NotFoundResponse, SuccessResponse, TrustResponse }
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
 
 import scala.concurrent.Future
 
 
 trait TrustBaseController extends BaseController {
-  val metrics: Metrics = Metrics
+  val metrics: TrustMetrics
   val registerTrustService: RegisterTrustService
+  
   val className: String = getClass.getSimpleName
 
   def respond(methodName: String, result: Future[TrustResponse]): Future[Status] = {
