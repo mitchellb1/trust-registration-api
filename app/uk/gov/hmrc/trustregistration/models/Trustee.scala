@@ -19,8 +19,17 @@ package uk.gov.hmrc.trustregistration.models
 import org.joda.time.DateTime
 import play.api.libs.json.{Json, Reads}
 
-case class Trustee(title: String, givenName: String, familyName: String, dateOfBirth: DateTime,otherName: Option[String]= None, nino: Option[String]= None,
-                   dateOfDeath: Option[DateTime]= None, telephoneNumber: Option[String]= None, passport: Option[Passport] = None, correspondenceAddress: Option[Address] = None)
+case class Trustee(
+     title: String,
+     givenName: String,
+     familyName: String,
+     dateOfBirth: DateTime,
+     otherName: Option[String]= None,
+     nino: Option[String]= None,
+     dateOfDeath: Option[DateTime]= None,
+     telephoneNumber: Option[String]= None,
+     passport: Option[Passport] = None,
+     correspondenceAddress: Option[Address] = None)
 
 object Trustee {
   implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))

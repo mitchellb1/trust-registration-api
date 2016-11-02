@@ -31,9 +31,7 @@ class CloseTrustSpec extends PlaySpec with OneAppPerSuite with DESConnectorMocks
   "Close Trust endpoint" must {
     "Return a BadRequestResponse" when {
       "a bad requested is returned from DES for the call to close-trust" in {
-        when (mockHttpPut.PUT[String,HttpResponse](Matchers.any(),Matchers.any())
-          (Matchers.any(),Matchers.any(),Matchers.any())).
-          thenReturn(Future.successful(HttpResponse(400)))
+        setHttpResponse(Future.successful(HttpResponse(400)))
         val result = Await.result(SUT.closeTrust("1234"),Duration.Inf)
         result mustBe BadRequestResponse
       }
@@ -41,52 +39,44 @@ class CloseTrustSpec extends PlaySpec with OneAppPerSuite with DESConnectorMocks
 
     "Return a NotFoundResponse" when {
       "a 404 is returned from DES for the call to close-trust" in {
-        when (mockHttpPut.PUT[String,HttpResponse](Matchers.any(),Matchers.any())
-          (Matchers.any(),Matchers.any(),Matchers.any())).
-          thenReturn(Future.successful(HttpResponse(404)))
+        setHttpResponse(Future.successful(HttpResponse(404)))
         val result = Await.result(SUT.closeTrust("1234"),Duration.Inf)
         result mustBe NotFoundResponse
       }
     }
 
-    "Return a InternalServerError" when {
-      "a 500 is returned from DES for the call to close-trust" in {
-        when (mockHttpPut.PUT[String,HttpResponse](Matchers.any(),Matchers.any())
-          (Matchers.any(),Matchers.any(),Matchers.any())).
-          thenReturn(Future.successful(HttpResponse(500)))
-        val result = Await.result(SUT.closeTrust("1234"),Duration.Inf)
-        result mustBe InternalServerErrorResponse
-      }
-    }
-
-    "Return a InternalServerError" when {
-      "a 418 is returned from DES for the call to close-trust" in {
-        when (mockHttpPut.PUT[String,HttpResponse](Matchers.any(),Matchers.any())
-          (Matchers.any(),Matchers.any(),Matchers.any())).
-          thenReturn(Future.successful(HttpResponse(418)))
-        val result = Await.result(SUT.closeTrust("1234"),Duration.Inf)
-        result mustBe InternalServerErrorResponse
-      }
-    }
-
     "Return a SuccessResponse" when {
       "a 204 is returned from DES for the call to close-trust" in {
-        when (mockHttpPut.PUT[String,HttpResponse](Matchers.any(),Matchers.any())
-          (Matchers.any(),Matchers.any(),Matchers.any())).
-          thenReturn(Future.successful(HttpResponse(204)))
+        setHttpResponse(Future.successful(HttpResponse(204)))
         val result = Await.result(SUT.closeTrust("1234"),Duration.Inf)
         result mustBe SuccessResponse
       }
     }
 
-    "Return an InternalServerErrorResponse" when {
+    "Return a InternalServerError" when {
+      "a 418 is returned from DES for the call to close-trust" in {
+        setHttpResponse(Future.successful(HttpResponse(418)))
+        val result = Await.result(SUT.closeTrust("1234"),Duration.Inf)
+        result mustBe InternalServerErrorResponse
+      }
+
       "the call to DES fails on the call to close-trust" in {
-        when (mockHttpPut.PUT[String,HttpResponse](Matchers.any(),Matchers.any())
-          (Matchers.any(),Matchers.any(),Matchers.any())).
-          thenReturn(Future.failed(Upstream4xxResponse("Error", 418, 400)))
+        setHttpResponse(Future.failed(Upstream4xxResponse("Error", 418, 400)))
+        val result = Await.result(SUT.closeTrust("1234"),Duration.Inf)
+        result mustBe InternalServerErrorResponse
+      }
+
+      "a 500 is returned from DES for the call to close-trust" in {
+        setHttpResponse(Future.successful(HttpResponse(500)))
         val result = Await.result(SUT.closeTrust("1234"),Duration.Inf)
         result mustBe InternalServerErrorResponse
       }
     }
+  }
+
+  def setHttpResponse(response: Future[HttpResponse]): Unit = {
+    when (mockHttpPut.PUT[String,HttpResponse](Matchers.any(),Matchers.any())
+      (Matchers.any(),Matchers.any(),Matchers.any())).
+      thenReturn(response)
   }
 }
