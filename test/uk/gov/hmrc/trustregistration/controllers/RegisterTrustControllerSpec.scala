@@ -176,7 +176,7 @@ class RegisterTrustControllerSpec extends PlaySpec
     "return 200 ok" when {
       "the endpoint is called with a valid identifier" in {
         when(mockRegisterTrustService.getTrustees(any[String])(any[HeaderCarrier]))
-          .thenReturn(Future.successful(SuccessResponse))
+          .thenReturn(Future.successful(new GetSuccessResponse[List[Individual]](Nil)))
 
         val result = SUT.getTrustees("sadfg").apply(FakeRequest("GET", ""))
 
