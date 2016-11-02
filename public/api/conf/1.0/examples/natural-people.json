@@ -4,11 +4,12 @@
     "givenName": "Joe",
     "otherName": "Fred",
     "familyName": "Bloggs",
-    "dateOfBirth": "10/10/1967",
+    "dateOfBirth": "1967-12-25",
     "nino": "WA123456A",
+    "dateOfDeath": "10/10/1967",
     "passport": {
       "identifier": "123435egxb",
-      "expiryDate": "12/12/2017",
+      "expiryDate": "1967-12-25",
       "countryOfIssue": "UK"
     },
     "correspondenceAddress": {
@@ -27,11 +28,12 @@
     "givenName": "Joe",
     "otherName": "Fred",
     "familyName": "Bloggs",
-    "dateOfBirth": "10/10/1967",
+    "dateOfBirth": "1967-12-25",
     "nino": "WA123456A",
+    "dateOfDeath": "10/10/1967",
     "passport": {
       "identifier": "123435egxb",
-      "expiryDate": "12/12/2017",
+      "expiryDate": "1967-12-25",
       "countryOfIssue": "UK"
     },
     "correspondenceAddress": {
@@ -46,3 +48,5 @@
     "telephoneNumber": "0191 234 5678"
   }
 ]
+
+
