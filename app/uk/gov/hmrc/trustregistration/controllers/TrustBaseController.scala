@@ -15,9 +15,6 @@
  */
 
 package uk.gov.hmrc.trustregistration.controllers
-import org.joda.time.DateTime
-
-import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.Logger
 import play.api.libs.json.Json
 import play.api.mvc.Result
@@ -26,6 +23,7 @@ import uk.gov.hmrc.trustregistration.metrics.Metrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
