@@ -135,10 +135,10 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
     result.map(f => {
       f.status match {
         case 200 => {
-          val trustees = f.json.asOpt[List[Trustee]]
+          val trustees = f.json.asOpt[List[Individual]]
 
           trustees match {
-            case Some(value: List[Trustee]) => GetSuccessResponse(value)
+            case Some(value: List[Individual]) => GetSuccessResponse(value)
             case _ => InternalServerErrorResponse
           }
         }
