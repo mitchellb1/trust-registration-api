@@ -132,7 +132,7 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
 
     val result: Future[HttpResponse] = httpGet.GET[HttpResponse](uri)(httpReads, implicitly)
 
-    result.map(f = f => {
+    result.map(f => {
       f.status match {
         case 200 => {
           val trustees = f.json.asOpt[List[Trustee]]

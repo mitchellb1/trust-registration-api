@@ -69,9 +69,11 @@ class RegisterTrustControllerSpec extends PlaySpec
         }
       }
     }
-    //no change tests
+  }
+
+  "No change endpoint" must {
     "return 200 ok" when {
-      "the no change endpoint is called with a valid identifier" in {
+      "the endpoint is called with a valid identifier" in {
         when(mockRegisterTrustService.noChange(any[String])(any[HeaderCarrier]))
           .thenReturn(Future.successful(SuccessResponse))
 
@@ -82,7 +84,7 @@ class RegisterTrustControllerSpec extends PlaySpec
     }
 
     "return 400" when {
-      "the no change endpoint is called with an invalid identifier" in {
+      "the endpoint is called with an invalid identifier" in {
         when(mockRegisterTrustService.noChange(any[String])(any[HeaderCarrier]))
           .thenReturn(Future.successful(BadRequestResponse))
 
@@ -112,10 +114,11 @@ class RegisterTrustControllerSpec extends PlaySpec
         status(result) mustBe NOT_FOUND
       }
     }
+  }
 
-    //Close trust test
+  "Close trusts endpoint" must {
     "return 200 ok" when {
-      "the closeTrust endpoint is called with a valid identifier" in {
+      "the endpoint is called with a valid identifier" in {
         when(mockRegisterTrustService.closeTrust(any[String])(any[HeaderCarrier]))
           .thenReturn(Future.successful(SuccessResponse))
 
@@ -126,7 +129,7 @@ class RegisterTrustControllerSpec extends PlaySpec
     }
 
     "return 400" when {
-      "the closeTrust endpoint is called with an invalid identifier" in {
+      "the endpoint is called with an invalid identifier" in {
         when(mockRegisterTrustService.closeTrust(any[String])(any[HeaderCarrier]))
           .thenReturn(Future.successful(BadRequestResponse))
 
@@ -137,7 +140,7 @@ class RegisterTrustControllerSpec extends PlaySpec
     }
 
     "return 401" when {
-      "the closeTrust endpoint is called and authentication credentials are missing or incorrect" in {
+      "the endpoint is called and authentication credentials are missing or incorrect" in {
 
         when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "NOT_AUTHORISED"))
         val result = SUT.closeTrust("12345").apply(FakeRequest("PUT", ""))
@@ -147,7 +150,7 @@ class RegisterTrustControllerSpec extends PlaySpec
     }
 
     "return 404" when {
-      "the closeTrust endpoint is called and we pass an identifier that does not return a trust" in {
+      "the endpoint is called and we pass an identifier that does not return a trust" in {
         when(mockRegisterTrustService.closeTrust(any[String])(any[HeaderCarrier]))
           .thenReturn(Future.successful(NotFoundResponse))
 
@@ -156,7 +159,6 @@ class RegisterTrustControllerSpec extends PlaySpec
         status(result) mustBe NOT_FOUND
       }
     }
-
 
     "return 500" when {
       "something is broken" in {
@@ -167,11 +169,9 @@ class RegisterTrustControllerSpec extends PlaySpec
         status(result) mustBe INTERNAL_SERVER_ERROR
       }
     }
-
   }
 
   "Trustees endpoint" must {
-
     "not return a NotFound response" when {
       "the endpoint is called with a routed fake request" in {
         val result = route(FakeRequest(GET, "/trusts/1234567890/trustees"))
@@ -202,7 +202,7 @@ class RegisterTrustControllerSpec extends PlaySpec
     }
 
     "return 400" when {
-      "the closeTrust endpoint is called with an invalid identifier" in {
+      "the  endpoint is called with an invalid identifier" in {
         when(mockRegisterTrustService.getTrustees(any[String])(any[HeaderCarrier]))
           .thenReturn(Future.successful(BadRequestResponse))
 
@@ -223,7 +223,7 @@ class RegisterTrustControllerSpec extends PlaySpec
     }
 
     "return 401" when {
-      "the getTrustees endpoint is called and authentication credentials are missing or incorrect" in {
+      "the endpoint is called and authentication credentials are missing or incorrect" in {
 
         when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "NOT_AUTHORISED"))
         val result = SUT.getTrustees("12345").apply(FakeRequest("GET", ""))
