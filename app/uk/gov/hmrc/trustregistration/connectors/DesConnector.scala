@@ -34,7 +34,9 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
 
   val audit: TrustsAudit = TrustsAudit
   val AuditNoChangeIdentifier: String = "trustRegistration_noAnnualChangeTrust"
-  val AuditCloseTrustIdentifier: String = "trustRegistration_CloseTrust"
+  val AuditCloseTrustIdentifier: String = "trustRegistration_closeTrust"
+  val AuditGetTrusteesIdentifier: String = "trustRegistration_getTrustees"
+
   val metrics : Metrics
 
   lazy val desUrl = baseUrl("des")
@@ -120,7 +122,7 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
       }
     }).recover {
       case _ => {
-        audit.doAudit("ncloseTrustFailure", AuditCloseTrustIdentifier)
+        audit.doAudit("closeTrustFailure", AuditCloseTrustIdentifier)
         InternalServerErrorResponse
       }
     }
@@ -130,22 +132,43 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
 
     val uri: String = s"$serviceUrl/$identifier/trustees"
 
+    val timerStart = metrics.startDesConnectorTimer("closeTrust")
+
     val result: Future[HttpResponse] = httpGet.GET[HttpResponse](uri)(httpReads, implicitly)
 
     result.map(f => {
+      timerStart.stop()
       f.status match {
         case 200 => {
           val trustees = f.json.asOpt[List[Individual]]
 
           trustees match {
-            case Some(value: List[Individual]) => GetSuccessResponse(value)
-            case _ => InternalServerErrorResponse
+            case Some(value: List[Individual]) => {
+              audit.doAudit("getTrusteesSuccessful", AuditGetTrusteesIdentifier)
+              GetSuccessResponse(value)
+            }
+            case _ => {
+              audit.doAudit("getTrusteesFailure", AuditGetTrusteesIdentifier)
+              InternalServerErrorResponse
+            }
           }
         }
-        case 404 => NotFoundResponse
+        case 400 => {
+          audit.doAudit("getTrusteesFailure", AuditGetTrusteesIdentifier)
+          BadRequestResponse
+        }
+        case 404 => {
+          audit.doAudit("getTrusteesFailure", AuditGetTrusteesIdentifier)
+          NotFoundResponse
+        }
+        case _ => {
+          audit.doAudit("getTrusteesFailure", AuditGetTrusteesIdentifier)
+          InternalServerErrorResponse
+        }
       }
     }).recover {
       case _ => {
+        audit.doAudit("getTrusteesFailure", AuditGetTrusteesIdentifier)
         InternalServerErrorResponse
       }
     }
