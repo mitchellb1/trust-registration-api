@@ -23,7 +23,7 @@ import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustregistration.connectors.DesConnector
-import uk.gov.hmrc.trustregistration.models.{BadRequestResponse, RegistrationDocument, SuccessResponse, TRN}
+import uk.gov.hmrc.trustregistration.models._
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
@@ -44,12 +44,27 @@ class RegisterTrustServiceSpec extends PlaySpec
         result mustBe Right(TRN(testTRN))
       }
     }
+
     "Return a SuccessResponse" when {
       "a successful response is returned from DES for the call to no-change" in {
         when(mockDesConnector.noChange(any())(any())).thenReturn(Future.successful(SuccessResponse))
 
         val result = Await.result(SUT.noChange("1234567890")(HeaderCarrier()), Duration.Inf)
         result mustBe SuccessResponse
+      }
+
+      "a successful response is returned from DES for the call to closeTrust" in {
+        when(mockDesConnector.closeTrust(any())(any())).thenReturn(Future.successful(SuccessResponse))
+
+        val result = Await.result(SUT.closeTrust("1234567890")(HeaderCarrier()), Duration.Inf)
+        result mustBe SuccessResponse
+      }
+
+      "a successful response is returned from DES for the call to getTrustees" in {
+        when(mockDesConnector.getTrustees(any())(any())).thenReturn(Future.successful(GetTrusteeSuccessResponse(Nil)))
+
+        val result = Await.result(SUT.getTrustees("1234567890")(HeaderCarrier()), Duration.Inf)
+        result mustBe GetTrusteeSuccessResponse(Nil)
       }
     }
 
@@ -60,22 +75,30 @@ class RegisterTrustServiceSpec extends PlaySpec
         val result = Await.result(SUT.noChange("400BadRequest")(HeaderCarrier()), Duration.Inf)
         result mustBe BadRequestResponse
       }
-    }
-    "Return a SuccessResponse" when {
-      "a successful response is returned from DES for the call to closeTrust" in {
-        when(mockDesConnector.noChange(any())(any())).thenReturn(Future.successful(SuccessResponse))
 
-        val result = Await.result(SUT.noChange("1234567890")(HeaderCarrier()), Duration.Inf)
-        result mustBe SuccessResponse
+      "a bad requested is returned from DES for the call to closeTrust" in {
+        when(mockDesConnector.closeTrust(any())(any())).thenReturn(Future.successful(BadRequestResponse))
+
+        val result = Await.result(SUT.closeTrust("400BadRequest")(HeaderCarrier()), Duration.Inf)
+        result mustBe BadRequestResponse
       }
     }
 
-    "Return a BadRequestResponse" when {
-      "a bad requested is returned from DES for the call to closeTrust" in {
-        when(mockDesConnector.noChange(any())(any())).thenReturn(Future.successful(BadRequestResponse))
+    "Return a InternalServerErrorResponse" when {
+      "a InternalServerErrorResponse is returned from DES for the call to getTrustees" in {
+        when(mockDesConnector.getTrustees(any())(any())).thenReturn(Future.successful(InternalServerErrorResponse))
 
-        val result = Await.result(SUT.noChange("400BadRequest")(HeaderCarrier()), Duration.Inf)
-        result mustBe BadRequestResponse
+        val result = Await.result(SUT.getTrustees("500Error")(HeaderCarrier()), Duration.Inf)
+        result mustBe InternalServerErrorResponse
+      }
+    }
+
+    "Return a NotFoundResponse" when {
+      "a NotFoundResponse is returned from DES for the call to getTrustees" in {
+        when(mockDesConnector.getTrustees(any())(any())).thenReturn(Future.successful(NotFoundResponse))
+
+        val result = Await.result(SUT.getTrustees("404NotFound")(HeaderCarrier()), Duration.Inf)
+        result mustBe NotFoundResponse
       }
     }
   }
