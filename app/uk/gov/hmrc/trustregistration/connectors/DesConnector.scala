@@ -38,6 +38,7 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
   val AuditNoChangeIdentifier: String = "trustRegistration_noAnnualChangeTrust"
   val AuditCloseTrustIdentifier: String = "trustRegistration_closeTrust"
   val AuditGetTrusteesIdentifier: String = "trustRegistration_getTrustees"
+  val AuditGetNaturalPersonsIdentifier: String = "trustRegistration_getNaturalPersons"
 
   lazy val desUrl = baseUrl("des")
   lazy val serviceUrl = s"$desUrl/trust-registration-stub/trusts"
@@ -132,7 +133,7 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
 
     val uri: String = s"$serviceUrl/$identifier/trustees"
 
-    val timerStart = metrics.startDesConnectorTimer("closeTrust")
+    val timerStart = metrics.startDesConnectorTimer("getTrustees")
 
     val result: Future[HttpResponse] = httpGet.GET[HttpResponse](uri)(httpReads, implicitly)
 
@@ -178,34 +179,43 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
 
     val uri: String = s"$serviceUrl/$identifier/naturalPersons"
 
+    val timerStart = metrics.startDesConnectorTimer("getNaturalPersons")
+
     val result: Future[HttpResponse] = httpGet.GET[HttpResponse](uri)(httpReads, implicitly)
 
     result.map(f => {
+      timerStart.stop()
       f.status match {
         case 200 => {
           val naturalPersons = f.json.asOpt[List[Individual]]
 
           naturalPersons match {
             case Some(value: List[Individual]) => {
+              audit.doAudit("getNaturalPersonsSuccessful", AuditGetNaturalPersonsIdentifier)
               GetSuccessResponse(value)
             }
             case _ => {
+              audit.doAudit("getNaturalPersonsFailure", AuditGetNaturalPersonsIdentifier)
               InternalServerErrorResponse
             }
           }
         }
         case 400 => {
+          audit.doAudit("getNaturalPersonsFailure", AuditGetNaturalPersonsIdentifier)
           BadRequestResponse
         }
         case 404 => {
+          audit.doAudit("getNaturalPersonsFailure", AuditGetNaturalPersonsIdentifier)
           NotFoundResponse
         }
         case _ => {
+          audit.doAudit("getNaturalPersonsFailure", AuditGetNaturalPersonsIdentifier)
           InternalServerErrorResponse
         }
       }
     }).recover {
       case _ => {
+        audit.doAudit("getNaturalPersonsFailure", AuditGetNaturalPersonsIdentifier)
         InternalServerErrorResponse
       }
     }
