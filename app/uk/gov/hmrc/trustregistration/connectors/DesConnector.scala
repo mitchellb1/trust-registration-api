@@ -22,7 +22,7 @@ import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.trustregistration.audit.TrustsAudit
 import uk.gov.hmrc.trustregistration.config.WSHttp
-import uk.gov.hmrc.trustregistration.metrics.Metrics
+import uk.gov.hmrc.trustregistration.metrics.{TrustMetrics}
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -32,12 +32,12 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
   val httpPut: HttpPut = WSHttp
   val httpGet: HttpGet = WSHttp
 
-  val audit: TrustsAudit = TrustsAudit
+  val audit: TrustsAudit
+  val metrics: TrustMetrics
+
   val AuditNoChangeIdentifier: String = "trustRegistration_noAnnualChangeTrust"
   val AuditCloseTrustIdentifier: String = "trustRegistration_closeTrust"
   val AuditGetTrusteesIdentifier: String = "trustRegistration_getTrustees"
-
-  val metrics : Metrics
 
   lazy val desUrl = baseUrl("des")
   lazy val serviceUrl = s"$desUrl/trust-registration-stub/trusts"
@@ -178,5 +178,5 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
 
 object DesConnector extends DesConnector {
   override val audit: TrustsAudit = TrustsAudit
-  override val metrics: Metrics = Metrics
+  override val metrics: TrustMetrics = TrustMetrics
 }

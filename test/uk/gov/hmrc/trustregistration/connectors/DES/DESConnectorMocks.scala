@@ -16,12 +16,14 @@
 
 package uk.gov.hmrc.trustregistration.connectors.DES
 
+import com.codahale.metrics.Timer.Context
+import org.mockito.Mockito._
+import org.mockito.Matchers.any
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.http.{HeaderCarrier, HttpGet, HttpPost, HttpPut}
-import uk.gov.hmrc.trustregistration.TestMetrics
 import uk.gov.hmrc.trustregistration.audit.TrustsAudit
 import uk.gov.hmrc.trustregistration.connectors.DesConnector
-import uk.gov.hmrc.trustregistration.metrics.Metrics
+import uk.gov.hmrc.trustregistration.metrics.TrustMetrics
 
 import scala.concurrent.ExecutionContext
 
@@ -31,14 +33,21 @@ trait DESConnectorMocks extends MockitoSugar {
   val mockHttpPost = mock[HttpPost]
   val mockHttpPut = mock[HttpPut]
   val mockHttpGet = mock[HttpGet]
-  object DesConnector extends DesConnector {
+  val mockTrustMetrics = mock[TrustMetrics]
+
+  private val mockContext = new com.codahale.metrics.Timer().time()
+
+  when (mockTrustMetrics.startDesConnectorTimer(any())).thenReturn(mockContext)
+
+
+  object SUT extends DesConnector {
     override val httpPost: HttpPost = mockHttpPost
     override val httpPut: HttpPut = mockHttpPut
     override val httpGet: HttpGet = mockHttpGet
+
+    override val metrics: TrustMetrics = mockTrustMetrics
     override val audit: TrustsAudit = new TrustsAudit {
       override def doAudit(eventTypelMessage: String, auditTag: String)(implicit headerCarrier: HeaderCarrier, ec: ExecutionContext): Unit = ()
     }
-    override val metrics: Metrics = TestMetrics
   }
-  lazy val SUT = DesConnector
 }

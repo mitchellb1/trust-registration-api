@@ -29,6 +29,7 @@ import play.api.mvc.{Action, Request, RequestHeader, Result}
 import play.api.test.{FakeHeaders, FakeRequest}
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.trustregistration.metrics.TrustMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
 
@@ -173,13 +174,6 @@ class RegisterTrustControllerSpec extends PlaySpec
   }
 
   "Trustees endpoint" must {
-    "not return a NotFound response" when {
-      "the endpoint is called with a routed fake request" in {
-        val result = route(FakeRequest(GET, "/trusts/1234567890/trustees"))
-        status(result.get) must not be (NOT_FOUND)
-      }
-    }
-
     "return 200 ok" when {
       "the endpoint is called with a valid identifier" in {
         when(mockRegisterTrustService.getTrustees(any[String])(any[HeaderCarrier]))
@@ -273,11 +267,17 @@ class RegisterTrustControllerSpec extends PlaySpec
 
   private val mockRegisterTrustService = mock[RegisterTrustService]
   private val mockHC = mock[HeaderCarrier]
+  private val mockMetrics = mock[TrustMetrics]
+  private val mockContext = new com.codahale.metrics.Timer().time()
+
+  when (mockMetrics.startDesConnectorTimer(any())).thenReturn(mockContext)
 
   object SUT extends RegisterTrustController {
     override implicit def hc(implicit rh: RequestHeader): HeaderCarrier = mockHC
-
+    
+    override val metrics: TrustMetrics = mockMetrics
     override val registerTrustService: RegisterTrustService = mockRegisterTrustService
+
   }
 
 

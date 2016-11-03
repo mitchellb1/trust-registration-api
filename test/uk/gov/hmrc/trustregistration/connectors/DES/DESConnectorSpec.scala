@@ -19,18 +19,13 @@ package uk.gov.hmrc.trustregistration.connectors.DES
 import org.mockito.Matchers
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
-import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Writes
 import uk.gov.hmrc.play.http._
-import uk.gov.hmrc.trustregistration.TestMetrics
-import uk.gov.hmrc.trustregistration.audit.TrustsAudit
-import uk.gov.hmrc.trustregistration.connectors.DesConnector
-import uk.gov.hmrc.trustregistration.metrics.Metrics
 import uk.gov.hmrc.trustregistration.models._
 
 import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.{Await, Future}
 
 
 class DesConnectorSpec extends PlaySpec with OneAppPerSuite with DESConnectorMocks {

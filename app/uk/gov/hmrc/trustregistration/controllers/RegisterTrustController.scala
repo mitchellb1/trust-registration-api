@@ -19,9 +19,7 @@ package uk.gov.hmrc.trustregistration.controllers
 import play.api.Logger
 import play.api.libs.json.{JsError, JsResult, JsValue, Json}
 import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.trustregistration.connectors.DesConnector
-import uk.gov.hmrc.trustregistration.metrics.Metrics
+import uk.gov.hmrc.trustregistration.metrics.TrustMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
 
@@ -30,6 +28,7 @@ import scala.concurrent.Future
 
 
 trait RegisterTrustController extends TrustBaseController {
+
   def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     Logger.info("Register API invoked")
 
@@ -112,23 +111,7 @@ trait RegisterTrustController extends TrustBaseController {
   }
 }
 
-object SandboxTrustController extends RegisterTrustController{
-  override val registerTrustService = RegisterTrustService
-  override val metrics = Metrics
-
-  override def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
-    Future.successful(Ok(Json.toJson(TRN("TRN-1234"))))
-  }
-  override def noChange(id: String) = Action.async { implicit request =>
-    Future.successful(Ok)
-  }
-
-  override def closeTrust(id: String) = Action.async { implicit request =>
-    Future.successful(Ok)
-  }
-}
-
 object RegisterTrustController extends RegisterTrustController {
   override val registerTrustService = RegisterTrustService
-  override val metrics = Metrics
+  override val metrics = TrustMetrics
 }
