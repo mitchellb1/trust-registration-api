@@ -17,6 +17,7 @@
 package uk.gov.hmrc.trustregistration.controllers
 
 
+import org.joda.time.DateTime
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfter
@@ -187,6 +188,36 @@ class RegisterTrustControllerSpec extends PlaySpec
         val result = SUT.getTrustees("sadfg").apply(FakeRequest("GET", ""))
 
         status(result) mustBe OK
+      }
+    }
+
+    "return 200 ok with valid json" when {
+      "the endpoint is called with a valid identifier" in {
+        val individual = Individual(
+          title = "Mr",
+          givenName = "John",
+          familyName = "Doe",
+          dateOfBirth = new DateTime("1800-01-01"),
+          passport = Some(Passport(
+            identifier = "IDENTIFIER",
+            expiryDate = new DateTime("2000-01-01"),
+            countryOfIssue = "UK"
+          )),
+          correspondenceAddress = Some(Address(
+            isNonUkAddress = false,
+            addressLine1 = "Address Line 1"
+          ))
+        )
+        when(mockRegisterTrustService.getTrustees(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(new GetSuccessResponse[List[Individual]](List(individual))))
+
+        val result = SUT.getTrustees("sadfg").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe OK
+        contentAsString(result) mustBe (
+          """[{"title":"Mr","givenName":"John","familyName":"Doe","dateOfBirth":"1800-01-01",""" +
+          """"passport":{"identifier":"IDENTIFIER","expiryDate":"2000-01-01","countryOfIssue":"UK"},""" +
+          """"correspondenceAddress":{"isNonUkAddress":false,"addressLine1":"Address Line 1"}}]""")
       }
     }
 

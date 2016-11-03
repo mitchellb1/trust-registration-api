@@ -129,6 +129,14 @@ class GetTrusteesSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
       }
     }
 
+    "return a BadRequestResponse" when {
+      "DES returns a 400 response" in {
+        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(400)))
+        val result = Await.result(SUT.getTrustees("1234"),Duration.Inf)
+        result mustBe BadRequestResponse
+      }
+    }
+
     "return a NotFoundResponse" when {
       "DES returns a 404 response" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(404)))

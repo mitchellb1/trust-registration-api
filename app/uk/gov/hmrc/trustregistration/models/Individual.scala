@@ -17,7 +17,7 @@
 package uk.gov.hmrc.trustregistration.models
 
 import org.joda.time.DateTime
-import play.api.libs.json.{Json, Reads}
+import play.api.libs.json.{JsString, Json, Reads, Writes}
 
 case class Individual(
      title: String,
@@ -33,5 +33,6 @@ case class Individual(
 
 object Individual {
   implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
+  implicit val dateWrites: Writes[DateTime] = Writes { (dt: DateTime) => JsString(dt.toString("yyyy-MM-dd")) }
   implicit val formats = Json.format[Individual]
 }

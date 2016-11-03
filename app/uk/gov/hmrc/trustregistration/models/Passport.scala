@@ -24,6 +24,7 @@ case class Passport(identifier: String, expiryDate: DateTime, countryOfIssue: St
 object Passport {
 
   implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
+  implicit val dateWrites: Writes[DateTime] = Writes { (dt: DateTime) => JsString(dt.toString("yyyy-MM-dd")) }
   implicit val passportFormat = Json.format[Passport]
 
 }
