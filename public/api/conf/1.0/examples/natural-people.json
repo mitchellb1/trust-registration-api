@@ -1,52 +1,51 @@
-[
-  {
-    "title": "Mr",
-    "givenName": "Joe",
-    "otherName": "Fred",
-    "familyName": "Bloggs",
-    "dateOfBirth": "1967-12-25",
-    "nino": "WA123456A",
-    "dateOfDeath": "10/10/1967",
-    "passport": {
-      "identifier": "123435egxb",
-      "expiryDate": "1967-12-25",
-      "countryOfIssue": "UK"
+{
+  "naturalPeople": [
+    {
+      "title": "Mr",
+      "givenName": "Joe",
+      "otherName": "John",
+      "familyName": "Doe",
+      "dateOfBirth": "1989-12-31",
+      "nino": "WA123456A",
+      "passport": {
+        "identifier": "b12344b23b45",
+        "expiryDate": "2018-12-25",
+        "countryOfIssue": "UK"
+      },
+      "correspondenceAddress": {
+        "isNonUkAddress": false,
+        "addressLine1": "Address Line 1",
+        "addressLine2": "Address Line 2",
+        "addressLine3": "Address Line 3",
+        "addressLine4": "Address Line 4",
+        "postcode": "NE1 2BR",
+        "country": "UK"
+      },
+      "telephoneNumber": "0191 357 1596"
     },
-    "correspondenceAddress": {
-      "isNonUkAddress": false,
-      "addressLine1": "Line 1",
-      "addressLine2": "Line 2",
-      "addressLine3": "Line 3",
-      "addressLine4": "Line 4",
-      "postcode": "NE1 2BR",
-      "country": "UK"
-    },
-    "telephoneNumber": "0191 234 5678"
-  },
-  {
-    "title": "Mr",
-    "givenName": "Joe",
-    "otherName": "Fred",
-    "familyName": "Bloggs",
-    "dateOfBirth": "1967-12-25",
-    "nino": "WA123456A",
-    "dateOfDeath": "10/10/1967",
-    "passport": {
-      "identifier": "123435egxb",
-      "expiryDate": "1967-12-25",
-      "countryOfIssue": "UK"
-    },
-    "correspondenceAddress": {
-      "isNonUkAddress": false,
-      "addressLine1": "Line 1",
-      "addressLine2": "Line 2",
-      "addressLine3": "Line 3",
-      "addressLine4": "Line 4",
-      "postcode": "NE1 2BR",
-      "country": "UK"
-    },
-    "telephoneNumber": "0191 234 5678"
-  }
-]
-
+    {
+      "title": "Mr",
+      "givenName": "Joe",
+      "otherName": "John",
+      "familyName": "Doe",
+      "dateOfBirth": "1989-12-31",
+      "nino": "WA123456A",
+      "passport": {
+        "identifier": "b12344b23b45",
+        "expiryDate": "2018-12-25",
+        "countryOfIssue": "UK"
+      },
+      "correspondenceAddress": {
+        "isNonUkAddress": false,
+        "addressLine1": "Address Line 1",
+        "addressLine2": "Address Line 2",
+        "addressLine3": "Address Line 3",
+        "addressLine4": "Address Line 4",
+        "postcode": "NE1 2BR",
+        "country": "UK"
+      },
+      "telephoneNumber": "0191 357 1596"
+    }
+  ]
+}
 
