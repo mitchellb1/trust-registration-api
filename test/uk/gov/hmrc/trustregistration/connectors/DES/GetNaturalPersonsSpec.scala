@@ -95,21 +95,25 @@ class GetNaturalPersonsSpec extends PlaySpec with OneAppPerSuite with DESConnect
         val result = Await.result(SUT.getNaturalPersons("1234"),Duration.Inf)
         result mustBe InternalServerErrorResponse
       }
+
       "DES returns a Json response which is invalid" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse("{}")))))
         val result = Await.result(SUT.getNaturalPersons("1234"),Duration.Inf)
         result mustBe InternalServerErrorResponse
       }
+
       "DES returns a 500 response" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(500)))
         val result = Await.result(SUT.getNaturalPersons("1234"),Duration.Inf)
         result mustBe InternalServerErrorResponse
       }
+
       "DES returns any unspecified error response (i.e. a 418)" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(418)))
         val result = Await.result(SUT.getNaturalPersons("1234"),Duration.Inf)
         result mustBe InternalServerErrorResponse
       }
+
       "DES returns a Natural Person without a date of birth" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(s"[$invalidIndividualJson]")))))
         val result = Await.result(SUT.getNaturalPersons("1234"),Duration.Inf)
