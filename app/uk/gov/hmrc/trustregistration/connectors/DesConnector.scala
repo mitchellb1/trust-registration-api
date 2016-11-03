@@ -174,6 +174,44 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
     }
   }
 
+  def getNaturalPersons(identifier: String)(implicit hc : HeaderCarrier): Future[TrustResponse] = {
+
+    val uri: String = s"$serviceUrl/$identifier/naturalPersons"
+
+    val result: Future[HttpResponse] = httpGet.GET[HttpResponse](uri)(httpReads, implicitly)
+
+    result.map(f => {
+      f.status match {
+        case 200 => {
+          val naturalPersons = f.json.asOpt[List[Individual]]
+
+          naturalPersons match {
+            case Some(value: List[Individual]) => {
+              GetSuccessResponse(value)
+            }
+            case _ => {
+              InternalServerErrorResponse
+            }
+          }
+        }
+        case 400 => {
+          BadRequestResponse
+        }
+        case 404 => {
+          NotFoundResponse
+        }
+        case _ => {
+          InternalServerErrorResponse
+        }
+      }
+    }).recover {
+      case _ => {
+        InternalServerErrorResponse
+      }
+    }
+
+  }
+
 }
 
 object DesConnector extends DesConnector {
