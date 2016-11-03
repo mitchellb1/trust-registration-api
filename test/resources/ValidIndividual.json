@@ -1,0 +1,12 @@
+{
+  "title": "Dr",
+  "givenName": "Leo",
+  "otherName": null,
+  "familyName": "Spaceman",
+  "dateOfBirth": "1800-01-01",
+  "dateOfDeath": null,
+  "nino": null,
+  "passport": "{PASSPORT}",
+  "correspondenceAddress": "{ADDRESS}",
+  "telephoneNumber": null
+}

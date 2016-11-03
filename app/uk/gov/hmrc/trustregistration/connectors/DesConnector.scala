@@ -16,12 +16,13 @@
 
 package uk.gov.hmrc.trustregistration.connectors
 
+import play.api.libs.json.JsValue
 import uk.gov.hmrc.play.http._
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.trustregistration.audit.TrustsAudit
 import uk.gov.hmrc.trustregistration.config.WSHttp
-import uk.gov.hmrc.trustregistration.metrics.Metrics
+import uk.gov.hmrc.trustregistration.metrics.{TrustMetrics}
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -29,11 +30,14 @@ import scala.concurrent.ExecutionContext.Implicits.global
 trait DesConnector extends ServicesConfig with RawResponseReads {
   val httpPost: HttpPost = WSHttp
   val httpPut: HttpPut = WSHttp
+  val httpGet: HttpGet = WSHttp
 
-  val audit: TrustsAudit = TrustsAudit
+  val audit: TrustsAudit
+  val metrics: TrustMetrics
+
   val AuditNoChangeIdentifier: String = "trustRegistration_noAnnualChangeTrust"
-  val AuditCloseTrustIdentifier: String = "trustRegistration_CloseTrust"
-  val metrics : Metrics
+  val AuditCloseTrustIdentifier: String = "trustRegistration_closeTrust"
+  val AuditGetTrusteesIdentifier: String = "trustRegistration_getTrustees"
 
   lazy val desUrl = baseUrl("des")
   lazy val serviceUrl = s"$desUrl/trust-registration-stub/trusts"
@@ -118,14 +122,61 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
       }
     }).recover {
       case _ => {
-        audit.doAudit("ncloseTrustFailure", AuditCloseTrustIdentifier)
+        audit.doAudit("closeTrustFailure", AuditCloseTrustIdentifier)
         InternalServerErrorResponse
       }
     }
   }
+
+  def getTrustees(identifier: String)(implicit hc : HeaderCarrier): Future[TrustResponse] = {
+
+    val uri: String = s"$serviceUrl/$identifier/trustees"
+
+    val timerStart = metrics.startDesConnectorTimer("closeTrust")
+
+    val result: Future[HttpResponse] = httpGet.GET[HttpResponse](uri)(httpReads, implicitly)
+
+    result.map(f => {
+      timerStart.stop()
+      f.status match {
+        case 200 => {
+          val trustees = f.json.asOpt[List[Individual]]
+
+          trustees match {
+            case Some(value: List[Individual]) => {
+              audit.doAudit("getTrusteesSuccessful", AuditGetTrusteesIdentifier)
+              GetSuccessResponse(value)
+            }
+            case _ => {
+              audit.doAudit("getTrusteesFailure", AuditGetTrusteesIdentifier)
+              InternalServerErrorResponse
+            }
+          }
+        }
+        case 400 => {
+          audit.doAudit("getTrusteesFailure", AuditGetTrusteesIdentifier)
+          BadRequestResponse
+        }
+        case 404 => {
+          audit.doAudit("getTrusteesFailure", AuditGetTrusteesIdentifier)
+          NotFoundResponse
+        }
+        case _ => {
+          audit.doAudit("getTrusteesFailure", AuditGetTrusteesIdentifier)
+          InternalServerErrorResponse
+        }
+      }
+    }).recover {
+      case _ => {
+        audit.doAudit("getTrusteesFailure", AuditGetTrusteesIdentifier)
+        InternalServerErrorResponse
+      }
+    }
+  }
+
 }
 
 object DesConnector extends DesConnector {
   override val audit: TrustsAudit = TrustsAudit
-  override val metrics: Metrics = Metrics
+  override val metrics: TrustMetrics = TrustMetrics
 }

@@ -15,23 +15,31 @@
  */
 
 package uk.gov.hmrc.trustregistration.controllers
-import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.Logger
+import play.api.libs.json.Json
+import play.api.mvc.Result
 import uk.gov.hmrc.play.microservice.controller.BaseController
-import uk.gov.hmrc.trustregistration.metrics.Metrics
-import uk.gov.hmrc.trustregistration.models.{BadRequestResponse, NotFoundResponse, SuccessResponse, TrustResponse}
+import uk.gov.hmrc.trustregistration.metrics.TrustMetrics
+import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
 trait TrustBaseController extends BaseController {
-  val metrics: Metrics = Metrics
+  val metrics: TrustMetrics
   val registerTrustService: RegisterTrustService
+  
   val className: String = getClass.getSimpleName
 
-  def respond(methodName: String, result: Future[TrustResponse]): Future[Status] = {
+  def respond(methodName: String, result: Future[TrustResponse]): Future[Result] = {
     result map {
+      case GetSuccessResponse(payload:List[Individual]) => {
+        Logger.info(s"$className:$methodName API returned OK")
+        metrics.incrementApiSuccessResponse(methodName)
+        Ok(Json.toJson(payload))
+      }
       case SuccessResponse => {
         Logger.info(s"$className:$methodName API returned OK")
         metrics.incrementApiSuccessResponse(methodName)

@@ -16,10 +16,16 @@
 
 package uk.gov.hmrc.trustregistration.controllers
 
+import com.google.inject.{Inject, Singleton}
 import controllers.AssetsBuilder
+import play.api.Play
+import play.api.http.HttpErrorHandler
 import uk.gov.hmrc.play.microservice.controller.BaseController
 
-trait DocumentationController extends AssetsBuilder with BaseController {
+@Singleton
+class DocumentationController @Inject() (errorHandler: HttpErrorHandler)
+    extends AssetsBuilder(errorHandler)
+    with BaseController {
 
   def documentation(version: String, endpointName: String) = {
     super.at(s"/public/api/documentation/$version", "Sample-Trusts.xml")
@@ -33,5 +39,3 @@ trait DocumentationController extends AssetsBuilder with BaseController {
     super.at(s"/public/api/conf/$version", file)
   }
 }
-
-object DocumentationController extends DocumentationController

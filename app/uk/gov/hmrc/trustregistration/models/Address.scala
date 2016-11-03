@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.utils
+package uk.gov.hmrc.trustregistration.models
 
-import play.api.Play
-import play.api.test.FakeApplication
-import uk.gov.hmrc.trustregistration.ApiGlobal
+import play.api.libs.json.{Json, Reads}
 
-trait MicroserviceLocalRunSugar {
+case class Address (
+     isNonUkAddress: Boolean,
+     addressLine1: String,
+     addressLine2: Option[String] = None,
+     addressLine3: Option[String] = None,
+     addressLine4: Option[String] = None,
+     postcode: Option[String] = None,
+     country: Option[String] = None)
 
-  val additionalConfiguration: Map[String, Any]
-
-  lazy val fakeApplication = FakeApplication(additionalConfiguration = additionalConfiguration)
-
-  def run(block: () => Unit) = {
-    Play.start(fakeApplication)
-    block()
-    Play.stop()
-  }
+object Address {
+  implicit val formats = Json.format[Address]
 }
