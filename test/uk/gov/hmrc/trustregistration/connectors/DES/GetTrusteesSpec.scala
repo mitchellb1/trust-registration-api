@@ -32,7 +32,7 @@ import scala.concurrent.{Await, Future}
 class GetTrusteesSpec extends PlaySpec with OneAppPerSuite with DESConnectorMocks with BeforeAndAfter {
 
   "Get Trustees endpoint" must {
-    "return a GetTrusteeSuccessResponse with an empty Trustee list" when {
+    "return a GetSuccessResponse with an empty Trustee list" when {
       "DES returns a 200 response with an empty array" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse("[]")))))
         val result = Await.result(SUT.getTrustees("1234"),Duration.Inf)
@@ -40,7 +40,7 @@ class GetTrusteesSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
       }
     }
 
-    "return a GetTrusteeSuccessResponse with a populated Trustee list" when {
+    "return a GetSuccessResponse with a populated Trustee list" when {
       "DES returns a 200 response with a JSON array of Trustees" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200,
           Some(Json.parse("""[{"title":"Mr","givenName":"Juan","familyName":"Doe","dateOfBirth" : "2012-04-23T18:25:43.511Z"},""" +
