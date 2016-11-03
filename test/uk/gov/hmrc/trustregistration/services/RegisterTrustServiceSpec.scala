@@ -36,7 +36,6 @@ class RegisterTrustServiceSpec extends PlaySpec
   "RegisterTrustService" must {
     "Return a TRN" when {
       "Given a valid registration" in {
-
         when(mockDesConnector.registerTrust(any())(any())).thenReturn(Future.successful(Right(TRN(testTRN))))
         val registration = RegistrationDocument("this is the input")
 
@@ -46,58 +45,121 @@ class RegisterTrustServiceSpec extends PlaySpec
     }
 
     "Return a SuccessResponse" when {
-      "a successful response is returned from DES for the call to no-change" in {
+      "a SuccessResponse is returned from DES for the call to noChange" in {
         when(mockDesConnector.noChange(any())(any())).thenReturn(Future.successful(SuccessResponse))
 
         val result = Await.result(SUT.noChange("1234567890")(HeaderCarrier()), Duration.Inf)
         result mustBe SuccessResponse
       }
 
-      "a successful response is returned from DES for the call to closeTrust" in {
+      "a SuccessResponse is returned from DES for the call to closeTrust" in {
         when(mockDesConnector.closeTrust(any())(any())).thenReturn(Future.successful(SuccessResponse))
 
         val result = Await.result(SUT.closeTrust("1234567890")(HeaderCarrier()), Duration.Inf)
         result mustBe SuccessResponse
       }
 
-      "a successful response is returned from DES for the call to getTrustees" in {
+      "a SuccessResponse is returned from DES for the call to getTrustees" in {
         when(mockDesConnector.getTrustees(any())(any())).thenReturn(Future.successful(GetSuccessResponse(Nil)))
 
         val result = Await.result(SUT.getTrustees("1234567890")(HeaderCarrier()), Duration.Inf)
         result mustBe GetSuccessResponse(Nil)
       }
+
+      "a SuccessResponse is returned from DES for the call to getNaturalPersons" in {
+        when(mockDesConnector.getNaturalPersons(any())(any())).thenReturn(Future.successful(GetSuccessResponse(Nil)))
+
+        val result = Await.result(SUT.getNaturalPersons("1234567890")(HeaderCarrier()), Duration.Inf)
+        result mustBe GetSuccessResponse(Nil)
+      }
     }
 
     "Return a BadRequestResponse" when {
-      "a bad requested is returned from DES for the call to no-change" in {
+      "a BadRequestResponse is returned from DES for the call to noChange" in {
         when(mockDesConnector.noChange(any())(any())).thenReturn(Future.successful(BadRequestResponse))
 
         val result = Await.result(SUT.noChange("400BadRequest")(HeaderCarrier()), Duration.Inf)
         result mustBe BadRequestResponse
       }
 
-      "a bad requested is returned from DES for the call to closeTrust" in {
+      "a BadRequestResponse is returned from DES for the call to closeTrust" in {
         when(mockDesConnector.closeTrust(any())(any())).thenReturn(Future.successful(BadRequestResponse))
 
         val result = Await.result(SUT.closeTrust("400BadRequest")(HeaderCarrier()), Duration.Inf)
         result mustBe BadRequestResponse
       }
+
+      "a BadRequestResponse is returned from DES for the call to getTrustees" in {
+        when(mockDesConnector.getTrustees(any())(any())).thenReturn(Future.successful(BadRequestResponse))
+
+        val result = Await.result(SUT.getTrustees("400BadRequest")(HeaderCarrier()), Duration.Inf)
+        result mustBe BadRequestResponse
+      }
+
+      "a BadRequestResponse is returned from DES for the call to getNaturalPersons" in {
+        when(mockDesConnector.getNaturalPersons(any())(any())).thenReturn(Future.successful(BadRequestResponse))
+
+        val result = Await.result(SUT.getNaturalPersons("400BadRequest")(HeaderCarrier()), Duration.Inf)
+        result mustBe BadRequestResponse
+      }
     }
 
     "Return a InternalServerErrorResponse" when {
+      "a InternalServerErrorResponse is returned from DES for the call to noChange" in {
+        when(mockDesConnector.noChange(any())(any())).thenReturn(Future.successful(InternalServerErrorResponse))
+
+        val result = Await.result(SUT.noChange("400BadRequest")(HeaderCarrier()), Duration.Inf)
+        result mustBe InternalServerErrorResponse
+      }
+
+      "a InternalServerErrorResponse is returned from DES for the call to closeTrust" in {
+        when(mockDesConnector.closeTrust(any())(any())).thenReturn(Future.successful(InternalServerErrorResponse))
+
+        val result = Await.result(SUT.closeTrust("400BadRequest")(HeaderCarrier()), Duration.Inf)
+        result mustBe InternalServerErrorResponse
+      }
+
       "a InternalServerErrorResponse is returned from DES for the call to getTrustees" in {
         when(mockDesConnector.getTrustees(any())(any())).thenReturn(Future.successful(InternalServerErrorResponse))
 
         val result = Await.result(SUT.getTrustees("500Error")(HeaderCarrier()), Duration.Inf)
         result mustBe InternalServerErrorResponse
       }
+
+      "a InternalServerErrorResponse is returned from DES for the call to getNaturalPersons" in {
+        when(mockDesConnector.getNaturalPersons(any())(any())).thenReturn(Future.successful(InternalServerErrorResponse))
+
+        val result = Await.result(SUT.getNaturalPersons("500Error")(HeaderCarrier()), Duration.Inf)
+        result mustBe InternalServerErrorResponse
+      }
     }
 
     "Return a NotFoundResponse" when {
+      "a NotFoundResponse is returned from DES for the call to noChange" in {
+        when(mockDesConnector.noChange(any())(any())).thenReturn(Future.successful(NotFoundResponse))
+
+        val result = Await.result(SUT.noChange("404NotFound")(HeaderCarrier()), Duration.Inf)
+        result mustBe NotFoundResponse
+      }
+
+      "a NotFoundResponse is returned from DES for the call to closeTrust" in {
+        when(mockDesConnector.closeTrust(any())(any())).thenReturn(Future.successful(NotFoundResponse))
+
+        val result = Await.result(SUT.closeTrust("404NotFound")(HeaderCarrier()), Duration.Inf)
+        result mustBe NotFoundResponse
+      }
+
       "a NotFoundResponse is returned from DES for the call to getTrustees" in {
         when(mockDesConnector.getTrustees(any())(any())).thenReturn(Future.successful(NotFoundResponse))
 
         val result = Await.result(SUT.getTrustees("404NotFound")(HeaderCarrier()), Duration.Inf)
+        result mustBe NotFoundResponse
+      }
+
+      "a NotFoundResponse is returned from DES for the call to getNaturalPersons" in {
+        when(mockDesConnector.getNaturalPersons(any())(any())).thenReturn(Future.successful(NotFoundResponse))
+
+        val result = Await.result(SUT.getNaturalPersons("404NotFound")(HeaderCarrier()), Duration.Inf)
         result mustBe NotFoundResponse
       }
     }
