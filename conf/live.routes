@@ -1,6 +1,7 @@
 # microservice specific routes
 
-POST       /trusts                         uk.gov.hmrc.trustregistration.controllers.RegisterTrustController.register()
-PUT        /trusts/:identifier/no-change   uk.gov.hmrc.trustregistration.controllers.RegisterTrustController.noChange(identifier: String)
-PUT        /trusts/:identifier/close       uk.gov.hmrc.trustregistration.controllers.RegisterTrustController.closeTrust(identifier: String)
-GET        /trusts/:identifier/trustees    uk.gov.hmrc.trustregistration.controllers.RegisterTrustController.getTrustees(identifier: String)
+POST       /trusts                              uk.gov.hmrc.trustregistration.controllers.RegisterTrustController.register()
+PUT        /trusts/:identifier/no-change        uk.gov.hmrc.trustregistration.controllers.RegisterTrustController.noChange(identifier: String)
+PUT        /trusts/:identifier/close            uk.gov.hmrc.trustregistration.controllers.RegisterTrustController.closeTrust(identifier: String)
+GET        /trusts/:identifier/trustees         uk.gov.hmrc.trustregistration.controllers.RegisterTrustController.getTrustees(identifier: String)
+GET        /trusts/:identifier/natural-persons  uk.gov.hmrc.trustregistration.controllers.RegisterTrustController.getNaturalPersons(identifier: String)
