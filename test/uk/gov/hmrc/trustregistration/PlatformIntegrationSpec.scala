@@ -52,6 +52,7 @@ class PlatformIntegrationSpec extends PlaySpec
   }
 
   "microservice" must {
+    /*
     "register itself to service-locator" when {
       "the application starts" in {
 
@@ -64,6 +65,7 @@ class PlatformIntegrationSpec extends PlaySpec
         )
       }
     }
+    */
 
     "provide definition endpoint and documentation endpoint for each api" in {
 
