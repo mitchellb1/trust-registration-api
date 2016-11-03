@@ -8,15 +8,15 @@ mediaType: application/hal+json
 resourceTypes:
   base: !include resourceTypes/base.raml
 types:
-  Estate: !include schemas/trust.json#/properties/estate
-  Trust: !include schemas/trust.json#/properties/trust
-  Trustees: !include schemas/trust.json#/properties/trust/properties/trustees
-  Beneficiaries: !include schemas/trust.json#/properties/trust/properties/beneficiaries
-  Settlors: !include schemas/trust.json#/properties/trust/properties/settlor
-  Protectors: !include schemas/trust.json#/properties/trust/properties/protector
-  LeadTrusteeIndividual: !include schemas/trust.json#/properties/trust/properties/leadTrustee/properties/person
-  LeadTrusteeCompany: !include schemas/trust.json#/properties/trust/properties/leadTrustee/properties/company
-  NaturalPersons: !include schemas/trust.json#/properties/trust/properties/naturalPersons
+  Estate: !include schemas/trust.json#/definitions/estate
+  Trust: !include schemas/trust.json#/definitions/trust
+  Trustees: !include schemas/trust.json#/definitions/trustees
+  Beneficiaries: !include schemas/trust.json#/definitions/beneficiaries
+  Settlors: !include schemas/trust.json#/definitions/settlor
+  Protectors: !include schemas/trust.json#/definitions/protector
+  LeadTrusteeIndividual: !include schemas/trust.json#/definitions/leadTrustee/properties/Individual
+  LeadTrusteeCompany: !include schemas/trust.json#/definitions/leadTrustee/properties/company
+  NaturalPersons: !include schemas/trust.json#/definitions/naturalPeople
   NoChange: !include schemas/no-change.json
   Close: !include schemas/close.json
 /trusts:
@@ -157,14 +157,14 @@ types:
             body:
               application/json:
                 type: NaturalPersons
-                example: !include examples/natural-persons.json
+                example: !include examples/natural-people.json
       put:
-        displayName: Update Beneficiaries
+        displayName: Update Natural Persons
         description: Updates all the "natural persons" for the Trust
         body:
           application/json:
               type: NaturalPersons
-              example: !include examples/natural-persons.json
+              example: !include examples/natural-people.json
     /protectors:
       type: base
       get:
@@ -222,7 +222,7 @@ types:
         body:
           application/json:
             type: Estate
-            example: !include examples/estate.json
+            #example: !include examples/estate.json
   post:
     displayName: Register Estate
     description: Submits an entire set of data for a estate
@@ -240,7 +240,7 @@ types:
           body:
             application/json:
               type: Estate
-              example: !include examples/estate.json
+              #example: !include examples/estate.json
     delete:
       displayName: Delete Estate
       description: Deletes a specific estate

@@ -1,52 +1,50 @@
 {
   "trustees": [
     {
-      "title": "Mrs",
-      "givenName": "Jane",
-      "otherName": "",
+      "title": "Mr",
+      "givenName": "Joe",
+      "otherName": "John",
       "familyName": "Doe",
-      "dateOfBirth": "12/08/1965",
+      "dateOfBirth": "1989-12-31",
       "nino": "WA123456A",
-      "dateOfDeath": "",
       "passport": {
-        "identifier": "79685556467575",
-        "expiryDate": "30/12/2016",
+        "identifier": "b12344b23b45",
+        "expiryDate": "2018-12-25",
         "countryOfIssue": "UK"
       },
       "correspondenceAddress": {
         "isNonUkAddress": false,
-        "addressLine1": "Line 1",
-        "addressLine2": "Line 2",
-        "addressLine3": "Line 3",
-        "addressLine4": "Line 4",
+        "addressLine1": "Address Line 1",
+        "addressLine2": "Address Line 2",
+        "addressLine3": "Address Line 3",
+        "addressLine4": "Address Line 4",
         "postcode": "NE1 2BR",
         "country": "UK"
       },
-      "telephoneNumber": "0191 289 4563"
+      "telephoneNumber": "0191 357 1596"
     },
     {
-      "title": "Dr",
-      "givenName": "Fiona",
-      "otherName": "Jane",
-      "familyName": "Bloggs",
-      "dateOfBirth": "12/12/1945",
-      "nino": "WR4356645A",
-      "dateOfDeath": "",
+      "title": "Mr",
+      "givenName": "Joe",
+      "otherName": "John",
+      "familyName": "Doe",
+      "dateOfBirth": "1989-12-31",
+      "nino": "WA123456A",
       "passport": {
-        "identifier": "3454657687686",
-        "expiryDate": "12/06/2020",
+        "identifier": "b12344b23b45",
+        "expiryDate": "2018-12-25",
         "countryOfIssue": "UK"
       },
       "correspondenceAddress": {
         "isNonUkAddress": false,
-        "addressLine1": "Line 1",
-        "addressLine2": "Line 2",
-        "addressLine3": "Line 3",
-        "addressLine4": "Line 4",
+        "addressLine1": "Address Line 1",
+        "addressLine2": "Address Line 2",
+        "addressLine3": "Address Line 3",
+        "addressLine4": "Address Line 4",
         "postcode": "NE1 2BR",
         "country": "UK"
       },
-      "telephoneNumber": "0121 558 9999"
+      "telephoneNumber": "0191 357 1596"
     }
   ]
 }
