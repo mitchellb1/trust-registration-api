@@ -38,6 +38,7 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
   val AuditNoChangeIdentifier: String = "trustRegistration_noAnnualChangeTrust"
   val AuditCloseTrustIdentifier: String = "trustRegistration_closeTrust"
   val AuditGetTrusteesIdentifier: String = "trustRegistration_getTrustees"
+  val AuditGetNaturalPersonsIdentifier: String = "trustRegistration_getNaturalPersons"
 
   lazy val desUrl = baseUrl("des")
   lazy val serviceUrl = s"$desUrl/trust-registration-stub/trusts"
@@ -174,24 +175,84 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
     }
   }
 
+
   def getSettlors(identifier: String)(implicit hc: HeaderCarrier): Future[TrustResponse] = {
 
     val uri: String = s"$serviceUrl/$identifier/settlors"
 
     val result: Future[HttpResponse] = httpGet.GET[HttpResponse](uri)(httpReads, implicitly)
 
-    result.map(f=>{
+    result.map(f => {
       f.status match {
         case 200 => {
           val settlors = f.json.asOpt[Settlors]
-          settlors match{
+          settlors match {
             case Some(value: Settlors) => {
               GetSuccessResponse(value)
             }
           }
         }
+        case 400 => {
+          BadRequestResponse
+        }
+        case 404 => {
+          NotFoundResponse
+        }
+        case _ =>{
+          InternalServerErrorResponse
+        }
       }
-    })
+    }).recover {
+      case _ => {
+        InternalServerErrorResponse
+      }
+    }
+  }
+
+  def getNaturalPersons(identifier: String)(implicit hc : HeaderCarrier): Future[TrustResponse] = {
+
+    val uri: String = s"$serviceUrl/$identifier/naturalPersons"
+
+    val timerStart = metrics.startDesConnectorTimer("getNaturalPersons")
+
+    val result: Future[HttpResponse] = httpGet.GET[HttpResponse](uri)(httpReads, implicitly)
+
+    result.map(f => {
+      timerStart.stop()
+      f.status match {
+        case 200 => {
+          val naturalPersons = f.json.asOpt[List[Individual]]
+
+          naturalPersons match {
+            case Some(value: List[Individual]) => {
+              audit.doAudit("getNaturalPersonsSuccessful", AuditGetNaturalPersonsIdentifier)
+              GetSuccessResponse(value)
+            }
+            case _ => {
+              audit.doAudit("getNaturalPersonsFailure", AuditGetNaturalPersonsIdentifier)
+              InternalServerErrorResponse
+            }
+          }
+        }
+        case 400 => {
+          audit.doAudit("getNaturalPersonsFailure", AuditGetNaturalPersonsIdentifier)
+          BadRequestResponse
+        }
+        case 404 => {
+          audit.doAudit("getNaturalPersonsFailure", AuditGetNaturalPersonsIdentifier)
+          NotFoundResponse
+        }
+        case _ => {
+          audit.doAudit("getNaturalPersonsFailure", AuditGetNaturalPersonsIdentifier)
+          InternalServerErrorResponse
+        }
+      }
+    }).recover {
+      case _ => {
+        audit.doAudit("getNaturalPersonsFailure", AuditGetNaturalPersonsIdentifier)
+        InternalServerErrorResponse
+      }
+    }
   }
 
 }

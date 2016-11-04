@@ -39,21 +39,19 @@ class GetSettlorsSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
     .mkString
     .replace("\"{PASSPORT}\"", validPassportJson)
     .replace("\"{ADDRESS}\"", validAddressJson)
+  val invalidIndividualJson = Source.fromFile(getClass.getResource("/InvalidIndividual.json").getPath).mkString
   val validCompanyJson = Source
     .fromFile(getClass.getResource("/ValidCompany.json").getPath)
     .mkString
-    .replace("\"{ADDRESS}\"", validPassportJson)
+    .replace("\"{ADDRESS}\"", validAddressJson)
+  val invalidCompanyJson = Source
+    .fromFile(getClass.getResource("/InvalidCompany.json").getPath)
+    .mkString
+    .replace("\"{ADDRESS}\"", validAddressJson)
+
 
 
   "Get Settlors endpoint" must {
-    "return a GetSuccessResponse with an empty Settlors" when{
-      "DES returns a 200 response with an empty settlors" in {
-        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse("[]")))))
-        val result = Await.result(SUT.getSettlors("1234"),Duration.Inf)
-        result mustBe GetSuccessResponse(Settlors())
-      }
-    }
-
     "return a GetSuccessResponse with a populated Settlors object" when {
       "DES returns a 200 response with a settlors JSON object that contains a list of individuals" in {
 
@@ -80,6 +78,60 @@ class GetSettlorsSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
         val expectedCompanySettlors = Settlors(None,Some(List(Company("Company",address,"12345",Some("AAA5221")),Company("Company",address,"12345",Some("AAA5221")))))
 
         result mustBe GetSuccessResponse(expectedCompanySettlors)
+      }
+    }
+
+    "return a BadRequestresponse" when {
+      "DES returns a 400 response" in {
+        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(400)))
+        val result = Await.result(SUT.getSettlors("1234"),Duration.Inf)
+        result mustBe BadRequestResponse
+      }
+    }
+
+    "return a NotFoundResponse" when {
+      "DES returns a 404 response" in {
+        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(404)))
+        val result = Await.result(SUT.getSettlors("1234"),Duration.Inf)
+        result mustBe NotFoundResponse
+      }
+    }
+
+    "return an InternalServerErrorResponse" when {
+      "DES Json response is missing" in {
+        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, None)))
+        val result = Await.result(SUT.getSettlors("1234"),Duration.Inf)
+        result mustBe InternalServerErrorResponse
+      }
+      "DES returns an invalid Json response" in {
+        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse("""{"test":"test"}""")))))
+        val result = Await.result(SUT.getSettlors("1234"),Duration.Inf)
+        result mustBe InternalServerErrorResponse
+      }
+      "DES returns a 500 response" in {
+        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(500)))
+        val result = Await.result(SUT.getSettlors("1234"),Duration.Inf)
+        result mustBe InternalServerErrorResponse
+      }
+      "DES returns any unspecified error response (i.e. a 418)" in {
+        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(418)))
+        val result = Await.result(SUT.getSettlors("1234"),Duration.Inf)
+        result mustBe InternalServerErrorResponse
+      }
+      "DES returns a Settlors object with a list of companies without all the required fields" in {
+        val invalidSettlorsJson = ("""{"companies" : [{COMPANY}]}""").replace("{COMPANY}", invalidCompanyJson)
+        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200,
+          Some(Json.parse(invalidSettlorsJson)))))
+        val result = Await.result(SUT.getSettlors("1234"),Duration.Inf)
+        result mustBe InternalServerErrorResponse
+      }
+
+      "DES returns a Settlors object with a list of individuals without all the required fields" in {
+        val invalidSettlorsJson = ("""{"individuals" : [{INDIVIDUAL}]}""").replace("{INDIVIDUAL}", invalidIndividualJson)
+        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200,
+          Some(Json.parse(invalidSettlorsJson)))))
+        val result = Await.result(SUT.getSettlors("1234"),Duration.Inf)
+        result mustBe InternalServerErrorResponse
       }
     }
   }

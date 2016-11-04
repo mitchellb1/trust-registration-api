@@ -145,8 +145,8 @@ class GetTrusteesSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
       }
     }
 
-    "return a InternalServerErrorResponse" when {
-      "DES' Json response is missing" in {
+    "return an InternalServerErrorResponse" when {
+      "DES Json response is missing" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, None)))
         val result = Await.result(SUT.getTrustees("1234"),Duration.Inf)
         result mustBe InternalServerErrorResponse

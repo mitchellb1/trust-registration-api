@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.models
+package Models
 
-import play.api.libs.json.Json
+import org.scalatestplus.play.PlaySpec
+import uk.gov.hmrc.trustregistration.models.Settlors
 
 
-case class Settlors(individuals: Option[List[Individual]] = None, companies: Option[List[Company]] = None) {
-  private val atleastOneTypeOfSettlor: Boolean = individuals.isDefined || companies.isDefined
+class SettlorsSpec extends PlaySpec {
 
-  require(atleastOneTypeOfSettlor, "Must have either an individual or company settlor")
+  "Settlors" must {
+    "throw an excetion" when {
+      "there are no individuals or companies" in {
+        val ex = the [IllegalArgumentException] thrownBy (Settlors(None, None))
+        ex.getMessage() contains  "Must have either an individual or company settlor"
+      }
+    }
+  }
 
-}
-object Settlors{
-  implicit val settlorsFormats = Json.format[Settlors]
 }
