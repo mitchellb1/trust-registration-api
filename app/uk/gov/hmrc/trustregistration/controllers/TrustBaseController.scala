@@ -37,6 +37,9 @@ trait TrustBaseController extends BaseController {
     val okMessage = s"$className:$methodName API returned OK"
 
     result map {
+      case GetSuccessResponse(payload:Settlors) => {
+        Ok(Json.toJson(payload))
+      }
       case GetSuccessResponse(payload:List[Individual]) => {
         Logger.info(okMessage)
         metrics.incrementApiSuccessResponse(methodName)

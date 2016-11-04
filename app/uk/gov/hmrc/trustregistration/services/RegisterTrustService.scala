@@ -42,6 +42,10 @@ trait RegisterTrustService {
     desConnector.getTrustees(identifier)
   }
 
+  def getSettlors(identifier: String)(implicit hc: HeaderCarrier): Future[TrustResponse] = {
+    desConnector.getSettlors(identifier)
+  }
+
   def getNaturalPersons(identifier: String)(implicit hc: HeaderCarrier): Future[TrustResponse] = {
     desConnector.getNaturalPersons(identifier)
   }
