@@ -39,6 +39,7 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
   val AuditCloseTrustIdentifier: String = "trustRegistration_closeTrust"
   val AuditGetTrusteesIdentifier: String = "trustRegistration_getTrustees"
   val AuditGetNaturalPersonsIdentifier: String = "trustRegistration_getNaturalPersons"
+  val AuditGetTrustContactDetailsIdentifier: String = "trustRegistration_getTrustContactDetails"
 
   lazy val desUrl = baseUrl("des")
   lazy val serviceUrl = s"$desUrl/trust-registration-stub/trusts"
@@ -216,6 +217,53 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
     }).recover {
       case _ => {
         audit.doAudit("getNaturalPersonsFailure", AuditGetNaturalPersonsIdentifier)
+        InternalServerErrorResponse
+      }
+    }
+
+  }
+
+  def getTrustContactDetails(identifier: String)(implicit hc : HeaderCarrier): Future[TrustResponse] = {
+
+    val uri: String = s"$serviceUrl/$identifier/contactDetails"
+
+    val timerStart = metrics.startDesConnectorTimer("getTrustContactDetails")
+
+    val result: Future[HttpResponse] = httpGet.GET[HttpResponse](uri)(httpReads, implicitly)
+
+    result.map(f => {
+      timerStart.stop()
+      f.status match {
+        case 200 => {
+          val details = f.json.asOpt[TrustContactDetails]
+
+          details match {
+            case Some(value: TrustContactDetails) => {
+              audit.doAudit("getTrustContactDetailsSuccessful", AuditGetTrustContactDetailsIdentifier)
+              GetSuccessResponse(value)
+            }
+            case _ => {
+              audit.doAudit("getTrustContactDetailsFailure", AuditGetTrustContactDetailsIdentifier)
+              InternalServerErrorResponse
+            }
+          }
+        }
+        case 400 => {
+          audit.doAudit("getTrustContactDetailsFailure", AuditGetTrustContactDetailsIdentifier)
+          BadRequestResponse
+        }
+        case 404 => {
+          audit.doAudit("getTrustContactDetailsFailure", AuditGetTrustContactDetailsIdentifier)
+          NotFoundResponse
+        }
+        case _ => {
+          audit.doAudit("getTrustContactDetailsFailure", AuditGetTrustContactDetailsIdentifier)
+          InternalServerErrorResponse
+        }
+      }
+    }).recover {
+      case _ => {
+        audit.doAudit("getTrustContactDetailsFailure", AuditGetTrustContactDetailsIdentifier)
         InternalServerErrorResponse
       }
     }
