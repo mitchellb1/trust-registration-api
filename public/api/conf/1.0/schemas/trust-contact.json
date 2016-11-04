@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "id": "http://uk/gov/hmrc/trustregistration/raml/schemas/close.json",
+  "title": "Get Trust Contact Details",
+  "description": "A JSON response of trust contact details with HATEOAS links for further actions",
+  "type": "object",
+  "properties": {
+    "correspondenceAddress": {
+      "type": "object",
+      "properties": {
+        "isNonUkAddress": {
+          "type": "boolean"
+        },
+        "addressLine1": {
+          "type": "string"
+        },
+        "addressLine2": {
+          "type": "string"
+        },
+        "addressLine3": {
+          "type": "string"
+        },
+        "addressLine4": {
+          "type": "string"
+        },
+        "postcode": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "addressLine1",
+        "isNonUkAddress"
+      ]
+    },
+    "telephoneNumber": {"type": "string"},
+    "_links": {
+      "type": "object",
+      "properties": {
+        "self": {
+          "type": "object",
+          "properties": {
+            "href": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "href"
+          ]
+        },
+        "trust": {
+          "type": "object",
+          "properties": {
+            "href": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "href"
+          ]
+        }
+      },
+      "required": [
+        "self",
+        "trust"
+      ]
+    }
+  }
+}
