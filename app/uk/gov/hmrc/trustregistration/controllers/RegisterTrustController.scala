@@ -151,6 +151,27 @@ trait RegisterTrustController extends TrustBaseController {
       }
     }
   }
+
+  def getTrustContactDetails(identifier: String): Action[AnyContent] = Action.async{ implicit request =>
+
+    Logger.info(s"$className:getTrustContactDetails API invoked")
+    Logger.debug(s"$className:getTrustContactDetails($identifier) API invoked")
+
+    val authorised: Option[(String, String)] = hc.headers.find((tup) => tup._1 == AUTHORIZATION)
+
+    authorised match {
+      case Some((key, "AUTHORISED")) => {
+        Logger.info(s"$className:getTrustContactDetails API authorised")
+        metrics.incrementAuthorisedRequest("getTrustContactDetails")
+        respond("getTrustees", registerTrustService.getTrustContactDetails(identifier))
+      }
+      case _ => {
+        Logger.info(s"$className:getTrustContactDetails API returned unauthorised")
+        metrics.incrementUnauthorisedRequest("getTrustContactDetails")
+        Future.successful(Unauthorized)
+      }
+    }
+  }
 }
 
 object RegisterTrustController extends RegisterTrustController {

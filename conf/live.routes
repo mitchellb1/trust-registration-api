@@ -6,3 +6,4 @@ PUT        /trusts/:identifier/close            uk.gov.hmrc.trustregistration.co
 GET        /trusts/:identifier/trustees         uk.gov.hmrc.trustregistration.controllers.RegisterTrustController.getTrustees(identifier: String)
 GET        /trusts/:identifier/settlors         uk.gov.hmrc.trustregistration.controllers.RegisterTrustController.getSettlors(identifier: String)
 GET        /trusts/:identifier/natural-persons  uk.gov.hmrc.trustregistration.controllers.RegisterTrustController.getNaturalPersons(identifier: String)
+GET        /trusts/:identifier/contact-details  uk.gov.hmrc.trustregistration.controllers.RegisterTrustController.getTrustContactDetails(identifier: String)
