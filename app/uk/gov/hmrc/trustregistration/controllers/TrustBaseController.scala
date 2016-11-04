@@ -34,14 +34,21 @@ trait TrustBaseController extends BaseController {
   val className: String = getClass.getSimpleName
 
   def respond(methodName: String, result: Future[TrustResponse]): Future[Result] = {
+    val okMessage = s"$className:$methodName API returned OK"
+
     result map {
       case GetSuccessResponse(payload:List[Individual]) => {
-        Logger.info(s"$className:$methodName API returned OK")
+        Logger.info(okMessage)
+        metrics.incrementApiSuccessResponse(methodName)
+        Ok(Json.toJson(payload))
+      }
+      case GetSuccessResponse(payload: TrustContactDetails) => {
+        Logger.info(okMessage)
         metrics.incrementApiSuccessResponse(methodName)
         Ok(Json.toJson(payload))
       }
       case SuccessResponse => {
-        Logger.info(s"$className:$methodName API returned OK")
+        Logger.info(okMessage)
         metrics.incrementApiSuccessResponse(methodName)
         Ok
       }
