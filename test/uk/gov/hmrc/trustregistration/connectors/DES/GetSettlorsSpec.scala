@@ -23,6 +23,7 @@ import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
 import uk.gov.hmrc.play.http.HttpResponse
+import uk.gov.hmrc.trustregistration.JsonExamples
 import uk.gov.hmrc.trustregistration.models._
 
 import scala.concurrent.duration.Duration
@@ -30,27 +31,7 @@ import scala.concurrent.{Await, Future}
 import scala.io.Source
 
 
-class GetSettlorsSpec extends PlaySpec with OneAppPerSuite with DESConnectorMocks with BeforeAndAfter {
-
-  val validPassportJson = Source.fromFile(getClass.getResource("/ValidPassport.json").getPath).mkString
-  val validAddressJson = Source.fromFile(getClass.getResource("/ValidAddress.json").getPath).mkString
-  val validIndividualJson = Source
-    .fromFile(getClass.getResource("/ValidIndividual.json").getPath)
-    .mkString
-    .replace("\"{PASSPORT}\"", validPassportJson)
-    .replace("\"{ADDRESS}\"", validAddressJson)
-  val invalidIndividualJson = Source.fromFile(getClass.getResource("/InvalidIndividual.json").getPath).mkString
-  val validCompanyJson = Source
-    .fromFile(getClass.getResource("/ValidCompany.json").getPath)
-    .mkString
-    .replace("\"{ADDRESS}\"", validAddressJson)
-  val invalidCompanyJson = Source
-    .fromFile(getClass.getResource("/InvalidCompany.json").getPath)
-    .mkString
-    .replace("\"{ADDRESS}\"", validAddressJson)
-
-
-
+class GetSettlorsSpec extends PlaySpec with OneAppPerSuite with DESConnectorMocks with BeforeAndAfter with JsonExamples {
   "Get Settlors endpoint" must {
     "return a GetSuccessResponse with a populated Settlors object" when {
       "DES returns a 200 response with a settlors JSON object that contains a list of individuals" in {
@@ -135,4 +116,6 @@ class GetSettlorsSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
       }
     }
   }
+
+
 }

@@ -66,6 +66,13 @@ class RegisterTrustServiceSpec extends PlaySpec
         result mustBe GetSuccessResponse(Nil)
       }
 
+      "a SuccessResponse is returned from DES for the call to getSettlors" in {
+        when(mockDesConnector.getSettlors(any())(any())).thenReturn(Future.successful(GetSuccessResponse(Nil)))
+
+        val result = Await.result(SUT.getSettlors("1234567890")(HeaderCarrier()), Duration.Inf)
+        result mustBe GetSuccessResponse(Nil)
+      }
+
       "a SuccessResponse is returned from DES for the call to getNaturalPersons" in {
         when(mockDesConnector.getNaturalPersons(any())(any())).thenReturn(Future.successful(GetSuccessResponse(Nil)))
 
@@ -93,6 +100,13 @@ class RegisterTrustServiceSpec extends PlaySpec
         when(mockDesConnector.getTrustees(any())(any())).thenReturn(Future.successful(BadRequestResponse))
 
         val result = Await.result(SUT.getTrustees("400BadRequest")(HeaderCarrier()), Duration.Inf)
+        result mustBe BadRequestResponse
+      }
+
+      "a BadRequestResponse is returned from DES for the call to getSettlors" in {
+        when(mockDesConnector.getSettlors(any())(any())).thenReturn(Future.successful(BadRequestResponse))
+
+        val result = Await.result(SUT.getSettlors("400BadRequest")(HeaderCarrier()), Duration.Inf)
         result mustBe BadRequestResponse
       }
 
@@ -126,6 +140,13 @@ class RegisterTrustServiceSpec extends PlaySpec
         result mustBe InternalServerErrorResponse
       }
 
+      "a InternalServerErrorResponse is returned from DES for the call to getSettlors" in {
+        when(mockDesConnector.getSettlors(any())(any())).thenReturn(Future.successful(InternalServerErrorResponse))
+
+        val result = Await.result(SUT.getSettlors("500Error")(HeaderCarrier()), Duration.Inf)
+        result mustBe InternalServerErrorResponse
+      }
+
       "a InternalServerErrorResponse is returned from DES for the call to getNaturalPersons" in {
         when(mockDesConnector.getNaturalPersons(any())(any())).thenReturn(Future.successful(InternalServerErrorResponse))
 
@@ -153,6 +174,13 @@ class RegisterTrustServiceSpec extends PlaySpec
         when(mockDesConnector.getTrustees(any())(any())).thenReturn(Future.successful(NotFoundResponse))
 
         val result = Await.result(SUT.getTrustees("404NotFound")(HeaderCarrier()), Duration.Inf)
+        result mustBe NotFoundResponse
+      }
+
+      "a NotFoundResponse is returned from DES for the call to getSettlors" in {
+        when(mockDesConnector.getSettlors(any())(any())).thenReturn(Future.successful(NotFoundResponse))
+
+        val result = Await.result(SUT.getSettlors("404NotFound")(HeaderCarrier()), Duration.Inf)
         result mustBe NotFoundResponse
       }
 

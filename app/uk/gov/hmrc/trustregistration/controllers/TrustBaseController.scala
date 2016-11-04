@@ -35,6 +35,9 @@ trait TrustBaseController extends BaseController {
 
   def respond(methodName: String, result: Future[TrustResponse]): Future[Result] = {
     result map {
+      case GetSuccessResponse(payload:Settlors) => {
+        Ok(Json.toJson(payload))
+      }
       case GetSuccessResponse(payload:List[Individual]) => {
         Logger.info(s"$className:$methodName API returned OK")
         metrics.incrementApiSuccessResponse(methodName)
