@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package Models
+package uk.gov.hmrc.trustregistration.models
 
 import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.trustregistration.models.Settlors
