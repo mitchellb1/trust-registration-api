@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema",
-  "id": "http://uk/gov/hmrc/trustregistration/raml/schemas/close.json",
+  "id": "http://uk/gov/hmrc/trustregistration/raml/schemas/trust-contact.json",
   "title": "Get Trust Contact Details",
   "description": "A JSON response of trust contact details with HATEOAS links for further actions",
   "type": "object",
