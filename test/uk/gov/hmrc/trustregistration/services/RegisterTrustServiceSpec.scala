@@ -22,6 +22,7 @@ import org.mockito.Mockito.mock
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.trustregistration.ScalaDataExamples
 import uk.gov.hmrc.trustregistration.connectors.DesConnector
 import uk.gov.hmrc.trustregistration.models._
 
@@ -31,7 +32,8 @@ import scala.util.Right
 
 class RegisterTrustServiceSpec extends PlaySpec
   with MockitoSugar
-  with OneAppPerSuite {
+  with OneAppPerSuite
+  with ScalaDataExamples {
 
   "RegisterTrustService" must {
     "Return a TRN" when {
@@ -86,6 +88,13 @@ class RegisterTrustServiceSpec extends PlaySpec
         val result = Await.result(SUT.getTrustContactDetails("1234567890")(HeaderCarrier()), Duration.Inf)
         result mustBe GetSuccessResponse(Nil)
       }
+
+      "a SuccessResponse is returned from DES for the call to getLeadTrustee" in {
+        when(mockDesConnector.getLeadTrustee(any())(any())).thenReturn(Future.successful(GetSuccessResponse(leadTrusteeCompany)))
+
+        val result = Await.result(SUT.getLeadTrustee("1234567890")(HeaderCarrier()), Duration.Inf)
+        result mustBe GetSuccessResponse(leadTrusteeCompany)
+      }
     }
 
     "Return a BadRequestResponse" when {
@@ -128,6 +137,13 @@ class RegisterTrustServiceSpec extends PlaySpec
         when(mockDesConnector.getTrustContactDetails(any())(any())).thenReturn(Future.successful(BadRequestResponse))
 
         val result = Await.result(SUT.getTrustContactDetails("400BadRequest")(HeaderCarrier()), Duration.Inf)
+        result mustBe BadRequestResponse
+      }
+
+      "a BadRequestResponse is returned from DES for the call to getLeadTrustee" in {
+        when(mockDesConnector.getLeadTrustee(any())(any())).thenReturn(Future.successful(BadRequestResponse))
+
+        val result = Await.result(SUT.getLeadTrustee("1234567890")(HeaderCarrier()), Duration.Inf)
         result mustBe BadRequestResponse
       }
     }
@@ -174,6 +190,13 @@ class RegisterTrustServiceSpec extends PlaySpec
         val result = Await.result(SUT.getTrustContactDetails("500Error")(HeaderCarrier()), Duration.Inf)
         result mustBe InternalServerErrorResponse
       }
+
+      "a InternalServerErrorResponse is returned from DES for the call to getLeadTrustee" in {
+        when(mockDesConnector.getLeadTrustee(any())(any())).thenReturn(Future.successful(InternalServerErrorResponse))
+
+        val result = Await.result(SUT.getLeadTrustee("1234567890")(HeaderCarrier()), Duration.Inf)
+        result mustBe InternalServerErrorResponse
+      }
     }
 
     "Return a NotFoundResponse" when {
@@ -216,6 +239,13 @@ class RegisterTrustServiceSpec extends PlaySpec
         when(mockDesConnector.getTrustContactDetails(any())(any())).thenReturn(Future.successful(NotFoundResponse))
 
         val result = Await.result(SUT.getTrustContactDetails("404NotFound")(HeaderCarrier()), Duration.Inf)
+        result mustBe NotFoundResponse
+      }
+
+      "a NotFoundResponse is returned from DES for the call to getLeadTrustee" in {
+        when(mockDesConnector.getLeadTrustee(any())(any())).thenReturn(Future.successful(NotFoundResponse))
+
+        val result = Await.result(SUT.getLeadTrustee("1234567890")(HeaderCarrier()), Duration.Inf)
         result mustBe NotFoundResponse
       }
     }
