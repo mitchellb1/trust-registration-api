@@ -54,6 +54,10 @@ trait RegisterTrustService {
     desConnector.getTrustContactDetails(identifier)
   }
 
+  def getLeadTrustee(identifier: String)(implicit hc: HeaderCarrier): Future[ApplicationResponse] = {
+    desConnector.getLeadTrustee(identifier)
+  }
+
   def closeEstate(identifier: String)(implicit hc: HeaderCarrier): Future[ApplicationResponse] = {
     desConnector.closeEstate(identifier)
   }

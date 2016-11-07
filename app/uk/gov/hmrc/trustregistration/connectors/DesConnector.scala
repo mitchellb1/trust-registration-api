@@ -40,6 +40,7 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
   val AuditGetTrusteesIdentifier: String = "trustRegistration_getTrustees"
   val AuditGetNaturalPersonsIdentifier: String = "trustRegistration_getNaturalPersons"
   val AuditGetTrustContactDetailsIdentifier: String = "trustRegistration_getTrustContactDetails"
+  val AuditGetLeadTrusteeIdentifier: String = "trustRegistration_getLeadTrustee"
 
   lazy val desUrl = baseUrl("des")
   lazy val serviceUrl = s"$desUrl/trust-registration-stub/trusts"
@@ -308,6 +309,48 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
     }).recover {
       case _ => {
         audit.doAudit(s"close${endpoint}Failure", auditIdentifier)
+        InternalServerErrorResponse
+      }
+    }
+  }
+
+  def getLeadTrustee(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
+
+    val uri: String = s"$serviceUrl/$identifier/leadTrustee"
+
+    val timerStart = metrics.startDesConnectorTimer("getTrustContactDetails")
+
+    val result: Future[HttpResponse] = httpGet.GET[HttpResponse](uri)(httpReads, implicitly)
+
+    result.map(f => {
+      timerStart.stop()
+      f.status match {
+        case 200 => {
+          val details = f.json.asOpt[LeadTrustee]
+
+          details match {
+            case Some(value: LeadTrustee) => {
+              audit.doAudit("getLeadTrusteeSuccessful", AuditGetLeadTrusteeIdentifier)
+              GetSuccessResponse(value)
+            }
+            case _ => {
+              audit.doAudit("getLeadTrusteeFailure", AuditGetLeadTrusteeIdentifier)
+              InternalServerErrorResponse
+            }
+          }
+        }
+        case 400 => {
+          audit.doAudit("getLeadTrusteeFailure", AuditGetLeadTrusteeIdentifier)
+          BadRequestResponse
+        }
+        case 404 => {
+          audit.doAudit("getLeadTrusteeFailure", AuditGetLeadTrusteeIdentifier)
+          NotFoundResponse
+        }
+      }
+    }).recover {
+      case _ => {
+        audit.doAudit("getLeadTrusteeFailure", AuditGetLeadTrusteeIdentifier)
         InternalServerErrorResponse
       }
     }

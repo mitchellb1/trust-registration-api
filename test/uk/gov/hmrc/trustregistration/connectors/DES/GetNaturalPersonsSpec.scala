@@ -23,6 +23,7 @@ import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
 import uk.gov.hmrc.play.http._
+import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 import uk.gov.hmrc.trustregistration.models._
 
 import scala.concurrent.duration.Duration
@@ -30,31 +31,7 @@ import scala.concurrent.{Await, Future}
 import scala.io.Source
 
 
-class GetNaturalPersonsSpec extends PlaySpec with OneAppPerSuite with DESConnectorMocks with BeforeAndAfter {
-
-  val validPassportJson = Source.fromFile(getClass.getResource("/ValidPassport.json").getPath).mkString
-
-  val validIndividualJson = Source
-    .fromFile(getClass.getResource("/ValidIndividual.json").getPath)
-    .mkString
-    .replace("\"{PASSPORT}\"", validPassportJson)
-    .replace("\"{ADDRESS}\"", "null")
-
-  val validIndividualObject = Individual(
-    title = "Dr",
-    givenName = "Leo",
-    familyName = "Spaceman",
-    dateOfBirth = new DateTime("1800-01-01"),
-    passport = Some(Passport(
-      identifier = "IDENTIFIER",
-      expiryDate = new DateTime("2020-01-01"),
-      countryOfIssue = "UK"
-    ))
-  )
-
-  val invalidIndividualJson = Source
-    .fromFile(getClass.getResource("/InvalidIndividual.json").getPath)
-    .mkString
+class GetNaturalPersonsSpec extends PlaySpec with OneAppPerSuite with DESConnectorMocks with BeforeAndAfter with JsonExamples with ScalaDataExamples {
 
   "Get Natural Persons endpoint" must {
     "return a GetSuccessResponse with an empty Natural Persons list" when {
@@ -69,7 +46,7 @@ class GetNaturalPersonsSpec extends PlaySpec with OneAppPerSuite with DESConnect
       "DES returns a 200 response with a JSON array of Natural Persons" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(s"[$validIndividualJson,$validIndividualJson]")))))
         val result = Await.result(SUT.getNaturalPersons("1234"),Duration.Inf)
-        result mustBe GetSuccessResponse(List(validIndividualObject, validIndividualObject))
+        result mustBe GetSuccessResponse(List(individual, individual))
       }
     }
 

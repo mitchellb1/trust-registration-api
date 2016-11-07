@@ -14,12 +14,11 @@ types:
   Beneficiaries: !include schemas/trust.json#/properties/trust/properties/beneficiaries
   Settlors: !include schemas/trust.json#/properties/trust/properties/settlor
   Protectors: !include schemas/trust.json#/properties/trust/properties/protector
-  LeadTrusteeIndividual: !include schemas/trust.json#/properties/trust/properties/leadTrustee/properties/person
-  LeadTrusteeCompany: !include schemas/trust.json#/properties/trust/properties/leadTrustee/properties/company
   NaturalPersons: !include schemas/trust.json#/properties/trust/properties/naturalPersons
   NoChange: !include schemas/no-change.json
   Close: !include schemas/close.json
   TrustContact: !include schemas/trust-contact.json
+  LeadTrustee: !include schemas/lead-trustee.json
 /trusts:
   type: base
   get:
@@ -70,42 +69,24 @@ types:
               application/json:
                 type: TrustContact
                 example: !include examples/trust-contact.json
-    /lead-trustee-individual:
+    /lead-trustee:
       type: base
       get:
         displayName: Get Lead Trustee Individual
-        description: Retrieves the information for an lead Trustee as an individual
+        description: Retrieves the information for an lead Trustee
         responses:
           200:
             body:
               application/json:
-                type: LeadTrusteeIndividual
-                #example: !include examples/lead-trustee-individual.json
+                type: LeadTrustee
+                example: !include examples/lead-trustee.json
       put:
-        displayName: Update Lead Trustee Individual
-        description: Updates the information for an lead Trustee as an individual
+        displayName: Update Lead Trustee
+        description: Updates the information for an lead Trustee
         body:
           application/json:
-            type: LeadTrusteeIndividual
+            type: LeadTrustee
             #example: !include examples/lead-trustee-individual.json
-    /lead-trustee-company:
-      type: base
-      get:
-        displayName: Get Lead Trustee Company
-        description: Retrieves the information for an lead Trustee as an company
-        responses:
-          200:
-            body:
-              application/json:
-                type: LeadTrusteeCompany
-                #example: !include examples/lead-trustee-company.json
-      put:
-        displayName: Update Lead Trustee Company
-        description: Updates the information for an lead Trustee as an company
-        body:
-          application/json:
-            type: LeadTrusteeCompany
-            #example: !include examples/lead-trustee-company.json
     /trustees:
       type: base
       get:
@@ -207,24 +188,15 @@ types:
               application/json:
                 type: NoChange
                 example: !include examples/no-change.json
-  /lead-trustee-individual:
+  /lead-trustee:
     type: base
     post:
-      displayName: Register Lead Trustee Individual
-      description: Registers a lead Trustee as an individual
+      displayName: Register Lead Trustee
+      description: Registers a lead Trustee
       body:
         application/json:
-          type: LeadTrusteeIndividual
+          type: LeadTrustee
           #example: !include examples/lead-trustee-individual.json
-  /lead-trustee-company:
-    type: base
-    post:
-      displayName: Register Lead Trustee Company
-      description: Registers a lead Trustee as an company
-      body:
-        application/json:
-          type: LeadTrusteeCompany
-          #example: !include examples/lead-trustee-company.json
 /estates:
   type: base
   get:

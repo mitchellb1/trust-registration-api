@@ -32,7 +32,7 @@ trait TrustsAudit {
   val auditConnector: AuditConnector = ApiGlobal.auditConnector
   val appName: String = AppName.appName
 
-  def doAudit(eventTypelMessage: String,
+  def doAudit(eventTypeMessage: String,
               auditTag: String)(implicit headerCarrier: HeaderCarrier, ec: ExecutionContext): Unit = {
 
     val auditDetails: Map[String, String] = Map(
@@ -45,7 +45,7 @@ trait TrustsAudit {
     val auditResult: Future[AuditResult] = auditConnector.sendEvent(
       DataEvent(
         appName,
-        eventTypelMessage,
+        eventTypeMessage,
         tags = headerCarrier.toAuditTags(auditTag, "N/A"),
         detail = headerCarrier.toAuditDetails() ++ auditDetails)
     )

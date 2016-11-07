@@ -34,11 +34,11 @@ trait DESConnectorMocks extends MockitoSugar {
   val mockHttpPut = mock[HttpPut]
   val mockHttpGet = mock[HttpGet]
   val mockTrustMetrics = mock[ApplicationMetrics]
+  val mockAudit = mock[TrustsAudit]
 
   private val mockContext = new com.codahale.metrics.Timer().time()
 
   when (mockTrustMetrics.startDesConnectorTimer(any())).thenReturn(mockContext)
-
 
   object SUT extends DesConnector {
     override val httpPost: HttpPost = mockHttpPost
@@ -46,9 +46,7 @@ trait DESConnectorMocks extends MockitoSugar {
     override val httpGet: HttpGet = mockHttpGet
 
     override val metrics: ApplicationMetrics = mockTrustMetrics
-    override val audit: TrustsAudit = new TrustsAudit {
-      override def doAudit(eventTypelMessage: String, auditTag: String)(implicit headerCarrier: HeaderCarrier, ec: ExecutionContext): Unit = ()
-    }
+    override val audit: TrustsAudit = mockAudit
   }
 
   def setHttpPutResponse(response: Future[HttpResponse]): Unit = {
