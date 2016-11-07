@@ -29,7 +29,7 @@ import play.api.mvc.{Action, Request, RequestHeader, Result}
 import play.api.test.{FakeHeaders, FakeRequest}
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.trustregistration.JsonExamples
+import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 import uk.gov.hmrc.trustregistration.metrics.TrustMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
@@ -43,7 +43,8 @@ class RegisterTrustControllerSpec extends PlaySpec
   with OneAppPerSuite
   with MockitoSugar
   with BeforeAndAfter
-  with JsonExamples {
+  with JsonExamples
+  with ScalaDataExamples {
 
   before {
     when(mockRegisterTrustService.registerTrust(any[RegistrationDocument])(any[HeaderCarrier]))

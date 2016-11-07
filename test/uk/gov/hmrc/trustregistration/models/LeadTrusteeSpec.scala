@@ -17,9 +17,9 @@
 package uk.gov.hmrc.trustregistration.models
 
 import org.scalatestplus.play.PlaySpec
-import uk.gov.hmrc.trustregistration.JsonExamples
+import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 
-class LeadTrusteeSpec extends PlaySpec with JsonExamples {
+class LeadTrusteeSpec extends PlaySpec with JsonExamples with ScalaDataExamples {
 
   "Lead Trustee" must {
     "throw an exception" when {

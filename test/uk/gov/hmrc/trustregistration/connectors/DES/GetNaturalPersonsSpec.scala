@@ -23,7 +23,7 @@ import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
 import uk.gov.hmrc.play.http._
-import uk.gov.hmrc.trustregistration.JsonExamples
+import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 import uk.gov.hmrc.trustregistration.models._
 
 import scala.concurrent.duration.Duration
@@ -31,7 +31,7 @@ import scala.concurrent.{Await, Future}
 import scala.io.Source
 
 
-class GetNaturalPersonsSpec extends PlaySpec with OneAppPerSuite with DESConnectorMocks with BeforeAndAfter with JsonExamples {
+class GetNaturalPersonsSpec extends PlaySpec with OneAppPerSuite with DESConnectorMocks with BeforeAndAfter with JsonExamples with ScalaDataExamples {
 
   "Get Natural Persons endpoint" must {
     "return a GetSuccessResponse with an empty Natural Persons list" when {

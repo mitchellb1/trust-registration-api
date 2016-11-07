@@ -21,7 +21,6 @@ import uk.gov.hmrc.trustregistration.models.{Address, Company, Individual, Passp
 
 import scala.io.Source
 
-
 trait JsonExamples {
   val validPassportJson = Source.fromFile(getClass.getResource("/ValidPassport.json").getPath).mkString
   val validAddressJson = Source.fromFile(getClass.getResource("/ValidAddress.json").getPath).mkString
@@ -39,7 +38,9 @@ trait JsonExamples {
     .fromFile(getClass.getResource("/InvalidCompany.json").getPath)
     .mkString
     .replace("\"{ADDRESS}\"", validAddressJson)
+}
 
+trait ScalaDataExamples {
   val validAddress = Address(
     isNonUkAddress = false,
     addressLine1 = "Line 1",
