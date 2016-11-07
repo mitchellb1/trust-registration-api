@@ -19,7 +19,7 @@ import play.api.Logger
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.play.microservice.controller.BaseController
-import uk.gov.hmrc.trustregistration.metrics.TrustMetrics
+import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
 
@@ -27,8 +27,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-trait TrustBaseController extends BaseController {
-  val metrics: TrustMetrics
+trait ApplicationBaseController extends BaseController {
+  val metrics: ApplicationMetrics
   val registerTrustService: RegisterTrustService
   
   val className: String = getClass.getSimpleName

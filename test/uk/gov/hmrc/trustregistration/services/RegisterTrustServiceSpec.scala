@@ -86,6 +86,13 @@ class RegisterTrustServiceSpec extends PlaySpec
         val result = Await.result(SUT.getTrustContactDetails("1234567890")(HeaderCarrier()), Duration.Inf)
         result mustBe GetSuccessResponse(Nil)
       }
+
+      "a SuccessResponse is returned from DES for the call to closeEstate" in {
+        when(mockDesConnector.closeEstate(any())(any())).thenReturn(Future.successful(SuccessResponse))
+
+        val result = Await.result(SUT.closeEstate("1234567890")(HeaderCarrier()), Duration.Inf)
+        result mustBe SuccessResponse
+      }
     }
 
     "Return a BadRequestResponse" when {
@@ -128,6 +135,13 @@ class RegisterTrustServiceSpec extends PlaySpec
         when(mockDesConnector.getTrustContactDetails(any())(any())).thenReturn(Future.successful(BadRequestResponse))
 
         val result = Await.result(SUT.getTrustContactDetails("400BadRequest")(HeaderCarrier()), Duration.Inf)
+        result mustBe BadRequestResponse
+      }
+
+      "a BadRequestResponse is returned from DES for the call to closeEstate" in {
+        when(mockDesConnector.closeEstate(any())(any())).thenReturn(Future.successful(BadRequestResponse))
+
+        val result = Await.result(SUT.closeEstate("400BadRequest")(HeaderCarrier()), Duration.Inf)
         result mustBe BadRequestResponse
       }
     }
@@ -174,6 +188,13 @@ class RegisterTrustServiceSpec extends PlaySpec
         val result = Await.result(SUT.getTrustContactDetails("500Error")(HeaderCarrier()), Duration.Inf)
         result mustBe InternalServerErrorResponse
       }
+
+      "a InternalServerErrorResponse is returned from DES for the call to closeEstate" in {
+        when(mockDesConnector.closeEstate(any())(any())).thenReturn(Future.successful(InternalServerErrorResponse))
+
+        val result = Await.result(SUT.closeEstate("400BadRequest")(HeaderCarrier()), Duration.Inf)
+        result mustBe InternalServerErrorResponse
+      }
     }
 
     "Return a NotFoundResponse" when {
@@ -216,6 +237,13 @@ class RegisterTrustServiceSpec extends PlaySpec
         when(mockDesConnector.getTrustContactDetails(any())(any())).thenReturn(Future.successful(NotFoundResponse))
 
         val result = Await.result(SUT.getTrustContactDetails("404NotFound")(HeaderCarrier()), Duration.Inf)
+        result mustBe NotFoundResponse
+      }
+
+      "a NotFoundResponse is returned from DES for the call to closeEstate" in {
+        when(mockDesConnector.closeEstate(any())(any())).thenReturn(Future.successful(NotFoundResponse))
+
+        val result = Await.result(SUT.closeEstate("404NotFound")(HeaderCarrier()), Duration.Inf)
         result mustBe NotFoundResponse
       }
     }

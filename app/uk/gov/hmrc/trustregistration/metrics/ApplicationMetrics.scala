@@ -21,7 +21,7 @@ import com.codahale.metrics.Timer.Context
 import com.kenshoo.play.metrics.Metrics
 import play.api.Play
 
-trait TrustMetrics {
+trait ApplicationMetrics {
 
   val metrics = Play.current.injector.instanceOf[Metrics]
 
@@ -35,7 +35,7 @@ trait TrustMetrics {
 
 }
 
-object TrustMetrics extends TrustMetrics {
+object ApplicationMetrics extends ApplicationMetrics {
 
   override def incrementUnauthorisedRequest(api: String): Unit = metrics.defaultRegistry.counter(s"unauthorised-$api").inc()
   override def incrementAuthorisedRequest(api: String): Unit = metrics.defaultRegistry.counter(s"authorised-$api").inc()

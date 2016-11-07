@@ -30,28 +30,32 @@ trait RegisterTrustService {
     desConnector.registerTrust(regDoc)(hc)
   }
 
-  def noChange(identifier: String)(implicit hc: HeaderCarrier): Future[TrustResponse] = {
+  def noChange(identifier: String)(implicit hc: HeaderCarrier): Future[ApplicationResponse] = {
      desConnector.noChange(identifier)
   }
 
-  def closeTrust(identifier: String)(implicit hc: HeaderCarrier): Future[TrustResponse] = {
+  def closeTrust(identifier: String)(implicit hc: HeaderCarrier): Future[ApplicationResponse] = {
     desConnector.closeTrust(identifier)
   }
 
-  def getTrustees(identifier: String)(implicit hc: HeaderCarrier): Future[TrustResponse] = {
+  def getTrustees(identifier: String)(implicit hc: HeaderCarrier): Future[ApplicationResponse] = {
     desConnector.getTrustees(identifier)
   }
 
-  def getSettlors(identifier: String)(implicit hc: HeaderCarrier): Future[TrustResponse] = {
+  def getSettlors(identifier: String)(implicit hc: HeaderCarrier): Future[ApplicationResponse] = {
     desConnector.getSettlors(identifier)
   }
 
-  def getNaturalPersons(identifier: String)(implicit hc: HeaderCarrier): Future[TrustResponse] = {
+  def getNaturalPersons(identifier: String)(implicit hc: HeaderCarrier): Future[ApplicationResponse] = {
     desConnector.getNaturalPersons(identifier)
   }
 
-  def getTrustContactDetails(identifier: String)(implicit hc: HeaderCarrier): Future[TrustResponse] = {
+  def getTrustContactDetails(identifier: String)(implicit hc: HeaderCarrier): Future[ApplicationResponse] = {
     desConnector.getTrustContactDetails(identifier)
+  }
+
+  def closeEstate(identifier: String)(implicit hc: HeaderCarrier): Future[ApplicationResponse] = {
+    desConnector.closeEstate(identifier)
   }
 
 }
