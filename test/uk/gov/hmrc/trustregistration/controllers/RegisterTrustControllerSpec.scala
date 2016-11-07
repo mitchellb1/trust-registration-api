@@ -424,7 +424,7 @@ class RegisterTrustControllerSpec extends PlaySpec
       "the endpoint is called with a valid identifier" in {
         when(mockRegisterTrustService.getTrustContactDetails(any[String])(any[HeaderCarrier]))
           .thenReturn(Future.successful(new GetSuccessResponse[TrustContactDetails](TrustContactDetails(
-            correspondenceAddress = validAddress,
+            correspondenceAddress = address,
             telephoneNumber = "0191 234 5678"
           ))))
 
@@ -438,7 +438,7 @@ class RegisterTrustControllerSpec extends PlaySpec
       "the endpoint is called with a valid identifier" in {
         when(mockRegisterTrustService.getTrustContactDetails(any[String])(any[HeaderCarrier]))
           .thenReturn(Future.successful(new GetSuccessResponse[TrustContactDetails](TrustContactDetails(
-            correspondenceAddress = validAddress,
+            correspondenceAddress = address,
             telephoneNumber = "0191 234 5678"
           ))))
 

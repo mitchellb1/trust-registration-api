@@ -46,7 +46,7 @@ class GetNaturalPersonsSpec extends PlaySpec with OneAppPerSuite with DESConnect
       "DES returns a 200 response with a JSON array of Natural Persons" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(s"[$validIndividualJson,$validIndividualJson]")))))
         val result = Await.result(SUT.getNaturalPersons("1234"),Duration.Inf)
-        result mustBe GetSuccessResponse(List(validIndividual, validIndividual))
+        result mustBe GetSuccessResponse(List(individual, individual))
       }
     }
 

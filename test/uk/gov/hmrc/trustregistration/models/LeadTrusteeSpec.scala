@@ -28,7 +28,7 @@ class LeadTrusteeSpec extends PlaySpec with JsonExamples with ScalaDataExamples 
         ex.getMessage() contains  "Must have either an individual or company lead trustee"
       }
       "there are both an individual and company assigned" in {
-        val ex = the [IllegalArgumentException] thrownBy (LeadTrustee(Some(validIndividual), Some(validCompany)))
+        val ex = the [IllegalArgumentException] thrownBy (LeadTrustee(Some(individual), Some(company)))
         ex.getMessage() contains  "Must have only an individual or company lead trustee"
       }
     }

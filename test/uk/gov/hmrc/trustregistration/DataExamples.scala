@@ -17,7 +17,7 @@
 package uk.gov.hmrc.trustregistration
 
 import org.joda.time.DateTime
-import uk.gov.hmrc.trustregistration.models.{Address, Company, Individual, Passport}
+import uk.gov.hmrc.trustregistration.models._
 
 import scala.io.Source
 
@@ -38,10 +38,13 @@ trait JsonExamples {
     .fromFile(getClass.getResource("/InvalidCompany.json").getPath)
     .mkString
     .replace("\"{ADDRESS}\"", validAddressJson)
+  val validLeadTrusteeIndividualJson = s"""{"individual":$validIndividualJson,"company":null}"""
+  val validLeadTrusteeCompanyJson = s"""{"individual":null,"company":$validCompanyJson}"""
+  val invalidLeadTrusteeJson = s"""{"individual":$validIndividualJson,"company":$validCompanyJson}"""
 }
 
 trait ScalaDataExamples {
-  val validAddress = Address(
+  val address = Address(
     isNonUkAddress = false,
     addressLine1 = "Line 1",
     addressLine2 = Some("Line 2"),
@@ -51,13 +54,13 @@ trait ScalaDataExamples {
     country = Some("UK")
   )
 
-  val validPassport = Passport(
+  val passport = Passport(
     identifier = "IDENTIFIER",
     expiryDate = new DateTime("2020-01-01"),
     countryOfIssue = "UK"
   )
 
-  val validIndividual = Individual(
+  val individual = Individual(
     title = "Dr",
     givenName = "Leo",
     otherName = None,
@@ -65,15 +68,25 @@ trait ScalaDataExamples {
     dateOfBirth = new DateTime("1800-01-01"),
     dateOfDeath = None,
     nino = None,
-    passport = Some(validPassport),
-    correspondenceAddress = Some(validAddress),
+    passport = Some(passport),
+    correspondenceAddress = Some(address),
     telephoneNumber = None
   )
 
-  val validCompany = Company(
+  val company = Company(
     name = "Company",
     referenceNumber = Some("AAA5221"),
-    correspondenceAddress = validAddress,
+    correspondenceAddress = address,
     telephoneNumber = "12345"
+  )
+
+  val leadTrusteeIndividual = LeadTrustee(
+    individual = Some(individual),
+    company = None
+  )
+
+  val leadTrusteeCompany = LeadTrustee(
+    individual = None,
+    company = Some(company)
   )
 }
