@@ -16,6 +16,9 @@
 
 package uk.gov.hmrc.trustregistration
 
+import org.joda.time.DateTime
+import uk.gov.hmrc.trustregistration.models.{Address, Company, Individual, Passport}
+
 import scala.io.Source
 
 
@@ -36,4 +39,40 @@ trait JsonExamples {
     .fromFile(getClass.getResource("/InvalidCompany.json").getPath)
     .mkString
     .replace("\"{ADDRESS}\"", validAddressJson)
+
+  val validAddress = Address(
+    isNonUkAddress = false,
+    addressLine1 = "Line 1",
+    addressLine2 = Some("Line 2"),
+    addressLine3 = Some("Line 3"),
+    addressLine4 = Some("Line 4"),
+    postcode = Some("NE1 2BR"),
+    country = Some("UK")
+  )
+
+  val validPassport = Passport(
+    identifier = "IDENTIFIER",
+    expiryDate = new DateTime("2020-01-01"),
+    countryOfIssue = "UK"
+  )
+
+  val validIndividual = Individual(
+    title = "Dr",
+    givenName = "Leo",
+    otherName = None,
+    familyName = "Spaceman",
+    dateOfBirth = new DateTime("1800-01-01"),
+    dateOfDeath = None,
+    nino = None,
+    passport = Some(validPassport),
+    correspondenceAddress = Some(validAddress),
+    telephoneNumber = None
+  )
+
+  val validCompany = Company(
+    name = "Company",
+    referenceNumber = Some("AAA5221"),
+    correspondenceAddress = validAddress,
+    telephoneNumber = "12345"
+  )
 }

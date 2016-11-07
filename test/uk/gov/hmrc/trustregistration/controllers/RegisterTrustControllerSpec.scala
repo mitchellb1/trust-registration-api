@@ -45,16 +45,6 @@ class RegisterTrustControllerSpec extends PlaySpec
   with BeforeAndAfter
   with JsonExamples {
 
-  val validAddress = Address(
-    isNonUkAddress = false,
-    addressLine1 = "Line 1",
-    addressLine2 = Some("Line 2"),
-    addressLine3 = Some("Line 3"),
-    addressLine4 = Some("Line 4"),
-    postcode = Some("NE1 2BR"),
-    country = Some("UK")
-  )
-
   before {
     when(mockRegisterTrustService.registerTrust(any[RegistrationDocument])(any[HeaderCarrier]))
       .thenReturn(Future.successful(Right(TRN("TRN-1234"))))
