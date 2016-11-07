@@ -142,7 +142,7 @@ trait RegisterTrustController extends TrustBaseController {
       case Some((key, "AUTHORISED")) => {
         Logger.info(s"$className:getNaturalPersons API authorised")
         metrics.incrementAuthorisedRequest("getNaturalPersons")
-        respond("getTrustees", registerTrustService.getNaturalPersons(identifier))
+        respond("getNaturalPersons", registerTrustService.getNaturalPersons(identifier))
       }
       case _ => {
         Logger.info(s"$className:getNaturalPersons API returned unauthorised")
@@ -163,11 +163,32 @@ trait RegisterTrustController extends TrustBaseController {
       case Some((key, "AUTHORISED")) => {
         Logger.info(s"$className:getTrustContactDetails API authorised")
         metrics.incrementAuthorisedRequest("getTrustContactDetails")
-        respond("getTrustees", registerTrustService.getTrustContactDetails(identifier))
+        respond("getTrustContactDetails", registerTrustService.getTrustContactDetails(identifier))
       }
       case _ => {
         Logger.info(s"$className:getTrustContactDetails API returned unauthorised")
         metrics.incrementUnauthorisedRequest("getTrustContactDetails")
+        Future.successful(Unauthorized)
+      }
+    }
+  }
+
+  def getLeadTrustee(identifier: String): Action[AnyContent] = Action.async { implicit request =>
+
+    Logger.info(s"$className:getLeadTrustee API invoked")
+    Logger.debug(s"$className:getLeadTrustee($identifier) API invoked")
+
+    val authorised: Option[(String, String)] = hc.headers.find((tup) => tup._1 == AUTHORIZATION)
+
+    authorised match {
+      case Some((key, "AUTHORISED")) => {
+        Logger.info(s"$className:getLeadTrustee API authorised")
+        metrics.incrementAuthorisedRequest("getLeadTrustee")
+        respond("getLeadTrustee", registerTrustService.getLeadTrustee(identifier))
+      }
+      case _ => {
+        Logger.info(s"$className:getLeadTrustee API returned unauthorised")
+        metrics.incrementUnauthorisedRequest("getLeadTrustee")
         Future.successful(Unauthorized)
       }
     }

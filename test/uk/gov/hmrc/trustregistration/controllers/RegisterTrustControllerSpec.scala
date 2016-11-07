@@ -496,6 +496,68 @@ class RegisterTrustControllerSpec extends PlaySpec
 
   }
 
+  "Get Lead Trustee endpoint" must {
+
+    "return 200 ok with valid json" when {
+      "the endpoint is called with a valid identifier" in {
+        when(mockRegisterTrustService.getLeadTrustee(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(new GetSuccessResponse[LeadTrustee](leadTrusteeIndividual)))
+
+        val result = SUT.getLeadTrustee("sadfg").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe OK
+        contentAsString(result) mustBe(
+          """{"individual":{"title":"Dr","givenName":"Leo","familyName":"Spaceman","dateOfBirth":"1800-01-01",""" +
+          """"passport":{"identifier":"IDENTIFIER","expiryDate":"2020-01-01","countryOfIssue":"UK"},""" +
+          """"correspondenceAddress":{"isNonUkAddress":false,"addressLine1":"Line 1","addressLine2":"Line 2","addressLine3":"Line 3","addressLine4":"Line 4",""" +
+          """"postcode":"NE1 2BR","country":"UK"}}}"""
+        )
+      }
+    }
+
+    "return 404 not found" when {
+      "the endpoint is called with an identifier that can't be found" in {
+        when(mockRegisterTrustService.getLeadTrustee(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(NotFoundResponse))
+
+        val result = SUT.getLeadTrustee("404NotFound").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe NOT_FOUND
+      }
+    }
+
+    "return 400" when {
+      "the  endpoint is called with an invalid identifier" in {
+        when(mockRegisterTrustService.getLeadTrustee(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(BadRequestResponse))
+
+        val result = SUT.getLeadTrustee("sadfg").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
+    "return 500" when {
+      "something is broken" in {
+        when(mockRegisterTrustService.getLeadTrustee(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(InternalServerErrorResponse))
+
+        val result = SUT.getLeadTrustee("sadfg").apply(FakeRequest("GET", ""))
+        status(result) mustBe INTERNAL_SERVER_ERROR
+      }
+    }
+
+    "return 401" when {
+      "the endpoint is called and authentication credentials are missing or incorrect" in {
+        when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "NOT_AUTHORISED"))
+        val result = SUT.getLeadTrustee("12345").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe UNAUTHORIZED
+      }
+    }
+
+  }
+
   private val regDocPayload = Json.obj(
     "value" -> "Trust Name"
   )
