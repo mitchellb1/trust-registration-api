@@ -33,7 +33,7 @@ trait TrustBaseController extends BaseController {
   
   val className: String = getClass.getSimpleName
 
-  def respond(methodName: String, result: Future[TrustResponse]): Future[Result] = {
+  def respond(methodName: String, result: Future[ApplicationResponse]): Future[Result] = {
     val okMessage = s"$className:$methodName API returned OK"
 
     result map {
