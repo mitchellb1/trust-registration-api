@@ -314,7 +314,7 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
     }
   }
 
-  def getLeadTrustee(identifier: String)(implicit hc : HeaderCarrier): Future[TrustResponse] = {
+  def getLeadTrustee(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
 
     val uri: String = s"$serviceUrl/$identifier/leadTrustee"
 

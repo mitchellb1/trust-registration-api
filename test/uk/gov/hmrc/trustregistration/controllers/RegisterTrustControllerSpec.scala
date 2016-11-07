@@ -23,7 +23,7 @@ import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.http.HeaderNames.{AUTHORIZATION => _, CONTENT_TYPE => _}
-import play.api.libs.json.JsValue
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{RequestHeader, Result}
 import play.api.test.{FakeHeaders, FakeRequest}
 import play.api.test.Helpers._
@@ -40,8 +40,8 @@ class RegisterTrustControllerSpec extends PlaySpec
   with OneAppPerSuite
   with BeforeAndAfter
   with JsonExamples
-  with ScalaDataExamples {
-  with RegisterTrustServiceMocks{
+  with ScalaDataExamples
+  with RegisterTrustServiceMocks {
 
   before {
     when(mockRegisterTrustService.registerTrust(any[RegistrationDocument])(any[HeaderCarrier]))
@@ -553,20 +553,6 @@ class RegisterTrustControllerSpec extends PlaySpec
     }
 
   }
-
-  private val regDocPayload = Json.obj(
-    "value" -> "Trust Name"
-  )
-  private val badRegDocPayload = Json.obj(
-    "wrongIdentifier" -> "Trust Name"
-  )
-
-  private val mockRegisterTrustService = mock[RegisterTrustService]
-  private val mockHC = mock[HeaderCarrier]
-  private val mockMetrics = mock[TrustMetrics]
-  private val mockContext = new com.codahale.metrics.Timer().time()
-
-  when (mockMetrics.startDesConnectorTimer(any())).thenReturn(mockContext)
 
   object SUT extends RegisterTrustController {
     override implicit def hc(implicit rh: RequestHeader): HeaderCarrier = mockHC
