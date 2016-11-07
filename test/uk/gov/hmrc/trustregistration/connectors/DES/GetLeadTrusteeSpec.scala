@@ -25,10 +25,18 @@ import uk.gov.hmrc.play.http.HttpResponse
 import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 import uk.gov.hmrc.trustregistration.models.{BadRequestResponse, GetSuccessResponse, InternalServerErrorResponse, NotFoundResponse}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
 class GetLeadTrusteeSpec extends PlaySpec with OneAppPerSuite with DESConnectorMocks with BeforeAndAfter with JsonExamples with ScalaDataExamples {
+
+  val auditSuccessMessage = "getLeadTrusteeSuccessful"
+  val auditFailureMessage = "getLeadTrusteeFailure"
+
+  before {
+    reset(mockAudit) // resets mock audit before each test to ensure the verify(mockAudit, times(1)) test is accurate
+  }
 
   "Get Lead Trustee endpoint" must {
     "return a GetSuccessResponse with a populated Lead Trustee object" when {
@@ -36,12 +44,16 @@ class GetLeadTrusteeSpec extends PlaySpec with OneAppPerSuite with DESConnectorM
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(validLeadTrusteeIndividualJson)))))
         val result = Await.result(SUT.getLeadTrustee("1234"),Duration.Inf)
         result mustBe GetSuccessResponse(leadTrusteeIndividual)
+
+        verify(mockAudit, times(1)).doAudit(auditSuccessMessage, SUT.AuditGetLeadTrusteeIdentifier)
       }
 
       "DES returns a 200 with a valid Lead Trustee Company json response" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(validLeadTrusteeCompanyJson)))))
         val result = Await.result(SUT.getLeadTrustee("1234"),Duration.Inf)
         result mustBe GetSuccessResponse(leadTrusteeCompany)
+
+        verify(mockAudit, times(1)).doAudit(auditSuccessMessage, SUT.AuditGetLeadTrusteeIdentifier)
       }
     }
 
@@ -50,6 +62,8 @@ class GetLeadTrusteeSpec extends PlaySpec with OneAppPerSuite with DESConnectorM
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(400, None)))
         val result = Await.result(SUT.getLeadTrustee("1234"),Duration.Inf)
         result mustBe BadRequestResponse
+
+        verify(mockAudit, times(1)).doAudit(auditFailureMessage, SUT.AuditGetLeadTrusteeIdentifier)
       }
     }
 
@@ -58,6 +72,8 @@ class GetLeadTrusteeSpec extends PlaySpec with OneAppPerSuite with DESConnectorM
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(404, None)))
         val result = Await.result(SUT.getLeadTrustee("1234"),Duration.Inf)
         result mustBe NotFoundResponse
+
+        verify(mockAudit, times(1)).doAudit(auditFailureMessage, SUT.AuditGetLeadTrusteeIdentifier)
       }
     }
 
@@ -66,30 +82,40 @@ class GetLeadTrusteeSpec extends PlaySpec with OneAppPerSuite with DESConnectorM
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, None)))
         val result = Await.result(SUT.getLeadTrustee("1234"),Duration.Inf)
         result mustBe InternalServerErrorResponse
+
+        verify(mockAudit, times(1)).doAudit(auditFailureMessage, SUT.AuditGetLeadTrusteeIdentifier)
       }
 
       "DES returns a 200 with empty Json data" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse("{}")))))
         val result = Await.result(SUT.getLeadTrustee("1234"),Duration.Inf)
         result mustBe InternalServerErrorResponse
+
+        verify(mockAudit, times(1)).doAudit(auditFailureMessage, SUT.AuditGetLeadTrusteeIdentifier)
       }
 
       "DES returns a 200 with invalid Json data" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(invalidLeadTrusteeJson)))))
         val result = Await.result(SUT.getLeadTrustee("1234"),Duration.Inf)
         result mustBe InternalServerErrorResponse
+
+        verify(mockAudit, times(1)).doAudit(auditFailureMessage, SUT.AuditGetLeadTrusteeIdentifier)
       }
 
       "DES returns a 500" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(500, None)))
         val result = Await.result(SUT.getLeadTrustee("1234"),Duration.Inf)
         result mustBe InternalServerErrorResponse
+
+        verify(mockAudit, times(1)).doAudit(auditFailureMessage, SUT.AuditGetLeadTrusteeIdentifier)
       }
 
       "DES returns any other response (i.e. 418)" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(418, None)))
         val result = Await.result(SUT.getLeadTrustee("1234"),Duration.Inf)
         result mustBe InternalServerErrorResponse
+
+        verify(mockAudit, times(1)).doAudit(auditFailureMessage, SUT.AuditGetLeadTrusteeIdentifier)
       }
     }
   }
