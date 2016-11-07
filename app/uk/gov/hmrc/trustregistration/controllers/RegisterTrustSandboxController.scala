@@ -16,12 +16,9 @@
 
 package uk.gov.hmrc.trustregistration.controllers
 
-import com.codahale.metrics.Timer.Context
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Action
-import uk.gov.hmrc.trustregistration.audit.TrustsAudit
-import uk.gov.hmrc.trustregistration.connectors.DesConnector
-import uk.gov.hmrc.trustregistration.metrics.TrustMetrics
+import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models.TRN
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
 
@@ -29,7 +26,7 @@ import scala.concurrent.Future
 
 object RegisterTrustSandboxController extends RegisterTrustController {
     override val registerTrustService = RegisterTrustService
-    override val metrics = TrustMetrics
+    override val metrics = ApplicationMetrics
 
     override def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
       Future.successful(Ok(Json.toJson(TRN("TRN-1234"))))
@@ -41,5 +38,4 @@ object RegisterTrustSandboxController extends RegisterTrustController {
     override def closeTrust(id: String) = Action.async { implicit request =>
       Future.successful(Ok)
     }
-
 }

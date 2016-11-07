@@ -19,7 +19,7 @@ package uk.gov.hmrc.trustregistration.controllers
 import play.api.Logger
 import play.api.libs.json.{JsError, JsResult, JsValue, Json}
 import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.trustregistration.metrics.TrustMetrics
+import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
 
@@ -27,7 +27,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-trait RegisterTrustController extends TrustBaseController {
+trait RegisterTrustController extends ApplicationBaseController {
 
   def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     Logger.info("Register API invoked")
@@ -176,5 +176,5 @@ trait RegisterTrustController extends TrustBaseController {
 
 object RegisterTrustController extends RegisterTrustController {
   override val registerTrustService = RegisterTrustService
-  override val metrics = TrustMetrics
+  override val metrics = ApplicationMetrics
 }

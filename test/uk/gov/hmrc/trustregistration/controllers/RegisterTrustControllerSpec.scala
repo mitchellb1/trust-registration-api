@@ -21,29 +21,26 @@ import org.joda.time.DateTime
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfter
-import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
-import play.api.http.HeaderNames.{AUTHORIZATION => _, CONTENT_TYPE => _, _}
-import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Action, Request, RequestHeader, Result}
+import play.api.http.HeaderNames.{AUTHORIZATION => _, CONTENT_TYPE => _}
+import play.api.libs.json.JsValue
+import play.api.mvc.{RequestHeader, Result}
 import play.api.test.{FakeHeaders, FakeRequest}
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustregistration.JsonExamples
-import uk.gov.hmrc.trustregistration.metrics.TrustMetrics
+import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
 
-import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, Future}
-import scala.io.Source
+import scala.concurrent.Future
 
 
 class RegisterTrustControllerSpec extends PlaySpec
   with OneAppPerSuite
-  with MockitoSugar
   with BeforeAndAfter
-  with JsonExamples {
+  with JsonExamples
+  with RegisterTrustServiceMocks{
 
   val validAddress = Address(
     isNonUkAddress = false,
@@ -502,42 +499,18 @@ class RegisterTrustControllerSpec extends PlaySpec
         status(result) mustBe UNAUTHORIZED
       }
     }
-
   }
-
-  private val regDocPayload = Json.obj(
-    "value" -> "Trust Name"
-  )
-  private val badRegDocPayload = Json.obj(
-    "wrongIdentifier" -> "Trust Name"
-  )
-
-  private val mockRegisterTrustService = mock[RegisterTrustService]
-  private val mockHC = mock[HeaderCarrier]
-  private val mockMetrics = mock[TrustMetrics]
-  private val mockContext = new com.codahale.metrics.Timer().time()
-
-  when (mockMetrics.startDesConnectorTimer(any())).thenReturn(mockContext)
 
   object SUT extends RegisterTrustController {
     override implicit def hc(implicit rh: RequestHeader): HeaderCarrier = mockHC
-    
-    override val metrics: TrustMetrics = mockMetrics
+
+    override val metrics: ApplicationMetrics = mockMetrics
     override val registerTrustService: RegisterTrustService = mockRegisterTrustService
-
   }
-
 
   private def withCallToPOST(payload: JsValue)(handler: Future[Result] => Any) = {
     handler(SUT.register.apply(registerRequestWithPayload(payload)))
   }
-
-  private def registerRequestWithPayload(payload: JsValue): Request[JsValue] = FakeRequest(
-    "POST",
-    "",
-    FakeHeaders(),
-    payload
-  ).withHeaders(CONTENT_TYPE -> "application/json")
 
   private def withCallToPOST()(handler: Future[Result] => Any) = {
     val fr = FakeRequest(
@@ -548,5 +521,4 @@ class RegisterTrustControllerSpec extends PlaySpec
     ).withHeaders(CONTENT_TYPE -> "application/json")
     SUT.register.apply(fr)
   }
-
 }
