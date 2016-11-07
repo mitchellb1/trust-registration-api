@@ -18,54 +18,67 @@ package uk.gov.hmrc.trustregistration
 
 import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
-import com.github.tomakehurst.wiremock.client.WireMock._
+import org.mockito.ArgumentCaptor
 import org.scalatest.BeforeAndAfter
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mock.MockitoSugar
-import org.scalatestplus.play.{OneAppPerTest, PlaySpec}
+import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
+import org.mockito.Mockito._
+import org.mockito.Matchers.any
 import play.api.Play
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import scala.concurrent.Future
+import uk.gov.hmrc.play.http.HttpPost
+import uk.gov.hmrc.trustregistration.connectors.ServiceLocatorConnector
 import uk.gov.hmrc.trustregistration.controllers.DocumentationController
-import uk.gov.hmrc.trustregistration.utils.WiremockServiceLocatorSugar
+import uk.gov.hmrc.play.http.HeaderCarrier
+
 
 class PlatformIntegrationSpec extends PlaySpec
   with MockitoSugar
-  with ScalaFutures
-  with WiremockServiceLocatorSugar
-  with BeforeAndAfter
-  with OneAppPerTest {
+  with OneAppPerSuite {
+
+
+  val mockHttp: HttpPost = mock[HttpPost]
+
+  private object SUT extends ServiceLocatorConnector {
+    override val http = mockHttp
+    val appName: String = "test"
+    val appUrl: String = "test"
+    val handlerError: Throwable => Unit = (x) => ()
+    val handlerOK: () => Unit = () => ()
+    val metadata: Option[Map[String,String]] = Some (Map())
+    val serviceUrl: String = "test"
+  }
+
 
   implicit val system = ActorSystem("test")
-
   implicit def mat: Materializer = ActorMaterializer()
+  implicit val hc: HeaderCarrier = HeaderCarrier()
 
   lazy val documentationController = Play.current.injector.instanceOf[DocumentationController]
 
-  before {
-    startMockServer()
-    stubRegisterEndpoint(200)
-  }
-
-  after {
-    stopMockServer()
-  }
-
   "microservice" must {
-    /*
+    
     "register itself to service-locator" when {
       "the application starts" in {
 
-        resetAllRequests()
-        verify(
-          1,
-          postRequestedFor(urlMatching("/registration"))
-            .withHeader("Content-Type", equalTo("application/json"))
-            .withRequestBody(equalTo(regPayloadStringFor("trust-registration-api", "http://trust-registration-api.service")))
-        )
+        when(mockHttp.POST[String, String](any(), any(), any())(any(), any(), any()))
+          .thenReturn(Future.successful(""))
+
+        val captor = ArgumentCaptor.forClass(classOf[String])
+
+        SUT.register
+
+        verify(mockHttp, times(1)).POST(captor.capture, any(), any())(any(), any(), any())
+
+        val url = captor.getValue
+        url must endWith ("registration")
+
       }
     }
-    */
 
     "provide definition endpoint and documentation endpoint for each api" in {
 
