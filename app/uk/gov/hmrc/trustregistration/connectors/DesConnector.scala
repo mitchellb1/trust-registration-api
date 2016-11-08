@@ -61,7 +61,7 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
 
   def registerEstate(doc: EstateRegistrationDocument)(implicit hc : HeaderCarrier) = {
 
-    val uri: String = s"$trustsServiceUrl/register"
+    val uri: String = s"$estatesServiceUrl/register"
 
     val result: Future[HttpResponse] = httpPost.POST[EstateRegistrationDocument,HttpResponse](uri,doc)(implicitly, httpReads, implicitly)
 
@@ -69,7 +69,7 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
   }
 
   def noChange(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
-    val uri: String = s"$estatesServiceUrl/$identifier/no-change"
+    val uri: String = s"$trustsServiceUrl/$identifier/no-change"
 
     val timerStart = metrics.startDesConnectorTimer("no-change")
 
