@@ -49,68 +49,66 @@ class GetBeneficiariesSpec extends PlaySpec with OneAppPerSuite with DESConnecto
       }
     }
 
-    /*
     "return a BadRequestResponse" when {
       "DES returns a 400 response" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(400, None)))
-        val result = Await.result(SUT.getLeadTrustee("1234"),Duration.Inf)
+        val result = Await.result(SUT.getBeneficiaries("1234"),Duration.Inf)
         result mustBe BadRequestResponse
 
-        verify(mockAudit, times(1)).doAudit(auditFailureMessage, SUT.AuditGetLeadTrusteeIdentifier)
+        verify(mockAudit, times(1)).doAudit(auditFailureMessage, SUT.AuditGetBeneficiariesIdentifier)
       }
     }
 
     "return a NotFoundResponse" when {
       "DES returns a 404 response" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(404, None)))
-        val result = Await.result(SUT.getLeadTrustee("1234"),Duration.Inf)
+        val result = Await.result(SUT.getBeneficiaries("1234"),Duration.Inf)
         result mustBe NotFoundResponse
 
-        verify(mockAudit, times(1)).doAudit(auditFailureMessage, SUT.AuditGetLeadTrusteeIdentifier)
+        verify(mockAudit, times(1)).doAudit(auditFailureMessage, SUT.AuditGetBeneficiariesIdentifier)
       }
     }
 
     "return a InternalServerErrorResponse" when {
       "DES returns a 200 with no Json data" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, None)))
-        val result = Await.result(SUT.getLeadTrustee("1234"),Duration.Inf)
+        val result = Await.result(SUT.getBeneficiaries("1234"),Duration.Inf)
         result mustBe InternalServerErrorResponse
 
-        verify(mockAudit, times(1)).doAudit(auditFailureMessage, SUT.AuditGetLeadTrusteeIdentifier)
+        verify(mockAudit, times(1)).doAudit(auditFailureMessage, SUT.AuditGetBeneficiariesIdentifier)
       }
 
       "DES returns a 200 with empty Json data" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse("{}")))))
-        val result = Await.result(SUT.getLeadTrustee("1234"),Duration.Inf)
+        val result = Await.result(SUT.getBeneficiaries("1234"),Duration.Inf)
         result mustBe InternalServerErrorResponse
 
-        verify(mockAudit, times(1)).doAudit(auditFailureMessage, SUT.AuditGetLeadTrusteeIdentifier)
+        verify(mockAudit, times(1)).doAudit(auditFailureMessage, SUT.AuditGetBeneficiariesIdentifier)
       }
 
       "DES returns a 200 with invalid Json data" in {
-        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(invalidLeadTrusteeJson)))))
-        val result = Await.result(SUT.getLeadTrustee("1234"),Duration.Inf)
+        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(invalidBeneficiariesJson)))))
+        val result = Await.result(SUT.getBeneficiaries("1234"),Duration.Inf)
         result mustBe InternalServerErrorResponse
 
-        verify(mockAudit, times(1)).doAudit(auditFailureMessage, SUT.AuditGetLeadTrusteeIdentifier)
+        verify(mockAudit, times(1)).doAudit(auditFailureMessage, SUT.AuditGetBeneficiariesIdentifier)
       }
 
       "DES returns a 500" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(500, None)))
-        val result = Await.result(SUT.getLeadTrustee("1234"),Duration.Inf)
+        val result = Await.result(SUT.getBeneficiaries("1234"),Duration.Inf)
         result mustBe InternalServerErrorResponse
 
-        verify(mockAudit, times(1)).doAudit(auditFailureMessage, SUT.AuditGetLeadTrusteeIdentifier)
+        verify(mockAudit, times(1)).doAudit(auditFailureMessage, SUT.AuditGetBeneficiariesIdentifier)
       }
 
       "DES returns any other response (i.e. 418)" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(418, None)))
-        val result = Await.result(SUT.getLeadTrustee("1234"),Duration.Inf)
+        val result = Await.result(SUT.getBeneficiaries("1234"),Duration.Inf)
         result mustBe InternalServerErrorResponse
 
-        verify(mockAudit, times(1)).doAudit(auditFailureMessage, SUT.AuditGetLeadTrusteeIdentifier)
+        verify(mockAudit, times(1)).doAudit(auditFailureMessage, SUT.AuditGetBeneficiariesIdentifier)
       }
     }
-  */
   }
 }
