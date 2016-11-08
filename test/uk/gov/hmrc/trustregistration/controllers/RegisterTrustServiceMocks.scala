@@ -31,9 +31,14 @@ import scala.concurrent.Future
 
 
 trait RegisterTrustServiceMocks extends MockitoSugar {
-   val regDocPayload = Json.obj(
+   val trustRegDocPayload = Json.obj(
     "value" -> "Trust Name"
   )
+
+  val estateRegDocPayload = Json.obj(
+    "value" -> "Estate Name"
+  )
+
    val badRegDocPayload = Json.obj(
     "wrongIdentifier" -> "Trust Name"
   )
