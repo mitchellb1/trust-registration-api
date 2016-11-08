@@ -1,0 +1,52 @@
+{
+  "trustees": [
+    {
+      "title": "Mr",
+      "givenName": "Joe",
+      "otherName": "John",
+      "familyName": "Doe",
+      "dateOfBirth": "1989-12-31",
+      "nino": "WA123456A",
+      "passport": {
+        "identifier": "b12344b23b45",
+        "expiryDate": "2018-12-25",
+        "countryOfIssue": "UK"
+      },
+      "correspondenceAddress": {
+        "isNonUkAddress": false,
+        "addressLine1": "Address Line 1",
+        "addressLine2": "Address Line 2",
+        "addressLine3": "Address Line 3",
+        "addressLine4": "Address Line 4",
+        "postcode": "NE1 2BR",
+        "country": "UK"
+      },
+      "telephoneNumber": "0191 357 1596"
+    },
+    {
+      "title": "Mr",
+      "givenName": "Joe",
+      "otherName": "John",
+      "familyName": "Doe",
+      "dateOfBirth": "1989-12-31",
+      "nino": "WA123456A",
+      "passport": {
+        "identifier": "b12344b23b45",
+        "expiryDate": "2018-12-25",
+        "countryOfIssue": "UK"
+      },
+      "correspondenceAddress": {
+        "isNonUkAddress": false,
+        "addressLine1": "Address Line 1",
+        "addressLine2": "Address Line 2",
+        "addressLine3": "Address Line 3",
+        "addressLine4": "Address Line 4",
+        "postcode": "NE1 2BR",
+        "country": "UK"
+      },
+      "telephoneNumber": "0191 357 1596"
+    }
+  ]
+}
+
+
