@@ -8,17 +8,17 @@ mediaType: application/hal+json
 resourceTypes:
   base: !include resourceTypes/base.raml
 types:
-  Estate: !include schemas/trust.json#/definitions/estate
-  Trust: !include schemas/trust.json#/definitions/trust
-  Trustees: !include schemas/trust.json#/definitions/trustees
-  Beneficiaries: !include schemas/trust.json#/definitions/beneficiaries
-  Settlors: !include schemas/trust.json#/definitions/settlor
-  Protectors: !include schemas/trust.json#/definitions/protector
-  LeadTrusteeIndividual: !include schemas/trust.json#/definitions/leadTrustee/properties/Individual
-  LeadTrusteeCompany: !include schemas/trust.json#/definitions/leadTrustee/properties/company
-  NaturalPersons: !include schemas/trust.json#/definitions/naturalPeople
+  Estate: !include schemas/trust.json#/properties/estate
+  Trust: !include schemas/trust.json#/properties/trust
+  Trustees: !include schemas/trust.json#/properties/trust/properties/trustees
+  Beneficiaries: !include schemas/trust.json#/properties/trust/properties/beneficiaries
+  Settlors: !include schemas/trust.json#/properties/trust/properties/settlor
+  Protectors: !include schemas/trust.json#/properties/trust/properties/protector
+  NaturalPersons: !include schemas/trust.json#/properties/trust/properties/naturalPersons
   NoChange: !include schemas/no-change.json
   Close: !include schemas/close.json
+  TrustContact: !include schemas/trust-contact.json
+  LeadTrustee: !include schemas/lead-trustee.json
 /trusts:
   type: base
   get:
@@ -29,20 +29,21 @@ types:
         body:
           application/json:
             type: Trust
-            example: !include examples/trust.json
+            #example: !include examples/trust.json
   post:
     displayName: Full Trust Registration
     description: Submits an entire set of data for a trust
     body:
       application/json:
         type: Trust
-        example: !include examples/trust.json
+        #example: !include examples/trust.json
   /{identifier}:
     type: base
     uriParameters:
-      utr:
+      identifier:
         type: string
-        displayName: The SA UTR of the trust.
+        displayName: Identifier
+        description: A unique ID for the Trust
     get:
       displayName: Get Trust
       description: Retrieves a specific trust
@@ -57,42 +58,35 @@ types:
               application/json:
                 type: Close
                 example: !include examples/close.json
-    /lead-trustee-individual:
+    /contact-details:
+      type: base
+      get:
+        displayName: Get Trust Contact Details
+        description: Gets the address and telephone number associated with the trust
+        responses:
+          200:
+            body:
+              application/json:
+                type: TrustContact
+                example: !include examples/trust-contact.json
+    /lead-trustee:
       type: base
       get:
         displayName: Get Lead Trustee Individual
-        description: Retrieves the information for an lead Trustee as an individual
+        description: Retrieves the information for an lead Trustee
         responses:
           200:
             body:
               application/json:
-                type: LeadTrusteeIndividual
-                example: !include examples/lead-trustee-individual.json
+                type: LeadTrustee
+                example: !include examples/lead-trustee.json
       put:
-        displayName: Update Lead Trustee Individual
-        description: Updates the information for an lead Trustee as an individual
+        displayName: Update Lead Trustee
+        description: Updates the information for an lead Trustee
         body:
           application/json:
-            type: LeadTrusteeIndividual
-            example: !include examples/lead-trustee-individual.json
-    /lead-trustee-company:
-      type: base
-      get:
-        displayName: Get Lead Trustee Company
-        description: Retrieves the information for an lead Trustee as an company
-        responses:
-          200:
-            body:
-              application/json:
-                type: LeadTrusteeCompany
-                example: !include examples/lead-trustee-company.json
-      put:
-        displayName: Update Lead Trustee Company
-        description: Updates the information for an lead Trustee as an company
-        body:
-          application/json:
-            type: LeadTrusteeCompany
-            example: !include examples/lead-trustee-company.json
+            type: LeadTrustee
+            #example: !include examples/lead-trustee-individual.json
     /trustees:
       type: base
       get:
@@ -103,14 +97,14 @@ types:
             body:
               application/json:
                 type: Trustees
-                example: !include examples/trustees.json
+                #example: !include examples/trustees.json
       put:
         displayName: Update Trustees
         description: Updates all the trustees of the Trust
         body:
           application/json:
               type: Trustees
-              example: !include examples/trustees.json
+              #example: !include examples/trustees.json
     /beneficiaries:
       type: base
       get:
@@ -121,14 +115,14 @@ types:
             body:
               application/json:
                 type: Beneficiaries
-                example: !include examples/beneficiaries.json
+                #example: !include examples/beneficiaries.json
       put:
         displayName: Update Beneficiaries
         description: Updates all the beneficiaries of the Trust
         body:
           application/json:
               type: Beneficiaries
-              example: !include examples/beneficiaries.json
+              #example: !include examples/beneficiaries.json
     /settlors:
       type: base
       get:
@@ -139,14 +133,14 @@ types:
             body:
               application/json:
                 type: Settlors
-                example: !include examples/settlors.json
+                #example: !include examples/settlors.json
       put:
         displayName: Update Beneficiaries
         description: Updates all the settlors for the Trust
         body:
           application/json:
               type: Settlors
-              example: !include examples/settlors.json
+              #example: !include examples/settlors.json
     /natural-persons:
       type: base
       get:
@@ -157,14 +151,14 @@ types:
             body:
               application/json:
                 type: NaturalPersons
-                example: !include examples/natural-people.json
+                #example: !include examples/natural-persons.json
       put:
-        displayName: Update Natural Persons
+        displayName: Update Beneficiaries
         description: Updates all the "natural persons" for the Trust
         body:
           application/json:
               type: NaturalPersons
-              example: !include examples/natural-people.json
+              #example: !include examples/natural-persons.json
     /protectors:
       type: base
       get:
@@ -175,14 +169,14 @@ types:
             body:
               application/json:
                 type: Protectors
-                example: !include examples/protectors.json
+                #example: !include examples/protectors.json
       put:
         displayName: Update Protectors
         description: Updates all the protectors for the Trust
         body:
           application/json:
             type: Protectors
-            example: !include examples/protectors.json
+            #example: !include examples/protectors.json
     /no-change:
       type: base
       put:
@@ -194,24 +188,15 @@ types:
               application/json:
                 type: NoChange
                 example: !include examples/no-change.json
-  /lead-trustee-individual:
+  /lead-trustee:
     type: base
     post:
-      displayName: Register Lead Trustee Individual
-      description: Registers a lead Trustee as an individual
+      displayName: Register Lead Trustee
+      description: Registers a lead Trustee
       body:
         application/json:
-          type: LeadTrusteeIndividual
-          example: !include examples/lead-trustee-individual.json
-  /lead-trustee-company:
-    type: base
-    post:
-      displayName: Register Lead Trustee Company
-      description: Registers a lead Trustee as an company
-      body:
-        application/json:
-          type: LeadTrusteeCompany
-          example: !include examples/lead-trustee-company.json
+          type: LeadTrustee
+          #example: !include examples/lead-trustee-individual.json
 /estates:
   type: base
   get:

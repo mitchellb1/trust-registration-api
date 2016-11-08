@@ -16,9 +16,15 @@
 
 package uk.gov.hmrc.trustregistration.models
 
-trait ApplicationResponse
-object SuccessResponse extends ApplicationResponse
-object BadRequestResponse extends ApplicationResponse
-object NotFoundResponse extends ApplicationResponse
-object InternalServerErrorResponse extends ApplicationResponse
-case class GetSuccessResponse[T](payload:T) extends ApplicationResponse
+import play.api.libs.json.Json
+
+
+case class Settlors(individuals: Option[List[Individual]] = None, companies: Option[List[Company]] = None) {
+  private val atleastOneTypeOfSettlor: Boolean = individuals.isDefined || companies.isDefined
+
+  require(atleastOneTypeOfSettlor, "Must have either an individual or company settlor")
+
+}
+object Settlors{
+  implicit val settlorsFormats = Json.format[Settlors]
+}

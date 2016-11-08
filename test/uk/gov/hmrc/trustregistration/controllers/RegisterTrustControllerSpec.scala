@@ -21,26 +21,27 @@ import org.joda.time.DateTime
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfter
-import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
-import play.api.http.HeaderNames.{AUTHORIZATION => _, CONTENT_TYPE => _, _}
+import play.api.http.HeaderNames.{AUTHORIZATION => _, CONTENT_TYPE => _}
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Action, Request, RequestHeader, Result}
+import play.api.mvc.{RequestHeader, Result}
 import play.api.test.{FakeHeaders, FakeRequest}
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.trustregistration.metrics.TrustMetrics
+import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
+import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
 
-import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, Future}
+import scala.concurrent.Future
 
 
 class RegisterTrustControllerSpec extends PlaySpec
   with OneAppPerSuite
-  with MockitoSugar
-  with BeforeAndAfter {
+  with BeforeAndAfter
+  with JsonExamples
+  with ScalaDataExamples
+  with RegisterTrustServiceMocks {
 
   before {
     when(mockRegisterTrustService.registerTrust(any[RegistrationDocument])(any[HeaderCarrier]))
@@ -173,7 +174,8 @@ class RegisterTrustControllerSpec extends PlaySpec
     }
   }
 
-  "Trustees endpoint" must {
+  "Get Trustees endpoint" must {
+
     "return 200 ok" when {
       "the endpoint is called with a valid identifier" in {
         when(mockRegisterTrustService.getTrustees(any[String])(any[HeaderCarrier]))
@@ -210,8 +212,8 @@ class RegisterTrustControllerSpec extends PlaySpec
         status(result) mustBe OK
         contentAsString(result) mustBe (
           """[{"title":"Mr","givenName":"John","familyName":"Doe","dateOfBirth":"1800-01-01",""" +
-          """"passport":{"identifier":"IDENTIFIER","expiryDate":"2000-01-01","countryOfIssue":"UK"},""" +
-          """"correspondenceAddress":{"isNonUkAddress":false,"addressLine1":"Address Line 1"}}]""")
+            """"passport":{"identifier":"IDENTIFIER","expiryDate":"2000-01-01","countryOfIssue":"UK"},""" +
+            """"correspondenceAddress":{"isNonUkAddress":false,"addressLine1":"Address Line 1"}}]""")
       }
     }
 
@@ -249,7 +251,6 @@ class RegisterTrustControllerSpec extends PlaySpec
 
     "return 401" when {
       "the endpoint is called and authentication credentials are missing or incorrect" in {
-
         when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "NOT_AUTHORISED"))
         val result = SUT.getTrustees("12345").apply(FakeRequest("GET", ""))
 
@@ -258,39 +259,311 @@ class RegisterTrustControllerSpec extends PlaySpec
     }
   }
 
-  private val regDocPayload = Json.obj(
-    "value" -> "Trust Name"
-  )
-  private val badRegDocPayload = Json.obj(
-    "wrongIdentifier" -> "Trust Name"
-  )
+  "Get Settlors endpoint" must {
+    "return 200 ok" when {
+      "the endpoint is called with a valid identifier" in {
+        when(mockRegisterTrustService.getSettlors(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(new GetSuccessResponse[List[Settlors]](Nil)))
 
-  private val mockRegisterTrustService = mock[RegisterTrustService]
-  private val mockHC = mock[HeaderCarrier]
-  private val mockMetrics = mock[TrustMetrics]
-  private val mockContext = new com.codahale.metrics.Timer().time()
+        val result = SUT.getSettlors("1234").apply(FakeRequest("GET",""))
 
-  when (mockMetrics.startDesConnectorTimer(any())).thenReturn(mockContext)
+        status(result) mustBe OK
+      }
+    }
 
-  object SUT extends RegisterTrustController {
-    override implicit def hc(implicit rh: RequestHeader): HeaderCarrier = mockHC
-    
-    override val metrics: TrustMetrics = mockMetrics
-    override val registerTrustService: RegisterTrustService = mockRegisterTrustService
+    "return 200 ok with valid json" when {
+      "the endpoint is called with a valid identifier" in {
+        val validAddress = Address(false, "Fake Street 123, Testland")
+        val validCompanySettlors = Settlors(None,Some(List(Company("Company",validAddress,"12345",Some("AAA5221")),Company("Company",validAddress,"12345",Some("AAA5221")))))
+
+        val expectedSettlorsJson = ("""{"companies" : [{COMPANY},{COMPANY}]}""").replace("{COMPANY}", validCompanyJson)
+
+        when(mockRegisterTrustService.getSettlors(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(new GetSuccessResponse[Settlors](validCompanySettlors)))
+
+        val result = SUT.getSettlors("1234").apply(FakeRequest("GET",""))
+        status(result) mustBe OK
+        contentAsString(result) contains (expectedSettlorsJson)
+      }
+    }
+
+    "return 404 not found" when {
+      "the endpoint is called with an identifier that can't be found" in {
+        when(mockRegisterTrustService.getSettlors(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(NotFoundResponse))
+
+        val result = SUT.getSettlors("404NotFound").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe NOT_FOUND
+      }
+    }
+
+    "return 400" when {
+      "the  endpoint is called with an invalid identifier" in {
+        when(mockRegisterTrustService.getSettlors(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(BadRequestResponse))
+
+        val result = SUT.getSettlors("sadfg").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
+    "return 500" when {
+      "something is broken" in {
+        when(mockRegisterTrustService.getSettlors(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(InternalServerErrorResponse))
+
+        val result = SUT.getSettlors("sadfg").apply(FakeRequest("GET", ""))
+        status(result) mustBe INTERNAL_SERVER_ERROR
+      }
+    }
+
+    "return 401" when {
+      "the endpoint is called and authentication credentials are missing or incorrect" in {
+        when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "NOT_AUTHORISED"))
+        val result = SUT.getSettlors("12345").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe UNAUTHORIZED
+      }
+    }
+  }
+
+  "Get Natural Persons endpoint" must {
+
+      "return 200 ok" when {
+        "the endpoint is called with a valid identifier" in {
+          when(mockRegisterTrustService.getNaturalPersons(any[String])(any[HeaderCarrier]))
+            .thenReturn(Future.successful(new GetSuccessResponse[List[Individual]](Nil)))
+
+          val result = SUT.getNaturalPersons("sadfg").apply(FakeRequest("GET", ""))
+
+          status(result) mustBe OK
+        }
+      }
+
+      "return 200 ok with valid json" when {
+        "the endpoint is called with a valid identifier" in {
+          val individual = Individual(
+            title = "Mr",
+            givenName = "John",
+            familyName = "Doe",
+            dateOfBirth = new DateTime("1800-01-01"),
+            passport = Some(Passport(
+              identifier = "IDENTIFIER",
+              expiryDate = new DateTime("2000-01-01"),
+              countryOfIssue = "UK"
+            )),
+            correspondenceAddress = Some(Address(
+              isNonUkAddress = false,
+              addressLine1 = "Address Line 1"
+            ))
+          )
+          when(mockRegisterTrustService.getNaturalPersons(any[String])(any[HeaderCarrier]))
+            .thenReturn(Future.successful(new GetSuccessResponse[List[Individual]](List(individual))))
+
+          val result = SUT.getNaturalPersons("sadfg").apply(FakeRequest("GET", ""))
+
+          status(result) mustBe OK
+          contentAsString(result) mustBe (
+            """[{"title":"Mr","givenName":"John","familyName":"Doe","dateOfBirth":"1800-01-01",""" +
+              """"passport":{"identifier":"IDENTIFIER","expiryDate":"2000-01-01","countryOfIssue":"UK"},""" +
+              """"correspondenceAddress":{"isNonUkAddress":false,"addressLine1":"Address Line 1"}}]""")
+        }
+      }
+
+      "return 404 not found" when {
+        "the endpoint is called with an identifier that can't be found" in {
+          when(mockRegisterTrustService.getNaturalPersons(any[String])(any[HeaderCarrier]))
+            .thenReturn(Future.successful(NotFoundResponse))
+
+          val result = SUT.getNaturalPersons("404NotFound").apply(FakeRequest("GET", ""))
+
+          status(result) mustBe NOT_FOUND
+        }
+      }
+
+      "return 400" when {
+        "the  endpoint is called with an invalid identifier" in {
+          when(mockRegisterTrustService.getNaturalPersons(any[String])(any[HeaderCarrier]))
+            .thenReturn(Future.successful(BadRequestResponse))
+
+          val result = SUT.getNaturalPersons("sadfg").apply(FakeRequest("GET", ""))
+
+          status(result) mustBe BAD_REQUEST
+        }
+      }
+
+      "return 500" when {
+        "something is broken" in {
+          when(mockRegisterTrustService.getNaturalPersons(any[String])(any[HeaderCarrier]))
+            .thenReturn(Future.successful(InternalServerErrorResponse))
+
+          val result = SUT.getNaturalPersons("sadfg").apply(FakeRequest("GET", ""))
+          status(result) mustBe INTERNAL_SERVER_ERROR
+        }
+      }
+
+      "return 401" when {
+        "the endpoint is called and authentication credentials are missing or incorrect" in {
+          when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "NOT_AUTHORISED"))
+          val result = SUT.getNaturalPersons("12345").apply(FakeRequest("GET", ""))
+
+          status(result) mustBe UNAUTHORIZED
+        }
+      }
 
   }
 
+  "Get Trust Contact Details endpoint" must {
+
+    "return 200 ok" when {
+      "the endpoint is called with a valid identifier" in {
+        when(mockRegisterTrustService.getTrustContactDetails(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(new GetSuccessResponse[TrustContactDetails](TrustContactDetails(
+            correspondenceAddress = address,
+            telephoneNumber = "0191 234 5678"
+          ))))
+
+        val result = SUT.getTrustContactDetails("sadfg").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe OK
+      }
+    }
+
+    "return 200 ok with valid json" when {
+      "the endpoint is called with a valid identifier" in {
+        when(mockRegisterTrustService.getTrustContactDetails(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(new GetSuccessResponse[TrustContactDetails](TrustContactDetails(
+            correspondenceAddress = address,
+            telephoneNumber = "0191 234 5678"
+          ))))
+
+        val result = SUT.getTrustContactDetails("sadfg").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe OK
+        contentAsString(result) mustBe (
+          """{"correspondenceAddress":""" +
+            """{"isNonUkAddress":false,"addressLine1":"Line 1","addressLine2":"Line 2","addressLine3":"Line 3",""" +
+            """"addressLine4":"Line 4","postcode":"NE1 2BR","country":"UK"},""" +
+          """"telephoneNumber":"0191 234 5678"}""")
+      }
+    }
+
+    "return 404 not found" when {
+      "the endpoint is called with an identifier that can't be found" in {
+        when(mockRegisterTrustService.getTrustContactDetails(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(NotFoundResponse))
+
+        val result = SUT.getTrustContactDetails("404NotFound").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe NOT_FOUND
+      }
+    }
+
+    "return 400" when {
+      "the  endpoint is called with an invalid identifier" in {
+        when(mockRegisterTrustService.getTrustContactDetails(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(BadRequestResponse))
+
+        val result = SUT.getTrustContactDetails("sadfg").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
+    "return 500" when {
+      "something is broken" in {
+        when(mockRegisterTrustService.getTrustContactDetails(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(InternalServerErrorResponse))
+
+        val result = SUT.getTrustContactDetails("sadfg").apply(FakeRequest("GET", ""))
+        status(result) mustBe INTERNAL_SERVER_ERROR
+      }
+    }
+
+    "return 401" when {
+      "the endpoint is called and authentication credentials are missing or incorrect" in {
+        when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "NOT_AUTHORISED"))
+        val result = SUT.getTrustContactDetails("12345").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe UNAUTHORIZED
+      }
+    }
+  }
+
+  "Get Lead Trustee endpoint" must {
+
+    "return 200 ok with valid json" when {
+      "the endpoint is called with a valid identifier" in {
+        when(mockRegisterTrustService.getLeadTrustee(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(new GetSuccessResponse[LeadTrustee](leadTrusteeIndividual)))
+
+        val result = SUT.getLeadTrustee("sadfg").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe OK
+        contentAsString(result) mustBe(
+          """{"individual":{"title":"Dr","givenName":"Leo","familyName":"Spaceman","dateOfBirth":"1800-01-01",""" +
+          """"passport":{"identifier":"IDENTIFIER","expiryDate":"2020-01-01","countryOfIssue":"UK"},""" +
+          """"correspondenceAddress":{"isNonUkAddress":false,"addressLine1":"Line 1","addressLine2":"Line 2","addressLine3":"Line 3","addressLine4":"Line 4",""" +
+          """"postcode":"NE1 2BR","country":"UK"}}}"""
+        )
+      }
+    }
+
+    "return 404 not found" when {
+      "the endpoint is called with an identifier that can't be found" in {
+        when(mockRegisterTrustService.getLeadTrustee(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(NotFoundResponse))
+
+        val result = SUT.getLeadTrustee("404NotFound").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe NOT_FOUND
+      }
+    }
+
+    "return 400" when {
+      "the  endpoint is called with an invalid identifier" in {
+        when(mockRegisterTrustService.getLeadTrustee(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(BadRequestResponse))
+
+        val result = SUT.getLeadTrustee("sadfg").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
+    "return 500" when {
+      "something is broken" in {
+        when(mockRegisterTrustService.getLeadTrustee(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(InternalServerErrorResponse))
+
+        val result = SUT.getLeadTrustee("sadfg").apply(FakeRequest("GET", ""))
+        status(result) mustBe INTERNAL_SERVER_ERROR
+      }
+    }
+
+    "return 401" when {
+      "the endpoint is called and authentication credentials are missing or incorrect" in {
+        when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "NOT_AUTHORISED"))
+        val result = SUT.getLeadTrustee("12345").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe UNAUTHORIZED
+      }
+    }
+
+  }
+
+  object SUT extends RegisterTrustController {
+    override implicit def hc(implicit rh: RequestHeader): HeaderCarrier = mockHC
+
+    override val metrics: ApplicationMetrics = mockMetrics
+    override val registerTrustService: RegisterTrustService = mockRegisterTrustService
+  }
 
   private def withCallToPOST(payload: JsValue)(handler: Future[Result] => Any) = {
     handler(SUT.register.apply(registerRequestWithPayload(payload)))
   }
-
-  private def registerRequestWithPayload(payload: JsValue): Request[JsValue] = FakeRequest(
-    "POST",
-    "",
-    FakeHeaders(),
-    payload
-  ).withHeaders(CONTENT_TYPE -> "application/json")
 
   private def withCallToPOST()(handler: Future[Result] => Any) = {
     val fr = FakeRequest(
@@ -301,5 +574,4 @@ class RegisterTrustControllerSpec extends PlaySpec
     ).withHeaders(CONTENT_TYPE -> "application/json")
     SUT.register.apply(fr)
   }
-
 }

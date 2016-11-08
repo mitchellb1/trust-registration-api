@@ -24,19 +24,16 @@ trait MicroService {
 
     val ScoverageExclusionPatterns = List(
       "<empty>",
-      "app.*",
-      "config.*",
-      "testOnlyDoNotUseInAppConf.*",
-      "views.*",
+      "definition.*",
+      "sandbox.*",
+      "live.*",
       "prod.*",
-      "com.kenshoo.play.metrics.*",
-      "uk.gov.hmrc.BuildInfo.*",
-      ".*\\.composition"
-    )
+      "testOnlyDoNotUseInAppConf.*",
+      "uk.gov.hmrc.BuildInfo")
 
     Seq(
       ScoverageKeys.coverageExcludedPackages := ScoverageExclusionPatterns.mkString("",";",""),
-      ScoverageKeys.coverageMinimum := 0,
+      ScoverageKeys.coverageMinimum := 90,
       ScoverageKeys.coverageFailOnMinimum := true,
       ScoverageKeys.coverageHighlighting := true
     )

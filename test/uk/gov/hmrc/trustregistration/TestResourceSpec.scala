@@ -19,7 +19,7 @@ package uk.gov.hmrc.trustregistration
 import org.joda.time.DateTime
 import play.api.libs.json.Json
 import uk.gov.hmrc.play.test.UnitSpec
-import uk.gov.hmrc.trustregistration.models.{Passport, Trustee}
+import uk.gov.hmrc.trustregistration.models.{Passport, Individual}
 
 import scala.io.Source
 
@@ -42,7 +42,7 @@ class TestResourceSpec extends UnitSpec {
     }
 
     "be able to combine test resources" in {
-      val result = Json.parse(validIndividualJson).asOpt[Trustee].get
+      val result = Json.parse(validIndividualJson).asOpt[Individual].get
 
       result.givenName shouldBe "Leo"
       result.passport.get.identifier shouldBe "IDENTIFIER"

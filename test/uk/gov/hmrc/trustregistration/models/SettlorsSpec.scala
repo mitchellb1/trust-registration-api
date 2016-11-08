@@ -16,9 +16,19 @@
 
 package uk.gov.hmrc.trustregistration.models
 
-trait ApplicationResponse
-object SuccessResponse extends ApplicationResponse
-object BadRequestResponse extends ApplicationResponse
-object NotFoundResponse extends ApplicationResponse
-object InternalServerErrorResponse extends ApplicationResponse
-case class GetSuccessResponse[T](payload:T) extends ApplicationResponse
+import org.scalatestplus.play.PlaySpec
+import uk.gov.hmrc.trustregistration.models.Settlors
+
+
+class SettlorsSpec extends PlaySpec {
+
+  "Settlors" must {
+    "throw an excetion" when {
+      "there are no individuals or companies" in {
+        val ex = the [IllegalArgumentException] thrownBy (Settlors(None, None))
+        ex.getMessage() contains  "Must have either an individual or company settlor"
+      }
+    }
+  }
+
+}

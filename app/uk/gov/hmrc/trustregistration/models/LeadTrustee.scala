@@ -16,9 +16,16 @@
 
 package uk.gov.hmrc.trustregistration.models
 
-trait ApplicationResponse
-object SuccessResponse extends ApplicationResponse
-object BadRequestResponse extends ApplicationResponse
-object NotFoundResponse extends ApplicationResponse
-object InternalServerErrorResponse extends ApplicationResponse
-case class GetSuccessResponse[T](payload:T) extends ApplicationResponse
+import play.api.libs.json.Json
+
+
+case class LeadTrustee(individual: Option[Individual] = None, company: Option[Company] = None) {
+  private val atleastOneTypeOfTrustee: Boolean = individual.isDefined || company.isDefined
+  private val onlyOneTypeOfTrustee: Boolean = !(individual.isDefined && company.isDefined)
+
+  require(atleastOneTypeOfTrustee, "Must have either an individual or company lead trustee")
+  require(onlyOneTypeOfTrustee, "Must have only an individual or company lead trustee")
+}
+object LeadTrustee{
+  implicit val leadTrusteeFormats = Json.format[LeadTrustee]
+}

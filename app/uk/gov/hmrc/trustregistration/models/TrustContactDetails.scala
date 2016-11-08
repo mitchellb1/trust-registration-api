@@ -16,9 +16,13 @@
 
 package uk.gov.hmrc.trustregistration.models
 
-trait ApplicationResponse
-object SuccessResponse extends ApplicationResponse
-object BadRequestResponse extends ApplicationResponse
-object NotFoundResponse extends ApplicationResponse
-object InternalServerErrorResponse extends ApplicationResponse
-case class GetSuccessResponse[T](payload:T) extends ApplicationResponse
+import play.api.libs.json.Json
+
+case class TrustContactDetails (
+     correspondenceAddress: Address,
+     telephoneNumber: String
+)
+
+object TrustContactDetails {
+  implicit val formats = Json.format[TrustContactDetails]
+}

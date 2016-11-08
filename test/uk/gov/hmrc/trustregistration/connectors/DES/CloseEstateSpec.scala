@@ -16,59 +16,55 @@
 
 package uk.gov.hmrc.trustregistration.connectors.DES
 
-import org.mockito.Matchers
-import org.mockito.Mockito._
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
-import uk.gov.hmrc.play.http._
+import uk.gov.hmrc.play.http.{HttpResponse, Upstream4xxResponse}
 import uk.gov.hmrc.trustregistration.models.{BadRequestResponse, InternalServerErrorResponse, NotFoundResponse, SuccessResponse}
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-
-class CloseTrustSpec extends PlaySpec with OneAppPerSuite with DESConnectorMocks {
-
-  "Close Trust endpoint" must {
+class CloseEstateSpec extends PlaySpec with OneAppPerSuite with DESConnectorMocks {
+  "Close Estate endpoint" must {
     "Return a BadRequestResponse" when {
-      "a bad requested is returned from DES for the call to close-trust" in {
+      "a bad request is returned from DES for the call to close-estate" in {
         setHttpPutResponse(Future.successful(HttpResponse(400)))
-        val result = Await.result(SUT.closeTrust("1234"),Duration.Inf)
+        val result = Await.result(SUT.closeEstate("1234"), Duration.Inf)
         result mustBe BadRequestResponse
       }
     }
 
     "Return a NotFoundResponse" when {
-      "a 404 is returned from DES for the call to close-trust" in {
+      "a 404 is returned from DES for the call to close-estate" in {
         setHttpPutResponse(Future.successful(HttpResponse(404)))
-        val result = Await.result(SUT.closeTrust("1234"),Duration.Inf)
+        val result = Await.result(SUT.closeEstate("1234"), Duration.Inf)
         result mustBe NotFoundResponse
       }
     }
 
     "Return a SuccessResponse" when {
-      "a 204 is returned from DES for the call to close-trust" in {
+      "a 204 is returned from DES for the call to close-estate" in {
         setHttpPutResponse(Future.successful(HttpResponse(204)))
-        val result = Await.result(SUT.closeTrust("1234"),Duration.Inf)
+        val result = Await.result(SUT.closeEstate("1234"), Duration.Inf)
         result mustBe SuccessResponse
       }
     }
 
     "Return a InternalServerError" when {
-      "a 418 is returned from DES for the call to close-trust" in {
+      "a 418 is returned from DES for the call to close-estate" in {
         setHttpPutResponse(Future.successful(HttpResponse(418)))
-        val result = Await.result(SUT.closeTrust("1234"),Duration.Inf)
+        val result = Await.result(SUT.closeEstate("1234"), Duration.Inf)
         result mustBe InternalServerErrorResponse
       }
 
-      "the call to DES fails on the call to close-trust" in {
+      "the call to DES fails on the call to close-estate" in {
         setHttpPutResponse(Future.failed(Upstream4xxResponse("Error", 418, 400)))
-        val result = Await.result(SUT.closeTrust("1234"),Duration.Inf)
+        val result = Await.result(SUT.closeEstate("1234"), Duration.Inf)
         result mustBe InternalServerErrorResponse
       }
 
-      "a 500 is returned from DES for the call to close-trust" in {
+      "a 500 is returned from DES for the call to close-estate" in {
         setHttpPutResponse(Future.successful(HttpResponse(500)))
-        val result = Await.result(SUT.closeTrust("1234"),Duration.Inf)
+        val result = Await.result(SUT.closeEstate("1234"), Duration.Inf)
         result mustBe InternalServerErrorResponse
       }
     }

@@ -19,7 +19,7 @@ package uk.gov.hmrc.trustregistration.controllers
 import play.api.Logger
 import play.api.libs.json.{JsError, JsResult, JsValue, Json}
 import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.trustregistration.metrics.TrustMetrics
+import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
 
@@ -27,7 +27,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-trait RegisterTrustController extends TrustBaseController {
+trait RegisterTrustController extends ApplicationBaseController {
 
   def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     Logger.info("Register API invoked")
@@ -109,9 +109,93 @@ trait RegisterTrustController extends TrustBaseController {
       }
     }
   }
+
+  def getSettlors(identifier: String): Action[AnyContent] = Action.async{implicit request=>
+
+    Logger.info(s"$className:getSettlors API invoked")
+    Logger.debug(s"$className:getSettlors($identifier) API invoked")
+
+    val authorised: Option[(String, String)] = hc.headers.find((tup) => tup._1 == AUTHORIZATION)
+
+    authorised match {
+      case Some((key, "AUTHORISED")) => {
+        Logger.info(s"$className:getSettlors API authorised")
+        metrics.incrementAuthorisedRequest("getSettlors")
+        respond("getSettlors", registerTrustService.getSettlors(identifier))
+      }
+      case _ => {
+        Logger.info(s"$className:getSettlors API returned unauthorised")
+        metrics.incrementUnauthorisedRequest("getSettlors")
+        Future.successful(Unauthorized)
+      }
+    }
+  }
+
+  def getNaturalPersons(identifier: String): Action[AnyContent] = Action.async{ implicit request =>
+
+    Logger.info(s"$className:getNaturalPersons API invoked")
+    Logger.debug(s"$className:getNaturalPersons($identifier) API invoked")
+
+    val authorised: Option[(String, String)] = hc.headers.find((tup) => tup._1 == AUTHORIZATION)
+
+    authorised match {
+      case Some((key, "AUTHORISED")) => {
+        Logger.info(s"$className:getNaturalPersons API authorised")
+        metrics.incrementAuthorisedRequest("getNaturalPersons")
+        respond("getNaturalPersons", registerTrustService.getNaturalPersons(identifier))
+      }
+      case _ => {
+        Logger.info(s"$className:getNaturalPersons API returned unauthorised")
+        metrics.incrementUnauthorisedRequest("getNaturalPersons")
+        Future.successful(Unauthorized)
+      }
+    }
+  }
+
+  def getTrustContactDetails(identifier: String): Action[AnyContent] = Action.async{ implicit request =>
+
+    Logger.info(s"$className:getTrustContactDetails API invoked")
+    Logger.debug(s"$className:getTrustContactDetails($identifier) API invoked")
+
+    val authorised: Option[(String, String)] = hc.headers.find((tup) => tup._1 == AUTHORIZATION)
+
+    authorised match {
+      case Some((key, "AUTHORISED")) => {
+        Logger.info(s"$className:getTrustContactDetails API authorised")
+        metrics.incrementAuthorisedRequest("getTrustContactDetails")
+        respond("getTrustContactDetails", registerTrustService.getTrustContactDetails(identifier))
+      }
+      case _ => {
+        Logger.info(s"$className:getTrustContactDetails API returned unauthorised")
+        metrics.incrementUnauthorisedRequest("getTrustContactDetails")
+        Future.successful(Unauthorized)
+      }
+    }
+  }
+
+  def getLeadTrustee(identifier: String): Action[AnyContent] = Action.async { implicit request =>
+
+    Logger.info(s"$className:getLeadTrustee API invoked")
+    Logger.debug(s"$className:getLeadTrustee($identifier) API invoked")
+
+    val authorised: Option[(String, String)] = hc.headers.find((tup) => tup._1 == AUTHORIZATION)
+
+    authorised match {
+      case Some((key, "AUTHORISED")) => {
+        Logger.info(s"$className:getLeadTrustee API authorised")
+        metrics.incrementAuthorisedRequest("getLeadTrustee")
+        respond("getLeadTrustee", registerTrustService.getLeadTrustee(identifier))
+      }
+      case _ => {
+        Logger.info(s"$className:getLeadTrustee API returned unauthorised")
+        metrics.incrementUnauthorisedRequest("getLeadTrustee")
+        Future.successful(Unauthorized)
+      }
+    }
+  }
 }
 
 object RegisterTrustController extends RegisterTrustController {
   override val registerTrustService = RegisterTrustService
-  override val metrics = TrustMetrics
+  override val metrics = ApplicationMetrics
 }
