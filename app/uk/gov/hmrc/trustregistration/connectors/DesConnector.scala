@@ -45,20 +45,26 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
   lazy val desUrl = baseUrl("des")
   lazy val serviceUrl = s"$desUrl/trust-registration-stub/trusts"
 
-  def registerTrust(doc: RegistrationDocument)(implicit hc : HeaderCarrier) = {
+
+
+
+  def registerTrust(doc: TrustRegistrationDocument)(implicit hc : HeaderCarrier) = {
 
     val uri: String = s"$serviceUrl/register"
 
-    val result: Future[HttpResponse] = httpPost.POST[RegistrationDocument,HttpResponse](uri,doc)(implicitly, httpReads, implicitly)
+    val result: Future[HttpResponse] = httpPost.POST[TrustRegistrationDocument,HttpResponse](uri,doc)(implicitly, httpReads, implicitly)
 
-    result.map(f=> {
-      f.status match{
-        case 201 => Right(TRN("TRN-1234"))
-        case _ => Left("503")
-      }
-    }).recover({
-      case _ => Left("400")
-    })
+    getRegisterResponse(result)
+  }
+
+
+  def registerEstate(doc: EstateRegistrationDocument)(implicit hc : HeaderCarrier) = {
+
+    val uri: String = s"$serviceUrl/register"
+
+    val result: Future[HttpResponse] = httpPost.POST[EstateRegistrationDocument,HttpResponse](uri,doc)(implicitly, httpReads, implicitly)
+
+    getRegisterResponse(result)
   }
 
   def noChange(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
@@ -312,6 +318,17 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
         InternalServerErrorResponse
       }
     }
+  }
+
+  private def getRegisterResponse(result: Future[HttpResponse]): Future[Either[String, TRN] with Product with Serializable] = {
+    result.map(f => {
+      f.status match {
+        case 201 => Right(TRN("TRN-1234"))
+        case _ => Left("503")
+      }
+    }).recover({
+      case _ => Left("400")
+    })
   }
 
   def getLeadTrustee(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {

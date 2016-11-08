@@ -20,8 +20,9 @@ import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
-import play.api.mvc.RequestHeader
-import play.api.test.FakeRequest
+import play.api.libs.json.JsValue
+import play.api.mvc.{RequestHeader, Result}
+import play.api.test.{FakeHeaders, FakeRequest}
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
@@ -33,7 +34,34 @@ import scala.concurrent.Future
 class RegisterEstateControllerSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfter with RegisterTrustServiceMocks  {
 
   before {
+    when(mockRegisterTrustService.registerEstate(any[EstateRegistrationDocument])(any[HeaderCarrier]))
+      .thenReturn(Future.successful(Right(TRN("TRN-1234"))))
+
     when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "AUTHORISED"))
+  }
+
+  "Register estate endpoint" must {
+    "return created with a TRN" when {
+      "the register endpoint is called with a valid json payload" in {
+        withCallToPOST(estateRegDocPayload) { result =>
+          status(result) mustBe CREATED
+          contentAsString(result) must include("TRN")
+        }
+      }
+    }
+
+    "Return a Bad Request" when {
+      "The json trust document is invalid" in {
+        withCallToPOST(badRegDocPayload) { result =>
+          status(result) mustBe BAD_REQUEST
+        }
+      }
+      "The json trust document is missing" in {
+        withCallToPOST() { result =>
+          status(result) mustBe BAD_REQUEST
+        }
+      }
+    }
   }
 
   "Close estate endpoint" must {
@@ -96,5 +124,19 @@ class RegisterEstateControllerSpec extends PlaySpec with OneAppPerSuite with Bef
 
     override val metrics: ApplicationMetrics = mockMetrics
     override val registerTrustService: RegisterTrustService = mockRegisterTrustService
+  }
+
+  private def withCallToPOST(payload: JsValue)(handler: Future[Result] => Any) = {
+    handler(SUT.register.apply(registerRequestWithPayload(payload)))
+  }
+
+  private def withCallToPOST()(handler: Future[Result] => Any) = {
+    val fr = FakeRequest(
+      "PUT",
+      "",
+      FakeHeaders(),
+      ""
+    ).withHeaders(CONTENT_TYPE -> "application/json")
+    SUT.register.apply(fr)
   }
 }

@@ -19,8 +19,8 @@ package uk.gov.hmrc.trustregistration.models
 import play.api.libs.json.Json
 
 
-case class RegistrationDocument(value: String)
+case class TrustRegistrationDocument(value: String)
 
-object RegistrationDocument {
-  implicit val formats = Json.format[RegistrationDocument]
+object TrustRegistrationDocument {
+  implicit val formats = Json.format[TrustRegistrationDocument]
 }

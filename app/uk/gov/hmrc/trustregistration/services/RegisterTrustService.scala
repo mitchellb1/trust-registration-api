@@ -26,8 +26,12 @@ trait RegisterTrustService {
 
   val desConnector: DesConnector
 
-  def registerTrust(regDoc: RegistrationDocument)(implicit hc : HeaderCarrier) : Future[Either[String,TRN]] = {
+  def registerTrust(regDoc: TrustRegistrationDocument)(implicit hc : HeaderCarrier) : Future[Either[String,TRN]] = {
     desConnector.registerTrust(regDoc)(hc)
+  }
+
+  def registerEstate(regDoc: EstateRegistrationDocument)(implicit hc : HeaderCarrier) : Future[Either[String,TRN]] = {
+    desConnector.registerEstate(regDoc)(hc)
   }
 
   def noChange(identifier: String)(implicit hc: HeaderCarrier): Future[ApplicationResponse] = {
