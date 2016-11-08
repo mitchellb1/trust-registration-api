@@ -114,7 +114,7 @@ trait ScalaDataExamples {
     individual = individual,
     isVulnerable = false,
     isIncomeAtTrusteeDiscretion = true,
-    shareOfIncome = 30
+    shareOfIncome = Some(30)
   )
 
   val charityBeneficiary = CharityBeneficiary(
@@ -122,14 +122,14 @@ trait ScalaDataExamples {
     number = "123456789087654",
     correspondenceAddress = address,
     isIncomeAtTrusteeDiscretion = false,
-    shareOfIncome = 20
+    shareOfIncome = Some(20)
   )
 
   val otherBeneficiary = OtherBeneficiary(
     description = "Beneficiary Description",
     correspondenceAddress = address,
     isIncomeAtTrusteeDiscretion = false,
-    shareOfIncome = 50
+    shareOfIncome = Some(50)
   )
 
   val beneficiaries = Beneficiaries(

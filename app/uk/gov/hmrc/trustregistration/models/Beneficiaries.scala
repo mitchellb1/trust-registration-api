@@ -22,7 +22,7 @@ case class IndividualBeneficiary(
                                   individual: Individual,
                                   isVulnerable: Boolean,
                                   isIncomeAtTrusteeDiscretion: Boolean,
-                                  shareOfIncome: Float)
+                                  shareOfIncome: Option[Float])
 
 object IndividualBeneficiary{
   implicit val individualBeneficiaryFormats = Json.format[IndividualBeneficiary]
@@ -33,7 +33,7 @@ case class CharityBeneficiary(
                                number: String,
                                correspondenceAddress: Address,
                                isIncomeAtTrusteeDiscretion: Boolean,
-                               shareOfIncome: Float)
+                               shareOfIncome: Option[Float])
 
 object CharityBeneficiary{
   implicit val charityBeneficiaryFormats = Json.format[CharityBeneficiary]
@@ -43,7 +43,7 @@ case class OtherBeneficiary(
                              description: String,
                              correspondenceAddress: Address,
                              isIncomeAtTrusteeDiscretion: Boolean,
-                             shareOfIncome: Float)
+                             shareOfIncome: Option[Float])
 
 object OtherBeneficiary{
   implicit val otherBeneficiaryFormats = Json.format[OtherBeneficiary]
