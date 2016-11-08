@@ -37,6 +37,9 @@ trait ApplicationBaseController extends BaseController {
     val okMessage = s"$className:$methodName API returned OK"
 
     result map {
+      case GetSuccessResponse(payload:Estate) =>{
+        Ok(Json.toJson(payload))
+      }
       case GetSuccessResponse(payload:Beneficiaries) => {
         Ok(Json.toJson(payload))
       }

@@ -17,18 +17,15 @@
 package uk.gov.hmrc.trustregistration.models
 
 import org.scalatestplus.play.PlaySpec
-import uk.gov.hmrc.trustregistration.models.Settlors
 
 
-class SettlorsSpec extends PlaySpec {
-
-  "Settlors" must {
+class EstateSpec extends PlaySpec {
+  "Estate" must {
     "throw an exception" when {
-      "there are no individuals or companies" in {
-        val ex = the [IllegalArgumentException] thrownBy (Settlors(None, None))
-        ex.getMessage() contains  "Must have either an individual or company settlor"
+      "there are no personal representatives or deceased" in {
+        val ex = the [IllegalArgumentException] thrownBy (Estate(true,true,true,true,None,None))
+        ex.getMessage() contains  "Must have either a personal representative or a deceased"
       }
     }
   }
-
 }

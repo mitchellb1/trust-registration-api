@@ -16,19 +16,10 @@
 
 package uk.gov.hmrc.trustregistration.models
 
-import org.scalatestplus.play.PlaySpec
-import uk.gov.hmrc.trustregistration.models.Settlors
+import play.api.libs.json.Json
 
+case class EstateRegistrationDocument(value: String)
 
-class SettlorsSpec extends PlaySpec {
-
-  "Settlors" must {
-    "throw an exception" when {
-      "there are no individuals or companies" in {
-        val ex = the [IllegalArgumentException] thrownBy (Settlors(None, None))
-        ex.getMessage() contains  "Must have either an individual or company settlor"
-      }
-    }
-  }
-
+object EstateRegistrationDocument {
+  implicit val formats = Json.format[EstateRegistrationDocument]
 }

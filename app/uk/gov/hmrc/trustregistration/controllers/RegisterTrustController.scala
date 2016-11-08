@@ -30,10 +30,10 @@ import scala.concurrent.Future
 trait RegisterTrustController extends ApplicationBaseController {
 
   def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
-    Logger.info("Register API invoked")
+    Logger.info("Trust Register API invoked")
 
-    val jsonBody: JsResult[RegistrationDocument] = request.body.validate[RegistrationDocument]
-    jsonBody.map { regDoc: RegistrationDocument => {
+    val jsonBody: JsResult[TrustRegistrationDocument] = request.body.validate[TrustRegistrationDocument]
+    jsonBody.map { regDoc: TrustRegistrationDocument => {
         val futureEither: Future[Either[String, TRN]] = registerTrustService.registerTrust(regDoc)
         futureEither.map {
           case Right(identifier) => Created(Json.toJson(identifier))
