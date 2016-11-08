@@ -8,4 +8,5 @@ GET        /trusts/:identifier/settlors         uk.gov.hmrc.trustregistration.co
 GET        /trusts/:identifier/natural-persons  uk.gov.hmrc.trustregistration.controllers.RegisterTrustController.getNaturalPersons(identifier: String)
 GET        /trusts/:identifier/contact-details  uk.gov.hmrc.trustregistration.controllers.RegisterTrustController.getTrustContactDetails(identifier: String)
 GET        /trusts/:identifier/lead-trustee     uk.gov.hmrc.trustregistration.controllers.RegisterTrustController.getLeadTrustee(identifier: String)
+GET        /trusts/:identifier/beneficiaries    uk.gov.hmrc.trustregistration.controllers.RegisterTrustController.getBeneficiaries(identifier: String)
 PUT        /estates/:identifier/close           uk.gov.hmrc.trustregistration.controllers.RegisterEstateController.closeEstate(identifier: String)
