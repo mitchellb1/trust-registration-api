@@ -38,6 +38,12 @@ trait JsonExamples {
     .fromFile(getClass.getResource("/InvalidCompany.json").getPath)
     .mkString
     .replace("\"{ADDRESS}\"", validAddressJson)
+  val invalidEstateJson = Source.fromFile(getClass.getResource("/InvalidEstate.json").getPath).mkString
+    .replace("\"{INDIVIDUAL}\"", validIndividualJson)
+  val validEstateWithPersonalRepresentativeJson = Source.fromFile(getClass.getResource("/ValidEstateWithPersonalRepresentative.json").getPath).mkString
+    .replace("\"{INDIVIDUAL}\"", validIndividualJson)
+  val validEstateWithDeceasedJson = Source.fromFile(getClass.getResource("/ValidEstateWithDeceased.json").getPath).mkString
+    .replace("\"{INDIVIDUAL}\"", validIndividualJson)
   val validLeadTrusteeIndividualJson = s"""{"individual":$validIndividualJson,"company":null}"""
   val validLeadTrusteeCompanyJson = s"""{"individual":null,"company":$validCompanyJson}"""
   val invalidLeadTrusteeJson = s"""{"individual":$validIndividualJson,"company":$validCompanyJson}"""
@@ -89,4 +95,9 @@ trait ScalaDataExamples {
     individual = None,
     company = Some(company)
   )
+
+  val personalRepresentative = PersonalRepresentative(individual,true)
+
+  val validEstateWithPersonalRepresentative = Estate(true,true,true,false,Some(personalRepresentative))
+  val validEstateWithDeceased = Estate(true,true,true,false,None,Some(individual),Some(false),Some(false),Some(false))
 }
