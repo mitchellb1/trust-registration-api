@@ -16,19 +16,10 @@
 
 package uk.gov.hmrc.trustregistration.models
 
-import org.scalatestplus.play.PlaySpec
-import uk.gov.hmrc.trustregistration.models.Settlors
+import play.api.libs.json.Json
 
 
-class SettlorsSpec extends PlaySpec {
-
-  "Settlors" must {
-    "throw an exception" when {
-      "there are no individuals or companies" in {
-        val ex = the [IllegalArgumentException] thrownBy (Settlors(None, None))
-        ex.getMessage() contains  "Must have either an individual or company settlor"
-      }
-    }
-  }
-
+case class PersonalRepresentative(val individual: Individual, val isExecutor: Boolean)
+object PersonalRepresentative{
+  implicit val personalRepresentativeFormats = Json.format[PersonalRepresentative]
 }

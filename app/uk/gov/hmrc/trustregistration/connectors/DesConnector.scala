@@ -38,6 +38,7 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
   val AuditCloseTrustIdentifier: String = "trustRegistration_closeTrust"
   val AuditCloseEstateIdentifier: String = "trustRegistration_closeEstate"
   val AuditGetTrusteesIdentifier: String = "trustRegistration_getTrustees"
+  val AuditGetEstateIdentifier: String = "trustRegistration_getEstate"
   val AuditGetNaturalPersonsIdentifier: String = "trustRegistration_getNaturalPersons"
   val AuditGetTrustContactDetailsIdentifier: String = "trustRegistration_getTrustContactDetails"
   val AuditGetLeadTrusteeIdentifier: String = "trustRegistration_getLeadTrustee"
@@ -113,6 +114,50 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
     val uri: String = s"$estatesServiceUrl/$identifier/closeEstate"
 
     closeTrustOrEstate(identifier, uri, "Estate",AuditCloseEstateIdentifier)
+  }
+
+  def getEstate(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
+    val uri: String = s"$estatesServiceUrl/$identifier"
+    val timerStart = metrics.startDesConnectorTimer("getEstate")
+    val result: Future[HttpResponse] = httpGet.GET[HttpResponse](uri)(httpReads, implicitly)
+
+    result.map(f => {
+      timerStart.stop()
+      f.status match {
+        case 200 => {
+          val trustees = f.json.asOpt[Estate]
+
+          trustees match {
+            case Some(value: Estate) => {
+              audit.doAudit("getEstateSuccessful", AuditGetEstateIdentifier)
+              GetSuccessResponse(value)
+            }
+            case _ => {
+              audit.doAudit("getEstateFailure", AuditGetEstateIdentifier)
+              InternalServerErrorResponse
+            }
+          }
+        }
+        case 400 => {
+          audit.doAudit("getEstateFailure", AuditGetEstateIdentifier)
+          BadRequestResponse
+        }
+        case 404 => {
+          audit.doAudit("getEstateFailure", AuditGetEstateIdentifier)
+          NotFoundResponse
+        }
+        case _ => {
+          audit.doAudit("getEstateFailure", AuditGetEstateIdentifier)
+          InternalServerErrorResponse
+        }
+      }
+    }).recover {
+      case _ => {
+        audit.doAudit("getEstateFailure", AuditGetEstateIdentifier)
+        InternalServerErrorResponse
+      }
+    }
+
   }
 
   def getTrustees(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
