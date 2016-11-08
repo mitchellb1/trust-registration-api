@@ -193,6 +193,27 @@ trait RegisterTrustController extends ApplicationBaseController {
       }
     }
   }
+
+  def getBeneficiaries(identifier: String): Action[AnyContent] = Action.async { implicit request =>
+
+    Logger.info(s"$className:getBeneficiaries API invoked")
+    Logger.debug(s"$className:getBeneficiaries($identifier) API invoked")
+
+    val authorised: Option[(String, String)] = hc.headers.find((tup) => tup._1 == AUTHORIZATION)
+
+    authorised match {
+      case Some((key, "AUTHORISED")) => {
+        Logger.info(s"$className:getBeneficiaries API authorised")
+        metrics.incrementAuthorisedRequest("getBeneficiaries")
+        respond("getBeneficiaries", registerTrustService.getBeneficiaries(identifier))
+      }
+      case _ => {
+        Logger.info(s"$className:getBeneficiaries API returned unauthorised")
+        metrics.incrementUnauthorisedRequest("getBeneficiaries")
+        Future.successful(Unauthorized)
+      }
+    }
+  }
 }
 
 object RegisterTrustController extends RegisterTrustController {

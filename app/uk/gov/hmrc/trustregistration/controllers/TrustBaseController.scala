@@ -40,6 +40,9 @@ trait ApplicationBaseController extends BaseController {
       case GetSuccessResponse(payload:Estate) =>{
         Ok(Json.toJson(payload))
       }
+      case GetSuccessResponse(payload:Beneficiaries) => {
+        Ok(Json.toJson(payload))
+      }
       case GetSuccessResponse(payload:LeadTrustee) => {
         Ok(Json.toJson(payload))
       }

@@ -104,6 +104,13 @@ class RegisterTrustServiceSpec extends PlaySpec
         result mustBe GetSuccessResponse(leadTrusteeCompany)
       }
 
+      "a SuccessResponse is returned from DES for the call to getBeneficiaries" in {
+        when(mockDesConnector.getBeneficiaries(any())(any())).thenReturn(Future.successful(GetSuccessResponse(beneficiaries)))
+
+        val result = Await.result(SUT.getBeneficiaries("1234567890")(HeaderCarrier()), Duration.Inf)
+        result mustBe GetSuccessResponse(beneficiaries)
+      }
+
       "a SuccessResponse is returned from DES for the call to getEstate" in {
         when(mockDesConnector.getEstate(any())(any())).thenReturn(Future.successful(GetSuccessResponse(validEstateWithPersonalRepresentative)))
 
@@ -166,6 +173,13 @@ class RegisterTrustServiceSpec extends PlaySpec
         when(mockDesConnector.getLeadTrustee(any())(any())).thenReturn(Future.successful(BadRequestResponse))
 
         val result = Await.result(SUT.getLeadTrustee("1234567890")(HeaderCarrier()), Duration.Inf)
+        result mustBe BadRequestResponse
+      }
+
+      "a BadRequestResponse is returned from DES for the call to getBeneficiaries" in {
+        when(mockDesConnector.getBeneficiaries(any())(any())).thenReturn(Future.successful(BadRequestResponse))
+
+        val result = Await.result(SUT.getBeneficiaries("1234567890")(HeaderCarrier()), Duration.Inf)
         result mustBe BadRequestResponse
       }
 
@@ -234,6 +248,13 @@ class RegisterTrustServiceSpec extends PlaySpec
         result mustBe InternalServerErrorResponse
       }
 
+      "a InternalServerErrorResponse is returned from DES for the call to getBeneficiaries" in {
+        when(mockDesConnector.getBeneficiaries(any())(any())).thenReturn(Future.successful(InternalServerErrorResponse))
+
+        val result = Await.result(SUT.getBeneficiaries("1234567890")(HeaderCarrier()), Duration.Inf)
+        result mustBe InternalServerErrorResponse
+      }
+
       "a InternalServerErrorResponse is returned from DES for the call to getEstate" in {
         when(mockDesConnector.getEstate(any())(any())).thenReturn(Future.successful(InternalServerErrorResponse))
 
@@ -296,6 +317,13 @@ class RegisterTrustServiceSpec extends PlaySpec
         when(mockDesConnector.getLeadTrustee(any())(any())).thenReturn(Future.successful(NotFoundResponse))
 
         val result = Await.result(SUT.getLeadTrustee("1234567890")(HeaderCarrier()), Duration.Inf)
+        result mustBe NotFoundResponse
+      }
+
+      "a NotFoundResponse is returned from DES for the call to getBeneficiaries" in {
+        when(mockDesConnector.getBeneficiaries(any())(any())).thenReturn(Future.successful(NotFoundResponse))
+
+        val result = Await.result(SUT.getBeneficiaries("1234567890")(HeaderCarrier()), Duration.Inf)
         result mustBe NotFoundResponse
       }
 

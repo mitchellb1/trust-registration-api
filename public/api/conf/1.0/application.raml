@@ -11,7 +11,7 @@ types:
   Estate: !include schemas/trust.json#/properties/estate
   Trust: !include schemas/trust.json#/properties/trust
   Trustees: !include schemas/trust.json#/properties/trust/properties/trustees
-  Beneficiaries: !include schemas/trust.json#/properties/trust/properties/beneficiaries
+  GetBeneficiaries: !include schemas/get-beneficiaries.json
   Settlors: !include schemas/trust.json#/properties/trust/properties/settlor
   Protectors: !include schemas/trust.json#/properties/trust/properties/protector
   NaturalPersons: !include schemas/trust.json#/properties/trust/properties/naturalPersons
@@ -114,14 +114,13 @@ types:
           200:
             body:
               application/json:
-                type: Beneficiaries
-                #example: !include examples/beneficiaries.json
+                type: GetBeneficiaries
+                example: !include examples/get-beneficiaries.json
       put:
         displayName: Update Beneficiaries
         description: Updates all the beneficiaries of the Trust
         body:
           application/json:
-              type: Beneficiaries
               #example: !include examples/beneficiaries.json
     /settlors:
       type: base

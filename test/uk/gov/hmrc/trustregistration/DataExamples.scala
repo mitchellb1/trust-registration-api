@@ -46,6 +46,25 @@ trait JsonExamples {
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
   val validLeadTrusteeIndividualJson = s"""{"individual":$validIndividualJson,"company":null}"""
   val validLeadTrusteeCompanyJson = s"""{"individual":null,"company":$validCompanyJson}"""
+
+  val validIndividualBeneficiary = Source.fromFile(getClass.getResource("/ValidIndividualBeneficiary.json").getPath)
+                                            .mkString
+                                            .replace(""""{INDIVIDUAL}"""", validIndividualJson)
+
+  val validCharityBeneficiary = Source.fromFile(getClass.getResource("/ValidCharityBeneficiary.json").getPath)
+    .mkString
+    .replace(""""{ADDRESS}"""", validAddressJson)
+
+  val invalidCharityBeneficiary = Source.fromFile(getClass.getResource("/InvalidCharityBeneficiary.json").getPath).mkString
+
+  val validOtherBeneficiary = Source.fromFile(getClass.getResource("/ValidOtherBeneficiary.json").getPath)
+    .mkString
+    .replace(""""{ADDRESS}"""", validAddressJson)
+
+  val validBeneficiariesJson = s"""{"individualBeneficiaries":[$validIndividualBeneficiary],"charityBeneficiaries":[$validCharityBeneficiary],"otherBeneficiaries":[$validOtherBeneficiary]}"""
+
+  val invalidBeneficiariesJson = s"""{"charityBeneficiaries": [$invalidCharityBeneficiary]}"""
+
   val invalidLeadTrusteeJson = s"""{"individual":$validIndividualJson,"company":$validCompanyJson}"""
 }
 
@@ -100,4 +119,32 @@ trait ScalaDataExamples {
 
   val validEstateWithPersonalRepresentative = Estate(true,true,true,false,Some(personalRepresentative))
   val validEstateWithDeceased = Estate(true,true,true,false,None,Some(individual),Some(false),Some(false),Some(false))
+
+  val individualBeneficiary = IndividualBeneficiary(
+    individual = individual,
+    isVulnerable = false,
+    isIncomeAtTrusteeDiscretion = true,
+    shareOfIncome = Some(30)
+  )
+
+  val charityBeneficiary = CharityBeneficiary(
+    name = "Charity Name",
+    number = "123456789087654",
+    correspondenceAddress = address,
+    isIncomeAtTrusteeDiscretion = false,
+    shareOfIncome = Some(20)
+  )
+
+  val otherBeneficiary = OtherBeneficiary(
+    description = "Beneficiary Description",
+    correspondenceAddress = address,
+    isIncomeAtTrusteeDiscretion = false,
+    shareOfIncome = Some(50)
+  )
+
+  val beneficiaries = Beneficiaries(
+    individualBeneficiaries = Some(List(individualBeneficiary)),
+    charityBeneficiaries = Some(List(charityBeneficiary)),
+    otherBeneficiaries = Some(List(otherBeneficiary))
+  )
 }

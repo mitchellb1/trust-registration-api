@@ -554,6 +554,75 @@ class RegisterTrustControllerSpec extends PlaySpec
 
   }
 
+  "Get Beneficiaries endpoint" must {
+
+    "return 200 ok with valid json" when {
+      "the endpoint is called with a valid identifier" in {
+        when(mockRegisterTrustService.getBeneficiaries(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(new GetSuccessResponse[Beneficiaries](beneficiaries)))
+
+        val result = SUT.getBeneficiaries("sadfg").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe OK
+        contentAsString(result) mustBe(
+          """{"individualBeneficiaries":""" +
+          """[{"individual":{"title":"Dr","givenName":"Leo","familyName":"Spaceman","dateOfBirth":"1800-01-01",""" +
+          """"passport":{"identifier":"IDENTIFIER","expiryDate":"2020-01-01","countryOfIssue":"UK"},""" +
+          """"correspondenceAddress":{"isNonUkAddress":false,"addressLine1":"Line 1","addressLine2":"Line 2","addressLine3":"Line 3",""" +
+          """"addressLine4":"Line 4","postcode":"NE1 2BR","country":"UK"}},"isVulnerable":false,"isIncomeAtTrusteeDiscretion":true,"shareOfIncome":30}],""" +
+          """"charityBeneficiaries":[{"name":"Charity Name","number":"123456789087654",""" +
+          """"correspondenceAddress":{"isNonUkAddress":false,"addressLine1":"Line 1","addressLine2":"Line 2","addressLine3":"Line 3",""" +
+          """"addressLine4":"Line 4","postcode":"NE1 2BR","country":"UK"},"isIncomeAtTrusteeDiscretion":false,"shareOfIncome":20}],""" +
+          """"otherBeneficiaries":[{"description":"Beneficiary Description","correspondenceAddress":""" +
+          """{"isNonUkAddress":false,"addressLine1":"Line 1","addressLine2":"Line 2","addressLine3":"Line 3","addressLine4":"Line 4",""" +
+          """"postcode":"NE1 2BR","country":"UK"},"isIncomeAtTrusteeDiscretion":false,"shareOfIncome":50}]}"""
+        )
+      }
+    }
+
+    "return 404 not found" when {
+      "the endpoint is called with an identifier that can't be found" in {
+        when(mockRegisterTrustService.getBeneficiaries(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(NotFoundResponse))
+
+        val result = SUT.getBeneficiaries("404NotFound").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe NOT_FOUND
+      }
+    }
+
+    "return 400" when {
+      "the  endpoint is called with an invalid identifier" in {
+        when(mockRegisterTrustService.getBeneficiaries(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(BadRequestResponse))
+
+        val result = SUT.getBeneficiaries("sadfg").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
+    "return 500" when {
+      "something is broken" in {
+        when(mockRegisterTrustService.getBeneficiaries(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(InternalServerErrorResponse))
+
+        val result = SUT.getBeneficiaries("sadfg").apply(FakeRequest("GET", ""))
+        status(result) mustBe INTERNAL_SERVER_ERROR
+      }
+    }
+
+    "return 401" when {
+      "the endpoint is called and authentication credentials are missing or incorrect" in {
+        when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "NOT_AUTHORISED"))
+        val result = SUT.getBeneficiaries("12345").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe UNAUTHORIZED
+      }
+    }
+
+  }
+
   object SUT extends RegisterTrustController {
     override implicit def hc(implicit rh: RequestHeader): HeaderCarrier = mockHC
 
