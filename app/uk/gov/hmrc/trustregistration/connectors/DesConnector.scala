@@ -422,7 +422,7 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
 
   def getBeneficiaries(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
 
-    val uri: String = s"$serviceUrl/$identifier/beneficiaries"
+    val uri: String = s"$trustsServiceUrl/$identifier/beneficiaries"
 
     val timerStart = metrics.startDesConnectorTimer("getBeneficiaries")
 
