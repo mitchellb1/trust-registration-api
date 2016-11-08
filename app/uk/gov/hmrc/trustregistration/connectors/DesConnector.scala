@@ -41,6 +41,7 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
   val AuditGetNaturalPersonsIdentifier: String = "trustRegistration_getNaturalPersons"
   val AuditGetTrustContactDetailsIdentifier: String = "trustRegistration_getTrustContactDetails"
   val AuditGetLeadTrusteeIdentifier: String = "trustRegistration_getLeadTrustee"
+  val AuditGetBeneficiariesIdentifier: String = "trustRegistration_getBeneficiaries"
 
   lazy val desUrl = baseUrl("des")
   lazy val serviceUrl = s"$desUrl/trust-registration-stub/trusts"
@@ -318,7 +319,7 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
 
     val uri: String = s"$serviceUrl/$identifier/leadTrustee"
 
-    val timerStart = metrics.startDesConnectorTimer("getTrustContactDetails")
+    val timerStart = metrics.startDesConnectorTimer("getLeadTrustee")
 
     val result: Future[HttpResponse] = httpGet.GET[HttpResponse](uri)(httpReads, implicitly)
 
@@ -351,6 +352,48 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
     }).recover {
       case _ => {
         audit.doAudit("getLeadTrusteeFailure", AuditGetLeadTrusteeIdentifier)
+        InternalServerErrorResponse
+      }
+    }
+  }
+
+  def getBeneficiaries(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
+
+    val uri: String = s"$serviceUrl/$identifier/beneficiaries"
+
+    val timerStart = metrics.startDesConnectorTimer("getBeneficiaries")
+
+    val result: Future[HttpResponse] = httpGet.GET[HttpResponse](uri)(httpReads, implicitly)
+
+    result.map(f => {
+      timerStart.stop()
+      f.status match {
+        case 200 => {
+          val details = f.json.asOpt[Beneficiaries]
+
+          details match {
+            case Some(value: Beneficiaries) => {
+              audit.doAudit("getBeneficiariesSuccessful", AuditGetBeneficiariesIdentifier)
+              GetSuccessResponse(value)
+            }
+            case _ => {
+              audit.doAudit("getBeneficiariesFailure", AuditGetBeneficiariesIdentifier)
+              InternalServerErrorResponse
+            }
+          }
+        }
+        case 400 => {
+          audit.doAudit("getBeneficiariesFailure", AuditGetBeneficiariesIdentifier)
+          BadRequestResponse
+        }
+        case 404 => {
+          audit.doAudit("getBeneficiariesFailure", AuditGetBeneficiariesIdentifier)
+          NotFoundResponse
+        }
+      }
+    }).recover {
+      case _ => {
+        audit.doAudit("getBeneficiariesFailure", AuditGetBeneficiariesIdentifier)
         InternalServerErrorResponse
       }
     }
