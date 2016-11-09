@@ -16,34 +16,54 @@
 
 package uk.gov.hmrc.trustregistration.models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsArray, JsValue, Json, Writes}
 
 case class IndividualBeneficiary(
-                                  individual: Individual,
-                                  isVulnerable: Boolean,
-                                  isIncomeAtTrusteeDiscretion: Boolean,
-                                  shareOfIncome: Option[Float])
+  individual: Individual,
+  isVulnerable: Boolean,
+  isIncomeAtTrusteeDiscretion: Boolean,
+  shareOfIncome: Option[Float])
 
 object IndividualBeneficiary{
   implicit val individualBeneficiaryFormats = Json.format[IndividualBeneficiary]
 }
 
+case class EmployeeBeneficiary(
+  individual: Individual,
+  isVulnerable: Boolean,
+  isIncomeAtTrusteeDiscretion: Boolean,
+  shareOfIncome: Option[Float])
+
+object EmployeeBeneficiary{
+  implicit val employeeBeneficiaryFormats = Json.format[EmployeeBeneficiary]
+}
+
+case class DirectorBeneficiary(
+  individual: Individual,
+  isVulnerable: Boolean,
+  isIncomeAtTrusteeDiscretion: Boolean,
+  shareOfIncome: Option[Float])
+
+object DirectorBeneficiary{
+  implicit val directorBeneficiaryFormats = Json.format[DirectorBeneficiary]
+}
+
 case class CharityBeneficiary(
-                               name: String,
-                               number: String,
-                               correspondenceAddress: Address,
-                               isIncomeAtTrusteeDiscretion: Boolean,
-                               shareOfIncome: Option[Float])
+   name: String,
+   number: String,
+   correspondenceAddress: Address,
+   isIncomeAtTrusteeDiscretion: Boolean,
+   shareOfIncome: Option[Float])
 
 object CharityBeneficiary{
   implicit val charityBeneficiaryFormats = Json.format[CharityBeneficiary]
 }
 
 case class OtherBeneficiary(
-                             description: String,
-                             correspondenceAddress: Address,
-                             isIncomeAtTrusteeDiscretion: Boolean,
-                             shareOfIncome: Option[Float])
+   description: String,
+   correspondenceAddress: Address,
+   isIncomeAtTrusteeDiscretion: Boolean,
+   shareOfIncome: Option[Float])
 
 object OtherBeneficiary{
   implicit val otherBeneficiaryFormats = Json.format[OtherBeneficiary]
@@ -51,10 +71,14 @@ object OtherBeneficiary{
 
 case class Beneficiaries(
   individualBeneficiaries: Option[List[IndividualBeneficiary]] = None,
+  employeeBeneficiaries: Option[List[EmployeeBeneficiary]] = None,
+  directorBeneficiaries: Option[List[DirectorBeneficiary]] = None,
   charityBeneficiaries: Option[List[CharityBeneficiary]] = None,
   otherBeneficiaries: Option[List[OtherBeneficiary]] = None) {
   private val atLeastOneBeneficiary: Boolean =
     (individualBeneficiaries.isDefined && individualBeneficiaries.get.size > 0) ||
+    (employeeBeneficiaries.isDefined && employeeBeneficiaries.get.size > 0) ||
+    (directorBeneficiaries.isDefined && directorBeneficiaries.get.size > 0) ||
     (charityBeneficiaries.isDefined && charityBeneficiaries.get.size > 0) ||
     (otherBeneficiaries.isDefined && otherBeneficiaries.get.size > 0)
 
@@ -62,5 +86,15 @@ case class Beneficiaries(
 }
 
 object Beneficiaries{
-  implicit val beneficiariesFormats = Json.format[Beneficiaries]
+  implicit val beneficiariesWrites: Writes[Beneficiaries] = new Writes[Beneficiaries] {
+    def writes(b:Beneficiaries) = Json.obj(
+      "individualBeneficiaries" -> b.individualBeneficiaries.getOrElse[List[IndividualBeneficiary]](List[IndividualBeneficiary]()),
+      "employeeBeneficiaries" -> b.employeeBeneficiaries.getOrElse[List[EmployeeBeneficiary]](List[EmployeeBeneficiary]()),
+      "directorBeneficiaries" -> b.directorBeneficiaries.getOrElse[List[DirectorBeneficiary]](List[DirectorBeneficiary]()),
+      "charityBeneficiaries" -> b.charityBeneficiaries.getOrElse[List[CharityBeneficiary]](List[CharityBeneficiary]()),
+      "otherBeneficiaries" -> b.otherBeneficiaries.getOrElse[List[OtherBeneficiary]](List[OtherBeneficiary]())
+    )
+  }
+
+  implicit val beneficiariesReads = Json.reads[Beneficiaries]
 }
