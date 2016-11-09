@@ -28,6 +28,8 @@
       "shareOfIncome": 30
     }
   ],
+  "employeeBeneficiaries": [],
+  "directorBeneficiaries": [],
   "charityBeneficiaries": [
     {
       "name": "Charity Name",
