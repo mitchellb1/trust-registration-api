@@ -176,6 +176,7 @@
           }
         },
         "required": [
+          "individual",
           "isIncomeAtTrusteeDiscretion",
           "isVulnerable"
         ]
