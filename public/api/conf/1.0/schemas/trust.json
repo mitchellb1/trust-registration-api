@@ -158,6 +158,42 @@
         "$ref": "#/definitions/individual"
       }
     },
+    "hateoas": {
+      "type": "object",
+      "properties": {
+        "_links": {
+          "type": "object",
+          "properties": {
+            "self": {
+              "type": "object",
+              "properties": {
+                "href": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "href"
+              ]
+            },
+            "trust": {
+              "type": "object",
+              "properties": {
+                "href": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "href"
+              ]
+            }
+          },
+          "required": [
+            "self",
+            "trust"
+          ]
+        }
+      }
+    },
     "protectors": {
       "type": "object",
       "properties": {
@@ -174,6 +210,14 @@
           }
         }
       }
+    },
+    "getprotectors": {
+      "type": "object",
+      "allOf": [
+        {"$ref": "#/definitions/protectors"},
+        {"$ref": "#/definitions/hateoas"}
+      ],
+      "required": ["individuals", "companies", "_links"]
     },
     "settlors": {
       "type": "object",

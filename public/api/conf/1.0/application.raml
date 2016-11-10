@@ -13,7 +13,7 @@ types:
   Trustees: !include schemas/trust.json#/properties/trust/properties/trustees
   GetBeneficiaries: !include schemas/get-beneficiaries.json
   Settlors: !include schemas/trust.json#/properties/trust/properties/settlor
-  Protectors: !include schemas/trust.json#/properties/trust/properties/protector
+  GetProtectors: !include schemas/trust.json#/definitions/getprotectors
   NaturalPersons: !include schemas/trust.json#/properties/trust/properties/naturalPersons
   NoChange: !include schemas/no-change.json
   Close: !include schemas/close.json
@@ -167,14 +167,14 @@ types:
           200:
             body:
               application/json:
-                type: Protectors
-                #example: !include examples/protectors.json
+                type: GetProtectors
+                example: !include examples/protectors.json
       put:
         displayName: Update Protectors
         description: Updates all the protectors for the Trust
         body:
           application/json:
-            type: Protectors
+            #type: Protectors
             #example: !include examples/protectors.json
     /no-change:
       type: base
@@ -213,7 +213,7 @@ types:
   /{identifier}:
     type: base
     uriParameters:
-      utr:
+      identifier:
         type: string
         displayName: The SA UTR of the estate.
     get:
