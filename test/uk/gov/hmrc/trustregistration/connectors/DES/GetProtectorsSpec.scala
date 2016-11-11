@@ -59,7 +59,7 @@ class GetProtectorsSpec extends PlaySpec with OneAppPerSuite with DESConnectorMo
 
     "return a BadRequestResponse" when {
       "DES returns a 400 response" in {
-        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).sbtthenReturn(Future.successful(HttpResponse(400, None)))
+        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(400, None)))
         val result = Await.result(SUT.getProtectors("1234"),Duration.Inf)
         result mustBe BadRequestResponse
 
