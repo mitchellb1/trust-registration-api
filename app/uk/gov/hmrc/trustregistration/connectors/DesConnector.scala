@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.trustregistration.connectors
 
+import com.codahale.metrics.Timer
+import play.api.libs.json.Reads
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http._
 import uk.gov.hmrc.trustregistration.audit.TrustsAudit
@@ -379,42 +381,47 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
   }
 
   def getLeadTrustee(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
-
     val uri: String = s"$trustsServiceUrl/$identifier/leadTrustee"
 
-    val timerStart = metrics.startDesConnectorTimer("getLeadTrustee")
+    val endpointName = "getLeadTrustee"
+
+    val timerStart = metrics.startDesConnectorTimer(endpointName)
 
     val result: Future[HttpResponse] = httpGet.GET[HttpResponse](uri)(httpReads, implicitly)
 
+    respond[LeadTrustee](endpointName, identifier, timerStart, result, AuditGetLeadTrusteeIdentifier)
+  }
+
+  private def respond[T](endpointName: String, identifier: String, timer:Timer.Context, result: Future[HttpResponse], auditIdentifier: String)(implicit hc : HeaderCarrier, tjs: Reads[T]): Future[ApplicationResponse] = {
     result.map(f => {
-      timerStart.stop()
+      timer.stop()
       f.status match {
         case 200 => {
-          val details = f.json.asOpt[LeadTrustee]
+          val details = f.json.asOpt[T]
 
           details match {
-            case Some(value: LeadTrustee) => {
-              audit.doAudit("getLeadTrusteeSuccessful", AuditGetLeadTrusteeIdentifier)
+            case Some(value: T) => {
+              audit.doAudit(s"${endpointName}Successful", auditIdentifier)
               GetSuccessResponse(value)
             }
             case _ => {
-              audit.doAudit("getLeadTrusteeFailure", AuditGetLeadTrusteeIdentifier)
+              audit.doAudit(s"${endpointName}Failure", auditIdentifier)
               InternalServerErrorResponse
             }
           }
         }
         case 400 => {
-          audit.doAudit("getLeadTrusteeFailure", AuditGetLeadTrusteeIdentifier)
+          audit.doAudit(s"${endpointName}Failure", auditIdentifier)
           BadRequestResponse
         }
         case 404 => {
-          audit.doAudit("getLeadTrusteeFailure", AuditGetLeadTrusteeIdentifier)
+          audit.doAudit(s"${endpointName}Failure", auditIdentifier)
           NotFoundResponse
         }
       }
     }).recover {
       case _ => {
-        audit.doAudit("getLeadTrusteeFailure", AuditGetLeadTrusteeIdentifier)
+        audit.doAudit(s"${endpointName}Failure", auditIdentifier)
         InternalServerErrorResponse
       }
     }
