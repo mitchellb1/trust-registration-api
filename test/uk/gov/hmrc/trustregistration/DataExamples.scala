@@ -66,6 +66,9 @@ trait JsonExamples {
   val invalidBeneficiariesJson = s"""{"charityBeneficiaries": [$invalidCharityBeneficiary]}"""
 
   val invalidLeadTrusteeJson = s"""{"individual":$validIndividualJson,"company":$validCompanyJson}"""
+
+  val validProtectorsJson = s"""{"individuals":[$validIndividualJson],"companies":[$validCompanyJson]}"""
+  val invalidProtectorsJson = s"""{"individuals":[$invalidIndividualJson],"companies":[$invalidCompanyJson]}"""
 }
 
 trait ScalaDataExamples {
@@ -146,5 +149,10 @@ trait ScalaDataExamples {
     individualBeneficiaries = Some(List(individualBeneficiary)),
     charityBeneficiaries = Some(List(charityBeneficiary)),
     otherBeneficiaries = Some(List(otherBeneficiary))
+  )
+
+  val protectors = Protectors(
+    individuals = Some(List(individual)),
+    companies = Some(List(company))
   )
 }

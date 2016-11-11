@@ -982,8 +982,8 @@
         }
       },
       "oneOf" : [
-        {"required" : "deceased"},
-        {"required" : "personalRepresentative"}
+        {"required" : ["deceased"]},
+        {"required" : ["personalRepresentative"]}
       ],
       "required" : [
         "isCreatedByWill",
@@ -991,6 +991,60 @@
         "adminPeriodFinishedDate",
         "incomeTaxDueMoreThan10000"
       ]
+    },
+    "api-responses": {
+      "hateoas": {
+        "type": "object",
+        "properties": {
+          "_links": {
+            "type": "object",
+            "properties": {
+              "self": {
+                "type": "object",
+                "properties": {
+                  "href": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "href"
+                ]
+              },
+              "trust": {
+                "type": "object",
+                "properties": {
+                  "href": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "href"
+                ]
+              }
+            },
+            "required": [
+              "self",
+              "trust"
+            ]
+          }
+        }
+      },
+      "get-protectors": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/protectors"
+          },
+          {
+            "$ref": "#/definitions/api-responses/hateoas"
+          }
+        ],
+        "required": [
+          "individuals",
+          "companies",
+          "_links"
+        ]
+      }
     }
   }
 }

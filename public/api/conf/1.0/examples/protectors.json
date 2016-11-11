@@ -39,6 +39,14 @@
       },
       "telephoneNumber": "0191 234 5678"
     }
-  ]
+  ],
+  "_links": {
+    "self": {
+      "href" : "/trusts/2234567890/protectors"
+    },
+    "trust": {
+      "href" : "/trusts/2234567890"
+    }
+  }
 }
 
