@@ -1026,8 +1026,8 @@
         }
       },
       "oneOf" : [
-        {"required" : "deceased"},
-        {"required" : "personalRepresentative"}
+        {"required" : ["deceased"]},
+        {"required" : ["personalRepresentative"]}
       ],
       "required" : [
         "isCreatedByWill",
