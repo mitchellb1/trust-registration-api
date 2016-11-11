@@ -41,6 +41,7 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
   val AuditCloseEstateIdentifier: String = "trustRegistration_closeEstate"
   val AuditGetTrusteesIdentifier: String = "trustRegistration_getTrustees"
   val AuditGetEstateIdentifier: String = "trustRegistration_getEstate"
+  val AuditGetSettlorsIdentifier: String = "trustRegistration_getSettlors"
   val AuditGetNaturalPersonsIdentifier: String = "trustRegistration_getNaturalPersons"
   val AuditGetTrustContactDetailsIdentifier: String = "trustRegistration_getTrustContactDetails"
   val AuditGetLeadTrusteeIdentifier: String = "trustRegistration_getLeadTrustee"
@@ -50,323 +51,106 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
   lazy val trustsServiceUrl = s"$desUrl/trust-registration-stub/trusts"
   lazy val estatesServiceUrl = s"$desUrl/trust-registration-stub/estates"
 
+  def getLeadTrustee(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
+    val uri: String = s"$trustsServiceUrl/$identifier/leadTrustee"
 
+    respond[LeadTrustee](
+      desResponse = httpGet.GET[HttpResponse](uri)(httpReads, implicitly),
+      auditIdentifier = AuditGetLeadTrusteeIdentifier,
+      timer = metrics.startDesConnectorTimer("getLeadTrustee"))
+  }
 
+  def getBeneficiaries(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
+    val uri: String = s"$trustsServiceUrl/$identifier/beneficiaries"
+
+    respond[Beneficiaries](
+      desResponse = httpGet.GET[HttpResponse](uri)(httpReads, implicitly),
+      auditIdentifier = AuditGetBeneficiariesIdentifier,
+      timer = metrics.startDesConnectorTimer("getBeneficiaries"))
+  }
+
+  def getEstate(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
+    val uri: String = s"$estatesServiceUrl/$identifier"
+
+    respond[Estate](
+      desResponse = httpGet.GET[HttpResponse](uri)(httpReads, implicitly),
+      auditIdentifier = AuditGetEstateIdentifier,
+      timer = metrics.startDesConnectorTimer("getEstate"))
+  }
+
+  def getTrustees(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
+    val uri: String = s"$trustsServiceUrl/$identifier/trustees"
+
+    respond[List[Individual]](
+      desResponse = httpGet.GET[HttpResponse](uri)(httpReads, implicitly),
+      auditIdentifier = AuditGetTrusteesIdentifier,
+      timer = metrics.startDesConnectorTimer("getTrustees"))
+  }
+
+  def getSettlors(identifier: String)(implicit hc: HeaderCarrier): Future[ApplicationResponse] = {
+    val uri: String = s"$trustsServiceUrl/$identifier/settlors"
+
+    respond[Settlors](
+      desResponse = httpGet.GET[HttpResponse](uri)(httpReads, implicitly),
+      auditIdentifier = AuditGetSettlorsIdentifier,
+      timer = metrics.startDesConnectorTimer("getSettlors"))
+  }
+
+  def getNaturalPersons(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
+    val uri: String = s"$trustsServiceUrl/$identifier/naturalPersons"
+
+    respond[List[Individual]](
+      desResponse = httpGet.GET[HttpResponse](uri)(httpReads, implicitly),
+      auditIdentifier = AuditGetNaturalPersonsIdentifier,
+      timer = metrics.startDesConnectorTimer("getNaturalPersons"))
+  }
+
+  def getTrustContactDetails(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
+    val uri: String = s"$trustsServiceUrl/$identifier/contactDetails"
+
+    respond[TrustContactDetails](
+      desResponse = httpGet.GET[HttpResponse](uri)(httpReads, implicitly),
+      auditIdentifier = AuditGetTrustContactDetailsIdentifier,
+      timer = metrics.startDesConnectorTimer("getTrustContactDetails"))
+  }
 
   def registerTrust(doc: TrustRegistrationDocument)(implicit hc : HeaderCarrier) = {
-
     val uri: String = s"$trustsServiceUrl/register"
 
-    val result: Future[HttpResponse] = httpPost.POST[TrustRegistrationDocument,HttpResponse](uri,doc)(implicitly, httpReads, implicitly)
-
-    getRegisterResponse(result)
+    getRegisterResponse(httpPost.POST[TrustRegistrationDocument,HttpResponse](uri,doc)(implicitly, httpReads, implicitly))
   }
-
 
   def registerEstate(doc: EstateRegistrationDocument)(implicit hc : HeaderCarrier) = {
-
     val uri: String = s"$estatesServiceUrl/register"
 
-    val result: Future[HttpResponse] = httpPost.POST[EstateRegistrationDocument,HttpResponse](uri,doc)(implicitly, httpReads, implicitly)
-
-    getRegisterResponse(result)
-  }
-
-  def noChange(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
-    val uri: String = s"$trustsServiceUrl/$identifier/no-change"
-
-    val timerStart = metrics.startDesConnectorTimer("no-change")
-
-    val result: Future[HttpResponse] = httpPut.PUT[String, HttpResponse](uri, identifier)(implicitly, httpReads, implicitly)
-
-    result.map(f=> {
-      timerStart.stop()
-      f.status match {
-        case 204 => {
-          audit.doAudit("noChangeTrustSuccessful", AuditNoChangeIdentifier)
-          SuccessResponse
-        }
-        case 400 => {
-          audit.doAudit("noChangeTrustFailure", AuditNoChangeIdentifier)
-          BadRequestResponse
-        }
-        case 404 => {
-          audit.doAudit("noChangeTrustFailure", AuditNoChangeIdentifier)
-          NotFoundResponse
-        }
-        case _ => {
-          audit.doAudit("noChangeTrustFailure", AuditNoChangeIdentifier)
-          InternalServerErrorResponse
-        }
-      }
-    }).recover {
-      case _ => {
-        audit.doAudit("noChangeTrustFailure", AuditNoChangeIdentifier)
-        InternalServerErrorResponse
-      }
-    }
+    getRegisterResponse(httpPost.POST[EstateRegistrationDocument,HttpResponse](uri,doc)(implicitly, httpReads, implicitly))
   }
 
   def closeTrust(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
     val uri: String = s"$trustsServiceUrl/$identifier/closeTrust"
 
-    closeTrustOrEstate(identifier, uri, "Trust",AuditCloseTrustIdentifier)
+    respondNoContent(
+      desResponse = httpPut.PUT[String, HttpResponse](uri, identifier)(implicitly, httpReads, implicitly),
+      auditIdentifier = AuditCloseTrustIdentifier,
+      timer = metrics.startDesConnectorTimer("closeTrust"))
   }
 
   def closeEstate(identifier: String)(implicit hc: HeaderCarrier): Future[ApplicationResponse] = {
     val uri: String = s"$estatesServiceUrl/$identifier/closeEstate"
 
-    closeTrustOrEstate(identifier, uri, "Estate",AuditCloseEstateIdentifier)
+    respondNoContent(
+      desResponse = httpPut.PUT[String, HttpResponse](uri, identifier)(implicitly, httpReads, implicitly),
+      auditIdentifier = AuditCloseEstateIdentifier,
+      timer = metrics.startDesConnectorTimer("closeEstate"))
   }
 
-  def getEstate(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
-    val uri: String = s"$estatesServiceUrl/$identifier"
-    val timerStart = metrics.startDesConnectorTimer("getEstate")
-    val result: Future[HttpResponse] = httpGet.GET[HttpResponse](uri)(httpReads, implicitly)
+  def noChange(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
+    val uri: String = s"$trustsServiceUrl/$identifier/no-change"
 
-    result.map(f => {
-      timerStart.stop()
-      f.status match {
-        case 200 => {
-          val trustees = f.json.asOpt[Estate]
-
-          trustees match {
-            case Some(value: Estate) => {
-              audit.doAudit("getEstateSuccessful", AuditGetEstateIdentifier)
-              GetSuccessResponse(value)
-            }
-            case _ => {
-              audit.doAudit("getEstateFailure", AuditGetEstateIdentifier)
-              InternalServerErrorResponse
-            }
-          }
-        }
-        case 400 => {
-          audit.doAudit("getEstateFailure", AuditGetEstateIdentifier)
-          BadRequestResponse
-        }
-        case 404 => {
-          audit.doAudit("getEstateFailure", AuditGetEstateIdentifier)
-          NotFoundResponse
-        }
-        case _ => {
-          audit.doAudit("getEstateFailure", AuditGetEstateIdentifier)
-          InternalServerErrorResponse
-        }
-      }
-    }).recover {
-      case _ => {
-        audit.doAudit("getEstateFailure", AuditGetEstateIdentifier)
-        InternalServerErrorResponse
-      }
-    }
-
-  }
-
-  def getTrustees(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
-
-    val uri: String = s"$trustsServiceUrl/$identifier/trustees"
-
-    val timerStart = metrics.startDesConnectorTimer("getTrustees")
-
-    val result: Future[HttpResponse] = httpGet.GET[HttpResponse](uri)(httpReads, implicitly)
-
-    result.map(f => {
-      timerStart.stop()
-      f.status match {
-        case 200 => {
-          val trustees = f.json.asOpt[List[Individual]]
-
-          trustees match {
-            case Some(value: List[Individual]) => {
-              audit.doAudit("getTrusteesSuccessful", AuditGetTrusteesIdentifier)
-              GetSuccessResponse(value)
-            }
-            case _ => {
-              audit.doAudit("getTrusteesFailure", AuditGetTrusteesIdentifier)
-              InternalServerErrorResponse
-            }
-          }
-        }
-        case 400 => {
-          audit.doAudit("getTrusteesFailure", AuditGetTrusteesIdentifier)
-          BadRequestResponse
-        }
-        case 404 => {
-          audit.doAudit("getTrusteesFailure", AuditGetTrusteesIdentifier)
-          NotFoundResponse
-        }
-        case _ => {
-          audit.doAudit("getTrusteesFailure", AuditGetTrusteesIdentifier)
-          InternalServerErrorResponse
-        }
-      }
-    }).recover {
-      case _ => {
-        audit.doAudit("getTrusteesFailure", AuditGetTrusteesIdentifier)
-        InternalServerErrorResponse
-      }
-    }
-  }
-
-
-  def getSettlors(identifier: String)(implicit hc: HeaderCarrier): Future[ApplicationResponse] = {
-
-    val uri: String = s"$trustsServiceUrl/$identifier/settlors"
-
-    val result: Future[HttpResponse] = httpGet.GET[HttpResponse](uri)(httpReads, implicitly)
-
-    result.map(f => {
-      f.status match {
-        case 200 => {
-          val settlors = f.json.asOpt[Settlors]
-          settlors match {
-            case Some(value: Settlors) => {
-              GetSuccessResponse(value)
-            }
-          }
-        }
-        case 400 => {
-          BadRequestResponse
-        }
-        case 404 => {
-          NotFoundResponse
-        }
-        case _ =>{
-          InternalServerErrorResponse
-        }
-      }
-    }).recover {
-      case _ => {
-        InternalServerErrorResponse
-      }
-    }
-  }
-
-  def getNaturalPersons(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
-
-    val uri: String = s"$trustsServiceUrl/$identifier/naturalPersons"
-
-    val timerStart = metrics.startDesConnectorTimer("getNaturalPersons")
-
-    val result: Future[HttpResponse] = httpGet.GET[HttpResponse](uri)(httpReads, implicitly)
-
-    result.map(f => {
-      timerStart.stop()
-      f.status match {
-        case 200 => {
-          val naturalPersons = f.json.asOpt[List[Individual]]
-
-          naturalPersons match {
-            case Some(value: List[Individual]) => {
-              audit.doAudit("getNaturalPersonsSuccessful", AuditGetNaturalPersonsIdentifier)
-              GetSuccessResponse(value)
-            }
-            case _ => {
-              audit.doAudit("getNaturalPersonsFailure", AuditGetNaturalPersonsIdentifier)
-              InternalServerErrorResponse
-            }
-          }
-        }
-        case 400 => {
-          audit.doAudit("getNaturalPersonsFailure", AuditGetNaturalPersonsIdentifier)
-          BadRequestResponse
-        }
-        case 404 => {
-          audit.doAudit("getNaturalPersonsFailure", AuditGetNaturalPersonsIdentifier)
-          NotFoundResponse
-        }
-        case _ => {
-          audit.doAudit("getNaturalPersonsFailure", AuditGetNaturalPersonsIdentifier)
-          InternalServerErrorResponse
-        }
-      }
-    }).recover {
-      case _ => {
-        audit.doAudit("getNaturalPersonsFailure", AuditGetNaturalPersonsIdentifier)
-        InternalServerErrorResponse
-      }
-    }
-  }
-
-  def getTrustContactDetails(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
-
-    val uri: String = s"$trustsServiceUrl/$identifier/contactDetails"
-
-    val timerStart = metrics.startDesConnectorTimer("getTrustContactDetails")
-
-    val result: Future[HttpResponse] = httpGet.GET[HttpResponse](uri)(httpReads, implicitly)
-
-    result.map(f => {
-      timerStart.stop()
-      f.status match {
-        case 200 => {
-          val details = f.json.asOpt[TrustContactDetails]
-
-          details match {
-            case Some(value: TrustContactDetails) => {
-              audit.doAudit("getTrustContactDetailsSuccessful", AuditGetTrustContactDetailsIdentifier)
-              GetSuccessResponse(value)
-            }
-            case _ => {
-              audit.doAudit("getTrustContactDetailsFailure", AuditGetTrustContactDetailsIdentifier)
-              InternalServerErrorResponse
-            }
-          }
-        }
-        case 400 => {
-          audit.doAudit("getTrustContactDetailsFailure", AuditGetTrustContactDetailsIdentifier)
-          BadRequestResponse
-        }
-        case 404 => {
-          audit.doAudit("getTrustContactDetailsFailure", AuditGetTrustContactDetailsIdentifier)
-          NotFoundResponse
-        }
-        case _ => {
-          audit.doAudit("getTrustContactDetailsFailure", AuditGetTrustContactDetailsIdentifier)
-          InternalServerErrorResponse
-        }
-      }
-    }).recover {
-      case _ => {
-        audit.doAudit("getTrustContactDetailsFailure", AuditGetTrustContactDetailsIdentifier)
-        InternalServerErrorResponse
-      }
-    }
-  }
-
-  private def closeTrustOrEstate(identifier: String, uri: String, endpoint: String, auditIdentifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
-
-    val timerStart = metrics.startDesConnectorTimer(s"close${endpoint}")
-
-    val result: Future[HttpResponse] = httpPut.PUT[String, HttpResponse](uri, identifier)(implicitly, httpReads, implicitly)
-
-    result.map(f => {
-      timerStart.stop()
-      f.status match {
-        case 204 => {
-          audit.doAudit(s"close${endpoint}Successful", auditIdentifier)
-          SuccessResponse
-        }
-        case 400 => {
-          audit.doAudit(s"close${endpoint}Failure", auditIdentifier)
-          BadRequestResponse
-        }
-        case 404 => {
-          audit.doAudit(s"close${endpoint}Failure", auditIdentifier)
-          NotFoundResponse
-        }
-        case _ => {
-          audit.doAudit(s"close${endpoint}Failure", auditIdentifier)
-          InternalServerErrorResponse
-        }
-      }
-    }).recover {
-      case _ => {
-        audit.doAudit(s"close${endpoint}Failure", auditIdentifier)
-        InternalServerErrorResponse
-      }
-    }
+    respondNoContent(
+      desResponse = httpPut.PUT[String, HttpResponse](uri, identifier)(implicitly, httpReads, implicitly),
+      auditIdentifier = AuditGetTrustContactDetailsIdentifier,
+      timer = metrics.startDesConnectorTimer("noChange"))
   }
 
   private def getRegisterResponse(result: Future[HttpResponse]): Future[Either[String, TRN] with Product with Serializable] = {
@@ -380,90 +164,60 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
     })
   }
 
-  def getLeadTrustee(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
-    val uri: String = s"$trustsServiceUrl/$identifier/leadTrustee"
-
-    val endpointName = "getLeadTrustee"
-
-    val timerStart = metrics.startDesConnectorTimer(endpointName)
-
-    val result: Future[HttpResponse] = httpGet.GET[HttpResponse](uri)(httpReads, implicitly)
-
-    respond[LeadTrustee](endpointName, identifier, timerStart, result, AuditGetLeadTrusteeIdentifier)
-  }
-
-  private def respond[T](endpointName: String, identifier: String, timer:Timer.Context, result: Future[HttpResponse], auditIdentifier: String)(implicit hc : HeaderCarrier, tjs: Reads[T]): Future[ApplicationResponse] = {
-    result.map(f => {
+  private def respondNoContent(desResponse: Future[HttpResponse], auditIdentifier: String, timer:Timer.Context)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
+    desResponse.map(f => {
       timer.stop()
       f.status match {
-        case 200 => {
-          val details = f.json.asOpt[T]
-
-          details match {
-            case Some(value: T) => {
-              audit.doAudit(s"${endpointName}Successful", auditIdentifier)
-              GetSuccessResponse(value)
-            }
-            case _ => {
-              audit.doAudit(s"${endpointName}Failure", auditIdentifier)
-              InternalServerErrorResponse
-            }
-          }
+        case 204 => {
+          audit.doAudit("Successful", auditIdentifier)
+          SuccessResponse
         }
         case 400 => {
-          audit.doAudit(s"${endpointName}Failure", auditIdentifier)
+          audit.doAudit("Failure", auditIdentifier)
           BadRequestResponse
         }
         case 404 => {
-          audit.doAudit(s"${endpointName}Failure", auditIdentifier)
+          audit.doAudit("Failure", auditIdentifier)
           NotFoundResponse
         }
       }
     }).recover {
       case _ => {
-        audit.doAudit(s"${endpointName}Failure", auditIdentifier)
+        audit.doAudit("Failure", auditIdentifier)
         InternalServerErrorResponse
       }
     }
   }
 
-  def getBeneficiaries(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
-
-    val uri: String = s"$trustsServiceUrl/$identifier/beneficiaries"
-
-    val timerStart = metrics.startDesConnectorTimer("getBeneficiaries")
-
-    val result: Future[HttpResponse] = httpGet.GET[HttpResponse](uri)(httpReads, implicitly)
-
-    result.map(f => {
-      timerStart.stop()
+  private def respond[T](desResponse: Future[HttpResponse], auditIdentifier: String, timer:Timer.Context)(implicit hc : HeaderCarrier, tjs: Reads[T]): Future[ApplicationResponse] = {
+    desResponse.map(f => {
+      timer.stop()
       f.status match {
         case 200 => {
-          val details = f.json.asOpt[Beneficiaries]
-
+          val details = f.json.asOpt[T]
           details match {
-            case Some(value: Beneficiaries) => {
-              audit.doAudit("getBeneficiariesSuccessful", AuditGetBeneficiariesIdentifier)
+            case Some(value: T) => {
+              audit.doAudit("Successful", auditIdentifier)
               GetSuccessResponse(value)
             }
             case _ => {
-              audit.doAudit("getBeneficiariesFailure", AuditGetBeneficiariesIdentifier)
+              audit.doAudit("Failure", auditIdentifier)
               InternalServerErrorResponse
             }
           }
         }
         case 400 => {
-          audit.doAudit("getBeneficiariesFailure", AuditGetBeneficiariesIdentifier)
+          audit.doAudit("Failure", auditIdentifier)
           BadRequestResponse
         }
         case 404 => {
-          audit.doAudit("getBeneficiariesFailure", AuditGetBeneficiariesIdentifier)
+          audit.doAudit("Failure", auditIdentifier)
           NotFoundResponse
         }
       }
     }).recover {
       case _ => {
-        audit.doAudit("getBeneficiariesFailure", AuditGetBeneficiariesIdentifier)
+        audit.doAudit("Failure", auditIdentifier)
         InternalServerErrorResponse
       }
     }

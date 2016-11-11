@@ -31,8 +31,8 @@ import scala.concurrent.{Await, Future}
 
 class GetBeneficiariesSpec extends PlaySpec with OneAppPerSuite with DESConnectorMocks with BeforeAndAfter with JsonExamples with ScalaDataExamples {
 
-  val auditSuccessMessage = "getBeneficiariesSuccessful"
-  val auditFailureMessage = "getBeneficiariesFailure"
+  val auditSuccessMessage = "Successful"
+  val auditFailureMessage = "Failure"
 
   before {
     reset(mockAudit) // resets mock audit before each test to ensure the verify(mockAudit, times(1)) test is accurate
