@@ -46,6 +46,7 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
   val AuditGetTrustContactDetailsIdentifier: String = "trustRegistration_getTrustContactDetails"
   val AuditGetLeadTrusteeIdentifier: String = "trustRegistration_getLeadTrustee"
   val AuditGetBeneficiariesIdentifier: String = "trustRegistration_getBeneficiaries"
+  val AuditGetProtectorsIdentifier: String = "trustRegistration_getProtectors"
 
   lazy val desUrl = baseUrl("des")
   lazy val trustsServiceUrl = s"$desUrl/trust-registration-stub/trusts"
@@ -112,6 +113,15 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
       desResponse = httpGet.GET[HttpResponse](uri)(httpReads, implicitly),
       auditIdentifier = AuditGetTrustContactDetailsIdentifier,
       timer = metrics.startDesConnectorTimer("getTrustContactDetails"))
+  }
+
+  def getProtectors(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {
+    val uri: String = s"$trustsServiceUrl/$identifier/protectors"
+
+    respond[Protectors](
+      desResponse = httpGet.GET[HttpResponse](uri)(httpReads, implicitly),
+      auditIdentifier = AuditGetProtectorsIdentifier,
+      timer = metrics.startDesConnectorTimer("getProtectors"))
   }
 
   def registerTrust(doc: TrustRegistrationDocument)(implicit hc : HeaderCarrier) = {

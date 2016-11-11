@@ -24,13 +24,12 @@ class ProtectorsSpec extends PlaySpec with JsonExamples with ScalaDataExamples {
 
   "Protectors" must {
     "serialize to json" in {
-      val protectors = new Protectors(individuals = Some(List(individual)), companies = Some(List(company)))
       val details = Json.toJson[Protectors](protectors).toString()
       details must include ("Spaceman")
     }
     "output a none value as an empty array for individuals and companies" in {
-      val protectors = new Protectors(None, None)
-      val details = Json.toJson[Protectors](protectors).toString()
+      val emptyProtectors = new Protectors(None, None)
+      val details = Json.toJson[Protectors](emptyProtectors).toString()
       details must be ("""{"individuals":[],"companies":[]}""")
     }
   }
