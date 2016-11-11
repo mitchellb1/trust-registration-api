@@ -17,25 +17,28 @@
 package uk.gov.hmrc.trustregistration.controllers
 
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.Action
+import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models.TRN
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
 
 import scala.concurrent.Future
 
-object RegisterTrustSandboxController extends RegisterTrustController {
-    override val registerTrustService = RegisterTrustService
-    override val metrics = ApplicationMetrics
-
+trait RegisterTrustSandboxController extends RegisterTrustController {
     override def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
-      Future.successful(Ok(Json.toJson(TRN("TRN-1234"))))
+      Future.successful(Created(Json.toJson(TRN("TRN-1234"))))
     }
-    override def noChange(id: String) = Action.async { implicit request =>
+
+    override def noChange(identifier: String): Action[AnyContent] = Action.async { implicit request =>
       Future.successful(Ok)
     }
 
-    override def closeTrust(id: String) = Action.async { implicit request =>
+    override def closeTrust(identifier: String): Action[AnyContent] = Action.async { implicit request =>
       Future.successful(Ok)
     }
+}
+
+object RegisterTrustSandboxController extends RegisterTrustSandboxController {
+  override val registerTrustService = RegisterTrustService
+  override val metrics = ApplicationMetrics
 }
