@@ -5,11 +5,11 @@
       "givenName": "Joe",
       "otherName": "Fred",
       "familyName": "Bloggs",
-      "dateOfBirth": "10/10/1967",
+      "dateOfBirth": "1967-10-10",
       "nino": "WA123456A",
       "passport": {
         "identifier": "123435egxb",
-        "expiryDate": "12/12/2017",
+        "expiryDate": "2017-12-12",
         "countryOfIssue": "UK"
       },
       "correspondenceAddress": {
