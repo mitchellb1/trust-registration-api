@@ -21,12 +21,5 @@ import play.api.libs.json.{Json, Writes}
 case class Protectors(individuals: Option[List[Individual]] = None, companies: Option[List[Company]] = None)
 
 object Protectors{
-  implicit val protectorsWrites: Writes[Protectors] = new Writes[Protectors] {
-    def writes(b:Protectors) = Json.obj(
-      "individuals" -> b.individuals.getOrElse[List[Individual]](List[Individual]()),
-      "companies" -> b.companies.getOrElse[List[Company]](List[Company]())
-    )
-  }
-
-  implicit val protectorsReads = Json.reads[Protectors]
+  implicit val protectorsFormats = Json.format[Protectors]
 }

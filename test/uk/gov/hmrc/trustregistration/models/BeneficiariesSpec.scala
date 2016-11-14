@@ -17,6 +17,7 @@
 package uk.gov.hmrc.trustregistration.models
 
 import org.scalatestplus.play.PlaySpec
+import play.api.libs.json.Json
 import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 
 class BeneficiariesSpec extends PlaySpec with JsonExamples with ScalaDataExamples {
@@ -41,6 +42,11 @@ class BeneficiariesSpec extends PlaySpec with JsonExamples with ScalaDataExample
         val ex = the[IllegalArgumentException] thrownBy Beneficiaries(otherBeneficiaries = Some(List[OtherBeneficiary]()))
         ex.getMessage() contains invalidBeneficiariesError
       }
+    }
+    "exclude none values from the serialized response" in {
+      val indBeneficiaries = new Beneficiaries(individualBeneficiaries = Some(List(individualBeneficiary)))
+      val details = Json.toJson[Beneficiaries](indBeneficiaries).toString()
+      details mustNot include ("charityBeneficiaries")
     }
   }
 
