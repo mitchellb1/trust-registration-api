@@ -570,7 +570,6 @@ class RegisterTrustControllerSpec extends PlaySpec
           """"passport":{"identifier":"IDENTIFIER","expiryDate":"2020-01-01","countryOfIssue":"UK"},""" +
           """"correspondenceAddress":{"isNonUkAddress":false,"addressLine1":"Line 1","addressLine2":"Line 2","addressLine3":"Line 3",""" +
           """"addressLine4":"Line 4","postcode":"NE1 2BR","country":"UK"}},"isVulnerable":false,"isIncomeAtTrusteeDiscretion":true,"shareOfIncome":30}],""" +
-          """"employeeBeneficiaries":[],"directorBeneficiaries":[],""" +
           """"charityBeneficiaries":[{"name":"Charity Name","number":"123456789087654",""" +
           """"correspondenceAddress":{"isNonUkAddress":false,"addressLine1":"Line 1","addressLine2":"Line 2","addressLine3":"Line 3",""" +
           """"addressLine4":"Line 4","postcode":"NE1 2BR","country":"UK"},"isIncomeAtTrusteeDiscretion":false,"shareOfIncome":20}],""" +
