@@ -66,6 +66,10 @@ trait RegisterTrustService {
     desConnector.getBeneficiaries(identifier)
   }
 
+  def getProtectors(identifier: String)(implicit hc: HeaderCarrier): Future[ApplicationResponse] = {
+    desConnector.getProtectors(identifier)
+  }
+
   def getEstate(identifier: String)(implicit hc: HeaderCarrier): Future[ApplicationResponse] = {
     desConnector.getEstate(identifier)
   }
