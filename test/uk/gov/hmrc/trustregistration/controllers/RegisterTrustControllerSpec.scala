@@ -624,6 +624,72 @@ class RegisterTrustControllerSpec extends PlaySpec
 
   }
 
+  "Get Protectors endpoint" must {
+
+    "return 200 ok with valid json" when {
+      "the endpoint is called with a valid identifier" in {
+        when(mockRegisterTrustService.getProtectors(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(new GetSuccessResponse[Protectors](protectors)))
+
+        val result = SUT.getProtectors("sadfg").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe OK
+        contentAsString(result) mustBe(
+          """{"individuals":[{"title":"Dr","givenName":"Leo","familyName":"Spaceman","dateOfBirth":"1800-01-01",""" +
+          """"passport":{"identifier":"IDENTIFIER","expiryDate":"2020-01-01","countryOfIssue":"UK"},""" +
+          """"correspondenceAddress":{"isNonUkAddress":false,"addressLine1":"Line 1","addressLine2":"Line 2",""" +
+          """"addressLine3":"Line 3","addressLine4":"Line 4","postcode":"NE1 2BR","country":"UK"}}],"companies":[""" +
+          """{"name":"Company","correspondenceAddress":{"isNonUkAddress":false,"addressLine1":"Line 1",""" +
+          """"addressLine2":"Line 2","addressLine3":"Line 3","addressLine4":"Line 4","postcode":"NE1 2BR","country":"UK"}""" +
+          ""","telephoneNumber":"12345","referenceNumber":"AAA5221"}]}"""
+        )
+      }
+    }
+
+    "return 404 not found" when {
+      "the endpoint is called with an identifier that can't be found" in {
+        when(mockRegisterTrustService.getProtectors(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(NotFoundResponse))
+
+        val result = SUT.getProtectors("404NotFound").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe NOT_FOUND
+      }
+    }
+
+    "return 400" when {
+      "the  endpoint is called with an invalid identifier" in {
+        when(mockRegisterTrustService.getProtectors(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(BadRequestResponse))
+
+        val result = SUT.getProtectors("sadfg").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+
+    "return 500" when {
+      "something is broken" in {
+        when(mockRegisterTrustService.getProtectors(any[String])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(InternalServerErrorResponse))
+
+        val result = SUT.getProtectors("sadfg").apply(FakeRequest("GET", ""))
+        status(result) mustBe INTERNAL_SERVER_ERROR
+      }
+    }
+
+    "return 401" when {
+      "the endpoint is called and authentication credentials are missing or incorrect" in {
+        when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "NOT_AUTHORISED"))
+        val result = SUT.getProtectors("12345").apply(FakeRequest("GET", ""))
+
+        status(result) mustBe UNAUTHORIZED
+      }
+    }
+
+  }
+
+
   object SUT extends RegisterTrustController {
     override implicit def hc(implicit rh: RequestHeader): HeaderCarrier = mockHC
 
