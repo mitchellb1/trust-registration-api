@@ -86,15 +86,5 @@ case class Beneficiaries(
 }
 
 object Beneficiaries{
-  implicit val beneficiariesWrites: Writes[Beneficiaries] = new Writes[Beneficiaries] {
-    def writes(b:Beneficiaries) = Json.obj(
-      "individualBeneficiaries" -> b.individualBeneficiaries.getOrElse[List[IndividualBeneficiary]](List[IndividualBeneficiary]()),
-      "employeeBeneficiaries" -> b.employeeBeneficiaries.getOrElse[List[EmployeeBeneficiary]](List[EmployeeBeneficiary]()),
-      "directorBeneficiaries" -> b.directorBeneficiaries.getOrElse[List[DirectorBeneficiary]](List[DirectorBeneficiary]()),
-      "charityBeneficiaries" -> b.charityBeneficiaries.getOrElse[List[CharityBeneficiary]](List[CharityBeneficiary]()),
-      "otherBeneficiaries" -> b.otherBeneficiaries.getOrElse[List[OtherBeneficiary]](List[OtherBeneficiary]())
-    )
-  }
-
-  implicit val beneficiariesReads = Json.reads[Beneficiaries]
+  implicit val beneficiariesFormat = Json.format[Beneficiaries]
 }
