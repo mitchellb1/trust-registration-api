@@ -1,0 +1,24 @@
+{
+  "name" : "Test Trust",
+  "correspondenceAddress" : "{ADDRESS}",
+  "telephoneNumber" : "0044 12345 12345",
+  "currentYear" : "1970",
+  "commencementDate" : "1940",
+  "legality" : "{LEGALITY}",
+  "isTrustUkResident" : true,
+  "leadTrustee" : {
+    "individual" : "{INDIVIDUAL}"
+  },
+  "trustees" : [
+    "{INDIVIDUAL}","{INDIVIDUAL}","{INDIVIDUAL}","{INDIVIDUAL}"
+  ],
+  "protectors" : {
+    "individuals" :[
+      "{INDIVIDUAL}","{INDIVIDUAL}"
+    ]
+  },
+  "naturalPeople" : [
+    "{INDIVIDUAL}","{INDIVIDUAL}","{INDIVIDUAL}","{INDIVIDUAL}"
+  ],
+  "willIntestacyTrust" : "{WILLINTESTACYTRUST}"
+}

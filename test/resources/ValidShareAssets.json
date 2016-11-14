@@ -1,0 +1,16 @@
+[
+  {
+    "shareNumber" : 1234,
+    "shareClass" : "Test",
+    "shareType" : "Test",
+    "companyRegistrationNumber" : "12345",
+    "shareValue" : 12345
+  },
+  {
+    "shareNumber" : 1234,
+    "shareClass" : "Test",
+    "shareType" : "Test",
+    "companyRegistrationNumber" : "12345",
+    "shareValue" : 12345
+  }
+]

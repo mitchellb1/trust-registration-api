@@ -61,6 +61,8 @@ trait JsonExamples {
     .mkString
     .replace(""""{ADDRESS}"""", validAddressJson)
 
+
+
   val validBeneficiariesJson = s"""{"individualBeneficiaries":[$validIndividualBeneficiary],"charityBeneficiaries":[$validCharityBeneficiary],"otherBeneficiaries":[$validOtherBeneficiary]}"""
 
   val invalidBeneficiariesJson = s"""{"charityBeneficiaries": [$invalidCharityBeneficiary]}"""
@@ -69,9 +71,22 @@ trait JsonExamples {
 
   val validProtectorsJson = s"""{"individuals":[$validIndividualJson],"companies":[$validCompanyJson]}"""
   val invalidProtectorsJson = s"""{"individuals":[$invalidIndividualJson],"companies":[$invalidCompanyJson]}"""
+
+  val validShareAssetsJson = Source.fromFile(getClass.getResource("/ValidShareAssets.json").getPath).mkString
+  val validBusinessAssetsJson = Source.fromFile(getClass.getResource("/ValidBusinessAssets.json").getPath).mkString
+  val validWillIntestacyTrustJson = Source.fromFile(getClass.getResource("/ValidWillIntestacyTrust.json").getPath).mkString
+    .replace("\"{SHAREASSETS}\"", validShareAssetsJson)
+    .replace("\"{BUSINESSASSETS}\"", validBusinessAssetsJson)
+  val validLegalityJson = Source.fromFile(getClass.getResource("/ValidLegality.json").getPath).mkString
+  val validTrustJson = Source.fromFile(getClass.getResource("/ValidTrust.json").getPath).mkString
+    .replace("\"{WILLINTESTACYTRUST}\"", validWillIntestacyTrustJson)
+    .replace("\"{INDIVIDUAL}\"", validIndividualJson)
+    .replace("\"{ADDRESS}\"", validAddressJson)
+    .replace("\"{LEGALITY}\"", validLegalityJson)
 }
 
 trait ScalaDataExamples {
+
   val address = Address(
     isNonUkAddress = false,
     addressLine1 = "Line 1",

@@ -1,0 +1,42 @@
+/*
+ * Copyright 2016 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package uk.gov.hmrc.trustregistration.models
+
+import org.scalatestplus.play.PlaySpec
+
+
+class WillIntestacyTrustSpec extends PlaySpec{
+  "WillIntestacyTrust" must{
+    "throw an exception" when{
+      "there is no assets" in {
+        val ex = the [IllegalArgumentException] thrownBy (WillIntestacyTrust())
+        ex.getMessage() contains  "Must have at least one type of Asset"
+      }
+    }
+
+    "not throw an exception" when {
+      "there is one asset" in {
+        noException should be thrownBy (WillIntestacyTrust(Some(List(2.0f,2.5f))))
+      }
+
+      "there is more than one type of asset" in {
+        val otherAsset = OtherAsset("Test",5.0f)
+        noException should be thrownBy (WillIntestacyTrust(Some(List(2.0f,2.5f)),None,None,None,Some(List(otherAsset))))
+      }
+    }
+  }
+}
