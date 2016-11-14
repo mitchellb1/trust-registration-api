@@ -20,21 +20,21 @@ import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
 
 
-class WillIntestacyTrustSpec extends PlaySpec with ScalaDataExamples{
-  "WillIntestacyTrust" must{
+class EmploymentTrustSpec extends PlaySpec with ScalaDataExamples {
+  "Employemnt Trust" must{
     "throw an exception" when{
       "there is no assets" in {
         val assets = Assets(None)
-        val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(assets,beneficiaries, individual))
+        val ex = the[IllegalArgumentException] thrownBy (EmploymentTrust(assets,settlors,beneficiaries,true))
         ex.getMessage() contains  "Must have at least one type of Asset"
       }
 
       "the wrong Beneficiaries are defined" in {
         val assets = Assets(None)
 
-        val beneficiaries = Beneficiaries(None,Some(List(employeeBeneficiary)))
+        val beneficiaries = Beneficiaries(None,None,None,Some(List(charityBeneficiary)))
 
-        val ex = the[IllegalArgumentException] thrownBy WillIntestacyTrust(assets,beneficiaries, individual)
+        val ex = the[IllegalArgumentException] thrownBy EmploymentTrust(assets,settlors,beneficiaries, true)
         ex.getMessage() contains  "Must have at least one required Beneficiary"
       }
     }
@@ -42,13 +42,13 @@ class WillIntestacyTrustSpec extends PlaySpec with ScalaDataExamples{
     "not throw an exception" when {
       "there is one asset" in {
         val assets = Assets(Some(List(2.0f,2.5f)))
-        noException should be thrownBy (WillIntestacyTrust(assets,beneficiaries, individual))
+        noException should be thrownBy (EmploymentTrust(assets,settlors,beneficiaries,true))
       }
 
       "there is more than one type of asset" in {
-        val otherAsset = OtherAsset("Test",5.0f)
-        val assets = Assets(Some(List(2.0f,2.5f)),None,None,None,None,Some(List(otherAsset)))
-        noException should be thrownBy (WillIntestacyTrust(assets,beneficiaries, individual))
+        val propertyAssets = PropertyAssets(address,2.2f)
+        val assets = Assets(Some(List(2.0f,2.5f)),Some(List(propertyAssets)))
+        noException should be thrownBy (EmploymentTrust(assets,settlors,beneficiaries,true))
       }
     }
   }

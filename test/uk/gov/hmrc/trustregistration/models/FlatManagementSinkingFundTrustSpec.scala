@@ -20,35 +20,26 @@ import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
 
 
-class WillIntestacyTrustSpec extends PlaySpec with ScalaDataExamples{
-  "WillIntestacyTrust" must{
+class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples {
+  "Flat Management Sinking Fund Trust" must {
     "throw an exception" when{
       "there is no assets" in {
         val assets = Assets(None)
-        val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(assets,beneficiaries, individual))
+        val ex = the[IllegalArgumentException] thrownBy (FlatManagementSinkingFundTrust(assets,settlors,beneficiaries))
         ex.getMessage() contains  "Must have at least one type of Asset"
-      }
-
-      "the wrong Beneficiaries are defined" in {
-        val assets = Assets(None)
-
-        val beneficiaries = Beneficiaries(None,Some(List(employeeBeneficiary)))
-
-        val ex = the[IllegalArgumentException] thrownBy WillIntestacyTrust(assets,beneficiaries, individual)
-        ex.getMessage() contains  "Must have at least one required Beneficiary"
       }
     }
 
     "not throw an exception" when {
       "there is one asset" in {
         val assets = Assets(Some(List(2.0f,2.5f)))
-        noException should be thrownBy (WillIntestacyTrust(assets,beneficiaries, individual))
+        noException should be thrownBy (FlatManagementSinkingFundTrust(assets,settlors,beneficiaries))
       }
 
       "there is more than one type of asset" in {
         val otherAsset = OtherAsset("Test",5.0f)
         val assets = Assets(Some(List(2.0f,2.5f)),None,None,None,None,Some(List(otherAsset)))
-        noException should be thrownBy (WillIntestacyTrust(assets,beneficiaries, individual))
+        noException should be thrownBy (FlatManagementSinkingFundTrust(assets,settlors,beneficiaries))
       }
     }
   }

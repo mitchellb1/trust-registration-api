@@ -87,6 +87,8 @@ trait JsonExamples {
 
 trait ScalaDataExamples {
 
+  val settlors = Settlors(Some(List(individual)))
+
   val address = Address(
     isNonUkAddress = false,
     addressLine1 = "Line 1",
@@ -138,6 +140,11 @@ trait ScalaDataExamples {
   val validEstateWithPersonalRepresentative = Estate(true,true,true,false,Some(personalRepresentative))
   val validEstateWithDeceased = Estate(true,true,true,false,None,Some(individual),Some(false),Some(false),Some(false))
 
+  val employeeBeneficiary = EmployeeBeneficiary(individual = individual,
+    isVulnerable = false,
+    isIncomeAtTrusteeDiscretion = false,
+    shareOfIncome = Some(20))
+
   val individualBeneficiary = IndividualBeneficiary(
     individual = individual,
     isVulnerable = false,
@@ -170,4 +177,6 @@ trait ScalaDataExamples {
     individuals = Some(List(individual)),
     companies = Some(List(company))
   )
+
+  //val trust = Trust()
 }
