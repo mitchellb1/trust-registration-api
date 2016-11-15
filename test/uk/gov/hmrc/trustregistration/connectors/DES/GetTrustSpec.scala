@@ -22,11 +22,12 @@ import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
 import uk.gov.hmrc.play.http.HttpResponse
-import uk.gov.hmrc.trustregistration.models.GetSuccessResponse
+import uk.gov.hmrc.trustregistration.models.{BadRequestResponse, GetSuccessResponse, InternalServerErrorResponse, NotFoundResponse}
 import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
+import scala.io.Source
 
 
 class GetTrustSpec extends PlaySpec
@@ -41,10 +42,73 @@ class GetTrustSpec extends PlaySpec
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200,
           Some(Json.parse(validTrustJson)))))
 
-
-        val result = Await.result(SUT.getTrust("12314"),Duration.Inf)
-
+        val result = Await.result(SUT.getTrust("1234"),Duration.Inf)
         result mustBe GetSuccessResponse(trust)
+      }
+    }
+
+    "returns a BadRequestresponse" when {
+      "DES returns a 400 response" in {
+        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(400)))
+
+        val result = Await.result(SUT.getTrust("1234"),Duration.Inf)
+        result mustBe BadRequestResponse
+      }
+    }
+
+    "return a NotFoundResponse" when {
+      "DES returns a 404 response" in {
+        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(404)))
+
+        val result = Await.result(SUT.getTrust("1234"),Duration.Inf)
+        result mustBe NotFoundResponse
+      }
+    }
+
+    "return an InternalServerErrorResponse" when {
+      "DES returns a 404 response" in {
+        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, None)))
+
+        val result = Await.result(SUT.getTrust("1234"),Duration.Inf)
+        result mustBe InternalServerErrorResponse
+      }
+      "DES returns an invalid Json response" in {
+        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse("""{"test":"test"}""")))))
+
+        val result = Await.result(SUT.getTrust("1234"),Duration.Inf)
+        result mustBe InternalServerErrorResponse
+      }
+      "DES returns a 500 response" in {
+        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(500)))
+
+        val result = Await.result(SUT.getTrust("1234"),Duration.Inf)
+        result mustBe InternalServerErrorResponse
+      }
+      "DES returns any unspecified error response (i.e. a 418)" in {
+        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(418)))
+
+        val result = Await.result(SUT.getTrust("1234"),Duration.Inf)
+        result mustBe InternalServerErrorResponse
+      }
+      "DES returns a Trust without name" in {
+        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200,
+          Some(Json.parse(invalidTrustJson)))))
+
+        val result = Await.result(SUT.getTrust("1234"),Duration.Inf)
+        result mustBe InternalServerErrorResponse
+      }
+      "DES returns a Trust with an assets object that doesn't contain any assets" in {
+        val invalidTrustJson = Source.fromFile(getClass.getResource("/ValidTrust.json").getPath).mkString
+          .replace("\"{WILLINTESTACYTRUST}\"", invalidWillIntestacyTrustJson)
+          .replace("\"{INDIVIDUAL}\"", validIndividualJson)
+          .replace("\"{ADDRESS}\"", validAddressJson)
+          .replace("\"{LEGALITY}\"", validLegalityJson)
+
+        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200,
+          Some(Json.parse(invalidTrustJson)))))
+
+        val result = Await.result(SUT.getTrust("1234"),Duration.Inf)
+        result mustBe InternalServerErrorResponse
       }
     }
   }
