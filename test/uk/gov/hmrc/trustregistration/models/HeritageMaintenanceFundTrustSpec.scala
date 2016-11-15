@@ -20,20 +20,26 @@ import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
 
 
-class HeritageMaintenanceFundTrustSpec extends PlaySpec with ScalaDataExamples{
+class HeritageMaintenanceFundTrustSpec extends PlaySpec with ScalaDataExamples {
   "Heritage Maintenance Fund Trust" must {
     "throw an exception" when{
       "there is no assets" in {
         val assets = Assets(None)
         val ex = the[IllegalArgumentException] thrownBy (HeritageMaintenanceFundTrust(assets,settlors,beneficiaries,true))
-        ex.getMessage() contains  "Must have at least one type of Asset"
+        ex.getMessage() mustEqual ("requirement failed: Must have at least one type of Asset")
       }
 
       "the required beneficiaries are not there" in {
-        val assets = Assets(None)
+        val assets = Assets(Some(List(2.0f,2.5f)))
         val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)))
         val ex = the[IllegalArgumentException] thrownBy (HeritageMaintenanceFundTrust(assets,settlors,beneficiaries,true))
-        ex.getMessage() contains  "Must have at least one required Beneficiary"
+        ex.getMessage() mustEqual  ("requirement failed: Must have at least one required Beneficiary")
+      }
+
+      "a list of a type of asset is added but with no elements in it" in {
+        val assets = Assets(Some(List()),Some(List()),Some(List()),Some(List()),Some(List()),Some(List()))
+        val ex = the[IllegalArgumentException] thrownBy (HeritageMaintenanceFundTrust(assets,settlors, beneficiaries, true))
+        ex.getMessage() mustEqual  "requirement failed: Must have at least one type of Asset"
       }
     }
 

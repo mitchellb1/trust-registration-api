@@ -17,7 +17,8 @@
 package uk.gov.hmrc.trustregistration.models
 
 import org.joda.time.DateTime
-/*
+import play.api.libs.json.Json
+
 case class Trust(name: String,
                  correspondenceAddress: Address,
                  telephoneNumber: String,
@@ -37,4 +38,9 @@ case class Trust(name: String,
                  declaration: Option[Declaration] = None,
                  isSchedule5A: Option[Boolean] = None,
                  nonResidentType: Option[String] = None
-)*/
+)
+
+object Trust{
+  implicit val formats = Json.format[Trust]
+}
+
