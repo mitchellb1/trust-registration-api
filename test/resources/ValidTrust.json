@@ -1,9 +1,9 @@
 {
   "name" : "Test Trust",
   "correspondenceAddress" : "{ADDRESS}",
-  "telephoneNumber" : "0044 12345 12345",
+  "telephoneNumber" : "0044 1234 1234",
   "currentYear" : "1970",
-  "commencementDate" : "1940",
+  "commencementDate" : "1940-01-01",
   "legality" : "{LEGALITY}",
   "isTrustUkResident" : true,
   "leadTrustee" : {

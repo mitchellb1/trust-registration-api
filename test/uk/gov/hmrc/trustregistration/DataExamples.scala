@@ -72,11 +72,12 @@ trait JsonExamples {
   val validProtectorsJson = s"""{"individuals":[$validIndividualJson],"companies":[$validCompanyJson]}"""
   val invalidProtectorsJson = s"""{"individuals":[$invalidIndividualJson],"companies":[$invalidCompanyJson]}"""
 
-  val validShareAssetsJson = Source.fromFile(getClass.getResource("/ValidShareAssets.json").getPath).mkString
-  val validBusinessAssetsJson = Source.fromFile(getClass.getResource("/ValidBusinessAssets.json").getPath).mkString
+  val validShareAssetJson = Source.fromFile(getClass.getResource("/ValidShareAsset.json").getPath).mkString
+  val validBusinessAssetJson = Source.fromFile(getClass.getResource("/ValidBusinessAsset.json").getPath).mkString
   val validWillIntestacyTrustJson = Source.fromFile(getClass.getResource("/ValidWillIntestacyTrust.json").getPath).mkString
-    .replace("\"{SHAREASSETS}\"", validShareAssetsJson)
-    .replace("\"{BUSINESSASSETS}\"", validBusinessAssetsJson)
+    .replace("\"{SHAREASSETS}\"", validShareAssetJson)
+    .replace("\"{BUSINESSASSETS}\"", validBusinessAssetJson)
+    .replace("\"{INDIVIDUALBENEFICIARY}\"", validIndividualBeneficiary)
   val validLegalityJson = Source.fromFile(getClass.getResource("/ValidLegality.json").getPath).mkString
   val validTrustJson = Source.fromFile(getClass.getResource("/ValidTrust.json").getPath).mkString
     .replace("\"{WILLINTESTACYTRUST}\"", validWillIntestacyTrustJson)
@@ -178,5 +179,18 @@ trait ScalaDataExamples {
     companies = Some(List(company))
   )
 
-  //val trust = Trust()
+  val leadTrustee = LeadTrustee(Some(individual))
+
+  val legality = Legality("Scotland","Scotland",true)
+
+  val businessAsset = BusinessAsset("Test","Test","This is a description",address,1234)
+
+  val shareAsset = ShareAsset(1234,"Test","Test","1234",1234)
+
+  val assets = Assets(None,None,Some(List(shareAsset,shareAsset)),None,Some(List(businessAsset,businessAsset)))
+
+  val willIntestacyTrust = WillIntestacyTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false,true,Some(30))))),individual)
+
+  val trust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),legality,true,leadTrustee,List(individual,individual,individual,individual),
+    Protectors(Some(List(individual,individual))),List(individual,individual,individual,individual),Some(willIntestacyTrust))
 }

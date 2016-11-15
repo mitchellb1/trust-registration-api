@@ -22,9 +22,11 @@ import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
 import uk.gov.hmrc.play.http.HttpResponse
+import uk.gov.hmrc.trustregistration.models.GetSuccessResponse
 import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 
-import scala.concurrent.Future
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
 
 
 class GetTrustSpec extends PlaySpec
@@ -38,8 +40,12 @@ class GetTrustSpec extends PlaySpec
       "DES returns a 200 response with a Trust JSON object that contains all required fields" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200,
           Some(Json.parse(validTrustJson)))))
+
+
+        val result = Await.result(SUT.getTrust("12314"),Duration.Inf)
+
+        result mustBe GetSuccessResponse(trust)
       }
     }
   }
-
 }

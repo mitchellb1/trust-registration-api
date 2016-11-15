@@ -1,0 +1,8 @@
+{
+  "buildingName" : "Test",
+  "payeRef" : "Test",
+  "description" : "This is a description",
+  "correspondenceAddress" : "{ADDRESS}",
+  "value" : 1234,
+  "lastValudationDate" : "1940-04-04"
+}

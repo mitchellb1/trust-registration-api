@@ -19,8 +19,8 @@ package uk.gov.hmrc.trustregistration.models
 import play.api.libs.json.Json
 
 
-case class ShareAssets(shareNumber: Int, shareClass: String, shareType: String, companyRegistrationNumber: String, shareValue: Float)
+case class ShareAsset(shareNumber: Int, shareClass: String, shareType: String, companyRegistrationNumber: String, shareValue: Float)
 
-object ShareAssets{
-  implicit val formats = Json.format[ShareAssets]
+object ShareAsset{
+  implicit val formats = Json.format[ShareAsset]
 }

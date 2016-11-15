@@ -52,7 +52,7 @@ class EmploymentTrustSpec extends PlaySpec with ScalaDataExamples {
       }
 
       "there is more than one type of asset" in {
-        val propertyAssets = PropertyAssets(address,2.2f)
+        val propertyAssets = PropertyAsset(address,2.2f)
         val assets = Assets(Some(List(2.0f,2.5f)),Some(List(propertyAssets)))
         noException should be thrownBy (EmploymentTrust(assets,settlors,beneficiaries,true))
       }
