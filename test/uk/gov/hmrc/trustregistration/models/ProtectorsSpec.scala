@@ -17,17 +17,20 @@
 package uk.gov.hmrc.trustregistration.models
 
 import org.scalatestplus.play.PlaySpec
-import uk.gov.hmrc.trustregistration.models.Settlors
+import play.api.libs.json.Json
+import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 
+class ProtectorsSpec extends PlaySpec with JsonExamples with ScalaDataExamples {
 
-class SettlorsSpec extends PlaySpec {
-
-  "Settlors" must {
-    "throw an exception" when {
-      "there are no individuals or companies" in {
-        val ex = the [IllegalArgumentException] thrownBy (Settlors(None, None))
-        ex.getMessage() contains  "Must have either an individual or company settlor"
-      }
+  "Protectors" must {
+    "serialize to json" in {
+      val details = Json.toJson[Protectors](protectors).toString()
+      details must include ("Spaceman")
+    }
+    "exclude none values from the serialized response" in {
+      val emptyProtectors = new Protectors(None, None)
+      val details = Json.toJson[Protectors](emptyProtectors).toString()
+      details must be ("{}")
     }
   }
 

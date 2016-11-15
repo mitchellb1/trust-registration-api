@@ -18,6 +18,7 @@ package uk.gov.hmrc.trustregistration.controllers
 import play.api.Logger
 import play.api.libs.json.Json
 import play.api.mvc.Result
+import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.microservice.controller.BaseController
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
@@ -33,14 +34,53 @@ trait ApplicationBaseController extends BaseController {
   
   val className: String = getClass.getSimpleName
 
+  protected def authorised(apiName: String, identifier: String)(f: => Future[Result])(implicit hc : HeaderCarrier): Future[Result] = {
+    Logger.info(s"$className:$apiName API invoked")
+    Logger.debug(s"$className:$apiName($identifier) API invoked")
+
+    val authorised: Option[(String, String)] = hc.headers.find((tup) => tup._1 == AUTHORIZATION)
+
+    authorised match {
+      case Some ((key, "AUTHORISED") ) => {
+        Logger.info (s"$className:$apiName API authorised")
+        metrics.incrementAuthorisedRequest (apiName)
+        f
+      }
+      case _ => {
+        Logger.info (s"$className:$apiName API returned unauthorised")
+        metrics.incrementUnauthorisedRequest (apiName)
+        Future.successful (Unauthorized)
+      }
+    }
+  }
+
   def respond(methodName: String, result: Future[ApplicationResponse]): Future[Result] = {
     val okMessage = s"$className:$methodName API returned OK"
 
     result map {
+      case GetSuccessResponse(payload:Protectors) =>{
+        Logger.info(okMessage)
+        metrics.incrementApiSuccessResponse(methodName)
+        Ok(Json.toJson(payload))
+      }
+      case GetSuccessResponse(payload:Estate) =>{
+        Logger.info(okMessage)
+        metrics.incrementApiSuccessResponse(methodName)
+        Ok(Json.toJson(payload))
+      }
+      case GetSuccessResponse(payload:Beneficiaries) => {
+        Logger.info(okMessage)
+        metrics.incrementApiSuccessResponse(methodName)
+        Ok(Json.toJson(payload))
+      }
       case GetSuccessResponse(payload:LeadTrustee) => {
+        Logger.info(okMessage)
+        metrics.incrementApiSuccessResponse(methodName)
         Ok(Json.toJson(payload))
       }
       case GetSuccessResponse(payload:Settlors) => {
+        Logger.info(okMessage)
+        metrics.incrementApiSuccessResponse(methodName)
         Ok(Json.toJson(payload))
       }
       case GetSuccessResponse(payload:List[Individual]) => {

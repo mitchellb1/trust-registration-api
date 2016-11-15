@@ -47,24 +47,15 @@ trait RegisterEstateController extends ApplicationBaseController {
     }
   }
 
-  def closeEstate(identifier: String): Action[AnyContent] = Action.async{ implicit request =>
+  def closeEstate(identifier: String): Action[AnyContent] = Action.async { implicit request =>
+    authorised("closeEstate", identifier) {
+      respond("closeEstate", registerTrustService.closeEstate(identifier))
+    }
+  }
 
-    Logger.info(s"$className:closeEstate API invoked")
-    Logger.debug(s"$className:closeEstate($identifier) API invoked")
-
-    val authorised: Option[(String, String)] = hc.headers.find((tup) => tup._1 == AUTHORIZATION)
-
-    authorised match {
-      case Some((key, "AUTHORISED")) => {
-        Logger.info(s"$className:closeEstate API authorised")
-        metrics.incrementAuthorisedRequest("closeEstate")
-        respond("closeEstate", registerTrustService.closeEstate(identifier))
-      }
-      case _ => {
-        Logger.info(s"$className:closeEstate API returned unauthorised")
-        metrics.incrementUnauthorisedRequest("closeEstate")
-        Future.successful(Unauthorized)
-      }
+  def getEstate(identifier: String): Action[AnyContent] = Action.async { implicit request =>
+    authorised("getEstate", identifier) {
+      respond("getEstate", registerTrustService.getEstate(identifier))
     }
   }
 }
