@@ -17,10 +17,11 @@
 package uk.gov.hmrc.trustregistration.models
 
 import org.scalatestplus.play.PlaySpec
-import uk.gov.hmrc.trustregistration.ScalaDataExamples
+import play.api.libs.json.Json
+import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 
 
-class InterVivoTrustSpec extends PlaySpec with ScalaDataExamples{
+class InterVivoTrustSpec extends PlaySpec with ScalaDataExamples with JsonExamples{
   "Inter Vivo Fund Trust" must {
     "throw an exception" when{
       "there is no assets" in {

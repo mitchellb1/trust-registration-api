@@ -79,6 +79,14 @@ trait JsonExamples {
     .replace("\"{BUSINESSASSETS}\"", validBusinessAssetJson)
     .replace("\"{INDIVIDUALBENEFICIARY}\"", validIndividualBeneficiary)
 
+
+  val validInterVivoTrust = Source.fromFile(getClass.getResource("/ValidInterVivoTrust.json").getPath).mkString
+    .replace("\"{SHAREASSETS}\"", validShareAssetJson)
+    .replace("\"{BUSINESSASSETS}\"", validBusinessAssetJson)
+    .replace("\"{INDIVIDUAL}\"", validIndividualJson )
+    .replace("\"{ADDRESS}\"", validAddressJson)
+    .replace("\"{INDIVIDUALBENEFICIARY}\"", validIndividualBeneficiary)
+
   val invalidWillIntestacyTrustJson = Source.fromFile(getClass.getResource("/ValidWillIntestacyTrust.json").getPath).mkString
     .replace("\"{BUSINESSASSETS}\"", validBusinessAssetJson)
     .replace("\"{INDIVIDUALBENEFICIARY}\"", validIndividualBeneficiary)
@@ -86,6 +94,12 @@ trait JsonExamples {
   val validLegalityJson = Source.fromFile(getClass.getResource("/ValidLegality.json").getPath).mkString
   val validTrustJson = Source.fromFile(getClass.getResource("/ValidTrust.json").getPath).mkString
     .replace("\"{WILLINTESTACYTRUST}\"", validWillIntestacyTrustJson)
+    .replace("\"{INDIVIDUAL}\"", validIndividualJson)
+    .replace("\"{ADDRESS}\"", validAddressJson)
+    .replace("\"{LEGALITY}\"", validLegalityJson)
+
+  val validTrustInterVivoJson = Source.fromFile(getClass.getResource("/ValidTrustInterVivo.json").getPath).mkString
+    .replace("\"{INTERVIVOTRUST}\"", validInterVivoTrust)
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
     .replace("\"{ADDRESS}\"", validAddressJson)
     .replace("\"{LEGALITY}\"", validLegalityJson)

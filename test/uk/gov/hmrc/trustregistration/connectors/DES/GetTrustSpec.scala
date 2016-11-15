@@ -16,13 +16,14 @@
 
 package uk.gov.hmrc.trustregistration.connectors.DES
 
+import org.joda.time.DateTime
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
 import uk.gov.hmrc.play.http.HttpResponse
-import uk.gov.hmrc.trustregistration.models.{BadRequestResponse, GetSuccessResponse, InternalServerErrorResponse, NotFoundResponse}
+import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 
 import scala.concurrent.duration.Duration
@@ -38,12 +39,24 @@ class GetTrustSpec extends PlaySpec
   with ScalaDataExamples {
   "Get Trust endpoint" must {
     "return a GetSuccessResponse with a populated Trust object" when {
-      "DES returns a 200 response with a Trust JSON object that contains all required fields" in {
+      "DES returns a 200 response with a Trust JSON object that contains all required fields and a Will Intestacy Trust" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200,
           Some(Json.parse(validTrustJson)))))
 
         val result = Await.result(SUT.getTrust("1234"),Duration.Inf)
         result mustBe GetSuccessResponse(trust)
+      }
+
+      "DES returns a 200 response with a Trust JSON object that contains all required fields and a InterVivo Trust" in {
+        val interVivoTrust = Some(InterVivoTrust(assets,Settlors(Some(List(individual,individual))),Beneficiaries(Some(List(IndividualBeneficiary(individual,false,true,Some(30))))),true,Some(individual)))
+        val trustOutput = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),legality,true,leadTrustee,List(individual,individual,individual,individual),
+          Protectors(Some(List(individual,individual))),List(individual,individual,individual,individual),None,interVivoTrust)
+
+        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200,
+          Some(Json.parse(validTrustInterVivoJson)))))
+
+        val result = Await.result(SUT.getTrust("12324"),Duration.Inf)
+        result mustBe GetSuccessResponse(trustOutput)
       }
     }
 
