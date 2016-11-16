@@ -109,7 +109,7 @@ trait JsonExamples {
     .replace("\"{ADDRESS}\"", validAddressJson)
     .replace("\"{OTHERBENEFICIARY}\"", validOtherBeneficiary)
 
-  val invalidWillIntestacyTrustJson = Source.fromFile(getClass.getResource("/ValidWillIntestacyTrust.json").getPath).mkString
+  val invalidWillIntestacyTrustJson = Source.fromFile(getClass.getResource("/InvalidWillInstestacyTrust.json").getPath).mkString
     .replace("\"{BUSINESSASSETS}\"", validBusinessAssetJson)
     .replace("\"{INDIVIDUALBENEFICIARY}\"", validIndividualBeneficiary)
 
@@ -255,7 +255,7 @@ trait ScalaDataExamples {
 
   val legality = Legality("Scotland","Scotland",true)
 
-  val businessAsset = BusinessAsset("Test","Test","This is a description",address,1234)
+  val businessAsset = BusinessAsset("Test","Test","This is a description",address,1234, Some(new DateTime("1940-04-04")))
 
   val shareAsset = ShareAsset(1234,"Test","Test","1234",1234)
 
