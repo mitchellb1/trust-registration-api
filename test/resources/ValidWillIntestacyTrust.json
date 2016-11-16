@@ -1,0 +1,16 @@
+{
+  "assets" : {
+    "shareAssets" : [
+     "{SHAREASSETS}","{SHAREASSETS}"
+    ],
+    "businessAssets" : [
+      "{BUSINESSASSETS}","{BUSINESSASSETS}"
+    ]
+  },
+  "beneficiaries" : {
+    "individualBeneficiaries" : [
+      "{INDIVIDUALBENEFICIARY}"
+    ]
+  },
+  "deceased" : "{INDIVIDUAL}"
+}

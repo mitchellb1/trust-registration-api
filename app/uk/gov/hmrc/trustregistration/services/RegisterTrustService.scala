@@ -78,6 +78,9 @@ trait RegisterTrustService {
     desConnector.closeEstate(identifier)
   }
 
+  def getTrust(identifier: String)(implicit hc: HeaderCarrier): Future[ApplicationResponse] = {
+    desConnector.getTrust(identifier)
+  }
 }
 
 object RegisterTrustService extends RegisterTrustService {

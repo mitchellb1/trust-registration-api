@@ -101,6 +101,12 @@ trait RegisterTrustController extends ApplicationBaseController {
       respond("getProtectors", registerTrustService.getProtectors(identifier))
     }
   }
+
+  def getTrust(identifier: String): Action[AnyContent] = Action.async{ implicit request =>
+    authorised("getTrust",identifier){
+      respond("getTrust", registerTrustService.getTrust(identifier))
+    }
+  }
 }
 
 object RegisterTrustController extends RegisterTrustController {

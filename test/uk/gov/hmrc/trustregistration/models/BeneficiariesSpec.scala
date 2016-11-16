@@ -22,25 +22,25 @@ import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 
 class BeneficiariesSpec extends PlaySpec with JsonExamples with ScalaDataExamples {
 
-  val invalidBeneficiariesError = "Must have at least one beneficiary"
+  val invalidBeneficiariesError = "requirement failed: Must have at least one beneficiary"
 
   "Beneficiaries" must {
     "throw an exception" when {
       "all beneficiary options are none" in {
         val ex = the[IllegalArgumentException] thrownBy Beneficiaries()
-        ex.getMessage() contains invalidBeneficiariesError
+        ex.getMessage() mustEqual invalidBeneficiariesError
       }
       "an individual beneficiaries option exist but it's an empty list" in {
         val ex = the[IllegalArgumentException] thrownBy Beneficiaries(individualBeneficiaries = Some(List[IndividualBeneficiary]()))
-        ex.getMessage() contains invalidBeneficiariesError
+        ex.getMessage() mustEqual invalidBeneficiariesError
       }
       "a charity beneficiaries option exists but it's an empty list" in {
         val ex = the[IllegalArgumentException] thrownBy Beneficiaries(charityBeneficiaries = Some(List[CharityBeneficiary]()))
-        ex.getMessage() contains invalidBeneficiariesError
+        ex.getMessage() mustEqual invalidBeneficiariesError
       }
       "an other beneficiaries option exists but it's an empty list" in {
         val ex = the[IllegalArgumentException] thrownBy Beneficiaries(otherBeneficiaries = Some(List[OtherBeneficiary]()))
-        ex.getMessage() contains invalidBeneficiariesError
+        ex.getMessage() mustEqual invalidBeneficiariesError
       }
     }
     "exclude none values from the serialized response" in {
