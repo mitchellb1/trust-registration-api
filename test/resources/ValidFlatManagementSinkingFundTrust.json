@@ -1,0 +1,20 @@
+{
+  "assets" : {
+    "shareAssets" : [
+      "{SHAREASSETS}","{SHAREASSETS}"
+    ],
+    "businessAssets" : [
+      "{BUSINESSASSETS}","{BUSINESSASSETS}"
+    ]
+  },
+  "settlors" : {
+    "individuals" : [
+      "{INDIVIDUAL}","{INDIVIDUAL}"
+    ]
+  },
+  "beneficiaries" : {
+    "individualBeneficiaries" : [
+      "{INDIVIDUALBENEFICIARY}"
+    ]
+  }
+}

@@ -72,6 +72,7 @@ trait JsonExamples {
   val validProtectorsJson = s"""{"individuals":[$validIndividualJson],"companies":[$validCompanyJson]}"""
   val invalidProtectorsJson = s"""{"individuals":[$invalidIndividualJson],"companies":[$invalidCompanyJson]}"""
 
+  val validOtherAssetJson = Source.fromFile(getClass.getResource("/ValidOtherAsset.json").getPath).mkString
   val validShareAssetJson = Source.fromFile(getClass.getResource("/ValidShareAsset.json").getPath).mkString
   val validBusinessAssetJson = Source.fromFile(getClass.getResource("/ValidBusinessAsset.json").getPath).mkString
   val validWillIntestacyTrustJson = Source.fromFile(getClass.getResource("/ValidWillIntestacyTrust.json").getPath).mkString
@@ -80,12 +81,33 @@ trait JsonExamples {
     .replace("\"{INDIVIDUALBENEFICIARY}\"", validIndividualBeneficiary)
 
 
-  val validInterVivoTrust = Source.fromFile(getClass.getResource("/ValidInterVivoTrust.json").getPath).mkString
+  val validInterVivoTrustJson = Source.fromFile(getClass.getResource("/ValidInterVivoTrust.json").getPath).mkString
     .replace("\"{SHAREASSETS}\"", validShareAssetJson)
     .replace("\"{BUSINESSASSETS}\"", validBusinessAssetJson)
     .replace("\"{INDIVIDUAL}\"", validIndividualJson )
     .replace("\"{ADDRESS}\"", validAddressJson)
     .replace("\"{INDIVIDUALBENEFICIARY}\"", validIndividualBeneficiary)
+
+  val validFlatManagementSinkingFundTrustJson = Source.fromFile(getClass.getResource("/ValidFlatManagementSinkingFundTrust.json").getPath).mkString
+    .replace("\"{SHAREASSETS}\"", validShareAssetJson)
+    .replace("\"{BUSINESSASSETS}\"", validBusinessAssetJson)
+    .replace("\"{INDIVIDUAL}\"", validIndividualJson )
+    .replace("\"{ADDRESS}\"", validAddressJson)
+    .replace("\"{INDIVIDUALBENEFICIARY}\"", validIndividualBeneficiary)
+
+  val validEmploymentTrustJson = Source.fromFile(getClass.getResource("/ValidEmploymentTrust.json").getPath).mkString
+    .replace("\"{SHAREASSETS}\"", validShareAssetJson)
+    .replace("\"{BUSINESSASSETS}\"", validBusinessAssetJson)
+    .replace("\"{INDIVIDUAL}\"", validIndividualJson )
+    .replace("\"{ADDRESS}\"", validAddressJson)
+    .replace("\"{INDIVIDUALBENEFICIARY}\"", validIndividualBeneficiary)
+
+  val validHeritageMaintenanceFundTrustJson = Source.fromFile(getClass.getResource("/ValidHeritageMaintenanceFundTrust.json").getPath).mkString
+    .replace("\"{SHAREASSETS}\"", validShareAssetJson)
+    .replace("\"{OTHERASSETS}\"", validOtherAssetJson)
+    .replace("\"{INDIVIDUAL}\"", validIndividualJson )
+    .replace("\"{ADDRESS}\"", validAddressJson)
+    .replace("\"{OTHERBENEFICIARY}\"", validOtherBeneficiary)
 
   val invalidWillIntestacyTrustJson = Source.fromFile(getClass.getResource("/ValidWillIntestacyTrust.json").getPath).mkString
     .replace("\"{BUSINESSASSETS}\"", validBusinessAssetJson)
@@ -99,13 +121,38 @@ trait JsonExamples {
     .replace("\"{LEGALITY}\"", validLegalityJson)
 
   val validTrustInterVivoJson = Source.fromFile(getClass.getResource("/ValidTrustInterVivo.json").getPath).mkString
-    .replace("\"{INTERVIVOTRUST}\"", validInterVivoTrust)
+    .replace("\"{INTERVIVOTRUST}\"", validInterVivoTrustJson)
+    .replace("\"{INDIVIDUAL}\"", validIndividualJson)
+    .replace("\"{ADDRESS}\"", validAddressJson)
+    .replace("\"{LEGALITY}\"", validLegalityJson)
+
+  val validTrustFlatManagementJson= Source.fromFile(getClass.getResource("/ValidTrustFlatManagementSinkingFund.json").getPath).mkString
+    .replace("\"{FLATMANAGEMENTSINKINGTRUST}\"", validFlatManagementSinkingFundTrustJson)
+    .replace("\"{INDIVIDUAL}\"", validIndividualJson)
+    .replace("\"{ADDRESS}\"", validAddressJson)
+    .replace("\"{LEGALITY}\"", validLegalityJson)
+
+  val validTrustEmploymentJson = Source.fromFile(getClass.getResource("/ValidTrustEmployment.json").getPath).mkString
+    .replace("\"{EMPLOYMENTTRUST}\"", validEmploymentTrustJson)
+    .replace("\"{INDIVIDUAL}\"", validIndividualJson)
+    .replace("\"{ADDRESS}\"", validAddressJson)
+    .replace("\"{LEGALITY}\"", validLegalityJson)
+
+  val validTrustHeritageMaintenanceJson = Source.fromFile(getClass.getResource("/ValidTrustHeritageMaintenance.json").getPath).mkString
+    .replace("\"{HERITAGEMAINTENANCETRUST}\"", validHeritageMaintenanceFundTrustJson)
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
     .replace("\"{ADDRESS}\"", validAddressJson)
     .replace("\"{LEGALITY}\"", validLegalityJson)
 
   val invalidTrustJson = Source.fromFile(getClass.getResource("/InvalidTrust.json").getPath).mkString
     .replace("\"{WILLINTESTACYTRUST}\"", validWillIntestacyTrustJson)
+    .replace("\"{INDIVIDUAL}\"", validIndividualJson)
+    .replace("\"{ADDRESS}\"", validAddressJson)
+    .replace("\"{LEGALITY}\"", validLegalityJson)
+
+  val invalidTrustWithTwoTrustsJson = Source.fromFile(getClass.getResource("/InvalidTrustWithTwoTrusts.json").getPath).mkString
+    .replace("\"{INTERVIVOTRUST}\"", validInterVivoTrustJson)
+    .replace("\"{FLATMANAGEMENTSINKINGTRUST}\"", validFlatManagementSinkingFundTrustJson)
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
     .replace("\"{ADDRESS}\"", validAddressJson)
     .replace("\"{LEGALITY}\"", validLegalityJson)
@@ -218,4 +265,23 @@ trait ScalaDataExamples {
 
   val trust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),legality,true,leadTrustee,List(individual,individual,individual,individual),
     Protectors(Some(List(individual,individual))),List(individual,individual,individual,individual),Some(willIntestacyTrust))
+
+  val otherAsset = OtherAsset("This is a test description",1234,Some(new DateTime("1800-01-01")))
+  val assetsWithOtherAsset = Assets(None,None,Some(List(shareAsset,shareAsset)),None,None,Some(List(otherAsset,otherAsset)))
+  val heritageFund = Some(HeritageMaintenanceFundTrust(assetsWithOtherAsset,Settlors(Some(List(individual,individual))),Beneficiaries(None,None,None,None,Some(List(otherBeneficiary))),true,Some(individual)))
+
+  val trustWithHeritageMaintenance = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),legality,true,leadTrustee,List(individual,individual,individual,individual),
+    Protectors(Some(List(individual,individual))),List(individual,individual,individual,individual),None,None,heritageFund)
+
+  val employmentTrust = Some(EmploymentTrust(assets,Settlors(Some(List(individual,individual))),Beneficiaries(Some(List(IndividualBeneficiary(individual,false,true,Some(30))))),true,Some(new DateTime("1940-01-01"))))
+  val trustWithEmploymentTrust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),legality,true,leadTrustee,List(individual,individual,individual,individual),
+    Protectors(Some(List(individual,individual))),List(individual,individual,individual,individual),None,None,None,None,employmentTrust)
+
+  val flatManagementFund = Some(FlatManagementSinkingFundTrust(assets,Settlors(Some(List(individual,individual))),Beneficiaries(Some(List(IndividualBeneficiary(individual,false,true,Some(30)))))))
+  val trustWithFlatManagementFund = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),legality,true,leadTrustee,List(individual,individual,individual,individual),
+    Protectors(Some(List(individual,individual))),List(individual,individual,individual,individual),None,None,None,flatManagementFund)
+
+  val interVivoTrust = Some(InterVivoTrust(assets,Settlors(Some(List(individual,individual))),Beneficiaries(Some(List(IndividualBeneficiary(individual,false,true,Some(30))))),true,Some(individual)))
+  val trustWithInterVivoTrust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),legality,true,leadTrustee,List(individual,individual,individual,individual),
+    Protectors(Some(List(individual,individual))),List(individual,individual,individual,individual),None,interVivoTrust)
 }

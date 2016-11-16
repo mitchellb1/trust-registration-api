@@ -1,0 +1,22 @@
+{
+  "assets" : {
+    "shareAssets" : [
+      "{SHAREASSETS}","{SHAREASSETS}"
+    ],
+    "otherAssets" : [
+      "{OTHERASSETS}","{OTHERASSETS}"
+    ]
+  },
+  "settlors" : {
+    "individuals" : [
+      "{INDIVIDUAL}","{INDIVIDUAL}"
+    ]
+  },
+  "beneficiaries" : {
+    "otherBeneficiaries" : [
+      "{OTHERBENEFICIARY}"
+    ]
+  },
+  "deceased" : "{INDIVIDUAL}",
+  "isMultiPurposeIncome" : true
+}
