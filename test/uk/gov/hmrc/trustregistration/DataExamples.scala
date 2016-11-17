@@ -81,7 +81,7 @@ trait JsonExamples {
     .replace("\"{INDIVIDUALBENEFICIARY}\"", validIndividualBeneficiary)
 
 
-  val validInterVivoTrustJson = Source.fromFile(getClass.getResource("/ValidInterVivoTrust.json").getPath).mkString
+  lazy val validInterVivoTrustJson = Source.fromFile(getClass.getResource("/ValidInterVivoTrust.json").getPath).mkString
     .replace("\"{SHAREASSETS}\"", validShareAssetJson)
     .replace("\"{BUSINESSASSETS}\"", validBusinessAssetJson)
     .replace("\"{INDIVIDUAL}\"", validIndividualJson )
