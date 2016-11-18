@@ -81,13 +81,6 @@ trait JsonExamples {
     .replace("\"{INDIVIDUALBENEFICIARY}\"", validIndividualBeneficiary)
 
 
-  lazy val validInterVivoTrustJson = Source.fromFile(getClass.getResource("/ValidInterVivoTrust.json").getPath).mkString
-    .replace("\"{SHAREASSETS}\"", validShareAssetJson)
-    .replace("\"{BUSINESSASSETS}\"", validBusinessAssetJson)
-    .replace("\"{INDIVIDUAL}\"", validIndividualJson )
-    .replace("\"{ADDRESS}\"", validAddressJson)
-    .replace("\"{INDIVIDUALBENEFICIARY}\"", validIndividualBeneficiary)
-
   lazy val validFlatManagementSinkingFundTrustJson = Source.fromFile(getClass.getResource("/ValidFlatManagementSinkingFundTrust.json").getPath).mkString
     .replace("\"{SHAREASSETS}\"", validShareAssetJson)
     .replace("\"{BUSINESSASSETS}\"", validBusinessAssetJson)
@@ -121,14 +114,21 @@ trait JsonExamples {
     .replace("\"{ADDRESS}\"", validAddressJson)
     .replace("\"{LEGALITY}\"", validLegalityJson)
 
-  lazy val validTrustInterVivoJson = Source.fromFile(getClass.getResource("/ValidTrustInterVivo.json").getPath).mkString
-    .replace("\"{INTERVIVOTRUST}\"", validInterVivoTrustJson)
+  lazy val validTrustFlatManagementJson= Source.fromFile(getClass.getResource("/ValidTrustFlatManagementSinkingFund.json").getPath).mkString
+    .replace("\"{FLATMANAGEMENTSINKINGTRUST}\"", validFlatManagementSinkingFundTrustJson)
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
     .replace("\"{ADDRESS}\"", validAddressJson)
     .replace("\"{LEGALITY}\"", validLegalityJson)
 
-  lazy val validTrustFlatManagementJson= Source.fromFile(getClass.getResource("/ValidTrustFlatManagementSinkingFund.json").getPath).mkString
-    .replace("\"{FLATMANAGEMENTSINKINGTRUST}\"", validFlatManagementSinkingFundTrustJson)
+  lazy val validInterVivoTrustFundJson = Source.fromFile(getClass.getResource("/ValidInterVivoTrust.json").getPath).mkString
+    .replace("\"{SHAREASSETS}\"", validShareAssetJson)
+    .replace("\"{BUSINESSASSETS}\"", validBusinessAssetJson)
+    .replace("\"{INDIVIDUAL}\"", validIndividualJson )
+    .replace("\"{ADDRESS}\"", validAddressJson)
+    .replace("\"{INDIVIDUALBENEFICIARY}\"", validIndividualBeneficiary)
+
+  lazy val validTrustWithInterVivoJson = Source.fromFile(getClass.getResource("/ValidTrustInterVivo.json").getPath).mkString
+    .replace("\"{INTERVIVOTRUST}\"", validInterVivoTrustFundJson)
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
     .replace("\"{ADDRESS}\"", validAddressJson)
     .replace("\"{LEGALITY}\"", validLegalityJson)
@@ -152,7 +152,7 @@ trait JsonExamples {
     .replace("\"{LEGALITY}\"", validLegalityJson)
 
   lazy val invalidTrustWithTwoTrustsJson = Source.fromFile(getClass.getResource("/InvalidTrustWithTwoTrusts.json").getPath).mkString
-    .replace("\"{INTERVIVOTRUST}\"", validInterVivoTrustJson)
+    .replace("\"{INTERVIVOTRUST}\"", validInterVivoTrustFundJson)
     .replace("\"{FLATMANAGEMENTSINKINGTRUST}\"", validFlatManagementSinkingFundTrustJson)
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
     .replace("\"{ADDRESS}\"", validAddressJson)
