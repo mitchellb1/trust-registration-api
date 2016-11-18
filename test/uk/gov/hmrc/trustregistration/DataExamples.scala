@@ -22,136 +22,137 @@ import uk.gov.hmrc.trustregistration.models._
 import scala.io.Source
 
 trait JsonExamples {
-  val validPassportJson = Source.fromFile(getClass.getResource("/ValidPassport.json").getPath).mkString
-  val validAddressJson = Source.fromFile(getClass.getResource("/ValidAddress.json").getPath).mkString
-  val validIndividualJson = Source
+  lazy val validPassportJson = Source.fromFile(getClass.getResource("/ValidPassport.json").getPath).mkString
+  lazy val validAddressJson = Source.fromFile(getClass.getResource("/ValidAddress.json").getPath).mkString
+  lazy val validIndividualJson = Source
     .fromFile(getClass.getResource("/ValidIndividual.json").getPath)
     .mkString
     .replace("\"{PASSPORT}\"", validPassportJson)
     .replace("\"{ADDRESS}\"", validAddressJson)
-  val invalidIndividualJson = Source.fromFile(getClass.getResource("/InvalidIndividual.json").getPath).mkString
-  val validCompanyJson = Source
+  lazy val invalidIndividualJson = Source.fromFile(getClass.getResource("/InvalidIndividual.json").getPath).mkString
+  lazy val validCompanyJson = Source
     .fromFile(getClass.getResource("/ValidCompany.json").getPath)
     .mkString
     .replace("\"{ADDRESS}\"", validAddressJson)
-  val invalidCompanyJson = Source
+  lazy val invalidCompanyJson = Source
     .fromFile(getClass.getResource("/InvalidCompany.json").getPath)
     .mkString
     .replace("\"{ADDRESS}\"", validAddressJson)
-  val invalidEstateJson = Source.fromFile(getClass.getResource("/InvalidEstate.json").getPath).mkString
+  lazy val invalidEstateJson = Source.fromFile(getClass.getResource("/InvalidEstate.json").getPath).mkString
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
-  val validEstateWithPersonalRepresentativeJson = Source.fromFile(getClass.getResource("/ValidEstateWithPersonalRepresentative.json").getPath).mkString
+  lazy val validEstateWithPersonalRepresentativeJson = Source.fromFile(getClass.getResource("/ValidEstateWithPersonalRepresentative.json").getPath).mkString
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
-  val validEstateWithDeceasedJson = Source.fromFile(getClass.getResource("/ValidEstateWithDeceased.json").getPath).mkString
+  lazy val validEstateWithDeceasedJson = Source.fromFile(getClass.getResource("/ValidEstateWithDeceased.json").getPath).mkString
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
-  val validLeadTrusteeIndividualJson = s"""{"individual":$validIndividualJson,"company":null}"""
-  val validLeadTrusteeCompanyJson = s"""{"individual":null,"company":$validCompanyJson}"""
+  lazy val validLeadTrusteeIndividualJson = s"""{"individual":$validIndividualJson,"company":null}"""
+  lazy val validLeadTrusteeCompanyJson = s"""{"individual":null,"company":$validCompanyJson}"""
 
-  val validIndividualBeneficiary = Source.fromFile(getClass.getResource("/ValidIndividualBeneficiary.json").getPath)
+  lazy val validIndividualBeneficiary = Source.fromFile(getClass.getResource("/ValidIndividualBeneficiary.json").getPath)
                                             .mkString
                                             .replace(""""{INDIVIDUAL}"""", validIndividualJson)
 
-  val validCharityBeneficiary = Source.fromFile(getClass.getResource("/ValidCharityBeneficiary.json").getPath)
+  lazy val validCharityBeneficiary = Source.fromFile(getClass.getResource("/ValidCharityBeneficiary.json").getPath)
     .mkString
     .replace(""""{ADDRESS}"""", validAddressJson)
 
-  val invalidCharityBeneficiary = Source.fromFile(getClass.getResource("/InvalidCharityBeneficiary.json").getPath).mkString
+  lazy val invalidCharityBeneficiary = Source.fromFile(getClass.getResource("/InvalidCharityBeneficiary.json").getPath).mkString
 
-  val validOtherBeneficiary = Source.fromFile(getClass.getResource("/ValidOtherBeneficiary.json").getPath)
+  lazy val validOtherBeneficiary = Source.fromFile(getClass.getResource("/ValidOtherBeneficiary.json").getPath)
     .mkString
     .replace(""""{ADDRESS}"""", validAddressJson)
 
 
 
-  val validBeneficiariesJson = s"""{"individualBeneficiaries":[$validIndividualBeneficiary],"charityBeneficiaries":[$validCharityBeneficiary],"otherBeneficiaries":[$validOtherBeneficiary]}"""
+  lazy val validBeneficiariesJson = s"""{"individualBeneficiaries":[$validIndividualBeneficiary],"charityBeneficiaries":[$validCharityBeneficiary],"otherBeneficiaries":[$validOtherBeneficiary]}"""
 
-  val invalidBeneficiariesJson = s"""{"charityBeneficiaries": [$invalidCharityBeneficiary]}"""
+  lazy val invalidBeneficiariesJson = s"""{"charityBeneficiaries": [$invalidCharityBeneficiary]}"""
 
-  val invalidLeadTrusteeJson = s"""{"individual":$validIndividualJson,"company":$validCompanyJson}"""
+  lazy val invalidLeadTrusteeJson = s"""{"individual":$validIndividualJson,"company":$validCompanyJson}"""
 
-  val validProtectorsJson = s"""{"individuals":[$validIndividualJson],"companies":[$validCompanyJson]}"""
-  val invalidProtectorsJson = s"""{"individuals":[$invalidIndividualJson],"companies":[$invalidCompanyJson]}"""
+  lazy val validProtectorsJson = s"""{"individuals":[$validIndividualJson],"companies":[$validCompanyJson]}"""
+  lazy val invalidProtectorsJson = s"""{"individuals":[$invalidIndividualJson],"companies":[$invalidCompanyJson]}"""
 
-  val validOtherAssetJson = Source.fromFile(getClass.getResource("/ValidOtherAsset.json").getPath).mkString
-  val validShareAssetJson = Source.fromFile(getClass.getResource("/ValidShareAsset.json").getPath).mkString
-  val validBusinessAssetJson = Source.fromFile(getClass.getResource("/ValidBusinessAsset.json").getPath).mkString
-  val validWillIntestacyTrustJson = Source.fromFile(getClass.getResource("/ValidWillIntestacyTrust.json").getPath).mkString
+  lazy val validOtherAssetJson = Source.fromFile(getClass.getResource("/ValidOtherAsset.json").getPath).mkString
+  lazy val validShareAssetJson = Source.fromFile(getClass.getResource("/ValidShareAsset.json").getPath).mkString
+  lazy val validBusinessAssetJson = Source.fromFile(getClass.getResource("/ValidBusinessAsset.json").getPath).mkString
+  lazy val validWillIntestacyTrustJson = Source.fromFile(getClass.getResource("/ValidWillIntestacyTrust.json").getPath).mkString
     .replace("\"{SHAREASSETS}\"", validShareAssetJson)
     .replace("\"{BUSINESSASSETS}\"", validBusinessAssetJson)
     .replace("\"{INDIVIDUALBENEFICIARY}\"", validIndividualBeneficiary)
 
 
-  val validInterVivoTrustJson = Source.fromFile(getClass.getResource("/ValidInterVivoTrust.json").getPath).mkString
-    .replace("\"{SHAREASSETS}\"", validShareAssetJson)
-    .replace("\"{BUSINESSASSETS}\"", validBusinessAssetJson)
-    .replace("\"{INDIVIDUAL}\"", validIndividualJson )
-    .replace("\"{ADDRESS}\"", validAddressJson)
-    .replace("\"{INDIVIDUALBENEFICIARY}\"", validIndividualBeneficiary)
-
-  val validFlatManagementSinkingFundTrustJson = Source.fromFile(getClass.getResource("/ValidFlatManagementSinkingFundTrust.json").getPath).mkString
+  lazy val validFlatManagementSinkingFundTrustJson = Source.fromFile(getClass.getResource("/ValidFlatManagementSinkingFundTrust.json").getPath).mkString
     .replace("\"{SHAREASSETS}\"", validShareAssetJson)
     .replace("\"{BUSINESSASSETS}\"", validBusinessAssetJson)
     .replace("\"{INDIVIDUAL}\"", validIndividualJson )
     .replace("\"{ADDRESS}\"", validAddressJson)
     .replace("\"{INDIVIDUALBENEFICIARY}\"", validIndividualBeneficiary)
 
-  val validEmploymentTrustJson = Source.fromFile(getClass.getResource("/ValidEmploymentTrust.json").getPath).mkString
+  lazy val validEmploymentTrustJson = Source.fromFile(getClass.getResource("/ValidEmploymentTrust.json").getPath).mkString
     .replace("\"{SHAREASSETS}\"", validShareAssetJson)
     .replace("\"{BUSINESSASSETS}\"", validBusinessAssetJson)
     .replace("\"{INDIVIDUAL}\"", validIndividualJson )
     .replace("\"{ADDRESS}\"", validAddressJson)
     .replace("\"{INDIVIDUALBENEFICIARY}\"", validIndividualBeneficiary)
 
-  val validHeritageMaintenanceFundTrustJson = Source.fromFile(getClass.getResource("/ValidHeritageMaintenanceFundTrust.json").getPath).mkString
+  lazy val validHeritageMaintenanceFundTrustJson = Source.fromFile(getClass.getResource("/ValidHeritageMaintenanceFundTrust.json").getPath).mkString
     .replace("\"{SHAREASSETS}\"", validShareAssetJson)
     .replace("\"{OTHERASSETS}\"", validOtherAssetJson)
     .replace("\"{INDIVIDUAL}\"", validIndividualJson )
     .replace("\"{ADDRESS}\"", validAddressJson)
     .replace("\"{OTHERBENEFICIARY}\"", validOtherBeneficiary)
 
-  val invalidWillIntestacyTrustJson = Source.fromFile(getClass.getResource("/InvalidWillInstestacyTrust.json").getPath).mkString
+  lazy val invalidWillIntestacyTrustJson = Source.fromFile(getClass.getResource("/InvalidWillInstestacyTrust.json").getPath).mkString
     .replace("\"{BUSINESSASSETS}\"", validBusinessAssetJson)
     .replace("\"{INDIVIDUALBENEFICIARY}\"", validIndividualBeneficiary)
 
-  val validLegalityJson = Source.fromFile(getClass.getResource("/ValidLegality.json").getPath).mkString
-  val validTrustJson = Source.fromFile(getClass.getResource("/ValidTrust.json").getPath).mkString
+  lazy val validLegalityJson = Source.fromFile(getClass.getResource("/ValidLegality.json").getPath).mkString
+
+  lazy val validTrustJson = Source.fromFile(getClass.getResource("/ValidTrust.json").getPath).mkString
     .replace("\"{WILLINTESTACYTRUST}\"", validWillIntestacyTrustJson)
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
     .replace("\"{ADDRESS}\"", validAddressJson)
     .replace("\"{LEGALITY}\"", validLegalityJson)
 
-  val validTrustInterVivoJson = Source.fromFile(getClass.getResource("/ValidTrustInterVivo.json").getPath).mkString
-    .replace("\"{INTERVIVOTRUST}\"", validInterVivoTrustJson)
-    .replace("\"{INDIVIDUAL}\"", validIndividualJson)
-    .replace("\"{ADDRESS}\"", validAddressJson)
-    .replace("\"{LEGALITY}\"", validLegalityJson)
-
-  val validTrustFlatManagementJson= Source.fromFile(getClass.getResource("/ValidTrustFlatManagementSinkingFund.json").getPath).mkString
+  lazy val validTrustFlatManagementJson= Source.fromFile(getClass.getResource("/ValidTrustFlatManagementSinkingFund.json").getPath).mkString
     .replace("\"{FLATMANAGEMENTSINKINGTRUST}\"", validFlatManagementSinkingFundTrustJson)
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
     .replace("\"{ADDRESS}\"", validAddressJson)
     .replace("\"{LEGALITY}\"", validLegalityJson)
 
-  val validTrustEmploymentJson = Source.fromFile(getClass.getResource("/ValidTrustEmployment.json").getPath).mkString
+  lazy val validInterVivoTrustFundJson = Source.fromFile(getClass.getResource("/ValidInterVivoTrust.json").getPath).mkString
+    .replace("\"{SHAREASSETS}\"", validShareAssetJson)
+    .replace("\"{BUSINESSASSETS}\"", validBusinessAssetJson)
+    .replace("\"{INDIVIDUAL}\"", validIndividualJson )
+    .replace("\"{ADDRESS}\"", validAddressJson)
+    .replace("\"{INDIVIDUALBENEFICIARY}\"", validIndividualBeneficiary)
+
+  lazy val validTrustWithInterVivoJson = Source.fromFile(getClass.getResource("/ValidTrustInterVivo.json").getPath).mkString
+    .replace("\"{INTERVIVOTRUST}\"", validInterVivoTrustFundJson)
+    .replace("\"{INDIVIDUAL}\"", validIndividualJson)
+    .replace("\"{ADDRESS}\"", validAddressJson)
+    .replace("\"{LEGALITY}\"", validLegalityJson)
+
+  lazy val validTrustEmploymentJson = Source.fromFile(getClass.getResource("/ValidTrustEmployment.json").getPath).mkString
     .replace("\"{EMPLOYMENTTRUST}\"", validEmploymentTrustJson)
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
     .replace("\"{ADDRESS}\"", validAddressJson)
     .replace("\"{LEGALITY}\"", validLegalityJson)
 
-  val validTrustHeritageMaintenanceJson = Source.fromFile(getClass.getResource("/ValidTrustHeritageMaintenance.json").getPath).mkString
+  lazy val validTrustHeritageMaintenanceJson = Source.fromFile(getClass.getResource("/ValidTrustHeritageMaintenance.json").getPath).mkString
     .replace("\"{HERITAGEMAINTENANCETRUST}\"", validHeritageMaintenanceFundTrustJson)
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
     .replace("\"{ADDRESS}\"", validAddressJson)
     .replace("\"{LEGALITY}\"", validLegalityJson)
 
-  val invalidTrustJson = Source.fromFile(getClass.getResource("/InvalidTrust.json").getPath).mkString
+  lazy val invalidTrustJson = Source.fromFile(getClass.getResource("/InvalidTrust.json").getPath).mkString
     .replace("\"{WILLINTESTACYTRUST}\"", validWillIntestacyTrustJson)
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
     .replace("\"{ADDRESS}\"", validAddressJson)
     .replace("\"{LEGALITY}\"", validLegalityJson)
 
-  val invalidTrustWithTwoTrustsJson = Source.fromFile(getClass.getResource("/InvalidTrustWithTwoTrusts.json").getPath).mkString
-    .replace("\"{INTERVIVOTRUST}\"", validInterVivoTrustJson)
+  lazy val invalidTrustWithTwoTrustsJson = Source.fromFile(getClass.getResource("/InvalidTrustWithTwoTrusts.json").getPath).mkString
+    .replace("\"{INTERVIVOTRUST}\"", validInterVivoTrustFundJson)
     .replace("\"{FLATMANAGEMENTSINKINGTRUST}\"", validFlatManagementSinkingFundTrustJson)
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
     .replace("\"{ADDRESS}\"", validAddressJson)

@@ -48,7 +48,7 @@ class GetTrustSpec extends PlaySpec
 
       "DES returns a 200 response with a Trust JSON object that contains all required fields and a InterVivo Trust" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200,
-          Some(Json.parse(validTrustInterVivoJson)))))
+          Some(Json.parse(validTrustWithInterVivoJson)))))
 
         val result = Await.result(SUT.getTrust("12324"),Duration.Inf)
         result mustBe GetSuccessResponse(trustWithInterVivoTrust)
