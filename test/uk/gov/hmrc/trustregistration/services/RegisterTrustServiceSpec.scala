@@ -18,13 +18,13 @@ package uk.gov.hmrc.trustregistration.services
 
 import org.mockito.Matchers._
 import org.mockito.Mockito.when
-import org.mockito.Mockito.mock
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
 import uk.gov.hmrc.trustregistration.connectors.DesConnector
 import uk.gov.hmrc.trustregistration.models._
+import uk.gov.hmrc.trustregistration.utils.{JsonSchemaValidator, SuccessfulValidation}
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
@@ -38,6 +38,7 @@ class RegisterTrustServiceSpec extends PlaySpec
   "RegisterTrustService" must {
     "Return a TRN" when {
       "Given a valid trust registration" in {
+        when(mockValidator.validate(any(), any())).thenReturn(SuccessfulValidation)
         when(mockDesConnector.registerTrust(any())(any())).thenReturn(Future.successful(Right(TRN(testTRN))))
         val registration = TrustRegistrationDocument("this is the input")
 
@@ -401,8 +402,10 @@ class RegisterTrustServiceSpec extends PlaySpec
 
 
   val mockDesConnector = mock[DesConnector]
+  val mockValidator = mock[JsonSchemaValidator]
   object TestRegisterTrustService extends RegisterTrustService {
     override val desConnector: DesConnector = mockDesConnector
+    override private[services] def schemaValidator  =  mockValidator
   }
 
   val testTRN: String = "TRN-1234"

@@ -16,18 +16,26 @@
 
 package uk.gov.hmrc.trustregistration.services
 
+import com.github.fge.jackson.JsonLoader
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.connectors.DesConnector
+import uk.gov.hmrc.trustregistration.utils.{FailedValidation, JsonSchemaValidator, SuccessfulValidation}
 
 import scala.concurrent.Future
+import scala.util.{Failure, Success, Try}
+import scala.concurrent.ExecutionContext.Implicits.global
 
 trait RegisterTrustService {
+  private[services] def schemaValidator : JsonSchemaValidator
 
   val desConnector: DesConnector
 
   def registerTrust(regDoc: TrustRegistrationDocument)(implicit hc : HeaderCarrier) : Future[Either[String,TRN]] = {
-    desConnector.registerTrust(regDoc)(hc)
+    schemaValidator.validate(regDoc.toString, "") match {
+      case FailedValidation(errs) => Future(Left(errs.mkString("\n")))
+      case SuccessfulValidation => desConnector.registerTrust(regDoc)(hc)
+    }
   }
 
   def registerEstate(regDoc: EstateRegistrationDocument)(implicit hc : HeaderCarrier) : Future[Either[String,TRN]] = {
@@ -85,4 +93,5 @@ trait RegisterTrustService {
 
 object RegisterTrustService extends RegisterTrustService {
   override val desConnector: DesConnector = DesConnector
+  override private[services] def schemaValidator = JsonSchemaValidator("trustestate-21-11-2016.json")
 }

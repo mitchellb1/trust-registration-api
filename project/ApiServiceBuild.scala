@@ -47,7 +47,8 @@ private object AppDependencies {
     "uk.gov.hmrc" %% "play-json-logger" % playJsonLoggerVersion,
     "uk.gov.hmrc" %% "domain" % domainVersion,
     "uk.gov.hmrc" %% "play-hmrc-api" % playHmrcApiVersion,
-    "com.github.tomakehurst" % "wiremock" % wireMockVersion % "test,it"
+    "com.github.tomakehurst" % "wiremock" % wireMockVersion % "test,it",
+    "com.github.fge" % "json-schema-validator" % "2.2.6"
   )
 
   trait TestDependencies {

@@ -1,6 +1,6 @@
 {
 	"$schema": "http://json-schema.org/draft-04/schema#",
-	"id": "http://uk/gov/hmrc/trustregistration/raml/schemas/trusts.json",
+	"id": "http://uk/gov/hmrc/trustregistration/public/api/conf/2.0/schemas/trust.json",
 	"type": "object",
 	"properties": {
 		"trustEstate": {
@@ -9,7 +9,7 @@
 			"additionalItems": false,
 			"oneOf": [
 				{
-					"properties": {						
+					"properties": {
 						"trust": {
 							"type": "object",
 							"$ref": "#/definitions/trust"
@@ -18,7 +18,7 @@
 					"additionalItems": false,
 					"additionalProperties": false
 				}, {
-					"properties": {						
+					"properties": {
 						"estate": {
 							"type": "object",
 							"$ref": "#/definitions/estate"

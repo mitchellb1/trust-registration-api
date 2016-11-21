@@ -21,6 +21,7 @@ import com.github.fge.jsonschema.main.JsonSchemaFactory
 import com.fasterxml.jackson.databind.JsonNode
 
 import scala.collection.JavaConverters._
+import scala.util.{Failure, Success, Try}
 
 trait ValidationResult
 case object SuccessfulValidation extends ValidationResult
@@ -28,20 +29,31 @@ case class FailedValidation(errors : Seq[String]) extends ValidationResult
 
 
 trait JsonSchemaValidator {
-  def validate(json : JsonNode) : ValidationResult
+  def validate(jsonString : String, node: String) : ValidationResult
 }
 
 object JsonSchemaValidator {
   def apply(schemaFile : String) = new JsonSchemaValidator {
-    override def validate(json : JsonNode) = {
-      val schema = JsonLoader.fromResource(s"/public/api/conf/2.0/schemas/$schemaFile")
-      val factory = JsonSchemaFactory.byDefault.getJsonSchema(schema)
-      val result = factory.validate(json)
 
-      if (result.isSuccess) {
-        SuccessfulValidation
-      } else {
-        FailedValidation(result.iterator().asScala.toSeq.map(pm => pm.asJson().toString))
+    override def validate(jsonString : String, node: String): ValidationResult = {
+
+      val jsonAsNode: Try[JsonNode] = Try(JsonLoader.fromString(jsonString))
+
+     // #/definitions/leadTrusteeType"
+
+      jsonAsNode match {
+        case Failure(ex) => FailedValidation(Seq("Failed to parse Json"))
+        case Success(json) => {
+          val schema = JsonLoader.fromResource(s"/public/api/conf/2.0/schemas/$schemaFile")
+          val factory = JsonSchemaFactory.byDefault.getJsonSchema(schema, node)
+          val result = factory.validate(json)
+
+          if (result.isSuccess) {
+            SuccessfulValidation
+          } else {
+            FailedValidation(result.iterator().asScala.toSeq.map(pm => pm.asJson().toString))
+          }
+        }
       }
     }
   }
