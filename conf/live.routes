@@ -10,6 +10,7 @@ GET        /trusts/:identifier/contact-details  uk.gov.hmrc.trustregistration.co
 GET        /trusts/:identifier/lead-trustee     uk.gov.hmrc.trustregistration.controllers.RegisterTrustController.getLeadTrustee(identifier: String)
 GET        /trusts/:identifier/beneficiaries    uk.gov.hmrc.trustregistration.controllers.RegisterTrustController.getBeneficiaries(identifier: String)
 GET        /trusts/:identifier/protectors       uk.gov.hmrc.trustregistration.controllers.RegisterTrustController.getProtectors(identifier: String)
+GET        /trusts/:identifier                  uk.gov.hmrc.trustregistration.controllers.RegisterTrustController.getTrust(identifier: String)
 
 POST       /estates                             uk.gov.hmrc.trustregistration.controllers.RegisterEstateController.register()
 PUT        /estates/:identifier/close           uk.gov.hmrc.trustregistration.controllers.RegisterEstateController.closeEstate(identifier: String)

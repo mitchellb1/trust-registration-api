@@ -16,16 +16,19 @@
 
 package uk.gov.hmrc.trustregistration.models
 
-import org.scalatestplus.play.PlaySpec
+import play.api.libs.json.{Json, Reads}
+import org.joda.time.DateTime
 
 
-class EstateSpec extends PlaySpec {
-  "Estate" must {
-    "throw an exception" when {
-      "there are no personal representatives or deceased" in {
-        val ex = the [IllegalArgumentException] thrownBy (Estate(true,true,true,true,None,None))
-        ex.getMessage() mustEqual   ("requirement failed: Must have either a personal representative or a deceased")
-      }
-    }
-  }
+case class Declaration (title: String,
+                        givenName: String,
+                        familyName: String,
+                        capacity: String,
+                        date: DateTime,
+                        otherName: Option[String] = None)
+
+
+object Declaration{
+  implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
+  implicit val formats = Json.format[Declaration]
 }

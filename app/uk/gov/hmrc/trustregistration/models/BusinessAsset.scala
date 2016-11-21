@@ -16,19 +16,20 @@
 
 package uk.gov.hmrc.trustregistration.models
 
-import org.scalatestplus.play.PlaySpec
-import uk.gov.hmrc.trustregistration.models.Settlors
+import org.joda.time.DateTime
+import play.api.libs.json.{JsString, Json, Reads, Writes}
 
 
-class SettlorsSpec extends PlaySpec {
 
-  "Settlors" must {
-    "throw an exception" when {
-      "there are no individuals or companies" in {
-        val ex = the [IllegalArgumentException] thrownBy (Settlors(None, None))
-        ex.getMessage() mustEqual  "requirement failed: Must have either an individual or company settlor"
-      }
-    }
-  }
+case class BusinessAsset(buildingName: String,
+                         payeRef: String,
+                         description: String,
+                         correspondenceAddress: Address,
+                         value: Float,
+                         lastValuationDate: Option[DateTime] = None)
 
+object BusinessAsset{
+  implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
+  implicit val dateWrites: Writes[DateTime] = Writes { (dt: DateTime) => JsString(dt.toString("yyyy-MM-dd")) }
+  implicit val formats = Json.format[BusinessAsset]
 }

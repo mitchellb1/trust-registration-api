@@ -16,16 +16,11 @@
 
 package uk.gov.hmrc.trustregistration.models
 
-import org.scalatestplus.play.PlaySpec
+import play.api.libs.json.Json
 
 
-class EstateSpec extends PlaySpec {
-  "Estate" must {
-    "throw an exception" when {
-      "there are no personal representatives or deceased" in {
-        val ex = the [IllegalArgumentException] thrownBy (Estate(true,true,true,true,None,None))
-        ex.getMessage() mustEqual   ("requirement failed: Must have either a personal representative or a deceased")
-      }
-    }
-  }
+case class ShareAsset(shareNumber: Int, shareClass: String, shareType: String, companyRegistrationNumber: String, shareValue: Float)
+
+object ShareAsset{
+  implicit val formats = Json.format[ShareAsset]
 }

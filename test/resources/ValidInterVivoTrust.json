@@ -1,0 +1,22 @@
+{
+  "assets" : {
+    "shareAssets" : [
+      "{SHAREASSETS}","{SHAREASSETS}"
+    ],
+    "businessAssets" : [
+      "{BUSINESSASSETS}","{BUSINESSASSETS}"
+    ]
+  },
+  "settlors" : {
+    "individuals" : [
+      "{INDIVIDUAL}","{INDIVIDUAL}"
+    ]
+  },
+  "beneficiaries" : {
+    "individualBeneficiaries" : [
+      "{INDIVIDUALBENEFICIARY}"
+    ]
+  },
+  "deceased" : "{INDIVIDUAL}",
+  "isHoldOverClaim" : true
+}

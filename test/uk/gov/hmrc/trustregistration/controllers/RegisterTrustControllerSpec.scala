@@ -680,9 +680,63 @@ class RegisterTrustControllerSpec extends PlaySpec
     "return 401" when {
       "the endpoint is called and authentication credentials are missing or incorrect" in {
         when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "NOT_AUTHORISED"))
-        val result = SUT.getProtectors("12345").apply(FakeRequest("GET", ""))
 
+        val result = SUT.getProtectors("12345").apply(FakeRequest("GET", ""))
         status(result) mustBe UNAUTHORIZED
+      }
+    }
+
+    "Get Trust endpoint" must {
+      "return 200 ok with valid json" when {
+        "the endpoint is called with a valid identifier" in {
+          when(mockRegisterTrustService.getTrust(any[String])(any[HeaderCarrier]))
+            .thenReturn(Future.successful(new GetSuccessResponse[Trust](trust)))
+
+          val result = SUT.getTrust("sadfg").apply(FakeRequest("GET", ""))
+          val jsonResult = Json.parse(contentAsString(result))
+
+          status(result) mustBe OK
+          jsonResult.as[Trust] mustBe trust
+        }
+      }
+
+      "return 404 not found" when {
+        "the endpoint is called with an identifier that can't be found" in {
+          when(mockRegisterTrustService.getTrust(any[String])(any[HeaderCarrier]))
+            .thenReturn(Future.successful(NotFoundResponse))
+
+          val result = SUT.getTrust("404NotFound").apply(FakeRequest("GET", ""))
+          status(result) mustBe NOT_FOUND
+        }
+      }
+
+      "return 400" when {
+        "the  endpoint is called with an invalid identifier" in {
+          when(mockRegisterTrustService.getTrust(any[String])(any[HeaderCarrier]))
+            .thenReturn(Future.successful(BadRequestResponse))
+
+          val result = SUT.getTrust("sadfg").apply(FakeRequest("GET", ""))
+          status(result) mustBe BAD_REQUEST
+        }
+      }
+
+      "return 500" when {
+        "something is broken" in {
+          when(mockRegisterTrustService.getTrust(any[String])(any[HeaderCarrier]))
+            .thenReturn(Future.successful(InternalServerErrorResponse))
+
+          val result = SUT.getTrust("sadfg").apply(FakeRequest("GET", ""))
+          status(result) mustBe INTERNAL_SERVER_ERROR
+        }
+      }
+
+      "return 401" when {
+        "the endpoint is called and authentication credentials are missing or incorrect" in {
+          when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "NOT_AUTHORISED"))
+
+          val result = SUT.getTrust("12345").apply(FakeRequest("GET", ""))
+          status(result) mustBe UNAUTHORIZED
+        }
       }
     }
 
