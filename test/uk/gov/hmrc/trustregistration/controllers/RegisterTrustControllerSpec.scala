@@ -44,7 +44,7 @@ class RegisterTrustControllerSpec extends PlaySpec
   with RegisterTrustServiceMocks {
 
   before {
-    when(mockRegisterTrustService.registerTrust(any[TrustRegistrationDocument])(any[HeaderCarrier]))
+    when(mockRegisterTrustService.registerTrust(any[Trust])(any[HeaderCarrier]))
       .thenReturn(Future.successful(Right(TRN("TRN-1234"))))
 
     when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "AUTHORISED"))
@@ -54,7 +54,7 @@ class RegisterTrustControllerSpec extends PlaySpec
   "RegisterTrustController" must {
     "return created with a TRN" when {
       "the register endpoint is called with a valid json payload" in {
-        withCallToPOST(trustRegDocPayload) { result =>
+        withCallToPOST(Json.parse(validTrustJson)) { result =>
           status(result) mustBe CREATED
           contentAsString(result) must include("TRN")
         }
@@ -62,8 +62,9 @@ class RegisterTrustControllerSpec extends PlaySpec
     }
     "Return a Bad Request" when {
       "The json trust document is invalid" in {
-        withCallToPOST(badRegDocPayload) { result =>
+        withCallToPOST(Json.parse(invalidTrustWithTwoTrustsJson)) { result =>
           status(result) mustBe BAD_REQUEST
+          contentAsString(result) must include("Must have one type of Trust")
         }
       }
       "The json trust document is missing" in {
