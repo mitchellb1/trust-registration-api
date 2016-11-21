@@ -42,7 +42,7 @@ class RegisterTrustSandboxControllerSpec extends PlaySpec
   with RegisterTrustServiceMocks {
 
   before {
-    when(mockRegisterTrustService.registerTrust(any[TrustRegistrationDocument])(any[HeaderCarrier]))
+    when(mockRegisterTrustService.registerTrust(any[Trust])(any[HeaderCarrier]))
       .thenReturn(Future.successful(Right(TRN("TRN-1234"))))
 
     when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "AUTHORISED"))
@@ -51,7 +51,7 @@ class RegisterTrustSandboxControllerSpec extends PlaySpec
   "RegisterTrustSandboxController" must {
     "return created with a TRN" when {
       "the register endpoint is called with a valid json payload" in {
-        withCallToPOST(trustRegDocPayload) { result =>
+        withCallToPOST(Json.parse(validTrustJson)) { result =>
           status(result) mustBe CREATED
           contentAsString(result) must include("TRN")
         }

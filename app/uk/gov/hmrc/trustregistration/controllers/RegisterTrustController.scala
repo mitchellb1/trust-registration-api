@@ -16,10 +16,8 @@
 
 package uk.gov.hmrc.trustregistration.controllers
 
-import play.api.Logger
-import play.api.libs.json.{JsError, JsResult, JsValue, Json}
-import play.api.mvc.{Action, AnyContent, Result}
-import uk.gov.hmrc.play.http.HeaderCarrier
+import play.api.libs.json.{JsError, JsValue, Json}
+import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
@@ -31,22 +29,27 @@ import scala.concurrent.Future
 trait RegisterTrustController extends ApplicationBaseController {
 
   def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
-    Logger.info("Trust Register API invoked")
-
-    val jsonBody: JsResult[TrustRegistrationDocument] = request.body.validate[TrustRegistrationDocument]
-    jsonBody.map { regDoc: TrustRegistrationDocument => {
-        val futureEither: Future[Either[String, TRN]] = registerTrustService.registerTrust(regDoc)
-        futureEither.map {
-          case Right(identifier) => Created(Json.toJson(identifier))
-          case _ => BadRequest("Error:")
+    authorised("register", "") {
+        try{
+          request.body.validate[Trust].map {
+            trust: Trust => {
+              val futureEither: Future[Either[String, TRN]] = registerTrustService.registerTrust(trust)
+              futureEither.map {
+                case Right(identifier) => Created(Json.toJson(identifier))
+                case _ => BadRequest("Error:")
+              }
+            }
+          }.recoverTotal {
+            e => {
+              Future.successful(BadRequest("Detected error:" + JsError.toFlatJson(e)))
+            }
+          }
+        }
+        catch {
+          case e => Future.successful(BadRequest("Error" + e))
         }
       }
-    }.recoverTotal {
-      e => {
-        Future.successful(BadRequest("Detected error:" + JsError.toFlatJson(e)))
-      }
     }
-  }
 
   def noChange(identifier: String): Action[AnyContent] = Action.async{ implicit request =>
     authorised("noChange", identifier) {

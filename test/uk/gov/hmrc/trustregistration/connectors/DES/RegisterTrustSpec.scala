@@ -22,42 +22,40 @@ import org.mockito.Mockito._
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Writes
 import uk.gov.hmrc.play.http._
+import uk.gov.hmrc.trustregistration.ScalaDataExamples
 import uk.gov.hmrc.trustregistration.models._
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
 
-class RegisterTrustSpec extends PlaySpec with OneAppPerSuite with DESConnectorMocks {
+class RegisterTrustSpec extends PlaySpec with OneAppPerSuite with DESConnectorMocks with ScalaDataExamples {
 
   "Register Trust endpoint" must {
     "return an identifier" when {
       "given a RegisterDocument" in {
-        when (mockHttpPost.POST[TrustRegistrationDocument,HttpResponse](Matchers.any(),Matchers.any(),Matchers.any())
+        when (mockHttpPost.POST[Trust,HttpResponse](Matchers.any(),Matchers.any(),Matchers.any())
           (Matchers.any(),Matchers.any(),Matchers.any())).
           thenReturn(Future.successful(HttpResponse(201)))
-        val doc = TrustRegistrationDocument("1234")
-        val result = Await.result(SUT.registerTrust(doc),Duration.Inf)
+        val result = Await.result(SUT.registerTrust(trustWithEmploymentTrust),Duration.Inf)
         result mustBe Right(TRN("TRN-1234"))
       }
     }
     "return a service unavailable response" when {
       "DES returns a service unavailable response " in {
-        when (mockHttpPost.POST[TrustRegistrationDocument,HttpResponse](any[String](),any[TrustRegistrationDocument](),any[Seq[(String,String)]]())
-          (any[Writes[TrustRegistrationDocument]](),any[HttpReads[HttpResponse]](),any[HeaderCarrier]())).
+        when (mockHttpPost.POST[Trust,HttpResponse](any[String](),any[Trust](),any[Seq[(String,String)]]())
+          (any[Writes[Trust]](),any[HttpReads[HttpResponse]](),any[HeaderCarrier]())).
           thenReturn(Future.successful(HttpResponse(503)))
-        val doc = TrustRegistrationDocument("1234")
-        val result = Await.result(SUT.registerTrust(doc),Duration.Inf)
+        val result = Await.result(SUT.registerTrust(trustWithEmploymentTrust),Duration.Inf)
         result mustBe Left("503")
       }
     }
     "return an exception" when {
       "Call to DES fails" in {
-        when (mockHttpPost.POST[TrustRegistrationDocument,HttpResponse](any[String](),any[TrustRegistrationDocument](),any[Seq[(String,String)]]())
-          (any[Writes[TrustRegistrationDocument]](),any[HttpReads[HttpResponse]](),any[HeaderCarrier]())).
+        when (mockHttpPost.POST[Trust,HttpResponse](any[String](),any[Trust](),any[Seq[(String,String)]]())
+          (any[Writes[Trust]](),any[HttpReads[HttpResponse]](),any[HeaderCarrier]())).
           thenReturn(Future.failed(Upstream4xxResponse("Bad request",400,400)))
-        val doc = TrustRegistrationDocument("")
-        val result = Await.result(SUT.registerTrust(doc),Duration.Inf)
+        val result = Await.result(SUT.registerTrust(trustWithEmploymentTrust),Duration.Inf)
         result mustBe Left("400")
       }
     }
