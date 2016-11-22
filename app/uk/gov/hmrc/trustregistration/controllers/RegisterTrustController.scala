@@ -36,6 +36,7 @@ trait RegisterTrustController extends ApplicationBaseController {
               val futureEither: Future[Either[String, TRN]] = registerTrustService.registerTrust(trust)
               futureEither.map {
                 case Right(identifier) => Created(Json.toJson(identifier))
+                case Left("503") => InternalServerError
                 case _ => BadRequest("Error:")
               }
             }

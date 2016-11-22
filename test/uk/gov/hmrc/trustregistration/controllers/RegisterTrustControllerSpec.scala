@@ -17,14 +17,16 @@
 package uk.gov.hmrc.trustregistration.controllers
 
 
+import akka.stream.{ActorMaterializer, Materializer}
 import org.joda.time.DateTime
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.http.HeaderNames.{AUTHORIZATION => _, CONTENT_TYPE => _}
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{RequestHeader, Result}
+import play.api.mvc.{Request, RequestHeader, Result}
 import play.api.test.{FakeHeaders, FakeRequest}
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.http.HeaderCarrier
@@ -44,8 +46,7 @@ class RegisterTrustControllerSpec extends PlaySpec
   with RegisterTrustServiceMocks {
 
   before {
-    when(mockRegisterTrustService.registerTrust(any[Trust])(any[HeaderCarrier]))
-      .thenReturn(Future.successful(Right(TRN("TRN-1234"))))
+
 
     when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "AUTHORISED"))
 
@@ -54,6 +55,9 @@ class RegisterTrustControllerSpec extends PlaySpec
   "RegisterTrustController" must {
     "return created with a TRN" when {
       "the register endpoint is called with a valid json payload" in {
+        when(mockRegisterTrustService.registerTrust(any[Trust])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(Right(TRN("TRN-1234"))))
+
         withCallToPOST(Json.parse(validTrustJson)) { result =>
           status(result) mustBe CREATED
           contentAsString(result) must include("TRN")
@@ -68,8 +72,19 @@ class RegisterTrustControllerSpec extends PlaySpec
         }
       }
       "The json trust document is missing" in {
-        withCallToPOST() { result =>
+        withCallToPOST(Json.parse("{}")) { result =>
           status(result) mustBe BAD_REQUEST
+        }
+      }
+    }
+
+    "Return an Internal Server Error" when {
+      "something is broken" in {
+        when(mockRegisterTrustService.registerTrust(any[Trust])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(Left("503")))
+
+        withCallToPOST(Json.parse(validTrustJson)) { result =>
+          status(result) mustBe INTERNAL_SERVER_ERROR
         }
       }
     }
@@ -753,15 +768,5 @@ class RegisterTrustControllerSpec extends PlaySpec
 
   private def withCallToPOST(payload: JsValue)(handler: Future[Result] => Any) = {
     handler(SUT.register.apply(registerRequestWithPayload(payload)))
-  }
-
-  private def withCallToPOST()(handler: Future[Result] => Any) = {
-    val fr = FakeRequest(
-      "PUT",
-      "",
-      FakeHeaders(),
-      ""
-    ).withHeaders(CONTENT_TYPE -> "application/json")
-    SUT.register.apply(fr)
   }
 }
