@@ -1049,6 +1049,17 @@
 			"additionalProperties": false,
 			"description": "An Estate",
 			"properties": {
+				"estateName": {
+					"additionalProperties": false,
+					"properties": {
+						"$": {
+							"maxLength": 56,
+							"minLength": 1,
+							"type": "string"
+						}
+					},
+					"type": "object"
+				},
 				"adminPeriodFinishedDate": {
 					"additionalProperties": false,
 					"properties": {
@@ -1516,13 +1527,17 @@
 			"additionalProperties": false,
 			"properties": {
 				"company": {
-					"$ref": "#/definitions/companyType"
+					"oneOf":[{"$ref": "#/definitions/companyType"}]
 				},
 				"individual": {
-					"$ref": "#/definitions/individualType"
+					"oneOf":[{"$ref": "#/definitions/individualType"}]
 				}
 			},
-			"type": "object"
+			"type": "object",
+			"oneOf": [
+			{"required": ["individual"]},
+			{"required": ["company"]}
+			]
 		},
 		"legalityType": {
 			"additionalProperties": false,
