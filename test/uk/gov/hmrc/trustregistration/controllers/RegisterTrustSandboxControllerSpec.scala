@@ -31,6 +31,7 @@ import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
+import uk.gov.hmrc.trustregistration.utils.JsonSchemaValidator
 
 import scala.concurrent.Future
 
@@ -90,6 +91,8 @@ class RegisterTrustSandboxControllerSpec extends PlaySpec
 
     override val metrics: ApplicationMetrics = mockMetrics
     override val registerTrustService: RegisterTrustService = mockRegisterTrustService
+    override val jsonSchemaValidator = JsonSchemaValidator
+
   }
 
   private def withCallToPOST(payload: JsValue)(handler: Future[Result] => Any) = {

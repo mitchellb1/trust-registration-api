@@ -18,6 +18,7 @@ package uk.gov.hmrc.trustregistration.controllers
 
 
 import akka.stream.{ActorMaterializer, Materializer}
+import com.google.i18n.phonenumbers.PhoneNumberUtil.ValidationResult
 import org.joda.time.DateTime
 import org.mockito.Matchers._
 import org.mockito.Mockito._
@@ -34,6 +35,7 @@ import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
+import uk.gov.hmrc.trustregistration.utils.{FailedValidation, JsonSchemaValidator, SuccessfulValidation}
 
 import scala.concurrent.Future
 
@@ -49,6 +51,8 @@ class RegisterTrustControllerSpec extends PlaySpec
 
 
     when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "AUTHORISED"))
+
+    when(mockSchemaValidator.validate(anyString(), anyString())).thenReturn(SuccessfulValidation)
 
   }
 
@@ -73,6 +77,13 @@ class RegisterTrustControllerSpec extends PlaySpec
       }
       "The json trust document is missing" in {
         withCallToPOST(Json.parse("{}")) { result =>
+          status(result) mustBe BAD_REQUEST
+        }
+      }
+      "The json fails schema validation" in {
+        when(mockSchemaValidator.validate(anyString(), anyString())).thenReturn(FailedValidation(List("Error")))
+
+        withCallToPOST(Json.parse(validTrustJson)) { result =>
           status(result) mustBe BAD_REQUEST
         }
       }
@@ -758,12 +769,15 @@ class RegisterTrustControllerSpec extends PlaySpec
 
   }
 
+  val mockSchemaValidator = mock[JsonSchemaValidator]
+
 
   object SUT extends RegisterTrustController {
     override implicit def hc(implicit rh: RequestHeader): HeaderCarrier = mockHC
 
     override val metrics: ApplicationMetrics = mockMetrics
     override val registerTrustService: RegisterTrustService = mockRegisterTrustService
+    override val jsonSchemaValidator = mockSchemaValidator
   }
 
   private def withCallToPOST(payload: JsValue)(handler: Future[Result] => Any) = {

@@ -68,7 +68,8 @@ class JsonValidatorSpec extends PlaySpec with  ValidatorBase{
         val res = result match {
           case SuccessfulValidation => SuccessfulValidation
           case f: FailedValidation => {
-            val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
+            val messages: Seq[JsValue] = Json.parse(f.errors.toStream..mkString.) \\ "message"
+            val location: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "location"
             println(s"invalidEstateNoName =>${messages.map(_.as[String])}")
             messages.map(_.as[String]) must contain ("object has missing required properties ([\"estateName\"])")
           }

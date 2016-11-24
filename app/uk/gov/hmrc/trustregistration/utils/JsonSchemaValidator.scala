@@ -19,6 +19,7 @@ package uk.gov.hmrc.trustregistration.utils
 import com.github.fge.jackson.JsonLoader
 import com.github.fge.jsonschema.main.JsonSchemaFactory
 import com.fasterxml.jackson.databind.JsonNode
+import com.github.fge.jsonschema.core.report.ProcessingReport
 
 import scala.collection.JavaConverters._
 import scala.util.{Failure, Success, Try}
@@ -41,7 +42,7 @@ trait JsonSchemaValidator {
       case Success(json) => {
           val schema: JsonNode = JsonLoader.fromResource(s"/public/api/conf/$schemaFilename")
         val factory = JsonSchemaFactory.byDefault.getJsonSchema(schema, node)
-        val result = factory.validate(json)
+        val result: ProcessingReport = factory.validate(json)
 
         if (result.isSuccess) {
           SuccessfulValidation

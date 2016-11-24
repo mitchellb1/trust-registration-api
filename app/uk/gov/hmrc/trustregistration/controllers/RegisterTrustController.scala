@@ -21,6 +21,7 @@ import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
+import uk.gov.hmrc.trustregistration.utils.{FailedValidation, JsonSchemaValidator}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -28,29 +29,38 @@ import scala.concurrent.Future
 
 trait RegisterTrustController extends ApplicationBaseController {
 
+  val jsonSchemaValidator: JsonSchemaValidator
+
   def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     authorised("register", "") {
-        try{
-          request.body.validate[Trust].map {
-            trust: Trust => {
-              val futureEither: Future[Either[String, TRN]] = registerTrustService.registerTrust(trust)
-              futureEither.map {
-                case Right(identifier) => Created(Json.toJson(identifier))
-                case Left("503") => InternalServerError
-                case _ => BadRequest("Error:")
+      val validationResult = jsonSchemaValidator.validate(request.body.toString(), "")
+
+      validationResult match {
+        case _: FailedValidation => Future.successful(BadRequest)
+        case _ => {
+          try {
+            request.body.validate[Trust].map {
+              trust: Trust => {
+                val futureEither: Future[Either[String, TRN]] = registerTrustService.registerTrust(trust)
+                futureEither.map {
+                  case Right(identifier) => Created(Json.toJson(identifier))
+                  case Left("503") => InternalServerError
+                  case _ => BadRequest("Error:")
+                }
+              }
+            }.recoverTotal {
+              e => {
+                Future.successful(BadRequest("Detected error:" + JsError.toFlatJson(e)))
               }
             }
-          }.recoverTotal {
-            e => {
-              Future.successful(BadRequest("Detected error:" + JsError.toFlatJson(e)))
-            }
           }
-        }
-        catch {
-          case e => Future.successful(BadRequest("Error" + e))
+          catch {
+            case e => Future.successful(BadRequest("Error" + e))
+          }
         }
       }
     }
+  }
 
   def noChange(identifier: String): Action[AnyContent] = Action.async{ implicit request =>
     authorised("noChange", identifier) {
@@ -115,5 +125,6 @@ trait RegisterTrustController extends ApplicationBaseController {
 
 object RegisterTrustController extends RegisterTrustController {
   override val registerTrustService = RegisterTrustService
+  override val jsonSchemaValidator = JsonSchemaValidator
   override val metrics = ApplicationMetrics
 }
