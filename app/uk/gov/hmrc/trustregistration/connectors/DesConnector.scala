@@ -136,10 +136,10 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
       timer = metrics.startDesConnectorTimer("getProtectors"))
   }
 
-  def registerTrust(doc: TrustRegistrationDocument)(implicit hc : HeaderCarrier) = {
+  def registerTrust(trust: Trust)(implicit hc : HeaderCarrier) = {
     val uri: String = s"$trustsServiceUrl/register"
 
-    getRegisterResponse(httpPost.POST[TrustRegistrationDocument,HttpResponse](uri,doc)(implicitly, httpReads, implicitly))
+    getRegisterResponse(httpPost.POST[Trust,HttpResponse](uri,trust)(implicitly, httpReads, implicitly))
   }
 
   def registerEstate(doc: EstateRegistrationDocument)(implicit hc : HeaderCarrier) = {

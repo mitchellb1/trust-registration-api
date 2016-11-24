@@ -31,11 +31,9 @@ trait RegisterTrustService {
 
   val desConnector: DesConnector
 
-  def registerTrust(regDoc: TrustRegistrationDocument)(implicit hc : HeaderCarrier) : Future[Either[String,TRN]] = {
-    schemaValidator.validate(regDoc.toString, "") match {
-      case FailedValidation(errs) => Future(Left(errs.mkString("\n")))
-      case SuccessfulValidation => desConnector.registerTrust(regDoc)(hc)
-    }
+
+  def registerTrust(trust: Trust)(implicit hc : HeaderCarrier) : Future[Either[String,TRN]] = {
+    desConnector.registerTrust(trust)(hc)
   }
 
   def registerEstate(regDoc: EstateRegistrationDocument)(implicit hc : HeaderCarrier) : Future[Either[String,TRN]] = {
@@ -93,5 +91,4 @@ trait RegisterTrustService {
 
 object RegisterTrustService extends RegisterTrustService {
   override val desConnector: DesConnector = DesConnector
-  override private[services] def schemaValidator = JsonSchemaValidator("trustestate-21-11-2016.json")
 }
