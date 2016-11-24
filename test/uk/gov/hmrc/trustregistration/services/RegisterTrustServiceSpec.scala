@@ -24,7 +24,7 @@ import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
 import uk.gov.hmrc.trustregistration.connectors.DesConnector
 import uk.gov.hmrc.trustregistration.models._
-import uk.gov.hmrc.trustregistration.utils.{JsonSchemaValidator, SuccessfulValidation}
+import uk.gov.hmrc.trustregistration.utils.{JsonSchemaValidator, SuccessfulValidation, ValidatorBase}
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
@@ -38,7 +38,6 @@ class RegisterTrustServiceSpec extends PlaySpec
   "RegisterTrustService" must {
     "Return a TRN" when {
       "Given a valid trust registration" in {
-        when(mockValidator.validate(any(), any())).thenReturn(SuccessfulValidation)
         when(mockDesConnector.registerTrust(any())(any())).thenReturn(Future.successful(Right(TRN(testTRN))))
 
         val result = Await.result(SUT.registerTrust(trustWithFlatManagementFund)(HeaderCarrier()), Duration.Inf)
@@ -402,10 +401,8 @@ class RegisterTrustServiceSpec extends PlaySpec
 
 
   val mockDesConnector = mock[DesConnector]
-  val mockValidator = mock[JsonSchemaValidator]
   object TestRegisterTrustService extends RegisterTrustService {
     override val desConnector: DesConnector = mockDesConnector
-    override private[services] def schemaValidator  =  mockValidator
   }
 
   val testTRN: String = "TRN-1234"

@@ -64,7 +64,6 @@ class JsonValidatorSpec extends PlaySpec with  ValidatorBase{
         }
       }
       "given an invalid estate" in {
-        def schemaValidator = JsonSchemaValidator("trustestate-21-11-2016.json")
         val result = schemaValidator.validate(invalidEstateNoName, "")
         val res = result match {
           case SuccessfulValidation => SuccessfulValidation

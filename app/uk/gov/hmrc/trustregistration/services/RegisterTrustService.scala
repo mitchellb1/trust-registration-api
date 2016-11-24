@@ -27,13 +27,11 @@ import scala.util.{Failure, Success, Try}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 trait RegisterTrustService {
-  private[services] def schemaValidator : JsonSchemaValidator
 
   val desConnector: DesConnector
 
-
-  def registerTrust(trust: Trust)(implicit hc : HeaderCarrier) : Future[Either[String,TRN]] = {
-    desConnector.registerTrust(trust)(hc)
+  def registerTrust(regDoc: TrustRegistrationDocument)(implicit hc : HeaderCarrier) : Future[Either[String,TRN]] = {
+    desConnector.registerTrust(regDoc)(hc)
   }
 
   def registerEstate(regDoc: EstateRegistrationDocument)(implicit hc : HeaderCarrier) : Future[Either[String,TRN]] = {

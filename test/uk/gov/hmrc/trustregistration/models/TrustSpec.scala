@@ -25,15 +25,19 @@ class TrustSpec extends PlaySpec with ScalaDataExamples {
   "Trust" must {
     "throw an exception" when {
       "there are no trusts" in {
-        val ex = the [IllegalArgumentException] thrownBy (Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),legality,true,leadTrustee,List(individual,individual,individual,individual),
-          Protectors(Some(List(individual,individual))),List(individual,individual,individual,individual),None,None,None,None,None))
+        val ex = the [IllegalArgumentException] thrownBy Trust("Test Trust", address, "0044 1234 1234", "1970", new DateTime("1940-01-01"), legality, true, leadTrustee, List(individual, individual, individual, individual),
+          Protectors(Some(List(individual, individual))), List(individual, individual, individual, individual), None, None, None, None, None)
         ex.getMessage() mustEqual  "requirement failed: Must have one type of Trust"
       }
       "there is more than one trust" in {
         val interVivoTrust = InterVivoTrust(assets,settlors,beneficiaries,true)
-        val ex = the [IllegalArgumentException] thrownBy (Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),legality,true,leadTrustee,List(individual,individual,individual,individual),
-          Protectors(Some(List(individual,individual))),List(individual,individual,individual,individual),Some(willIntestacyTrust),Some(interVivoTrust),None,None,None))
+        val ex = the [IllegalArgumentException] thrownBy Trust("Test Trust", address, "0044 1234 1234", "1970", new DateTime("1940-01-01"), legality, true, leadTrustee, List(individual, individual, individual, individual),
+          Protectors(Some(List(individual, individual))), List(individual, individual, individual, individual), Some(willIntestacyTrust), Some(interVivoTrust), None, None, None)
         ex.getMessage() mustEqual  "requirement failed: Must have one type of Trust"
+      }
+
+      "the schema validation fails" in {
+
       }
     }
   }

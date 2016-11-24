@@ -29,32 +29,31 @@ case class FailedValidation(errors : Seq[String]) extends ValidationResult
 
 
 trait JsonSchemaValidator {
-  def validate(jsonString : String, node: String) : ValidationResult
-}
+  val schemaFilename: String
 
-object JsonSchemaValidator {
-  def apply(schemaFile : String) = new JsonSchemaValidator {
+  def validate(jsonString : String, node: String) : ValidationResult = {
+    val jsonAsNode: Try[JsonNode] = Try(JsonLoader.fromString(jsonString))
 
-    override def validate(jsonString : String, node: String): ValidationResult = {
+    // #/definitions/leadTrusteeType"
 
-      val jsonAsNode: Try[JsonNode] = Try(JsonLoader.fromString(jsonString))
+    jsonAsNode match {
+      case Failure(ex) => FailedValidation(Seq("Failed to parse Json"))
+      case Success(json) => {
+          val schema: JsonNode = JsonLoader.fromResource(s"/public/api/conf/$schemaFilename")
+        val factory = JsonSchemaFactory.byDefault.getJsonSchema(schema, node)
+        val result = factory.validate(json)
 
-     // #/definitions/leadTrusteeType"
-
-      jsonAsNode match {
-        case Failure(ex) => FailedValidation(Seq("Failed to parse Json"))
-        case Success(json) => {
-          val schema = JsonLoader.fromResource(s"/public/api/conf/2.0/schemas/$schemaFile")
-          val factory = JsonSchemaFactory.byDefault.getJsonSchema(schema, node)
-          val result = factory.validate(json)
-
-          if (result.isSuccess) {
-            SuccessfulValidation
-          } else {
-            FailedValidation(result.iterator().asScala.toSeq.map(pm => pm.asJson().toString))
-          }
+        if (result.isSuccess) {
+          SuccessfulValidation
+        } else {
+          FailedValidation(result.iterator().asScala.toSeq.map(pm => pm.asJson().toString))
         }
       }
     }
   }
+
+}
+
+object JsonSchemaValidator extends JsonSchemaValidator {
+  val schemaFilename = "1.0/schemas/trusts.json"
 }

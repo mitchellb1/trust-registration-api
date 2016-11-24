@@ -19,5 +19,7 @@ package uk.gov.hmrc.trustregistration.utils
 
 trait ValidatorBase {
 
-  def schemaValidator = JsonSchemaValidator("trustestate-21-11-2016.json")
+  object schemaValidator extends JsonSchemaValidator {
+    override val schemaFilename = "2.0/schemas/trustestate-21-11-2016.json"
+  }
 }
