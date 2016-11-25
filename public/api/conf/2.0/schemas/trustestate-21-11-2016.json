@@ -1527,16 +1527,16 @@
 			"additionalProperties": false,
 			"properties": {
 				"company": {
-					"oneOf":[{"$ref": "#/definitions/companyType"}]
+					"$ref": "#/definitions/companyType"
 				},
 				"individual": {
-					"oneOf":[{"$ref": "#/definitions/individualType"}]
+					"$ref": "#/definitions/individualType"
 				}
 			},
 			"type": "object",
 			"oneOf": [
-			{"required": ["individual"]},
-			{"required": ["company"]}
+				{"required": ["individual"]},
+				{"required": ["company"]}
 			]
 		},
 		"legalityType": {

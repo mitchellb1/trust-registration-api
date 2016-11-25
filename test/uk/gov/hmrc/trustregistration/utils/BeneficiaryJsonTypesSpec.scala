@@ -26,28 +26,26 @@ class BeneficiaryJsonTypesSpec extends PlaySpec with  ValidatorBase{
     //Happy Path
     "read the schema and return a SuccessfulValidation" when {
       "given a valid Other Beneficiary Type" in {
-        val result = schemaValidator.validate(validOtherBeneficiary, "/definitions/otherBeneficiariesType")
-        val res = result match {
-          case SuccessfulValidation => SuccessfulValidation
-          case f: FailedValidation => {
-            val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
-            println(s"validOtherBeneficiary =>${messages.map(_.as[String])}")
-            messages
+        val parseResult = schemaValidator.validateIsJson(validOtherBeneficiary)
+
+        parseResult match {
+          case Some(jsonNode) => {
+            val result = schemaValidator.validateAgainstSchema(jsonNode,"/definitions/otherBeneficiariesType")
+            result mustBe SuccessfulValidation
           }
+          case _ => fail("Could not parse Json to a JsonNode")
         }
-        result mustBe SuccessfulValidation
       }
       "given multiple valid Other Beneficiary" in {
-        val result = schemaValidator.validate(validMultipleOtherBeneficiary, "/definitions/otherBeneficiariesType")
-        val res = result match {
-          case SuccessfulValidation => SuccessfulValidation
-          case f: FailedValidation => {
-            val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
-            println(s"validMultipleOtherBeneficiary =>${messages.map(_.as[String])}")
-            messages
+        val parseResult = schemaValidator.validateIsJson(validMultipleOtherBeneficiary)
+
+        parseResult match {
+          case Some(jsonNode) => {
+            val result = schemaValidator.validateAgainstSchema(jsonNode,"/definitions/otherBeneficiariesType")
+            result mustBe SuccessfulValidation
           }
+          case _ => fail("Could not parse Json to a JsonNode")
         }
-        result mustBe SuccessfulValidation
       }
     }
 

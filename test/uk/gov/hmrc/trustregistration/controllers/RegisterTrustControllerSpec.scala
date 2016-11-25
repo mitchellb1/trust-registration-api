@@ -18,6 +18,8 @@ package uk.gov.hmrc.trustregistration.controllers
 
 
 import akka.stream.{ActorMaterializer, Materializer}
+import com.fasterxml.jackson.databind.JsonNode
+import com.github.fge.jackson.JsonLoader
 import com.google.i18n.phonenumbers.PhoneNumberUtil.ValidationResult
 import org.joda.time.DateTime
 import org.mockito.Matchers._
@@ -48,12 +50,10 @@ class RegisterTrustControllerSpec extends PlaySpec
   with RegisterTrustServiceMocks {
 
   before {
-
-
     when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "AUTHORISED"))
 
-    when(mockSchemaValidator.validate(anyString(), anyString())).thenReturn(SuccessfulValidation)
-
+    when(mockSchemaValidator.validateIsJson(anyString())).thenReturn(Some(JsonLoader.fromString("{}")))
+    when(mockSchemaValidator.validateAgainstSchema(any(), anyString())).thenReturn(SuccessfulValidation())
   }
 
   "RegisterTrustController" must {
@@ -81,7 +81,7 @@ class RegisterTrustControllerSpec extends PlaySpec
         }
       }
       "The json fails schema validation" in {
-        when(mockSchemaValidator.validate(anyString(), anyString())).thenReturn(FailedValidation(List("Error")))
+        when(mockSchemaValidator.validateAgainstSchema(any(), anyString())).thenReturn(FailedValidation(List("Error")))
 
         withCallToPOST(Json.parse(validTrustJson)) { result =>
           status(result) mustBe BAD_REQUEST
@@ -778,6 +778,10 @@ class RegisterTrustControllerSpec extends PlaySpec
     override val metrics: ApplicationMetrics = mockMetrics
     override val registerTrustService: RegisterTrustService = mockRegisterTrustService
     override val jsonSchemaValidator = mockSchemaValidator
+  }
+
+  private def withCalltoPOSTInvalidPayload(payload: String)(handler: Future[Result] => Any) = {
+    handler(SUT.register.apply(registerRequestWithPayload(Json.parse(payload))))
   }
 
   private def withCallToPOST(payload: JsValue)(handler: Future[Result] => Any) = {

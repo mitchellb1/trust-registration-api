@@ -25,28 +25,27 @@ class AssetsJsonTypesSpec extends PlaySpec with  ValidatorBase{
     //Happy Path
     "read the schema and return a SuccessfulValidation" when {
       "given a valid monetary Assets Type" in {
-        val result = schemaValidator.validate(validMonetaryAssets, "/definitions/monetaryAssetsType")
-        val res = result match {
-          case SuccessfulValidation => SuccessfulValidation
-          case f: FailedValidation => {
-            val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
-            println(s"validMonetaryAssets =>${messages.map(_.as[String])}")
-            messages
+        val parseResult = schemaValidator.validateIsJson(validMonetaryAssets)
+
+        parseResult match {
+          case Some(jsonNode) => {
+            val result = schemaValidator.validateAgainstSchema(jsonNode, "/definitions/monetaryAssetsType")
+            result mustBe SuccessfulValidation
           }
+          case _ => fail("Could not parse Json to a JsonNode")
         }
-        result mustBe SuccessfulValidation
       }
+
       "given multiple valid monetary Assets" in {
-        val result = schemaValidator.validate(validMultipleMonetaryAssets, "/definitions/monetaryAssetsType")
-        val res = result match {
-          case SuccessfulValidation => SuccessfulValidation
-          case f: FailedValidation => {
-            val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
-            println(s"validMultipleMonetaryAssets =>${messages.map(_.as[String])}")
-            messages
+        val parseResult = schemaValidator.validateIsJson(validMultipleMonetaryAssets)
+
+        parseResult match {
+          case Some(jsonNode) => {
+            val result = schemaValidator.validateAgainstSchema(jsonNode, "/definitions/monetaryAssetsType")
+            result mustBe SuccessfulValidation
           }
+          case _ => fail("Could not parse Json to a JsonNode")
         }
-        result mustBe SuccessfulValidation
       }
     }
 

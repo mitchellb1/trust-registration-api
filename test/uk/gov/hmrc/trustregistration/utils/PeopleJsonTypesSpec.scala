@@ -24,100 +24,136 @@ class PeopleJsonTypesSpec extends PlaySpec with  ValidatorBase{
   "JsonValidator" must {
     //Happy Path
     "read the schema and return a SuccessfulValidation" when {
-      "given a valid individual" in {
-        val result = schemaValidator.validate(validIndividual, "/definitions/individualType")
-        val res = result match {
-          case SuccessfulValidation => SuccessfulValidation
-          case f: FailedValidation => {
-            val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
-            println(s"validIndividual =>${messages.map(_.as[String])}")
-            messages
+      "given a valid individual " in {
+        val parseResult = schemaValidator.validateIsJson(validIndividual)
+
+        parseResult match {
+          case Some(jsonNode) => {
+            val result = schemaValidator.validateAgainstSchema(jsonNode,"/definitions/individualType")
+            result mustBe SuccessfulValidation
           }
+          case _ => fail("Could not parse Json to a JsonNode")
         }
-        result mustBe SuccessfulValidation
       }
 
       "given a valid individual leadtrustee" in {
-        val result = schemaValidator.validate(validIndividualLeadtrustee, "/definitions/leadTrusteeType")
-        val res = result match {
-          case SuccessfulValidation => SuccessfulValidation
-          case f: FailedValidation => {
-            val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
-            println(s"validIndividualLeadtrustee =>${messages.map(_.as[String])}")
-            messages
+        val parseResult = schemaValidator.validateIsJson(validIndividualLeadtrustee)
+
+        parseResult match {
+          case Some(jsonNode) => {
+            val result = schemaValidator.validateAgainstSchema(jsonNode,"/definitions/leadTrusteeType")
+            result mustBe SuccessfulValidation
           }
+          case _ => fail("Could not parse Json to a JsonNode")
         }
-        res mustBe SuccessfulValidation
       }
       "given a valid company leadtrustee" in {
-        val result = schemaValidator.validate(validCompanyLeadtrustee, "/definitions/leadTrusteeType")
-        val res = result match {
-          case SuccessfulValidation => SuccessfulValidation
-          case f: FailedValidation => {
-            val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
-            println(s"validCompanyLeadtrustee =>${messages.map(_.as[String])}")
-            messages
+        val parseResult = schemaValidator.validateIsJson(validCompanyLeadtrustee)
+
+        parseResult match {
+          case Some(jsonNode) => {
+            val result = schemaValidator.validateAgainstSchema(jsonNode,"/definitions/leadTrusteeType")
+
+            result match {
+              case SuccessfulValidation => /* everything is ok, dont worry */
+              case f: FailedValidation => {
+                val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
+                fail(s"validCompanyLeadtrustee => ${messages.map(_.as[String])}")
+              }
+            }
+
+            result mustBe SuccessfulValidation
           }
+          case _ => fail("Could not parse Json to a JsonNode")
         }
-        res mustBe SuccessfulValidation
       }
     }
 
     //Sad Path
     "read the schema and return a FailedValidation" when {
       "given an invalid individual missing a given name" in {
-        val result = schemaValidator.validate(invalidIndividualNoGivenName, "/definitions/individualType")
-        val res = result match {
-          case SuccessfulValidation => SuccessfulValidation
-          case f: FailedValidation => {
-            val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
-            println(s"invalidIndividualNoGivenName =>${messages.map(_.as[String])}")
-            messages.map(_.as[String]) must contain("object has missing required properties ([\"givenName\"])")
+        val parseResult = schemaValidator.validateIsJson(invalidIndividualNoGivenName)
+
+        parseResult match {
+          case Some(jsonNode) => {
+            val result = schemaValidator.validateAgainstSchema(jsonNode,"/definitions/individualType")
+
+            result match {
+              case SuccessfulValidation => fail("Did not return any parsing errors")
+              case f: FailedValidation => {
+                val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
+                println(s"invalidIndividual =>${messages.map(_.as[String])}")
+                messages.map(_.as[String]) must contain("object has missing required properties ([\"givenName\"])")
+              }
+            }
           }
+          case _ => fail("Could not parse Json to a JsonNode")
         }
       }
+
       "given an invalid leadtrustee" in {
-        val result = schemaValidator.validate(invalidLeadtrustee, "/definitions/leadTrusteeType")
-        val res = result match {
-          case SuccessfulValidation => SuccessfulValidation
-          case f: FailedValidation => {
-            val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
-            println(s"invalidLeadtrustee =>${messages.map(_.as[String])}")
-            messages.map(_.as[String]) must contain("string \"Invalid Extra Long Family Name\" is too long (length: 30, maximum allowed: 25)")
+        val parseResult = schemaValidator.validateIsJson(invalidLeadtrustee)
+
+        parseResult match {
+          case Some(jsonNode) => {
+            val result = schemaValidator.validateAgainstSchema(jsonNode,"/definitions/leadTrusteeType")
+
+            result match {
+              case SuccessfulValidation => fail("Did not return any parsing errors")
+              case f: FailedValidation => {
+                val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
+                println(s"invalidLeadtrustee =>${messages.map(_.as[String])}")
+                messages.map(_.as[String]) must contain("string \"Invalid Extra Long Family Name\" is too long (length: 30, maximum allowed: 25)")
+              }
+            }
           }
+          case _ => fail("Could not parse Json to a JsonNode")
         }
       }
+
       "given a valid leadtrustee and a valid company" in {
-        val result = schemaValidator.validate(mixedLeadtrustees, "/definitions/leadTrusteeType")
-        val res = result match {
-          case SuccessfulValidation => SuccessfulValidation
-          case f: FailedValidation => {
-            val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
-            println(s"mixedLeadtrustees =>${messages.map(_.as[String])}")
-            messages.map(_.as[String]) must contain("instance failed to match exactly one schema (matched 2 out of 2)")
+        val parseResult = schemaValidator.validateIsJson(mixedLeadtrustees)
+
+        parseResult match {
+          case Some(jsonNode) => {
+            val result = schemaValidator.validateAgainstSchema(jsonNode,"/definitions/leadTrusteeType")
+
+            result match {
+              case SuccessfulValidation => fail("Did not return any parsing errors")
+              case f: FailedValidation => {
+                val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
+                println(s"mixedLeadtrustees =>${messages.map(_.as[String])}")
+                messages.map(_.as[String]) must contain("instance failed to match exactly one schema (matched 2 out of 2)")
+              }
+            }
           }
+          case _ => fail("Could not parse Json to a JsonNode")
         }
       }
+
       "given multiple valid individual lead trustees" in {
-        val result = schemaValidator.validate(twoIndividualLeadtrustees, "/definitions/leadTrusteeType")
-        val res = result match {
-          case SuccessfulValidation => SuccessfulValidation
-          case f: FailedValidation => {
-            val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
-            println(s"twoIndividualLeadtrustees =>${messages.map(_.as[String])}")
-            messages.map(_.as[String]) must contain("instance failed to match exactly one schema (matched 0 out of 1)")
+        val parseResult = schemaValidator.validateIsJson(twoIndividualLeadtrustees)
+
+        parseResult match {
+          case Some(jsonNode) => {
+            val result = schemaValidator.validateAgainstSchema(jsonNode,"/definitions/leadTrusteeType")
+
+            result mustBe SuccessfulValidation
           }
+          case _ => fail("Could not parse Json to a JsonNode")
         }
       }
-      "given multiple valid company lead trustees" in {
-        val result = schemaValidator.validate(twoCompanyLeadtrustees, "/definitions/leadTrusteeType")
-        val res = result match {
-          case SuccessfulValidation => SuccessfulValidation
-          case f: FailedValidation => {
-            val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
-            println(s"twoCompanyLeadtrustees =>${messages.map(_.as[String])}")
-            messages.map(_.as[String]) must contain("instance failed to match exactly one schema (matched 0 out of 1)")
+
+      "given multiple valid company lead trustees " in {
+        val parseResult = schemaValidator.validateIsJson(twoCompanyLeadtrustees)
+
+        parseResult match {
+          case Some(jsonNode) => {
+            val result = schemaValidator.validateAgainstSchema(jsonNode,"/definitions/leadTrusteeType")
+
+            result mustBe SuccessfulValidation
           }
+          case _ => fail("Could not parse Json to a JsonNode")
         }
       }
     }
@@ -337,7 +373,7 @@ class PeopleJsonTypesSpec extends PlaySpec with  ValidatorBase{
                                  |{
                                  |				"company": {
                                  |					"companyName": {
-                                 |						"$": "New Company Ltd"
+                                 |						"$": "New Company Ltd 1"
                                  |					},
                                  |					"correspondenceAddress": {
                                  |						"countryCode": {
@@ -365,7 +401,7 @@ class PeopleJsonTypesSpec extends PlaySpec with  ValidatorBase{
                                  |				},
                                  |				"company": {
                                  |					"companyName": {
-                                 |						"$": "New Company Ltd"
+                                 |						"$": "New Company Ltd 2"
                                  |					},
                                  |					"correspondenceAddress": {
                                  |						"countryCode": {
@@ -477,7 +513,7 @@ class PeopleJsonTypesSpec extends PlaySpec with  ValidatorBase{
                                     |						"$": "2016-12-14"
                                     |					},
                                     |					"familyName": {
-                                    |						"$": "Bloggs*************************************************"
+                                    |						"$": "Bloggs"
                                     |					},
                                     |					"givenName": {
                                     |						"$": "Joe"

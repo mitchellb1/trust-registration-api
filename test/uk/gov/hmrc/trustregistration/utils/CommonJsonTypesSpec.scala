@@ -25,28 +25,26 @@ class CommonJsonTypesSpec extends PlaySpec  with  ValidatorBase{
     //Happy Path
     "read the schema and return a SuccessfulValidation" when {
       "given a valid correspondence Address" in {
-        val result = schemaValidator.validate(validCorrespondenceAddress, "/definitions/correspondenceAddressType")
-        val res = result match {
-          case SuccessfulValidation => SuccessfulValidation
-          case f: FailedValidation => {
-            val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
-            println(s"validCorrespondenceAddress =>${messages.map(_.as[String])}")
-            messages
+        val parseResult = schemaValidator.validateIsJson(validCorrespondenceAddress)
+
+        parseResult match {
+          case Some(jsonNode) => {
+            val result = schemaValidator.validateAgainstSchema(jsonNode,"/definitions/correspondenceAddressType")
+            result mustBe SuccessfulValidation
           }
+          case _ => fail("Could not parse Json to a JsonNode")
         }
-        result mustBe SuccessfulValidation
       }
       "given a valid Company" in {
-        val result = schemaValidator.validate(validCompany, "/definitions/companyType")
-        val res = result match {
-          case SuccessfulValidation => SuccessfulValidation
-          case f: FailedValidation => {
-            val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
-            println(s"validCompany =>${messages.map(_.as[String])}")
-            messages
+        val parseResult = schemaValidator.validateIsJson(validCompany)
+
+        parseResult match {
+          case Some(jsonNode) => {
+            val result = schemaValidator.validateAgainstSchema(jsonNode,"/definitions/companyType")
+            result mustBe SuccessfulValidation
           }
+          case _ => fail("Could not parse Json to a JsonNode")
         }
-        result mustBe SuccessfulValidation
       }
     }
 
