@@ -26,7 +26,7 @@ class BeneficiaryJsonTypesSpec extends PlaySpec with  ValidatorBase{
     //Happy Path
     "read the schema and return a SuccessfulValidation" when {
       "given a valid Other Beneficiary Type" in {
-        val parseResult = schemaValidator.validateIsJson(validOtherBeneficiary)
+        val parseResult = schemaValidator.createJsonNode(validOtherBeneficiary)
 
         parseResult match {
           case Some(jsonNode) => {
@@ -37,7 +37,7 @@ class BeneficiaryJsonTypesSpec extends PlaySpec with  ValidatorBase{
         }
       }
       "given multiple valid Other Beneficiary" in {
-        val parseResult = schemaValidator.validateIsJson(validMultipleOtherBeneficiary)
+        val parseResult = schemaValidator.createJsonNode(validMultipleOtherBeneficiary)
 
         parseResult match {
           case Some(jsonNode) => {
@@ -91,40 +91,41 @@ class BeneficiaryJsonTypesSpec extends PlaySpec with  ValidatorBase{
 
   val validMultipleOtherBeneficiary = """
                           |{
-                          |							"otherBeneficiary": {
-                          |								"beneficiaryDescription": {
-                          |									"$": "1st Beneficiary"
-                          |								},
-                          |								"correspondenceAddress": {
-                          |									"countryCode": {
-                          |										"$": "AD"
-                          |									},
-                          |									"line1": {
-                          |										"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-                          |									},
-                          |									"line2": {
-                          |										"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-                          |									},
-                          |									"line3": {
-                          |										"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-                          |									},
-                          |									"line4": {
-                          |										"$": "aaaaaaaaaaaaaaaaa"
-                          |									},
-                          |									"postalCode": {
-                          |										"$": "aaaaaaaaaa"
-                          |									}
-                          |								},
-                          |								"income": {
-                          |									"isIncomeAtTrusteeDiscretion": {
-                          |										"$": true
-                          |									},
-                          |									"shareOfIncome": {
-                          |										"$": 0
-                          |									}
-                          |								}
-                          |        },
-                          |							"otherBeneficiary": {
+                          |							"otherBeneficiary": [
+                          |               {
+                              |								"beneficiaryDescription": {
+                              |									"$": "1st Beneficiary"
+                              |								},
+                              |								"correspondenceAddress": {
+                              |									"countryCode": {
+                              |										"$": "AD"
+                              |									},
+                              |									"line1": {
+                              |										"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                              |									},
+                              |									"line2": {
+                              |										"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                              |									},
+                              |									"line3": {
+                              |										"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                              |									},
+                              |									"line4": {
+                              |										"$": "aaaaaaaaaaaaaaaaa"
+                              |									},
+                              |									"postalCode": {
+                              |										"$": "aaaaaaaaaa"
+                              |									}
+                              |								},
+                              |								"income": {
+                              |									"isIncomeAtTrusteeDiscretion": {
+                              |										"$": true
+                              |									},
+                              |									"shareOfIncome": {
+                              |										"$": 0
+                              |									}
+                              |								}
+                              |        },
+                          |						 {
                           |								"beneficiaryDescription": {
                           |									"$": "2nd Beneficiary"
                           |								},
@@ -157,6 +158,7 @@ class BeneficiaryJsonTypesSpec extends PlaySpec with  ValidatorBase{
                           |									}
                           |								}
                           |        }
+                          |      ]
                           |}    """.stripMargin
 
 }

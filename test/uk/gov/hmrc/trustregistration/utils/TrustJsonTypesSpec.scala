@@ -26,7 +26,7 @@ class TrustJsonTypesSpec extends PlaySpec with  ValidatorBase{
     //Happy Path
     "read the schema and return a SuccessfulValidation" when {
       "given a valid WillIntestacy Trust" in {
-        val parseResult = schemaValidator.validateIsJson(validWillIntestacyTrust)
+        val parseResult = schemaValidator.createJsonNode(validWillIntestacyTrust)
 
         parseResult match {
           case Some(jsonNode) => {

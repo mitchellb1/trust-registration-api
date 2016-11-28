@@ -52,7 +52,7 @@ class RegisterTrustControllerSpec extends PlaySpec
   before {
     when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "AUTHORISED"))
 
-    when(mockSchemaValidator.validateIsJson(anyString())).thenReturn(Some(JsonLoader.fromString("{}")))
+    when(mockSchemaValidator.createJsonNode(anyString())).thenReturn(Some(JsonLoader.fromString("{}")))
     when(mockSchemaValidator.validateAgainstSchema(any(), anyString())).thenReturn(SuccessfulValidation())
   }
 

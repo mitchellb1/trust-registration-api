@@ -25,7 +25,7 @@ class CommonJsonTypesSpec extends PlaySpec  with  ValidatorBase{
     //Happy Path
     "read the schema and return a SuccessfulValidation" when {
       "given a valid correspondence Address" in {
-        val parseResult = schemaValidator.validateIsJson(validCorrespondenceAddress)
+        val parseResult = schemaValidator.createJsonNode(validCorrespondenceAddress)
 
         parseResult match {
           case Some(jsonNode) => {
@@ -36,7 +36,7 @@ class CommonJsonTypesSpec extends PlaySpec  with  ValidatorBase{
         }
       }
       "given a valid Company" in {
-        val parseResult = schemaValidator.validateIsJson(validCompany)
+        val parseResult = schemaValidator.createJsonNode(validCompany)
 
         parseResult match {
           case Some(jsonNode) => {

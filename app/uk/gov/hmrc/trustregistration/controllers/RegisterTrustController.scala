@@ -33,7 +33,7 @@ trait RegisterTrustController extends ApplicationBaseController {
 
   def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     authorised("register", "") {
-      val parseResult = jsonSchemaValidator.validateIsJson(request.body.toString())
+      val parseResult = jsonSchemaValidator.createJsonNode(request.body.toString())
 
       parseResult match {
         case Some(jsonNode) => {

@@ -16,9 +16,10 @@
 
 package uk.gov.hmrc.trustregistration.utils
 
+import com.fasterxml.jackson.core.{JsonFactory, JsonGenerator, JsonParser}
 import com.github.fge.jackson.JsonLoader
 import com.github.fge.jsonschema.main.JsonSchemaFactory
-import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.{JsonNode, ObjectMapper}
 import com.github.fge.jsonschema.core.report.ProcessingReport
 import play.api.libs.json.{JsError, JsPath, JsValue}
 
@@ -33,13 +34,27 @@ object SuccessfulValidation extends ValidationResult
 trait JsonSchemaValidator {
   val schemaFilename: String
 
-  def validateIsJson(value: String): Option[JsonNode] = {
-    val result: Try[JsonNode] = Try(JsonLoader.fromString(value))
+  // TODO: refactor to return appropriate failure responses if the json cannot be parsed
+  def createJsonNode(value: String): Option[JsonNode] = {
 
-    result match {
-      case Success(node) => Some(node)
-      case _ => None
+    val objectMapper: ObjectMapper = new ObjectMapper()
+        objectMapper.enable(JsonParser.Feature.STRICT_DUPLICATE_DETECTION)
+
+    val jsonFactory: JsonFactory = objectMapper.getFactory()
+    val jsonParser: JsonParser = jsonFactory.createParser(value)
+
+    var result: Option[JsonNode] = None
+
+    try {
+      result = Some(objectMapper.readTree(jsonParser))
     }
+    catch {
+      case _ => {
+        result = None
+      }
+    }
+
+    result
   }
 
   def validateAgainstSchema(jsonNode : JsonNode, schemaNode: String) : ValidationResult = {

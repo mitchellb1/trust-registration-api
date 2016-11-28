@@ -25,7 +25,7 @@ class PeopleJsonTypesSpec extends PlaySpec with  ValidatorBase{
     //Happy Path
     "read the schema and return a SuccessfulValidation" when {
       "given a valid individual " in {
-        val parseResult = schemaValidator.validateIsJson(validIndividual)
+        val parseResult = schemaValidator.createJsonNode(validIndividual)
 
         parseResult match {
           case Some(jsonNode) => {
@@ -37,7 +37,7 @@ class PeopleJsonTypesSpec extends PlaySpec with  ValidatorBase{
       }
 
       "given a valid individual leadtrustee" in {
-        val parseResult = schemaValidator.validateIsJson(validIndividualLeadtrustee)
+        val parseResult = schemaValidator.createJsonNode(validIndividualLeadtrustee)
 
         parseResult match {
           case Some(jsonNode) => {
@@ -48,7 +48,7 @@ class PeopleJsonTypesSpec extends PlaySpec with  ValidatorBase{
         }
       }
       "given a valid company leadtrustee" in {
-        val parseResult = schemaValidator.validateIsJson(validCompanyLeadtrustee)
+        val parseResult = schemaValidator.createJsonNode(validCompanyLeadtrustee)
 
         parseResult match {
           case Some(jsonNode) => {
@@ -72,7 +72,7 @@ class PeopleJsonTypesSpec extends PlaySpec with  ValidatorBase{
     //Sad Path
     "read the schema and return a FailedValidation" when {
       "given an invalid individual missing a given name" in {
-        val parseResult = schemaValidator.validateIsJson(invalidIndividualNoGivenName)
+        val parseResult = schemaValidator.createJsonNode(invalidIndividualNoGivenName)
 
         parseResult match {
           case Some(jsonNode) => {
@@ -92,7 +92,7 @@ class PeopleJsonTypesSpec extends PlaySpec with  ValidatorBase{
       }
 
       "given an invalid leadtrustee" in {
-        val parseResult = schemaValidator.validateIsJson(invalidLeadtrustee)
+        val parseResult = schemaValidator.createJsonNode(invalidLeadtrustee)
 
         parseResult match {
           case Some(jsonNode) => {
@@ -112,7 +112,7 @@ class PeopleJsonTypesSpec extends PlaySpec with  ValidatorBase{
       }
 
       "given a valid leadtrustee and a valid company" in {
-        val parseResult = schemaValidator.validateIsJson(mixedLeadtrustees)
+        val parseResult = schemaValidator.createJsonNode(mixedLeadtrustees)
 
         parseResult match {
           case Some(jsonNode) => {
@@ -122,6 +122,7 @@ class PeopleJsonTypesSpec extends PlaySpec with  ValidatorBase{
               case SuccessfulValidation => fail("Did not return any parsing errors")
               case f: FailedValidation => {
                 val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
+                val location: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "location"
                 println(s"mixedLeadtrustees =>${messages.map(_.as[String])}")
                 messages.map(_.as[String]) must contain("instance failed to match exactly one schema (matched 2 out of 2)")
               }
@@ -132,28 +133,24 @@ class PeopleJsonTypesSpec extends PlaySpec with  ValidatorBase{
       }
 
       "given multiple valid individual lead trustees" in {
-        val parseResult = schemaValidator.validateIsJson(twoIndividualLeadtrustees)
+        val parseResult = schemaValidator.createJsonNode(twoIndividualLeadtrustees)
 
         parseResult match {
           case Some(jsonNode) => {
-            val result = schemaValidator.validateAgainstSchema(jsonNode,"/definitions/leadTrusteeType")
-
-            result mustBe SuccessfulValidation
+            fail("Did not return any parsing errors")
           }
-          case _ => fail("Could not parse Json to a JsonNode")
+          case None => // worked
         }
       }
 
       "given multiple valid company lead trustees " in {
-        val parseResult = schemaValidator.validateIsJson(twoCompanyLeadtrustees)
+        val parseResult = schemaValidator.createJsonNode(twoCompanyLeadtrustees)
 
         parseResult match {
           case Some(jsonNode) => {
-            val result = schemaValidator.validateAgainstSchema(jsonNode,"/definitions/leadTrusteeType")
-
-            result mustBe SuccessfulValidation
+            fail("Did not return any parsing errors")
           }
-          case _ => fail("Could not parse Json to a JsonNode")
+          case None => // worked
         }
       }
     }

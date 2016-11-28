@@ -25,7 +25,7 @@ class AssetsJsonTypesSpec extends PlaySpec with  ValidatorBase{
     //Happy Path
     "read the schema and return a SuccessfulValidation" when {
       "given a valid monetary Assets Type" in {
-        val parseResult = schemaValidator.validateIsJson(validMonetaryAssets)
+        val parseResult = schemaValidator.createJsonNode(validMonetaryAssets)
 
         parseResult match {
           case Some(jsonNode) => {
@@ -37,7 +37,7 @@ class AssetsJsonTypesSpec extends PlaySpec with  ValidatorBase{
       }
 
       "given multiple valid monetary Assets" in {
-        val parseResult = schemaValidator.validateIsJson(validMultipleMonetaryAssets)
+        val parseResult = schemaValidator.createJsonNode(validMultipleMonetaryAssets)
 
         parseResult match {
           case Some(jsonNode) => {
@@ -63,15 +63,17 @@ class AssetsJsonTypesSpec extends PlaySpec with  ValidatorBase{
 
   val validMultipleMonetaryAssets = """
                           |{
-                          							"monetaryAsset": {
-                         |								"value": {
-                         |									"$": 1000000
-                         |								}
-                         |							},
-                         |							"monetaryAsset": {
-                         |								"value": {
-                         |									"$": 200000
-                         |								}
-                         |							}
+                          							"monetaryAsset": [
+                                          {
+                           |								"value": {
+                           |									"$": 1000000
+                           |								}
+                           |							},
+                         |							  {
+                           |								"value": {
+                           |									"$": 200000
+                           |								}
+                         |							  }
+                         |         ]
                           |}    """.stripMargin
 }

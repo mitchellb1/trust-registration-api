@@ -25,7 +25,7 @@ class JsonValidatorSpec extends PlaySpec with  ValidatorBase{
     //Happy Path
     "read the schema and return a JsSuccess" when {
       "given a valid trust" in {
-        val parseResult = schemaValidator.validateIsJson(validTrust)
+        val parseResult = schemaValidator.createJsonNode(validTrust)
 
         parseResult match {
           case Some(jsonNode) => {
@@ -44,7 +44,7 @@ class JsonValidatorSpec extends PlaySpec with  ValidatorBase{
       }
 
       "given a valid estate" in {
-        val parseResult = schemaValidator.validateIsJson(validEstate)
+        val parseResult = schemaValidator.createJsonNode(validEstate)
 
         parseResult match {
           case Some(jsonNode) => {
@@ -85,7 +85,7 @@ class JsonValidatorSpec extends PlaySpec with  ValidatorBase{
         }
       }*/
       "given an invalid estate" in {
-        val parseResult = schemaValidator.validateIsJson(invalidEstateNoName)
+        val parseResult = schemaValidator.createJsonNode(invalidEstateNoName)
 
         parseResult match {
           case Some(jsonNode) => {
