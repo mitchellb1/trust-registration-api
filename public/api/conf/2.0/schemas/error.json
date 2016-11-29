@@ -12,6 +12,9 @@
         "code" : {
             "type": "string",
             "default": "ACCOUNT_SUSPENDEDSA-100201"
+        },
+        "location" : {
+            "type": "string"
         }
     },
     "required" : [ "message", "code" ]

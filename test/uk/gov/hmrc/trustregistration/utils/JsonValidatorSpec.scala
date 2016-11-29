@@ -23,93 +23,70 @@ class JsonValidatorSpec extends PlaySpec with  ValidatorBase{
 
   "JsonValidator" must {
     //Happy Path
-    "read the schema and return a JsSuccess" when {
+    "read the schema and return a SuccessfulValidation" when {
       "given a valid trust" in {
-        val parseResult = schemaValidator.createJsonNode(validTrust)
 
-        parseResult match {
-          case Some(jsonNode) => {
-            val result = schemaValidator.validateAgainstSchema(jsonNode,"")
-            val res = result match {
-              case SuccessfulValidation => SuccessfulValidation
-              case f: FailedValidation => {
-                val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
-                println(s"validTrust =>${messages.map(_.as[String])}")
-              }
-            }
-            result mustBe SuccessfulValidation
+        val result = schemaValidator.validateAgainstSchema(validTrust, "")
+        val res = result match {
+          case SuccessfulValidation => SuccessfulValidation
+          case f: FailedValidation => {
+            val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
+            println(s"validTrust =>${messages.map(_.as[String])}")
           }
-          case _ => fail("Could not parse Json to a JsonNode")
         }
+        result mustBe SuccessfulValidation
+
       }
 
       "given a valid estate" in {
-        val parseResult = schemaValidator.createJsonNode(validEstate)
 
-        parseResult match {
-          case Some(jsonNode) => {
-            val result = schemaValidator.validateAgainstSchema(jsonNode,"")
-            val res = result match {
-              case SuccessfulValidation => SuccessfulValidation
-              case f: FailedValidation => {
-                val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
-                println(s"validEstate =>${messages.map(_.as[String])}")
-              }
-            }
-            result mustBe SuccessfulValidation
+        val result = schemaValidator.validateAgainstSchema(validEstate, "")
+        val res = result match {
+          case SuccessfulValidation => SuccessfulValidation
+          case f: FailedValidation => {
+            val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
+            println(s"validEstate =>${messages.map(_.as[String])}")
           }
-          case _ => fail("Could not parse Json to a JsonNode")
         }
+        result mustBe SuccessfulValidation
+
       }
     }
 
     //Sad Path
-    "read the schema and return JsErrors" when {
-     /* "given an invalid trust" in {
-        val result = schemaValidator.validate(invalidTrustNoName, "")
+    "read the schema and return an error message" when {
+      "given an invalid trust" in {
+        val result = schemaValidator.validateAgainstSchema(invalidTrustNoName, "")
+
         val res = result match {
-          case f: JsError => {
-            /*
+          case SuccessfulValidation => SuccessfulValidation
+          case f: FailedValidation => {
             val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
+            val location: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "location"
             println(s"invalidTrustNoName =>${messages.map(_.as[String])}")
-            messages.map(_.as[String]) must contain ("object has missing required properties ([\"trustName\"])")
-            */
-
-            // no trust name so should have an error with...
-            // a path to /trustEstate/trustName
-            // some sort of message about 'required field missing'
-
-            f.errors.size mustBe 1
+            messages.map(_.as[String]) must contain("object has missing required properties ([\"trustName\"])")
           }
-          case _ => fail("Did not recieve a JSError result")
         }
-      }*/
+      }
+
       "given an invalid estate" in {
-        val parseResult = schemaValidator.createJsonNode(invalidEstateNoName)
-
-        parseResult match {
-          case Some(jsonNode) => {
-            val result = schemaValidator.validateAgainstSchema(jsonNode, "")
-            val res = result match {
-              case SuccessfulValidation => SuccessfulValidation
-              case f: FailedValidation => {
-                val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
-                val location: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "location"
-                println(s"invalidEstateNoName =>${messages.map(_.as[String])}")
-                messages.map(_.as[String]) must contain ("object has missing required properties ([\"estateName\"])")
-              }
-            }
+        val result = schemaValidator.validateAgainstSchema(invalidEstateNoName, "")
+        val res = result match {
+          case SuccessfulValidation => SuccessfulValidation
+          case f: FailedValidation => {
+            val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
+            val location: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "location"
+            println(s"invalidEstateNoName =>${messages.map(_.as[String])}")
+            messages.map(_.as[String]) must contain("object has missing required properties ([\"estateName\"])")
           }
-          case _ => fail("Could not parse Json to a JsonNode")
         }
-
       }
     }
   }
 
   val validTrust = """{
       |	"@xmlns:xsi": "a",
-      |	"trustEstate": {
+      |"trustEstate":{
       |		"trust": {
       |			"commencementDate": {
       |				"$": "a"
@@ -2173,12 +2150,12 @@ class JsonValidatorSpec extends PlaySpec with  ValidatorBase{
       |				}
       |			}
       |		}
-      |	}
+      |}
       |}""".stripMargin
 
   val invalidTrustNoName = """{
       |	"@xmlns:xsi": "a",
-      |	"trustEstate": {
+      |"trustEstate":{
       |		"estate": {
       |			"adminPeriodFinishedDate": {
       |				"$": true
@@ -4460,7 +4437,7 @@ class JsonValidatorSpec extends PlaySpec with  ValidatorBase{
       |				}
       |			}
       |		}
-      |	}
+      |}
       |}""".stripMargin
 
   val validEstate = """{

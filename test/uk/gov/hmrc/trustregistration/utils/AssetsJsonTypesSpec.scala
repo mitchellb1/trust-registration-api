@@ -17,42 +17,30 @@
 package uk.gov.hmrc.trustregistration.utils
 
 import org.scalatestplus.play.PlaySpec
-import play.api.libs.json.{JsValue, Json}
 
-class AssetsJsonTypesSpec extends PlaySpec with  ValidatorBase{
+class AssetsJsonTypesSpec extends PlaySpec with ValidatorBase {
 
   "JsonValidator" must {
     //Happy Path
     "read the schema and return a SuccessfulValidation" when {
       "given a valid monetary Assets Type" in {
-        val parseResult = schemaValidator.createJsonNode(validMonetaryAssets)
-
-        parseResult match {
-          case Some(jsonNode) => {
-            val result = schemaValidator.validateAgainstSchema(jsonNode, "/definitions/monetaryAssetsType")
-            result mustBe SuccessfulValidation
-          }
-          case _ => fail("Could not parse Json to a JsonNode")
-        }
+        val result = schemaValidator.validateAgainstSchema(validMonetaryAssets, "/definitions/monetaryAssetsType")
+        result mustBe SuccessfulValidation
       }
 
       "given multiple valid monetary Assets" in {
-        val parseResult = schemaValidator.createJsonNode(validMultipleMonetaryAssets)
 
-        parseResult match {
-          case Some(jsonNode) => {
-            val result = schemaValidator.validateAgainstSchema(jsonNode, "/definitions/monetaryAssetsType")
-            result mustBe SuccessfulValidation
-          }
-          case _ => fail("Could not parse Json to a JsonNode")
-        }
+        val result = schemaValidator.validateAgainstSchema(validMultipleMonetaryAssets, "/definitions/monetaryAssetsType")
+        result mustBe SuccessfulValidation
+
       }
     }
 
     //Sad Path
   }
 
-  val validMonetaryAssets = """
+  val validMonetaryAssets =
+    """
                           |{
                           							"monetaryAsset": {
                          |								"value": {
@@ -61,7 +49,8 @@ class AssetsJsonTypesSpec extends PlaySpec with  ValidatorBase{
                          |							}
                           |}    """.stripMargin
 
-  val validMultipleMonetaryAssets = """
+  val validMultipleMonetaryAssets =
+    """
                           |{
                           							"monetaryAsset": [
                                           {

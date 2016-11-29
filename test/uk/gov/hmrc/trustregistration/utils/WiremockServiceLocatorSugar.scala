@@ -25,10 +25,10 @@ import uk.gov.hmrc.trustregistration.models.TrustApiServiceRegistration
 
 
 trait WiremockServiceLocatorSugar {
-  val stubHost = "localhost"
-  val stubPort = 9602
   lazy val wireMockUrl = s"http://$stubHost:$stubPort"
   lazy val wireMockServer = new WireMockServer(wireMockConfig().port(stubPort))
+  val stubHost = "localhost"
+  val stubPort = 9602
 
   def regPayloadStringFor(serviceName: String, serviceUrl: String): String =
     Json.toJson(TrustApiServiceRegistration(serviceName, serviceUrl, Some(Map("third-party-api" -> "true")))).toString

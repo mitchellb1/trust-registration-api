@@ -20,37 +20,33 @@ import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsValue, Json}
 
 
-class TrustJsonTypesSpec extends PlaySpec with  ValidatorBase{
+class TrustJsonTypesSpec extends PlaySpec with ValidatorBase {
 
   "JsonValidator" must {
     //Happy Path
     "read the schema and return a SuccessfulValidation" when {
       "given a valid WillIntestacy Trust" in {
-        val parseResult = schemaValidator.createJsonNode(validWillIntestacyTrust)
 
-        parseResult match {
-          case Some(jsonNode) => {
-            val result = schemaValidator.validateAgainstSchema(jsonNode, "/definitions/willIntestacyTrustType")
+        val result = schemaValidator.validateAgainstSchema(validWillIntestacyTrust, "/definitions/willIntestacyTrustType")
 
-            result match {
-              case SuccessfulValidation => // yay
-              case f: FailedValidation => {
-                val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
-                fail(s"validWillIntestacyTrust =>${messages.map(_.as[String])}")
-              }
-            }
-
-            result mustBe SuccessfulValidation
+        result match {
+          case SuccessfulValidation => // yay
+          case f: FailedValidation => {
+            val messages: Seq[JsValue] = Json.parse(f.errors.toStream.mkString) \\ "message"
+            fail(s"validWillIntestacyTrust =>${messages.map(_.as[String])}")
           }
-          case _ => fail("Could not parse Json to a JsonNode")
         }
+
+        result mustBe SuccessfulValidation
+
       }
     }
 
     //Sad Path
   }
 
-  val validWillIntestacyTrust = """{
+  val validWillIntestacyTrust =
+    """{
 
                                   |		"assets": {
                                   |			"businessAssets": {
