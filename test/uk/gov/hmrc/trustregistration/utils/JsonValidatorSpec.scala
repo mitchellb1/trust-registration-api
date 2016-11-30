@@ -24,6 +24,7 @@ import com.github.fge.jsonschema.core.report.ProcessingReport
 import com.github.fge.jsonschema.main.{JsonSchema, JsonSchemaFactory}
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
+import uk.gov.hmrc.trustregistration.SchemaValidationExamples
 
 import scala.util.{Failure, Success, Try}
 import scala.collection.JavaConverters._
@@ -63,7 +64,7 @@ object SchemaValidator{
             val map: Seq[TrustsValidationError] = report.iterator.asScala.toList.filter(m => m.getLogLevel == ERROR).map(m => TrustsValidationError(m.getMessage, ""))
             println(report.iterator.asScala.toList.map(pm => pm.asJson()))
 
-            """
+         /*   """
                {
                "level":"error",
                "schema":{"loadingURI":"#","pointer":""},
@@ -78,7 +79,7 @@ object SchemaValidator{
 
             {"level":"error","schema":{"loadingURI":"#","pointer":""},"instance":{"pointer":""},"domain":"validation","keyword":"required",
               "message":"object has missing required properties ([\"location\",\"message\"])","required":["code","location","message"],
-              "missing":["location","message"]}
+              "missing":["location","message"]}*/
 
             FailedValidation("Invalid Json",0, map)
           }
@@ -105,14 +106,14 @@ object SchemaValidator{
 }
 
 
-class JsonValidatorSpec extends PlaySpec with  ValidatorBase{
+class JsonValidatorSpec extends PlaySpec with  ValidatorBase with SchemaValidationExamples{
 
    "JsonValidator" must {
 
      "read the schema and return a SuccessfulValidation" when {
        "given any valid schema and matching json" in {
 
-         val result = SchemaValidator.validateAgainstSchema(schema, Json.parse(validJson))
+         val result = SchemaValidator.validateAgainstSchema(oneItemSchema, Json.parse(validJson))
 
          result mustBe SuccessfulValidation
        }
@@ -120,7 +121,7 @@ class JsonValidatorSpec extends PlaySpec with  ValidatorBase{
 
      "read the schema and return a FailedValidation" when {
        "we miss a required field" in {
-         val result = SchemaValidator.validateAgainstSchema(schema, Json.parse(invalidJson))
+         val result = SchemaValidator.validateAgainstSchema(oneItemSchema, Json.parse(invalidJson))
 
          result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("object has missing required properties ([\"message\"])","")))
        }
@@ -129,49 +130,14 @@ class JsonValidatorSpec extends PlaySpec with  ValidatorBase{
 
          result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("object has missing required properties ([\"location\",\"message\"])","")))
        }
+       "a field has the wrong type" in {
+         val result = SchemaValidator.validateAgainstSchema(threeItemSchema, Json.parse(invalidTypeJson))
+
+         result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("instance type (integer) does not match any allowed primitive type (allowed: [\"string\"])","")))
+       }
+       
      }
    }
-
-  val schema: String =
-    """
-      |{
-      |  "schema": "http://json-schema.org/draft-04/schema",
-      |  "id": "http://uk/gov/hmrc/trustregistration/raml/schemas/test.json",
-      |  "title": "Test Message",
-      |  "type": "object",
-      |  "properties": {
-      |    "message" : {
-      |      "type": "string"
-      |    },
-      |    "code" : {
-      |      "type": "string"
-      |    }
-      |  },
-      |  "required" : [ "message", "code" ]
-      |}
-    """.stripMargin
-
-  val threeItemSchema: String =
-    """
-      |{
-      |  "schema": "http://json-schema.org/draft-04/schema",
-      |  "id": "http://uk/gov/hmrc/trustregistration/raml/schemas/test.json",
-      |  "title": "Test Message",
-      |  "type": "object",
-      |  "properties": {
-      |    "message" : {
-      |      "type": "string"
-      |    },
-      |    "code" : {
-      |      "type": "string"
-      |    },
-      |    "location" : {
-      |      "type": "string"
-      |    }
-      |  },
-      |  "required" : [ "message", "code", "location"]
-      |}
-    """.stripMargin
 
   val validJson: String =
     """
@@ -187,6 +153,8 @@ class JsonValidatorSpec extends PlaySpec with  ValidatorBase{
       |  "code" : "valid code"
       |}
     """.stripMargin
+
+  val invalidTypeJson: String = """{"message" : "valid message", "code" : 5, "location":"this is a location"}"""
 
 //  "JsonValidator" must {
 //    //Happy Path
