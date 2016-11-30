@@ -804,7 +804,7 @@ class RegisterTrustControllerSpec extends PlaySpec
 
   }
 
-  val mockSchemaValidator = mock[JsonSchemaValidator]
+  val mockSchemaValidator = mock[SchemaValidator]
 
 
   object SUT extends RegisterTrustController {

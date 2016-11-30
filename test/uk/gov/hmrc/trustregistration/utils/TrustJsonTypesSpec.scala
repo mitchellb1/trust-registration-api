@@ -20,7 +20,7 @@ import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsValue, Json}
 
 
-class TrustJsonTypesSpec extends PlaySpec with ValidatorBase {
+class TrustJsonTypesSpec extends PlaySpec  {
 
 //  "JsonValidator" must {
 //    //Happy Path

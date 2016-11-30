@@ -16,15 +16,11 @@
 
 package uk.gov.hmrc.trustregistration.services
 
-import com.github.fge.jackson.JsonLoader
 import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.connectors.DesConnector
-import uk.gov.hmrc.trustregistration.utils.{FailedValidation, JsonSchemaValidator, SuccessfulValidation}
+import uk.gov.hmrc.trustregistration.models._
 
 import scala.concurrent.Future
-import scala.util.{Failure, Success, Try}
-import scala.concurrent.ExecutionContext.Implicits.global
 
 trait RegisterTrustService {
 

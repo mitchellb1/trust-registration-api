@@ -19,7 +19,7 @@ package uk.gov.hmrc.trustregistration.utils
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsValue, Json}
 
-class PeopleJsonTypesSpec extends PlaySpec with ValidatorBase {
+class PeopleJsonTypesSpec extends PlaySpec  {
 //
 //  "JsonValidator" must {
 //    //Happy Path

@@ -21,7 +21,7 @@ import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
-import uk.gov.hmrc.trustregistration.utils.{FailedValidation, JsonSchemaValidator, SuccessfulValidation}
+import uk.gov.hmrc.trustregistration.utils.{FailedValidation, SchemaValidator, SuccessfulValidation}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -29,7 +29,7 @@ import scala.concurrent.Future
 
 trait RegisterTrustController extends ApplicationBaseController {
 
-  val jsonSchemaValidator: JsonSchemaValidator
+  val jsonSchemaValidator: SchemaValidator
 
   def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     authorised("register", "") {
@@ -130,6 +130,6 @@ trait RegisterTrustController extends ApplicationBaseController {
 
 object RegisterTrustController extends RegisterTrustController {
   override val registerTrustService = RegisterTrustService
-  override val jsonSchemaValidator = JsonSchemaValidator
+  override val jsonSchemaValidator = SchemaValidator
   override val metrics = ApplicationMetrics
 }

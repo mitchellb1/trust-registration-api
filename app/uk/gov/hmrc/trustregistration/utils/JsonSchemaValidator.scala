@@ -19,6 +19,7 @@ package uk.gov.hmrc.trustregistration.utils
 import com.fasterxml.jackson.core.{JsonFactory, JsonParser}
 import com.fasterxml.jackson.databind.{JsonNode, ObjectMapper}
 import com.github.fge.jackson.JsonLoader
+import com.github.fge.jsonschema.core.report.LogLevel.ERROR
 import com.github.fge.jsonschema.core.report.ProcessingReport
 import com.github.fge.jsonschema.main.{JsonSchema, JsonSchemaFactory}
 
@@ -36,38 +37,38 @@ case class SuccessfulValidation() extends ValidationResult
 
 object SuccessfulValidation extends ValidationResult
 
-trait JsonSchemaValidator {
-  val schemaFilename: String
+trait SchemaValidator{
 
-  def validateAgainstSchema(jsonNodeAsString: String, schemaNodeAsString: String): ValidationResult = {
+  def validateAgainstSchema(schema: String, jsonNodeAsString: String): ValidationResult = {
     try {
       val objectMapper: ObjectMapper = new ObjectMapper()
-      objectMapper.enable(JsonParser.Feature.STRICT_DUPLICATE_DETECTION)
+          objectMapper.enable(JsonParser.Feature.STRICT_DUPLICATE_DETECTION)
 
       val jsonFactory: JsonFactory = objectMapper.getFactory()
       val jsonParser: JsonParser = jsonFactory.createParser(jsonNodeAsString)
-      objectMapper.readTree(jsonParser) //Throws exception here if duplicate elements not inside an array
+
+      objectMapper.readTree(jsonParser)
 
       val jsonAsNode: Try[JsonNode] = Try(JsonLoader.fromString(jsonNodeAsString))
+
       jsonAsNode match {
-        case Failure(ex) => {
-          println(ex.getMessage)
-          FailedValidation("",0,Seq(TrustsValidationError("message", "location")))
-        }
         case Success(json) => {
-          val schema: JsonNode = JsonLoader.fromResource(s"/public/api/conf/$schemaFilename")
-          val factory: JsonSchema = JsonSchemaFactory.byDefault.getJsonSchema(schema, schemaNodeAsString)
-          val report: ProcessingReport = factory.validate(json)
+          val schemaNode: JsonNode = JsonLoader.fromString(schema)
+          val factory: JsonSchema = JsonSchemaFactory.byDefault.getJsonSchema(schemaNode, "")
+          val report: ProcessingReport = factory.validate(json, true)
 
           if (report.isSuccess) {
-            println(s"report => $report")
             SuccessfulValidation
           } else {
-            println(s"report => $report")
-            //TODO : Parse json and add in "code" to convert output to comply with the json error schema
-            //TODO : Maybe validate output to schema???????
-            FailedValidation("Invalid Json",0,Seq(TrustsValidationError("Duplicate elements", "")))
-            //FailedValidation("",0,report.iterator().asScala.toSeq.map(pm => pm.asJson().toString))
+            val map: Seq[TrustsValidationError] = report.iterator.asScala.toList.filter(m => m.getLogLevel == ERROR).map(m => {
+              val error = m.asJson()
+              val message = error.findValue("message").asText("")
+              val location = error.findValue("instance").at("/pointer").asText()
+
+              TrustsValidationError(message, if (location == "") "/" else location)
+            })
+
+            FailedValidation("Invalid Json",0, map)
           }
         }
       }
@@ -75,18 +76,14 @@ trait JsonSchemaValidator {
     catch {
       case ex: Exception => {
         println(ex.getMessage)
-        //TODO : Check what other types of error message can occur here
         if (ex.getMessage.contains("Duplicate")) {
-
-          FailedValidation("",0,Seq(TrustsValidationError("Duplicate elements", "")))
+          FailedValidation("Duplicated Elements", 0, Nil)
         } else {
-          FailedValidation("",0,Seq(TrustsValidationError("message", "location")))
+          FailedValidation("Not JSON",0,Nil)
         }
       }
     }
   }
 }
 
-object JsonSchemaValidator extends JsonSchemaValidator {
-  val schemaFilename = "1.0/schemas/trusts.json"
-}
+object SchemaValidator extends SchemaValidator
