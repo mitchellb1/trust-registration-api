@@ -21,10 +21,10 @@ import com.fasterxml.jackson.databind.{JsonNode, ObjectMapper}
 import com.github.fge.jackson.JsonLoader
 import com.github.fge.jsonschema.core.report.LogLevel.ERROR
 import com.github.fge.jsonschema.core.report.ProcessingReport
-import com.github.fge.jsonschema.main.{JsonSchema, JsonSchemaFactory}
+import com.github.fge.jsonschema.main.JsonSchemaFactory
 
 import scala.collection.JavaConverters._
-import scala.util.{Failure, Success, Try}
+import scala.util.{Success, Try}
 
 trait ValidationResult
 
@@ -39,43 +39,25 @@ object SuccessfulValidation extends ValidationResult
 
 trait SchemaValidator{
 
-  def validateAgainstSchema(schema: String, jsonNodeAsString: String): ValidationResult = {
+  def validateAgainstSchema(schema: String, input: String): ValidationResult = {
     try {
-      val objectMapper: ObjectMapper = new ObjectMapper()
-          objectMapper.enable(JsonParser.Feature.STRICT_DUPLICATE_DETECTION)
+      val jsonToValidate = doNotAllowDuplicatedProperties(input)
 
-      val jsonFactory: JsonFactory = objectMapper.getFactory()
-      val jsonParser: JsonParser = jsonFactory.createParser(jsonNodeAsString)
-
-      objectMapper.readTree(jsonParser)
-
-      val jsonAsNode: Try[JsonNode] = Try(JsonLoader.fromString(jsonNodeAsString))
-
-      jsonAsNode match {
+      jsonToValidate match {
         case Success(json) => {
-          val schemaNode: JsonNode = JsonLoader.fromString(schema)
-          val factory: JsonSchema = JsonSchemaFactory.byDefault.getJsonSchema(schemaNode, "")
-          val report: ProcessingReport = factory.validate(json, true)
+          val validator = JsonSchemaFactory.byDefault.getJsonSchema(JsonLoader.fromString(schema))
+          val validationOutput = validator.validate(json, true)
 
-          if (report.isSuccess) {
+          if (validationOutput.isSuccess) {
             SuccessfulValidation
           } else {
-            val map: Seq[TrustsValidationError] = report.iterator.asScala.toList.filter(m => m.getLogLevel == ERROR).map(m => {
-              val error = m.asJson()
-              val message = error.findValue("message").asText("")
-              val location = error.findValue("instance").at("/pointer").asText()
-
-              TrustsValidationError(message, if (location == "") "/" else location)
-            })
-
-            FailedValidation("Invalid Json",0, map)
+            FailedValidation("Invalid Json",0, getValidationErrors(validationOutput))
           }
         }
       }
     }
     catch {
       case ex: Exception => {
-        println(ex.getMessage)
         if (ex.getMessage.contains("Duplicate")) {
           FailedValidation("Duplicated Elements", 0, Nil)
         } else {
@@ -83,6 +65,30 @@ trait SchemaValidator{
         }
       }
     }
+  }
+
+  private def getValidationErrors(validationOutput: ProcessingReport): Seq[TrustsValidationError] = {
+    val validationErrors: Seq[TrustsValidationError] = validationOutput.iterator.asScala.toList.filter(m => m.getLogLevel == ERROR).map(m => {
+      val error = m.asJson()
+      val message = error.findValue("message").asText("")
+      val location = error.findValue("instance").at("/pointer").asText()
+
+      TrustsValidationError(message, if (location == "") "/" else location)
+    })
+    validationErrors
+  }
+
+  private def doNotAllowDuplicatedProperties(jsonNodeAsString: String): Try[JsonNode] = {
+    val objectMapper: ObjectMapper = new ObjectMapper()
+    objectMapper.enable(JsonParser.Feature.STRICT_DUPLICATE_DETECTION)
+
+    val jsonFactory: JsonFactory = objectMapper.getFactory()
+    val jsonParser: JsonParser = jsonFactory.createParser(jsonNodeAsString)
+
+    objectMapper.readTree(jsonParser)
+
+    val jsonAsNode: Try[JsonNode] = Try(JsonLoader.fromString(jsonNodeAsString))
+    jsonAsNode
   }
 }
 
