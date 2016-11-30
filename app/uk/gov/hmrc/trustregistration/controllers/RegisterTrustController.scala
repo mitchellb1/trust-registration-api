@@ -37,7 +37,9 @@ trait RegisterTrustController extends ApplicationBaseController {
           val validationResult = jsonSchemaValidator.validateAgainstSchema(request.body.toString(), "")
 
           validationResult match {
-            case _: FailedValidation => Future.successful(BadRequest) // TODO: Return JsError
+            case fail: FailedValidation => {
+              val error = s"""{"message":"${fail.message}","code":${fail.code},"validationErrors":[{"message": "${fail.validationErrors.head.message}", "location": "${fail.validationErrors.head.location}"}]}"""
+              Future.successful(BadRequest(error))} // TODO: Return JsError
             case _ => {
               try {
                 request.body.validate[Trust].map {

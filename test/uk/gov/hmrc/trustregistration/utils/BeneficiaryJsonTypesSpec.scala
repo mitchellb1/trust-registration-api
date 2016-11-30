@@ -21,135 +21,135 @@ import org.scalatestplus.play.PlaySpec
 
 class BeneficiaryJsonTypesSpec extends PlaySpec with ValidatorBase {
 
-  "JsonValidator" must {
-    //Happy Path
-    "read the schema and return a SuccessfulValidation" when {
-      "given a valid Other Beneficiary Type" in {
-
-        val result = schemaValidator.validateAgainstSchema(validOtherBeneficiary, "/definitions/otherBeneficiariesType")
-        result mustBe SuccessfulValidation
-
-      }
-      "given multiple valid Other Beneficiary" in {
-
-        val result = schemaValidator.validateAgainstSchema(validMultipleOtherBeneficiary, "/definitions/otherBeneficiariesType")
-        result mustBe SuccessfulValidation
-
-      }
-    }
-
-    //Sad Path
-  }
-
-  val validOtherBeneficiary =
-    """
-      |{
-      |							"otherBeneficiary": {
-      |								"beneficiaryDescription": {
-      |									"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-      |								},
-      |								"correspondenceAddress": {
-      |									"countryCode": {
-      |										"$": "AD"
-      |									},
-      |									"line1": {
-      |										"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-      |									},
-      |									"line2": {
-      |										"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-      |									},
-      |									"line3": {
-      |										"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-      |									},
-      |									"line4": {
-      |										"$": "aaaaaaaaaaaaaaaaa"
-      |									},
-      |									"postalCode": {
-      |										"$": "aaaaaaaaaa"
-      |									}
-      |								},
-      |								"income": {
-      |									"isIncomeAtTrusteeDiscretion": {
-      |										"$": true
-      |									},
-      |									"shareOfIncome": {
-      |										"$": 0
-      |									}
-      |								}
-      |        }
-      |}    """.stripMargin
-
-  val validMultipleOtherBeneficiary =
-    """
-      |{
-      |							"otherBeneficiary": [
-      |               {
-      |								"beneficiaryDescription": {
-      |									"$": "1st Beneficiary"
-      |								},
-      |								"correspondenceAddress": {
-      |									"countryCode": {
-      |										"$": "AD"
-      |									},
-      |									"line1": {
-      |										"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-      |									},
-      |									"line2": {
-      |										"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-      |									},
-      |									"line3": {
-      |										"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-      |									},
-      |									"line4": {
-      |										"$": "aaaaaaaaaaaaaaaaa"
-      |									},
-      |									"postalCode": {
-      |										"$": "aaaaaaaaaa"
-      |									}
-      |								},
-      |								"income": {
-      |									"isIncomeAtTrusteeDiscretion": {
-      |										"$": true
-      |									},
-      |									"shareOfIncome": {
-      |										"$": 0
-      |									}
-      |								}
-      |        },
-      |						 {
-      |								"beneficiaryDescription": {
-      |									"$": "2nd Beneficiary"
-      |								},
-      |								"correspondenceAddress": {
-      |									"countryCode": {
-      |										"$": "AD"
-      |									},
-      |									"line1": {
-      |										"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-      |									},
-      |									"line2": {
-      |										"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-      |									},
-      |									"line3": {
-      |										"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-      |									},
-      |									"line4": {
-      |										"$": "aaaaaaaaaaaaaaaaa"
-      |									},
-      |									"postalCode": {
-      |										"$": "aaaaaaaaaa"
-      |									}
-      |								},
-      |								"income": {
-      |									"isIncomeAtTrusteeDiscretion": {
-      |										"$": true
-      |									},
-      |									"shareOfIncome": {
-      |										"$": 0
-      |									}
-      |								}
-      |        }
-      |      ]
-      |}    """.stripMargin
+//  "JsonValidator" must {
+//    //Happy Path
+//    "read the schema and return a SuccessfulValidation" when {
+//      "given a valid Other Beneficiary Type" in {
+//
+//        val result = schemaValidator.validateAgainstSchema(validOtherBeneficiary, "/definitions/otherBeneficiariesType")
+//        result mustBe SuccessfulValidation
+//
+//      }
+//      "given multiple valid Other Beneficiary" in {
+//
+//        val result = schemaValidator.validateAgainstSchema(validMultipleOtherBeneficiary, "/definitions/otherBeneficiariesType")
+//        result mustBe SuccessfulValidation
+//
+//      }
+//    }
+//
+//    //Sad Path
+//  }
+//
+//  val validOtherBeneficiary =
+//    """
+//      |{
+//      |							"otherBeneficiary": {
+//      |								"beneficiaryDescription": {
+//      |									"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+//      |								},
+//      |								"correspondenceAddress": {
+//      |									"countryCode": {
+//      |										"$": "AD"
+//      |									},
+//      |									"line1": {
+//      |										"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+//      |									},
+//      |									"line2": {
+//      |										"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+//      |									},
+//      |									"line3": {
+//      |										"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+//      |									},
+//      |									"line4": {
+//      |										"$": "aaaaaaaaaaaaaaaaa"
+//      |									},
+//      |									"postalCode": {
+//      |										"$": "aaaaaaaaaa"
+//      |									}
+//      |								},
+//      |								"income": {
+//      |									"isIncomeAtTrusteeDiscretion": {
+//      |										"$": true
+//      |									},
+//      |									"shareOfIncome": {
+//      |										"$": 0
+//      |									}
+//      |								}
+//      |        }
+//      |}    """.stripMargin
+//
+//  val validMultipleOtherBeneficiary =
+//    """
+//      |{
+//      |							"otherBeneficiary": [
+//      |               {
+//      |								"beneficiaryDescription": {
+//      |									"$": "1st Beneficiary"
+//      |								},
+//      |								"correspondenceAddress": {
+//      |									"countryCode": {
+//      |										"$": "AD"
+//      |									},
+//      |									"line1": {
+//      |										"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+//      |									},
+//      |									"line2": {
+//      |										"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+//      |									},
+//      |									"line3": {
+//      |										"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+//      |									},
+//      |									"line4": {
+//      |										"$": "aaaaaaaaaaaaaaaaa"
+//      |									},
+//      |									"postalCode": {
+//      |										"$": "aaaaaaaaaa"
+//      |									}
+//      |								},
+//      |								"income": {
+//      |									"isIncomeAtTrusteeDiscretion": {
+//      |										"$": true
+//      |									},
+//      |									"shareOfIncome": {
+//      |										"$": 0
+//      |									}
+//      |								}
+//      |        },
+//      |						 {
+//      |								"beneficiaryDescription": {
+//      |									"$": "2nd Beneficiary"
+//      |								},
+//      |								"correspondenceAddress": {
+//      |									"countryCode": {
+//      |										"$": "AD"
+//      |									},
+//      |									"line1": {
+//      |										"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+//      |									},
+//      |									"line2": {
+//      |										"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+//      |									},
+//      |									"line3": {
+//      |										"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+//      |									},
+//      |									"line4": {
+//      |										"$": "aaaaaaaaaaaaaaaaa"
+//      |									},
+//      |									"postalCode": {
+//      |										"$": "aaaaaaaaaa"
+//      |									}
+//      |								},
+//      |								"income": {
+//      |									"isIncomeAtTrusteeDiscretion": {
+//      |										"$": true
+//      |									},
+//      |									"shareOfIncome": {
+//      |										"$": 0
+//      |									}
+//      |								}
+//      |        }
+//      |      ]
+//      |}    """.stripMargin
 
 }

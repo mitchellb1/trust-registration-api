@@ -20,49 +20,49 @@ import org.scalatestplus.play.PlaySpec
 
 class AssetsJsonTypesSpec extends PlaySpec with ValidatorBase {
 
-  "JsonValidator" must {
-    //Happy Path
-    "read the schema and return a SuccessfulValidation" when {
-      "given a valid monetary Assets Type" in {
-        val result = schemaValidator.validateAgainstSchema(validMonetaryAssets, "/definitions/monetaryAssetsType")
-        result mustBe SuccessfulValidation
-      }
-
-      "given multiple valid monetary Assets" in {
-
-        val result = schemaValidator.validateAgainstSchema(validMultipleMonetaryAssets, "/definitions/monetaryAssetsType")
-        result mustBe SuccessfulValidation
-
-      }
-    }
-
-    //Sad Path
-  }
-
-  val validMonetaryAssets =
-    """
-                          |{
-                          							"monetaryAsset": {
-                         |								"value": {
-                         |									"$": 1000
-                         |								}
-                         |							}
-                          |}    """.stripMargin
-
-  val validMultipleMonetaryAssets =
-    """
-                          |{
-                          							"monetaryAsset": [
-                                          {
-                           |								"value": {
-                           |									"$": 1000000
-                           |								}
-                           |							},
-                         |							  {
-                           |								"value": {
-                           |									"$": 200000
-                           |								}
-                         |							  }
-                         |         ]
-                          |}    """.stripMargin
+//  "JsonValidator" must {
+//    //Happy Path
+//    "read the schema and return a SuccessfulValidation" when {
+//      "given a valid monetary Assets Type" in {
+//        val result = schemaValidator.validateAgainstSchema(validMonetaryAssets, "/definitions/monetaryAssetsType")
+//        result mustBe SuccessfulValidation
+//      }
+//
+//      "given multiple valid monetary Assets" in {
+//
+//        val result = schemaValidator.validateAgainstSchema(validMultipleMonetaryAssets, "/definitions/monetaryAssetsType")
+//        result mustBe SuccessfulValidation
+//
+//      }
+//    }
+//
+//    //Sad Path
+//  }
+//
+//  val validMonetaryAssets =
+//    """
+//                          |{
+//                          							"monetaryAsset": {
+//                         |								"value": {
+//                         |									"$": 1000
+//                         |								}
+//                         |							}
+//                          |}    """.stripMargin
+//
+//  val validMultipleMonetaryAssets =
+//    """
+//                          |{
+//                          							"monetaryAsset": [
+//                                          {
+//                           |								"value": {
+//                           |									"$": 1000000
+//                           |								}
+//                           |							},
+//                         |							  {
+//                           |								"value": {
+//                           |									"$": 200000
+//                           |								}
+//                         |							  }
+//                         |         ]
+//                          |}    """.stripMargin
 }

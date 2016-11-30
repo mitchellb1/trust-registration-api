@@ -27,7 +27,10 @@ import scala.util.{Failure, Success, Try}
 
 trait ValidationResult
 
-case class FailedValidation(errors: Seq[String]) extends ValidationResult
+
+case class TrustsValidationError(message: String, location: String)
+
+case class FailedValidation(message: String, code: Int, validationErrors: Seq[TrustsValidationError]) extends ValidationResult
 
 case class SuccessfulValidation() extends ValidationResult
 
@@ -49,7 +52,7 @@ trait JsonSchemaValidator {
       jsonAsNode match {
         case Failure(ex) => {
           println(ex.getMessage)
-          FailedValidation(Seq(ex.getMessage))
+          FailedValidation("",0,Seq(TrustsValidationError("message", "location")))
         }
         case Success(json) => {
           val schema: JsonNode = JsonLoader.fromResource(s"/public/api/conf/$schemaFilename")
@@ -63,7 +66,8 @@ trait JsonSchemaValidator {
             println(s"report => $report")
             //TODO : Parse json and add in "code" to convert output to comply with the json error schema
             //TODO : Maybe validate output to schema???????
-            FailedValidation(report.iterator().asScala.toSeq.map(pm => pm.asJson().toString))
+            FailedValidation("Invalid Json",0,Seq(TrustsValidationError("Duplicate elements", "")))
+            //FailedValidation("",0,report.iterator().asScala.toSeq.map(pm => pm.asJson().toString))
           }
         }
       }
@@ -73,9 +77,10 @@ trait JsonSchemaValidator {
         println(ex.getMessage)
         //TODO : Check what other types of error message can occur here
         if (ex.getMessage.contains("Duplicate")) {
-          FailedValidation(Seq("""{"message": "Duplicate elements","code": "400"}"""))
+
+          FailedValidation("",0,Seq(TrustsValidationError("Duplicate elements", "")))
         } else {
-          FailedValidation(Seq(ex.getMessage))
+          FailedValidation("",0,Seq(TrustsValidationError("message", "location")))
         }
       }
     }

@@ -32,14 +32,16 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Request, RequestHeader, Result}
 import play.api.test.{FakeHeaders, FakeRequest}
 import play.api.test.Helpers._
+import play.mvc.BodyParser
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
-import uk.gov.hmrc.trustregistration.utils.{FailedValidation, JsonSchemaValidator, SuccessfulValidation}
+import uk.gov.hmrc.trustregistration.utils._
 
 import scala.concurrent.Future
+import play.api.libs.json.Json
 
 
 class RegisterTrustControllerSpec extends PlaySpec
@@ -81,12 +83,45 @@ class RegisterTrustControllerSpec extends PlaySpec
         }
       }
       "The json fails schema validation" in {
-        when(mockSchemaValidator.validateAgainstSchema(any(), anyString())).thenReturn(FailedValidation(List("Error")))
+        when(mockSchemaValidator.validateAgainstSchema(any(), anyString())).thenReturn(FailedValidation("schema failure", 400, List(TrustsValidationError("Error", "givenName"))))
 
         withCallToPOST(Json.parse(validTrustJson)) { result =>
           status(result) mustBe BAD_REQUEST
+          val body = contentAsJson(result)
+
+          body must be (Json.parse(
+            """{
+              |  "message" : "schema failure",
+        |         "code" : 400,
+        |         "validationErrors" : [
+        |           {"message" : "Error", "location" : "givenName"}
+        |         ]
+        |      }""".stripMargin))
         }
       }
+
+      /*
+      "The json fails schema validation with multiple errors" in {
+        when(mockSchemaValidator.validateAgainstSchema(any(), anyString())).thenReturn(FailedValidation("schema failure", 400, List("Error", "Error 2")))
+
+        withCallToPOST(Json.parse(validTrustJson)) { result =>
+          status(result) mustBe BAD_REQUEST
+          val body = contentAsJson(result)
+
+          body must be (Json.parse(
+            """{
+              |  "message" : "schema failure",
+              |         "code" : 400,
+              |         "validationErrors" : [
+              |           {"message" : "Error", "location" : "givenName"},
+              |           {"message" : "Error 2", "location" : "givenName"}
+              |         ]
+              |      }""".stripMargin))
+        }
+      }
+      */
+
+
     }
 
     "Return an Internal Server Error" when {
