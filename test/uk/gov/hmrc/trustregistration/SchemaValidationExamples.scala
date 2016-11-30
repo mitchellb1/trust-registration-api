@@ -20,6 +20,7 @@ import scala.io.Source
 
 
 trait SchemaValidationExamples {
-  lazy val oneItemSchema = Source.fromFile(getClass.getResource("/SchemaValidation/OneItemSchema.json").getPath).mkString
   lazy val threeItemSchema = Source.fromFile(getClass.getResource("/SchemaValidation/ThreeItemSchema.json").getPath).mkString
+  lazy val maxLengthSchema = Source.fromFile(getClass.getResource("/SchemaValidation/MaxLengthSchema.json").getPath).mkString
+  lazy val nestedItemSchema = Source.fromFile(getClass.getResource("/SchemaValidation/NestedItemSchema.json").getPath).mkString
 }

@@ -4,12 +4,9 @@
   "title": "Test Message",
   "type": "object",
   "properties": {
-    "message" : {
-      "type": "string"
-    },
     "code" : {
-      "type": "string"
+      "type": "string",
+      "maxLength": 9
     }
-  },
-  "required" : [ "message", "code" ]
+  }
 }

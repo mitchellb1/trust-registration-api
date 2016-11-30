@@ -51,7 +51,7 @@ object SchemaValidator{
 //          val schema: JsonNode = JsonLoader.fromResource(s"/public/api/conf/$schemaFilename")
           val schemaNode: JsonNode = JsonLoader.fromString(schema)
           val factory: JsonSchema = JsonSchemaFactory.byDefault.getJsonSchema(schemaNode, schemaNodeAsString)
-          val report: ProcessingReport = factory.validate(json)
+          val report: ProcessingReport = factory.validate(json, true)
 
           if (report.isSuccess) {
             println(s"report => $report")
@@ -61,7 +61,14 @@ object SchemaValidator{
             //TODO : Parse json and add in "code" to convert output to comply with the json error schema
             //TODO : Maybe validate output to schema???????
 
-            val map: Seq[TrustsValidationError] = report.iterator.asScala.toList.filter(m => m.getLogLevel == ERROR).map(m => TrustsValidationError(m.getMessage, ""))
+            val map: Seq[TrustsValidationError] = report.iterator.asScala.toList.filter(m => m.getLogLevel == ERROR).map(m => {
+              val error = m.asJson()
+
+              val message = error.findValue("message").asText("")
+              val location = error.findValue("instance").at("/pointer").asText("")
+
+              TrustsValidationError(message, location)
+            })
             println(report.iterator.asScala.toList.map(pm => pm.asJson()))
 
          /*   """
@@ -111,9 +118,8 @@ class JsonValidatorSpec extends PlaySpec with  ValidatorBase with SchemaValidati
    "JsonValidator" must {
 
      "read the schema and return a SuccessfulValidation" when {
-       "given any valid schema and matching json" in {
-
-         val result = SchemaValidator.validateAgainstSchema(oneItemSchema, Json.parse(validJson))
+       "when we have a non required field missing" in {
+         val result = SchemaValidator.validateAgainstSchema(threeItemSchema, Json.parse(validJson))
 
          result mustBe SuccessfulValidation
        }
@@ -121,29 +127,54 @@ class JsonValidatorSpec extends PlaySpec with  ValidatorBase with SchemaValidati
 
      "read the schema and return a FailedValidation" when {
        "we miss a required field" in {
-         val result = SchemaValidator.validateAgainstSchema(oneItemSchema, Json.parse(invalidJson))
+         val result = SchemaValidator.validateAgainstSchema(threeItemSchema, Json.parse(invalidJsonOneFieldMissing))
 
-         result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("object has missing required properties ([\"message\"])","")))
+         result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("""object has missing required properties (["message"])""", "")))
        }
        "we miss 2 required fields" in {
          val result = SchemaValidator.validateAgainstSchema(threeItemSchema, Json.parse(invalidJson))
 
-         result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("object has missing required properties ([\"location\",\"message\"])","")))
+         result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("""object has missing required properties (["location","message"])""", "")))
        }
        "a field has the wrong type" in {
          val result = SchemaValidator.validateAgainstSchema(threeItemSchema, Json.parse(invalidTypeJson))
 
-         result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("instance type (integer) does not match any allowed primitive type (allowed: [\"string\"])","")))
+         result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("""instance type (integer) does not match any allowed primitive type (allowed: ["string"])""", "/code")))
        }
-       
+       "a field exceeds the maximum length" in {
+          val result = SchemaValidator.validateAgainstSchema(maxLengthSchema, Json.parse(invalidLengthJson))
+
+         result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("""string "1234567890" is too long (length: 10, maximum allowed: 9)""", "/code")))
+       }
+       "a required field is missing and one of the fields is the wrong type" in {
+         val result = SchemaValidator.validateAgainstSchema(threeItemSchema, Json.parse(invalidJsonMultipleErrors))
+
+         result mustBe FailedValidation("Invalid Json",0,List(
+           TrustsValidationError("""object has missing required properties (["code"])""", ""),
+           TrustsValidationError("""instance type (integer) does not match any allowed primitive type (allowed: ["string"])""", "/message")))
+       }
+       "a nested object has a missing field" in {
+         val result = SchemaValidator.validateAgainstSchema(nestedItemSchema, Json.parse(invalidNestedJsonOneFieldMissing))
+
+         result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("object has missing required properties ([\"message\"])", "/item")))
+       }
      }
    }
+
+  val invalidJsonMultipleErrors: String =
+    """
+      {
+         "message" : 4444,
+         "location" : "test"
+      }
+    """
 
   val validJson: String =
     """
       |{
       |  "message" : "valid message",
-      |  "code" : "valid code"
+      |  "code" : "valid code",
+      |  "location" : "location"
       |}
     """.stripMargin
 
@@ -154,7 +185,31 @@ class JsonValidatorSpec extends PlaySpec with  ValidatorBase with SchemaValidati
       |}
     """.stripMargin
 
+  val invalidJsonOneFieldMissing: String =
+    """
+      |{
+      |  "location" : "test",
+      |  "code" : "valid code"
+      |}
+    """.stripMargin
+
+  val invalidNestedJsonOneFieldMissing: String =
+    """
+      {
+        "item": {
+          "code" : "12345"
+        }
+      }
+    """
+
   val invalidTypeJson: String = """{"message" : "valid message", "code" : 5, "location":"this is a location"}"""
+
+  val invalidLengthJson: String =
+    """
+      |{
+      |  "code" : "1234567890"
+      |}
+    """.stripMargin
 
 //  "JsonValidator" must {
 //    //Happy Path

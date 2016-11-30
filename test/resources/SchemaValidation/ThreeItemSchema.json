@@ -12,6 +12,9 @@
     },
     "location" : {
       "type": "string"
+    },
+    "name" : {
+      "type" : "string"
     }
   },
   "required" : [ "message", "code", "location"]
