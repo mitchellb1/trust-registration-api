@@ -40,6 +40,12 @@ class JsonValidatorSpec extends PlaySpec  with SchemaValidationExamples{
 
          result mustBe SuccessfulValidation
        }
+
+       "a field matches a specified pattern" in {
+         val result = SchemaValidator.validateAgainstSchema(postcodeSchema, validPostcodeJson)
+
+         result mustBe SuccessfulValidation
+       }
      }
 
      "read the schema and return a FailedValidation" when {
@@ -62,6 +68,11 @@ class JsonValidatorSpec extends PlaySpec  with SchemaValidationExamples{
           val result = SchemaValidator.validateAgainstSchema(maxLengthSchema, invalidLengthJson)
 
          result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("""string "1234567890" is too long (length: 10, maximum allowed: 9)""", "/code")))
+       }
+       "a field doesn't match a specified pattern" in {
+         val result = SchemaValidator.validateAgainstSchema(postcodeSchema, invalidPostcodeJson)
+
+         result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("""ECMA 262 regex "^[A-Za-z0-9]{3,4} [A-Za-z0-9]{3}$" does not match input string "NOT A POSTCODE"""", "/postcode")))
        }
        "a required field is missing and one of the fields is the wrong type" in {
          val result = SchemaValidator.validateAgainstSchema(threeItemSchema, invalidJsonMultipleErrors)
@@ -101,6 +112,20 @@ class JsonValidatorSpec extends PlaySpec  with SchemaValidationExamples{
       {
          "message" : 4444,
          "location" : "test"
+      }
+    """
+
+  val validPostcodeJson: String =
+    """
+      {
+         "postcode" : "NE98 1ZZ"
+      }
+    """
+
+  val invalidPostcodeJson: String =
+    """
+      {
+         "postcode" : "NOT A POSTCODE"
       }
     """
 

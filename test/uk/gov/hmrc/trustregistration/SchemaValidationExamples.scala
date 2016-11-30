@@ -23,4 +23,5 @@ trait SchemaValidationExamples {
   lazy val threeItemSchema = Source.fromFile(getClass.getResource("/SchemaValidation/ThreeItemSchema.json").getPath).mkString
   lazy val maxLengthSchema = Source.fromFile(getClass.getResource("/SchemaValidation/MaxLengthSchema.json").getPath).mkString
   lazy val nestedItemSchema = Source.fromFile(getClass.getResource("/SchemaValidation/NestedItemSchema.json").getPath).mkString
+  lazy val postcodeSchema = Source.fromFile(getClass.getResource("/SchemaValidation/PostcodeSchema.json").getPath).mkString
 }
