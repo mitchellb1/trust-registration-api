@@ -65,9 +65,9 @@ object SchemaValidator{
               val error = m.asJson()
 
               val message = error.findValue("message").asText("")
-              val location = error.findValue("instance").at("/pointer").asText("")
+              val location = error.findValue("instance").at("/pointer").asText()
 
-              TrustsValidationError(message, location)
+              TrustsValidationError(message, if (location == "") "/" else location)
             })
             println(report.iterator.asScala.toList.map(pm => pm.asJson()))
 
@@ -129,12 +129,12 @@ class JsonValidatorSpec extends PlaySpec with  ValidatorBase with SchemaValidati
        "we miss a required field" in {
          val result = SchemaValidator.validateAgainstSchema(threeItemSchema, Json.parse(invalidJsonOneFieldMissing))
 
-         result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("""object has missing required properties (["message"])""", "")))
+         result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("""object has missing required properties (["message"])""", "/")))
        }
        "we miss 2 required fields" in {
          val result = SchemaValidator.validateAgainstSchema(threeItemSchema, Json.parse(invalidJson))
 
-         result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("""object has missing required properties (["location","message"])""", "")))
+         result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("""object has missing required properties (["location","message"])""", "/")))
        }
        "a field has the wrong type" in {
          val result = SchemaValidator.validateAgainstSchema(threeItemSchema, Json.parse(invalidTypeJson))
@@ -150,7 +150,7 @@ class JsonValidatorSpec extends PlaySpec with  ValidatorBase with SchemaValidati
          val result = SchemaValidator.validateAgainstSchema(threeItemSchema, Json.parse(invalidJsonMultipleErrors))
 
          result mustBe FailedValidation("Invalid Json",0,List(
-           TrustsValidationError("""object has missing required properties (["code"])""", ""),
+           TrustsValidationError("""object has missing required properties (["code"])""", "/"),
            TrustsValidationError("""instance type (integer) does not match any allowed primitive type (allowed: ["string"])""", "/message")))
        }
        "a nested object has a missing field" in {
