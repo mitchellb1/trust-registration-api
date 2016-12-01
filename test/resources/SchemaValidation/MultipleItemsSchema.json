@@ -15,6 +15,14 @@
     },
     "name" : {
       "type" : "string"
+    },
+    "postcode" : {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9]{3,4} [A-Za-z0-9]{3}$"
+    },
+    "numbers" : {
+      "type" : "string",
+      "maxLength": 9
     }
   },
   "required" : [ "message", "code", "location"]
