@@ -16,12 +16,13 @@
 
 package uk.gov.hmrc.trustregistration.controllers
 
+import com.github.fge.jackson.JsonLoader
 import play.api.libs.json.{JsError, JsValue, Json}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
-import uk.gov.hmrc.trustregistration.utils.{FailedValidation, SchemaValidator, SuccessfulValidation}
+import uk.gov.hmrc.trustregistration.utils.{FailedValidation, SchemaValidator, SuccessfulValidation, TrustsValidationError}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -31,15 +32,24 @@ trait RegisterTrustController extends ApplicationBaseController {
 
   val jsonSchemaValidator: SchemaValidator
 
+  val schemaLocation = "/public/api/conf/2.0/schemas/ThreeItemSchema.json"
+
   def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     authorised("register", "") {
 
-          val validationResult = jsonSchemaValidator.validateAgainstSchema(request.body.toString(), "")
+      // get the schema, read as a string
+          val schemaToUse = JsonLoader.fromResource(schemaLocation).toString
+          val jsonString = request.body.toString()
+
+          println(schemaToUse)
+          println(jsonString)
+
+          val validationResult = jsonSchemaValidator.validateAgainstSchema(schemaToUse, jsonString)
 
           validationResult match {
             case fail: FailedValidation => {
-              val error = s"""{"message":"${fail.message}","code":${fail.code},"validationErrors":[{"message": "${fail.validationErrors.head.message}", "location": "${fail.validationErrors.head.location}"}]}"""
-              Future.successful(BadRequest(error))} // TODO: Return JsError
+              Future.successful(BadRequest(Json.toJson[FailedValidation](fail)))
+            }
             case _ => {
               try {
                 request.body.validate[Trust].map {
@@ -48,17 +58,17 @@ trait RegisterTrustController extends ApplicationBaseController {
                     futureEither.map {
                       case Right(identifier) => Created(Json.toJson(identifier))
                       case Left("503") => InternalServerError
-                      case _ => BadRequest("Error:")
+                      case _ => BadRequest("""{"message": "Failed serialization"}""")
                     }
                   }
                 }.recoverTotal {
                   e => {
-                    Future.successful(BadRequest("Detected error:" + JsError.toFlatJson(e)))
+                    Future.successful(BadRequest(JsError.toFlatJson(e)))
                   }
                 }
               }
               catch {
-                case e => Future.successful(BadRequest("Error" + e))
+                case e => Future.successful(BadRequest(s"""{"message": "Exception: ${e.getMessage()}"}"""))
               }
             }
           }

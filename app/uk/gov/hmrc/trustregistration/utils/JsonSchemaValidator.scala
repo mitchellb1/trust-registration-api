@@ -22,6 +22,7 @@ import com.github.fge.jackson.JsonLoader
 import com.github.fge.jsonschema.core.report.LogLevel.ERROR
 import com.github.fge.jsonschema.core.report.ProcessingReport
 import com.github.fge.jsonschema.main.JsonSchemaFactory
+import play.api.libs.json.Json
 
 import scala.collection.JavaConverters._
 import scala.util.{Success, Try}
@@ -31,7 +32,15 @@ trait ValidationResult
 
 case class TrustsValidationError(message: String, location: String)
 
+object TrustsValidationError {
+  implicit val formats = Json.format[TrustsValidationError]
+}
+
 case class FailedValidation(message: String, code: Int, validationErrors: Seq[TrustsValidationError]) extends ValidationResult
+
+object FailedValidation {
+  implicit val formats = Json.format[FailedValidation]
+}
 
 case class SuccessfulValidation() extends ValidationResult
 

@@ -1,0 +1,21 @@
+{
+  "schema": "http://json-schema.org/draft-04/schema",
+  "id": "http://uk/gov/hmrc/trustregistration/raml/schemas/test.json",
+  "title": "Test Message",
+  "type": "object",
+  "properties": {
+    "message" : {
+      "type": "string"
+    },
+    "code" : {
+      "type": "string"
+    },
+    "location" : {
+      "type": "string"
+    },
+    "name" : {
+      "type" : "string"
+    }
+  },
+  "required" : [ "message", "code", "location"]
+}
