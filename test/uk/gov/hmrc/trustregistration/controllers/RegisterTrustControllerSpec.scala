@@ -85,21 +85,17 @@ class RegisterTrustControllerSpec extends PlaySpec
 
       "The json fails schema validation with a single error" in {
         withCallToPOSTRealValidator(Json.parse("""{"message":"","code":""}""")) { result =>
-          val x = "test"
-
           status(result) mustBe BAD_REQUEST
-          val body = contentAsJson(result)
 
-          body must be (Json.parse("""{"message":"Invalid Json","code":0,"validationErrors":[{"message":"object has missing required properties ([\"location\"])","location":"/"}]}"""))
+          contentAsJson(result) must be (Json.parse("""{"message":"Invalid Json","code":0,"validationErrors":[{"message":"object has missing required properties ([\"location\"])","location":"/"}]}"""))
         }
       }
 
       "The json fails schema validation with multiple errors" in {
         withCallToPOSTRealValidator(Json.parse("""{"message":""}""")) { result =>
           status(result) mustBe BAD_REQUEST
-          val body = contentAsJson(result)
 
-          body must be (Json.parse("""{"message":"Invalid Json","code":0,"validationErrors":[{"message":"object has missing required properties ([\"code\",\"location\"])","location":"/"}]}"""))
+          contentAsJson(result) must be (Json.parse("""{"message":"Invalid Json","code":0,"validationErrors":[{"message":"object has missing required properties ([\"code\",\"location\"])","location":"/"}]}"""))
         }
       }
 

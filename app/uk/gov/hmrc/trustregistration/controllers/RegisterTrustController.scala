@@ -36,19 +36,13 @@ trait RegisterTrustController extends ApplicationBaseController {
 
   def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     authorised("register", "") {
-
-      // get the schema, read as a string
           val schemaToUse = JsonLoader.fromResource(schemaLocation).toString
           val jsonString = request.body.toString()
-
-          println(schemaToUse)
-          println(jsonString)
-
           val validationResult = jsonSchemaValidator.validateAgainstSchema(schemaToUse, jsonString)
 
           validationResult match {
             case fail: FailedValidation => {
-              Future.successful(BadRequest(Json.toJson[FailedValidation](fail)))
+              Future.successful(BadRequest(Json.toJson(fail)))
             }
             case _ => {
               try {
@@ -72,7 +66,6 @@ trait RegisterTrustController extends ApplicationBaseController {
               }
             }
           }
-
       }
     }
 
