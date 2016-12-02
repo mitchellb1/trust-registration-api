@@ -90,7 +90,7 @@ class RegisterTrustControllerSpec extends PlaySpec
           status(result) mustBe BAD_REQUEST
           val body = contentAsJson(result)
 
-          body must be (Json.parse("""{"message": "object has missing required properties (["location"])", "location": "/"}"""))
+          body must be (Json.parse("""{"message":"Invalid Json","code":0,"validationErrors":[{"message":"object has missing required properties ([\"location\"])","location":"/"}]}"""))
         }
       }
 
@@ -99,7 +99,7 @@ class RegisterTrustControllerSpec extends PlaySpec
           status(result) mustBe BAD_REQUEST
           val body = contentAsJson(result)
 
-          body must be (Json.parse("""{"message": "failed with two errors"}"""))
+          body must be (Json.parse("""{"message":"Invalid Json","code":0,"validationErrors":[{"message":"object has missing required properties ([\"code\",\"location\"])","location":"/"}]}"""))
         }
       }
 
