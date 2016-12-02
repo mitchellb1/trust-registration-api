@@ -29,7 +29,7 @@ import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
-import uk.gov.hmrc.trustregistration.utils.SchemaValidator
+import uk.gov.hmrc.trustregistration.utils.JsonSchemaValidator
 import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 
 import scala.concurrent.Future
@@ -90,7 +90,7 @@ class RegisterTrustSandboxControllerSpec extends PlaySpec
 
     override val metrics: ApplicationMetrics = mockMetrics
     override val registerTrustService: RegisterTrustService = mockRegisterTrustService
-    override val jsonSchemaValidator = SchemaValidator
+    override val jsonSchemaValidator = JsonSchemaValidator
 
   }
 

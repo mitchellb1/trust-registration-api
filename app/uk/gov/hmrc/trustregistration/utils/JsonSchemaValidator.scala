@@ -27,28 +27,15 @@ import play.api.libs.json.Json
 import scala.collection.JavaConverters._
 import scala.util.{Success, Try}
 
-trait ValidationResult
 
+trait JsonSchemaValidator{
 
-case class TrustsValidationError(message: String, location: String)
-
-object TrustsValidationError {
-  implicit val formats = Json.format[TrustsValidationError]
-}
-
-case class FailedValidation(message: String, code: Int, validationErrors: Seq[TrustsValidationError]) extends ValidationResult
-
-object FailedValidation {
-  implicit val formats = Json.format[FailedValidation]
-}
-
-case class SuccessfulValidation() extends ValidationResult
-
-object SuccessfulValidation extends ValidationResult
-
-trait SchemaValidator{
+  val schemaLocation: String
 
   def validateAgainstSchema(schema: String, input: String): ValidationResult = {
+
+    val schemaToUse = JsonLoader.fromResource(schemaLocation).toString
+    
     try {
       val jsonToValidate = doNotAllowDuplicatedProperties(input)
 
@@ -101,4 +88,6 @@ trait SchemaValidator{
   }
 }
 
-object SchemaValidator extends SchemaValidator
+object JsonSchemaValidator extends JsonSchemaValidator {
+  val schemaLocation: String = "/public/api/conf/2.0/schemas/trustestate.json"
+}

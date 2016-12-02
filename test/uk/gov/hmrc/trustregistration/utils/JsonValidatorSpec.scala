@@ -36,13 +36,13 @@ class JsonValidatorSpec extends PlaySpec  with SchemaValidationExamples{
 
      "read the schema and return a SuccessfulValidation" when {
        "when we have a non required field missing" in {
-         val result = SchemaValidator.validateAgainstSchema(multipleItemsSchema, validJson)
+         val result = JsonSchemaValidator.validateAgainstSchema(multipleItemsSchema, validJson)
 
          result mustBe SuccessfulValidation
        }
 
        "a field matches a specified pattern" in {
-         val result = SchemaValidator.validateAgainstSchema(postcodeSchema, validPostcodeJson)
+         val result = JsonSchemaValidator.validateAgainstSchema(postcodeSchema, validPostcodeJson)
 
          result mustBe SuccessfulValidation
        }
@@ -50,49 +50,49 @@ class JsonValidatorSpec extends PlaySpec  with SchemaValidationExamples{
 
      "read the schema and return a FailedValidation" when {
        "we miss a required field" in {
-         val result = SchemaValidator.validateAgainstSchema(multipleItemsSchema, invalidJsonOneFieldMissing)
+         val result = JsonSchemaValidator.validateAgainstSchema(multipleItemsSchema, invalidJsonOneFieldMissing)
 
          result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("""object has missing required properties (["message"])""", "/")))
        }
        "we miss 2 required fields" in {
-         val result = SchemaValidator.validateAgainstSchema(multipleItemsSchema, invalidJson)
+         val result = JsonSchemaValidator.validateAgainstSchema(multipleItemsSchema, invalidJson)
 
          result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("""object has missing required properties (["location","message"])""", "/")))
        }
        "a field has the wrong type" in {
-         val result = SchemaValidator.validateAgainstSchema(multipleItemsSchema, invalidTypeJson)
+         val result = JsonSchemaValidator.validateAgainstSchema(multipleItemsSchema, invalidTypeJson)
 
          result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("""instance type (integer) does not match any allowed primitive type (allowed: ["string"])""", "/code")))
        }
        "a field exceeds the maximum length" in {
-          val result = SchemaValidator.validateAgainstSchema(maxLengthSchema, invalidLengthJson)
+          val result = JsonSchemaValidator.validateAgainstSchema(maxLengthSchema, invalidLengthJson)
 
          result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("""string "1234567890" is too long (length: 10, maximum allowed: 9)""", "/code")))
        }
        "a field doesn't match a specified pattern" in {
-         val result = SchemaValidator.validateAgainstSchema(postcodeSchema, invalidPostcodeJson)
+         val result = JsonSchemaValidator.validateAgainstSchema(postcodeSchema, invalidPostcodeJson)
 
          result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("""ECMA 262 regex "^[A-Za-z0-9]{3,4} [A-Za-z0-9]{3}$" does not match input string "NOT A POSTCODE"""", "/postcode")))
        }
        "a required field is missing and one of the fields is the wrong type" in {
-         val result = SchemaValidator.validateAgainstSchema(multipleItemsSchema, invalidJsonMultipleErrors)
+         val result = JsonSchemaValidator.validateAgainstSchema(multipleItemsSchema, invalidJsonMultipleErrors)
 
          result mustBe FailedValidation("Invalid Json",0,List(
            TrustsValidationError("""object has missing required properties (["code"])""", "/"),
            TrustsValidationError("""instance type (integer) does not match any allowed primitive type (allowed: ["string"])""", "/message")))
        }
        "a nested object has a missing field" in {
-         val result = SchemaValidator.validateAgainstSchema(nestedItemSchema, invalidNestedJsonOneFieldMissing)
+         val result = JsonSchemaValidator.validateAgainstSchema(nestedItemSchema, invalidNestedJsonOneFieldMissing)
 
          result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("object has missing required properties ([\"message\"])", "/item")))
        }
        "we pass in some html rather than json" in {
-         val result = SchemaValidator.validateAgainstSchema(multipleItemsSchema, "<html></html>")
+         val result = JsonSchemaValidator.validateAgainstSchema(multipleItemsSchema, "<html></html>")
 
          result mustBe FailedValidation("Not JSON", 0, Nil)
        }
        "we pass duplicated elements" in {
-         val result = SchemaValidator.validateAgainstSchema(multipleItemsSchema, duplicatedElementsJson)
+         val result = JsonSchemaValidator.validateAgainstSchema(multipleItemsSchema, duplicatedElementsJson)
 
          result mustBe FailedValidation("Duplicated Elements", 0, Nil)
        }

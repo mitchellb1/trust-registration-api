@@ -47,7 +47,7 @@ class RegisterTrustControllerSpec extends PlaySpec
   before {
     when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "AUTHORISED"))
 
-    when(mockSchemaValidator.validateAgainstSchema(any(), anyString())).thenReturn(SuccessfulValidation())
+    when(mockSchemaValidator.validateAgainstSchema(any(), anyString())).thenReturn(SuccessfulValidation)
   }
 
   "RegisterTrustController" must {
@@ -77,7 +77,8 @@ class RegisterTrustControllerSpec extends PlaySpec
       }
 
       "The json fails schema validation with a single error " in {
-        withCallToPOSTRealValidator(Json.parse("""{"message":"","code":""}""")) { result =>
+        when(mockSchemaValidator.validateAgainstSchema(anyString, anyString)).thenReturn(FailedValidation("Invalid Json", 0, Seq(TrustsValidationError("object has missing required properties ([\"location\"])", "/"))))
+        withCallToPOST(Json.parse("""{"message":"","code":""}""")) { result =>
 
           status(result) mustBe BAD_REQUEST
           val body = contentAsJson(result)
@@ -87,7 +88,9 @@ class RegisterTrustControllerSpec extends PlaySpec
       }
 
       "The json fails schema validation with two errors" in {
-        withCallToPOSTRealValidator(Json.parse("""{"message":1}""")) { result =>
+        when(mockSchemaValidator.validateAgainstSchema(anyString, anyString)).thenReturn(FailedValidation("Invalid Json", 0, Seq(TrustsValidationError("object has missing required properties ([\"code\",\"location\"])", "/"),TrustsValidationError("instance type (integer) does not match any allowed primitive type (allowed: [\"string\"])", "/message"))))
+
+        withCallToPOST(Json.parse("""{"message":1}""")) { result =>
           status(result) mustBe BAD_REQUEST
           val body = contentAsJson(result)
 
@@ -96,7 +99,9 @@ class RegisterTrustControllerSpec extends PlaySpec
       }
 
       "The json fails schema validation with multiple errors" in {
-        withCallToPOSTRealValidator(Json.parse("""{"message":1,"numbers":"1111111111","postcode":"1111"}""")) { result =>
+        when(mockSchemaValidator.validateAgainstSchema(anyString, anyString)).thenReturn(FailedValidation("Invalid Json", 0, Seq(TrustsValidationError("object has missing required properties ([\"code\",\"location\"])", "/"),TrustsValidationError("instance type (integer) does not match any allowed primitive type (allowed: [\"string\"])", "/message"),TrustsValidationError("string \"1111111111\" is too long (length: 10, maximum allowed: 9)", "/numbers"),TrustsValidationError("ECMA 262 regex \"^[A-Za-z0-9]{3,4} [A-Za-z0-9]{3}$\" does not match input string \"1111\"", "/postcode"))))
+
+        withCallToPOST(Json.parse("""{"message":1,"numbers":"1111111111","postcode":"1111"}""")) { result =>
           status(result) mustBe BAD_REQUEST
           val body = contentAsJson(result)
 
@@ -786,8 +791,12 @@ class RegisterTrustControllerSpec extends PlaySpec
 
   }
 
-  val mockSchemaValidator = mock[SchemaValidator]
+  val mockSchemaValidator = mock[JsonSchemaValidator]
 
+
+  object MultipleItemsSchema extends JsonSchemaValidator {
+    override val schemaLocation = "/SchemaValidation/MultipleItemsSchema.json"
+  }
 
   object SUT extends RegisterTrustController {
     override implicit def hc(implicit rh: RequestHeader): HeaderCarrier = mockHC
@@ -795,19 +804,6 @@ class RegisterTrustControllerSpec extends PlaySpec
     override val metrics: ApplicationMetrics = mockMetrics
     override val registerTrustService: RegisterTrustService = mockRegisterTrustService
     override val jsonSchemaValidator = mockSchemaValidator
-
-    override val schemaLocation = "/SchemaValidation/MultipleItemsSchema.json"
-  }
-
-
-  object SUTRealValidator extends RegisterTrustController {
-    override implicit def hc(implicit rh: RequestHeader): HeaderCarrier = mockHC
-
-    override val metrics: ApplicationMetrics = mockMetrics
-    override val registerTrustService: RegisterTrustService = mockRegisterTrustService
-    override val jsonSchemaValidator = SchemaValidator
-
-    override val schemaLocation = "/SchemaValidation/MultipleItemsSchema.json"
   }
 
   private def withCalltoPOSTInvalidPayload(payload: String)(handler: Future[Result] => Any) = {
@@ -816,9 +812,5 @@ class RegisterTrustControllerSpec extends PlaySpec
 
   private def withCallToPOST(payload: JsValue)(handler: Future[Result] => Any) = {
     handler(SUT.register.apply(registerRequestWithPayload(payload)))
-  }
-
-  private def withCallToPOSTRealValidator(payload: JsValue)(handler: Future[Result] => Any) = {
-    handler(SUTRealValidator.register.apply(registerRequestWithPayload(payload)))
   }
 }

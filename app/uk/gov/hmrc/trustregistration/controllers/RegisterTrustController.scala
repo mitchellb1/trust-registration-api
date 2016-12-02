@@ -22,7 +22,7 @@ import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
-import uk.gov.hmrc.trustregistration.utils.{FailedValidation, SchemaValidator, SuccessfulValidation, TrustsValidationError}
+import uk.gov.hmrc.trustregistration.utils.{FailedValidation, JsonSchemaValidator, SuccessfulValidation, TrustsValidationError}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -30,15 +30,12 @@ import scala.concurrent.Future
 
 trait RegisterTrustController extends ApplicationBaseController {
 
-  val jsonSchemaValidator: SchemaValidator
-
-  val schemaLocation = "/public/api/conf/2.0/schemas/ThreeItemSchema.json"
+  val jsonSchemaValidator: JsonSchemaValidator
 
   def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     authorised("register", "") {
-          val schemaToUse = JsonLoader.fromResource(schemaLocation).toString
           val jsonString = request.body.toString()
-          val validationResult = jsonSchemaValidator.validateAgainstSchema(schemaToUse, jsonString)
+          val validationResult = jsonSchemaValidator.validateAgainstSchema("", jsonString)
 
           validationResult match {
             case fail: FailedValidation => {
@@ -133,6 +130,6 @@ trait RegisterTrustController extends ApplicationBaseController {
 
 object RegisterTrustController extends RegisterTrustController {
   override val registerTrustService = RegisterTrustService
-  override val jsonSchemaValidator = SchemaValidator
+  override val jsonSchemaValidator = JsonSchemaValidator
   override val metrics = ApplicationMetrics
 }
