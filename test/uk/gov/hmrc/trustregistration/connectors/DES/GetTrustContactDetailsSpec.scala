@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.trustregistration.connectors.DES
 
-import org.joda.time.DateTime
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfter
@@ -37,13 +36,12 @@ class GetTrustContactDetailsSpec extends PlaySpec with OneAppPerSuite with DESCo
     .mkString
 
   val validAddressObject = Address(
-    isNonUkAddress = false,
-    addressLine1 = "Line 1",
-    addressLine2 = Some("Line 2"),
-    addressLine3 = Some("Line 3"),
-    addressLine4 = Some("Line 4"),
-    postcode = Some("NE1 2BR"),
-    country = Some("UK")
+    line1 = "Line 1",
+    line2 = Some("Line 2"),
+    line3 = Some("Line 3"),
+    line4 = Some("Line 4"),
+    postalCode = Some("NE1 2BR"),
+    countryCode = Some("UK")
   )
 
   "Get Trust Contact Details endpoint" must {

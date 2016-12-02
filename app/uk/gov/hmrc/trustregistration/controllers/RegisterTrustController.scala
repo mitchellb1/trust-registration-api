@@ -42,9 +42,9 @@ trait RegisterTrustController extends ApplicationBaseController {
             }
             case _ => {
               try {
-                request.body.validate[Trust].map {
-                  trust: Trust => {
-                    val futureEither: Future[Either[String, TRN]] = registerTrustService.registerTrust(trust)
+                request.body.validate[TrustEstateRequest].map {
+                  trustEstate: TrustEstateRequest => {
+                    val futureEither: Future[Either[String, TRN]] = registerTrustService.registerTrust(trustEstate.trustEstate.trust.get)
                     futureEither.map {
                       case Right(identifier) => Created(Json.toJson(identifier))
                       case Left("503") => InternalServerError

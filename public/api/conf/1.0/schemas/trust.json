@@ -37,7 +37,7 @@
         "line4": {
           "type": "string"
         },
-        "postcode": {
+        "postalCode": {
           "type": "string"
         },
         "country": {
@@ -45,7 +45,7 @@
         }
       },
       "required": [
-        "addressLine1",
+        "line1",
         "isNonUkAddress"
       ]
     },

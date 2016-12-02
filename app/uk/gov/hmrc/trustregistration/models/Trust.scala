@@ -27,9 +27,9 @@ case class Trust(name: String,
                  legality: Legality,
                  isTrustUkResident: Boolean,
                  leadTrustee: LeadTrustee,
-                 trustees: List[Individual],
+                 trustees: Trustees,
                  protectors: Protectors,
-                 naturalPeople: List[Individual],
+                 naturalPeople: List[Individual] = Nil,
                  willIntestacyTrust: Option[WillIntestacyTrust] = None,
                  interVivoTrust: Option[InterVivoTrust] = None,
                  heritageMaintenanceFundTrust: Option[HeritageMaintenanceFundTrust] = None,
@@ -38,17 +38,7 @@ case class Trust(name: String,
                  declaration: Option[Declaration] = None,
                  isSchedule5A: Option[Boolean] = None,
                  nonResidentType: Option[String] = None
-){
-  private val onlyOneTypeOfTrust: Boolean = {
-    List(willIntestacyTrust.isDefined,
-      interVivoTrust.isDefined,
-      heritageMaintenanceFundTrust.isDefined,
-      flatManagementSinkingFundTrust.isDefined,
-      employmentTrust.isDefined).count(c=>c) == 1
-  }
-
-  require(onlyOneTypeOfTrust,"Must have one type of Trust")
-}
+)
 
 object Trust{
   implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))

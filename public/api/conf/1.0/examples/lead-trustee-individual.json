@@ -14,11 +14,11 @@
       },
       "correspondenceAddress": {
         "isNonUkAddress": false,
-        "addressLine1": "Address Line 1",
-        "addressLine2": "Address Line 2",
-        "addressLine3": "Address Line 3",
-        "addressLine4": "Address Line 4",
-        "postcode": "NE1 2BR",
+        "line1": "Address Line 1",
+        "line2": "Address Line 2",
+        "line3": "Address Line 3",
+        "line4": "Address Line 4",
+        "postalCode": "NE1 2BR",
         "country": "UK"
       },
       "telephoneNumber": "0191 357 1596"

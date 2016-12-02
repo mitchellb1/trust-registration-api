@@ -18,14 +18,8 @@ package uk.gov.hmrc.trustregistration.models
 
 import play.api.libs.json.Json
 
-case class Address (
-                     line1: String,
-                     line2: Option[String] = None,
-                     line3: Option[String] = None,
-                     line4: Option[String] = None,
-                     postalCode: Option[String] = None,
-                     countryCode: Option[String] = None)
+case class TrustEstateRequest (trustEstate: TrustEstate)
 
-object Address {
-  implicit val formats = Json.format[Address]
+object TrustEstateRequest {
+  implicit val format = Json.format[TrustEstateRequest]
 }

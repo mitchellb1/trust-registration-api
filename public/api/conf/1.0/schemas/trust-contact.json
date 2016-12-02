@@ -11,19 +11,19 @@
         "isNonUkAddress": {
           "type": "boolean"
         },
-        "addressLine1": {
+        "line1": {
           "type": "string"
         },
-        "addressLine2": {
+        "line2": {
           "type": "string"
         },
-        "addressLine3": {
+        "line3": {
           "type": "string"
         },
-        "addressLine4": {
+        "line4": {
           "type": "string"
         },
-        "postcode": {
+        "postalCode": {
           "type": "string"
         },
         "country": {
@@ -31,7 +31,7 @@
         }
       },
       "required": [
-        "addressLine1",
+        "line1",
         "isNonUkAddress"
       ]
     },

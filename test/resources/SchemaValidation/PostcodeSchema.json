@@ -4,7 +4,7 @@
   "title": "Test Message",
   "type": "object",
   "properties": {
-    "postcode" : {
+    "postalCode" : {
       "type": "string",
       "pattern": "^[A-Za-z0-9]{3,4} [A-Za-z0-9]{3}$"
     }

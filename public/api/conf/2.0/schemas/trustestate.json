@@ -907,15 +907,10 @@
     "naturalPeopleType": {
       "description": "Natural People Individual Type",
       "additionalProperties": false,
-      "properties": {
-        "individuals": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/individualType"
-          }
-        }
-      },
-      "type": "object"
+      }
     },
     "otherAssetsType": {
       "description": "Other Assets Type",
@@ -1153,7 +1148,7 @@
     },
     "trustType": {
       "description": "Main Trust Type",
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
         "commencementDate": {
           "type": "string"

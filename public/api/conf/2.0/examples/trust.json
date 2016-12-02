@@ -3,11 +3,11 @@
     "name": "Sample Will / Intestacy Trust",
     "correspondenceAddress": {
       "isNonUkAddress": true,
-      "addressLine1": "Address Line 1",
-      "addressLine2": "Address Line 2",
-      "addressLine3": "Address Line 3",
-      "addressLine4": "Address Line 4",
-      "postcode": "NE1 2BR",
+      "line1": "Address Line 1",
+      "line2": "Address Line 2",
+      "line3": "Address Line 3",
+      "line4": "Address Line 4",
+      "postalCode": "NE1 2BR",
       "country": "FR"
     },
     "telephoneNumber": "0191 357 1596",
@@ -37,11 +37,11 @@
         },
         "correspondenceAddress": {
           "isNonUkAddress": false,
-          "addressLine1": "Address Line 1",
-          "addressLine2": "Address Line 2",
-          "addressLine3": "Address Line 3",
-          "addressLine4": "Address Line 4",
-          "postcode": "NE1 2BR",
+          "line1": "Address Line 1",
+          "line2": "Address Line 2",
+          "line3": "Address Line 3",
+          "line4": "Address Line 4",
+          "postalCode": "NE1 2BR",
           "country": "UK"
         },
         "telephoneNumber": "0191 357 1596"
@@ -62,11 +62,11 @@
         },
         "correspondenceAddress": {
           "isNonUkAddress": false,
-          "addressLine1": "Address Line 1",
-          "addressLine2": "Address Line 2",
-          "addressLine3": "Address Line 3",
-          "addressLine4": "Address Line 4",
-          "postcode": "NE1 2BR",
+          "line1": "Address Line 1",
+          "line2": "Address Line 2",
+          "line3": "Address Line 3",
+          "line4": "Address Line 4",
+          "postalCode": "NE1 2BR",
           "country": "UK"
         },
         "telephoneNumber": "0191 357 1596"
@@ -88,11 +88,11 @@
           },
           "correspondenceAddress": {
             "isNonUkAddress": false,
-            "addressLine1": "Address Line 1",
-            "addressLine2": "Address Line 2",
-            "addressLine3": "Address Line 3",
-            "addressLine4": "Address Line 4",
-            "postcode": "NE1 2BR",
+            "line1": "Address Line 1",
+            "line2": "Address Line 2",
+            "line3": "Address Line 3",
+            "line4": "Address Line 4",
+            "postalCode": "NE1 2BR",
             "country": "UK"
           },
           "telephoneNumber": "0191 357 1596"
@@ -111,11 +111,11 @@
           },
           "correspondenceAddress": {
             "isNonUkAddress": false,
-            "addressLine1": "Address Line 1",
-            "addressLine2": "Address Line 2",
-            "addressLine3": "Address Line 3",
-            "addressLine4": "Address Line 4",
-            "postcode": "NE1 2BR",
+            "line1": "Address Line 1",
+            "line2": "Address Line 2",
+            "line3": "Address Line 3",
+            "line4": "Address Line 4",
+            "postalCode": "NE1 2BR",
             "country": "UK"
           },
           "telephoneNumber": "0191 357 1596"
@@ -127,11 +127,11 @@
           "referenceNumber": "AAA4546BN",
           "correspondenceAddress": {
             "isNonUkAddress": false,
-            "addressLine1": "Address Line 1",
-            "addressLine2": "Address Line 2",
-            "addressLine3": "Address Line 3",
-            "addressLine4": "Address Line 4",
-            "postcode": "NE1 2BR",
+            "line1": "Address Line 1",
+            "line2": "Address Line 2",
+            "line3": "Address Line 3",
+            "line4": "Address Line 4",
+            "postalCode": "NE1 2BR",
             "country": "UK"
           },
           "telephoneNumber": "0191 357 1596"
@@ -153,11 +153,11 @@
         },
         "correspondenceAddress": {
           "isNonUkAddress": false,
-          "addressLine1": "Address Line 1",
-          "addressLine2": "Address Line 2",
-          "addressLine3": "Address Line 3",
-          "addressLine4": "Address Line 4",
-          "postcode": "NE1 2BR",
+          "line1": "Address Line 1",
+          "line2": "Address Line 2",
+          "line3": "Address Line 3",
+          "line4": "Address Line 4",
+          "postalCode": "NE1 2BR",
           "country": "UK"
         },
         "telephoneNumber": "0191 357 1596"
@@ -181,11 +181,11 @@
             "buildingLandName": "",
             "correspondenceAddress": {
               "isNonUkAddress": false,
-              "addressLine1": "Address Line 1",
-              "addressLine2": "Address Line 2",
-              "addressLine3": "Address Line 3",
-              "addressLine4": "Address Line 4",
-              "postcode": "NE1 2BR",
+              "line1": "Address Line 1",
+              "line2": "Address Line 2",
+              "line3": "Address Line 3",
+              "line4": "Address Line 4",
+              "postalCode": "NE1 2BR",
               "country": "UK"
             },
             "propertyLandValue": 20000000,
@@ -208,11 +208,11 @@
             "businessDescription": "We make things",
             "correspondenceAddress": {
               "isNonUkAddress": false,
-              "addressLine1": "Address Line 1",
-              "addressLine2": "Address Line 2",
-              "addressLine3": "Address Line 3",
-              "addressLine4": "Address Line 4",
-              "postcode": "NE1 2BR",
+              "line1": "Address Line 1",
+              "line2": "Address Line 2",
+              "line3": "Address Line 3",
+              "line4": "Address Line 4",
+              "postalCode": "NE1 2BR",
               "country": "UK"
             },
             "value": 1000000,
@@ -244,11 +244,11 @@
               },
               "correspondenceAddress": {
                 "isNonUkAddress": false,
-                "addressLine1": "Address Line 1",
-                "addressLine2": "Address Line 2",
-                "addressLine3": "Address Line 3",
-                "addressLine4": "Address Line 4",
-                "postcode": "NE1 2BR",
+                "line1": "Address Line 1",
+                "line2": "Address Line 2",
+                "line3": "Address Line 3",
+                "line4": "Address Line 4",
+                "postalCode": "NE1 2BR",
                 "country": "UK"
               },
               "telephoneNumber": "0191 357 1596"
@@ -266,11 +266,11 @@
             "number": "",
             "correspondenceAddress": {
               "isNonUkAddress": false,
-              "addressLine1": "Address Line 1",
-              "addressLine2": "Address Line 2",
-              "addressLine3": "Address Line 3",
-              "addressLine4": "Address Line 4",
-              "postcode": "NE1 2BR",
+              "line1": "Address Line 1",
+              "line2": "Address Line 2",
+              "line3": "Address Line 3",
+              "line4": "Address Line 4",
+              "postalCode": "NE1 2BR",
               "country": "UK"
             },
             "income": {
@@ -284,11 +284,11 @@
             "beneficiaryDescription": "",
             "correspondenceAddress": {
               "isNonUkAddress": false,
-              "addressLine1": "Address Line 1",
-              "addressLine2": "Address Line 2",
-              "addressLine3": "Address Line 3",
-              "addressLine4": "Address Line 4",
-              "postcode": "NE1 2BR",
+              "line1": "Address Line 1",
+              "line2": "Address Line 2",
+              "line3": "Address Line 3",
+              "line4": "Address Line 4",
+              "postalCode": "NE1 2BR",
               "country": "UK"
             },
             "income": {
@@ -312,11 +312,11 @@
         },
         "correspondenceAddress": {
           "isNonUkAddress": false,
-          "addressLine1": "Address Line 1",
-          "addressLine2": "Address Line 2",
-          "addressLine3": "Address Line 3",
-          "addressLine4": "Address Line 4",
-          "postcode": "NE1 2BR",
+          "line1": "Address Line 1",
+          "line2": "Address Line 2",
+          "line3": "Address Line 3",
+          "line4": "Address Line 4",
+          "postalCode": "NE1 2BR",
           "country": "UK"
         },
         "telephoneNumber": "0191 357 1596"

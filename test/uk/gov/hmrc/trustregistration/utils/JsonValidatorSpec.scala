@@ -63,7 +63,7 @@ class JsonValidatorSpec extends PlaySpec with SchemaValidationExamples {
       "a field doesn't match a specified pattern" in {
         val result = PostcodeSchemaValidator.validateAgainstSchema(invalidPostcodeJson)
 
-        result mustBe FailedValidation("Invalid Json", 0, List(TrustsValidationError("""ECMA 262 regex "^[A-Za-z0-9]{3,4} [A-Za-z0-9]{3}$" does not match input string "NOT A POSTCODE"""", "/postcode")))
+        result mustBe FailedValidation("Invalid Json", 0, List(TrustsValidationError("""ECMA 262 regex "^[A-Za-z0-9]{3,4} [A-Za-z0-9]{3}$" does not match input string "NOT A POSTCODE"""", "/postalCode")))
       }
       "a required field is missing and one of the fields is the wrong type" in {
         val result = MultipleItemSchemaValidator.validateAgainstSchema(invalidJsonMultipleErrors)
@@ -100,7 +100,7 @@ class JsonValidatorSpec extends PlaySpec with SchemaValidationExamples {
   }
 
   object PostcodeSchemaValidator extends JsonSchemaValidator {
-    override val schema: JsonNode = postcodeSchema
+    override val schema: JsonNode = postalCodeSchema
   }
 
   object NestedItemSchemaValidator extends JsonSchemaValidator {
@@ -126,14 +126,14 @@ class JsonValidatorSpec extends PlaySpec with SchemaValidationExamples {
   val validPostcodeJson: String =
     """
       {
-         "postcode" : "NE98 1ZZ"
+         "postalCode" : "NE98 1ZZ"
       }
     """
 
   val invalidPostcodeJson: String =
     """
       {
-         "postcode" : "NOT A POSTCODE"
+         "postalCode" : "NOT A POSTCODE"
       }
     """
 

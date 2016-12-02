@@ -16,11 +16,11 @@
           },
           "correspondenceAddress": {
             "isNonUkAddress": false,
-            "addressLine1": "Line 1",
-            "addressLine2": "Line 2",
-            "addressLine3": "Line 3",
-            "addressLine4": "Line 4",
-            "postcode": "NE1 2BR",
+            "line1": "Line 1",
+            "line2": "Line 2",
+            "line3": "Line 3",
+            "line4": "Line 4",
+            "postalCode": "NE1 2BR",
             "country": "UK"
           },
           "telephoneNumber": "0191 234 5678"
@@ -36,11 +36,11 @@
         "number": "123456789087654",
         "correspondenceAddress": {
           "isNonUkAddress": false,
-          "addressLine1": "Line 1",
-          "addressLine2": "Line 2",
-          "addressLine3": "Line 3",
-          "addressLine4": "Line 4",
-          "postcode": "NE1 2BR",
+          "line1": "Line 1",
+          "line2": "Line 2",
+          "line3": "Line 3",
+          "line4": "Line 4",
+          "postalCode": "NE1 2BR",
           "country": "UK"
         },
         "isIncomeAtTrusteeDiscretion": false,
@@ -52,11 +52,11 @@
         "description": "Beneficiary Description",
         "correspondenceAddress": {
           "isNonUkAddress": false,
-          "addressLine1": "Line 1",
-          "addressLine2": "Line 2",
-          "addressLine3": "Line 3",
-          "addressLine4": "Line 4",
-          "postcode": "NE1 2BR",
+          "line1": "Line 1",
+          "line2": "Line 2",
+          "line3": "Line 3",
+          "line4": "Line 4",
+          "postalCode": "NE1 2BR",
           "country": "UK"
         },
         "isIncomeAtTrusteeDiscretion": false,

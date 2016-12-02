@@ -24,5 +24,5 @@ trait SchemaValidationExamples {
   lazy val multipleItemsSchema: JsonNode = JsonLoader.fromResource("/SchemaValidation/MultipleItemsSchema.json")
   lazy val maxLengthSchema = JsonLoader.fromResource("/SchemaValidation/MaxLengthSchema.json")
   lazy val nestedItemSchema = JsonLoader.fromResource("/SchemaValidation/NestedItemSchema.json")
-  lazy val postcodeSchema = JsonLoader.fromResource("/SchemaValidation/PostcodeSchema.json")
+  lazy val postalCodeSchema = JsonLoader.fromResource("/SchemaValidation/PostcodeSchema.json")
 }

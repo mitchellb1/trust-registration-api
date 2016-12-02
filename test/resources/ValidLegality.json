@@ -1,5 +1,5 @@
 {
-  "governingCountry" : "Scotland",
-  "administrationCountry" : "Scotland",
+  "governingCountryCode" : "ES",
+  "administrationCountryCode" : "ES",
   "isEstablishedUnderScottishLaw" : true
 }
