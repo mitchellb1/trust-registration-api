@@ -16,12 +16,13 @@
 
 package uk.gov.hmrc.trustregistration
 
-import scala.io.Source
+import com.fasterxml.jackson.databind.JsonNode
+import com.github.fge.jackson.JsonLoader
 
 
 trait SchemaValidationExamples {
-  lazy val multipleItemsSchema = Source.fromFile(getClass.getResource("/SchemaValidation/MultipleItemsSchema.json").getPath).mkString
-  lazy val maxLengthSchema = Source.fromFile(getClass.getResource("/SchemaValidation/MaxLengthSchema.json").getPath).mkString
-  lazy val nestedItemSchema = Source.fromFile(getClass.getResource("/SchemaValidation/NestedItemSchema.json").getPath).mkString
-  lazy val postcodeSchema = Source.fromFile(getClass.getResource("/SchemaValidation/PostcodeSchema.json").getPath).mkString
+  lazy val multipleItemsSchema: JsonNode = JsonLoader.fromResource("/SchemaValidation/MultipleItemsSchema.json")
+  lazy val maxLengthSchema = JsonLoader.fromResource("/SchemaValidation/MaxLengthSchema.json")
+  lazy val nestedItemSchema = JsonLoader.fromResource("/SchemaValidation/NestedItemSchema.json")
+  lazy val postcodeSchema = JsonLoader.fromResource("/SchemaValidation/PostcodeSchema.json")
 }

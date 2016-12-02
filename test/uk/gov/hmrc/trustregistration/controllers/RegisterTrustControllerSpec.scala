@@ -54,7 +54,7 @@ class RegisterTrustControllerSpec extends PlaySpec
   before {
     when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "AUTHORISED"))
 
-    when(mockSchemaValidator.validateAgainstSchema(any(), anyString())).thenReturn(SuccessfulValidation)
+    when(mockSchemaValidator.validateAgainstSchema(anyString())).thenReturn(SuccessfulValidation)
   }
 
   "RegisterTrustController" must {
@@ -84,7 +84,7 @@ class RegisterTrustControllerSpec extends PlaySpec
       }
 
       "The json fails schema validation with a single error" in {
-        when(mockSchemaValidator.validateAgainstSchema(anyString, anyString)).thenReturn(FailedValidation("Invalid Json", 0, Seq(TrustsValidationError("object has missing required properties ([\"location\"])", "/"))))
+        when(mockSchemaValidator.validateAgainstSchema(anyString)).thenReturn(FailedValidation("Invalid Json", 0, Seq(TrustsValidationError("object has missing required properties ([\"location\"])", "/"))))
         withCallToPOST(Json.parse("""{"message":"","code":""}""")) { result =>
 
           status(result) mustBe BAD_REQUEST
@@ -93,7 +93,7 @@ class RegisterTrustControllerSpec extends PlaySpec
       }
 
       "The json fails schema validation with two errors" in {
-        when(mockSchemaValidator.validateAgainstSchema(anyString, anyString)).thenReturn(FailedValidation("Invalid Json", 0, Seq(TrustsValidationError("object has missing required properties ([\"code\",\"location\"])", "/"),TrustsValidationError("instance type (integer) does not match any allowed primitive type (allowed: [\"string\"])", "/message"))))
+        when(mockSchemaValidator.validateAgainstSchema(anyString)).thenReturn(FailedValidation("Invalid Json", 0, Seq(TrustsValidationError("object has missing required properties ([\"code\",\"location\"])", "/"),TrustsValidationError("instance type (integer) does not match any allowed primitive type (allowed: [\"string\"])", "/message"))))
 
         withCallToPOST(Json.parse("""{"message":1}""")) { result =>
           status(result) mustBe BAD_REQUEST
@@ -104,7 +104,7 @@ class RegisterTrustControllerSpec extends PlaySpec
       }
 
       "The json fails schema validation with multiple errors" in {
-        when(mockSchemaValidator.validateAgainstSchema(anyString, anyString)).thenReturn(FailedValidation("Invalid Json", 0, Seq(TrustsValidationError("object has missing required properties ([\"code\",\"location\"])", "/"),TrustsValidationError("instance type (integer) does not match any allowed primitive type (allowed: [\"string\"])", "/message"),TrustsValidationError("string \"1111111111\" is too long (length: 10, maximum allowed: 9)", "/numbers"),TrustsValidationError("ECMA 262 regex \"^[A-Za-z0-9]{3,4} [A-Za-z0-9]{3}$\" does not match input string \"1111\"", "/postcode"))))
+        when(mockSchemaValidator.validateAgainstSchema(anyString)).thenReturn(FailedValidation("Invalid Json", 0, Seq(TrustsValidationError("object has missing required properties ([\"code\",\"location\"])", "/"),TrustsValidationError("instance type (integer) does not match any allowed primitive type (allowed: [\"string\"])", "/message"),TrustsValidationError("string \"1111111111\" is too long (length: 10, maximum allowed: 9)", "/numbers"),TrustsValidationError("ECMA 262 regex \"^[A-Za-z0-9]{3,4} [A-Za-z0-9]{3}$\" does not match input string \"1111\"", "/postcode"))))
 
         withCallToPOST(Json.parse("""{"message":1,"numbers":"1111111111","postcode":"1111"}""")) { result =>
           status(result) mustBe BAD_REQUEST

@@ -21,28 +21,25 @@ import com.fasterxml.jackson.databind.{JsonNode, ObjectMapper}
 import com.github.fge.jackson.JsonLoader
 import com.github.fge.jsonschema.core.report.LogLevel.ERROR
 import com.github.fge.jsonschema.core.report.ProcessingReport
-import com.github.fge.jsonschema.main.JsonSchemaFactory
-import play.api.libs.json.Json
+import com.github.fge.jsonschema.main.{JsonSchema, JsonSchemaFactory}
 
 import scala.collection.JavaConverters._
 import scala.util.{Success, Try}
 
 
-trait JsonSchemaValidator{
+trait JsonSchemaValidator {
 
-  val schemaLocation: String
+  val schema: JsonNode
 
-  def validateAgainstSchema(schema: String, input: String): ValidationResult = {
+  def validateAgainstSchema(input: String): ValidationResult = {
 
-    val schemaToUse = JsonLoader.fromResource(schemaLocation).toString
-    
     try {
-      val jsonToValidate = doNotAllowDuplicatedProperties(input)
+      val jsonToValidate: Try[JsonNode] = doNotAllowDuplicatedProperties(input)
 
       jsonToValidate match {
         case Success(json) => {
-          val validator = JsonSchemaFactory.byDefault.getJsonSchema(JsonLoader.fromString(schema))
-          val validationOutput = validator.validate(json, true)
+          val validator: JsonSchema = JsonSchemaFactory.byDefault.getJsonSchema(schema)
+          val validationOutput: ProcessingReport = validator.validate(json, true)
 
           if (validationOutput.isSuccess) {
             SuccessfulValidation
@@ -89,5 +86,5 @@ trait JsonSchemaValidator{
 }
 
 object JsonSchemaValidator extends JsonSchemaValidator {
-  val schemaLocation: String = "/public/api/conf/2.0/schemas/trustestate.json"
+  val schema: JsonNode = JsonLoader.fromResource("/public/api/conf/2.0/schemas/trustestate.json")
 }
