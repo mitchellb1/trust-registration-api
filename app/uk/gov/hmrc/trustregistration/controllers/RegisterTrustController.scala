@@ -16,13 +16,12 @@
 
 package uk.gov.hmrc.trustregistration.controllers
 
-import com.github.fge.jackson.JsonLoader
 import play.api.libs.json.{JsError, JsValue, Json}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
-import uk.gov.hmrc.trustregistration.utils.{FailedValidation, JsonSchemaValidator, SuccessfulValidation, TrustsValidationError}
+import uk.gov.hmrc.trustregistration.utils.{FailedValidation, JsonSchemaValidator}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

@@ -29,6 +29,11 @@ import scala.util.{Success, Try}
 
 trait JsonSchemaValidator {
 
+  private val JsonErrorMessageTag = "message"
+  private val JsonErrorInstanceTag = "instance"
+  private val JsonErrorPointerTag = "pointer"
+
+
   val schema: JsonNode
 
   def validateAgainstSchema(input: String): ValidationResult = {
@@ -60,11 +65,12 @@ trait JsonSchemaValidator {
     }
   }
 
+
   private def getValidationErrors(validationOutput: ProcessingReport): Seq[TrustsValidationError] = {
     val validationErrors: Seq[TrustsValidationError] = validationOutput.iterator.asScala.toList.filter(m => m.getLogLevel == ERROR).map(m => {
       val error = m.asJson()
-      val message = error.findValue("message").asText("")
-      val location = error.findValue("instance").at("/pointer").asText()
+      val message = error.findValue(JsonErrorMessageTag).asText("")
+      val location = error.findValue(JsonErrorInstanceTag).at(s"/$JsonErrorPointerTag").asText()
 
       TrustsValidationError(message, if (location == "") "/" else location)
     })
@@ -86,5 +92,5 @@ trait JsonSchemaValidator {
 }
 
 object JsonSchemaValidator extends JsonSchemaValidator {
-  val schema: JsonNode = JsonLoader.fromResource("/public/api/conf/2.0/schemas/trustestate.json")
+  val schema: JsonNode = JsonLoader.fromPath("public/api/conf/2.0/schemas/trustestate.json")
 }
