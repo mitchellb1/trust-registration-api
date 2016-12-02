@@ -17,24 +17,31 @@
 package uk.gov.hmrc.trustregistration.controllers
 
 
+import akka.stream.{ActorMaterializer, Materializer}
+import com.fasterxml.jackson.databind.JsonNode
+import com.github.fge.jackson.JsonLoader
+import com.google.i18n.phonenumbers.PhoneNumberUtil.ValidationResult
 import org.joda.time.DateTime
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.http.HeaderNames.{AUTHORIZATION => _, CONTENT_TYPE => _}
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{RequestHeader, Result}
-import play.api.test.FakeRequest
+import play.api.mvc.{Request, RequestHeader, Result}
+import play.api.test.{FakeHeaders, FakeRequest}
 import play.api.test.Helpers._
+import play.mvc.BodyParser
 import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
-import uk.gov.hmrc.trustregistration.utils._
-import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
+import uk.gov.hmrc.trustregistration.utils.{TrustsValidationError, _}
 
 import scala.concurrent.Future
+import play.api.libs.json.Json
 
 
 class RegisterTrustControllerSpec extends PlaySpec
@@ -76,14 +83,12 @@ class RegisterTrustControllerSpec extends PlaySpec
         }
       }
 
-      "The json fails schema validation with a single error " in {
+      "The json fails schema validation with a single error" in {
         when(mockSchemaValidator.validateAgainstSchema(anyString, anyString)).thenReturn(FailedValidation("Invalid Json", 0, Seq(TrustsValidationError("object has missing required properties ([\"location\"])", "/"))))
         withCallToPOST(Json.parse("""{"message":"","code":""}""")) { result =>
 
           status(result) mustBe BAD_REQUEST
-          val body = contentAsJson(result)
-
-          body must be (Json.parse("""{"message":"Invalid Json","code":0,"validationErrors":[{"message":"object has missing required properties ([\"location\"])","location":"/"}]}"""))
+          contentAsJson(result) must be (Json.parse("""{"message":"Invalid Json","code":0,"validationErrors":[{"message":"object has missing required properties ([\"location\"])","location":"/"}]}"""))
         }
       }
 
@@ -94,7 +99,7 @@ class RegisterTrustControllerSpec extends PlaySpec
           status(result) mustBe BAD_REQUEST
           val body = contentAsJson(result)
 
-          body must be (Json.parse("""{"message":"Invalid Json","code":0,"validationErrors":[{"message":"object has missing required properties ([\"code\",\"location\"])","location":"/"},{"message":"instance type (integer) does not match any allowed primitive type (allowed: [\"string\"])","location":"/message"}]}"""))
+          contentAsJson(result) must be (Json.parse("""{"message":"Invalid Json","code":0,"validationErrors":[{"message":"object has missing required properties ([\"code\",\"location\"])","location":"/"},{"message":"instance type (integer) does not match any allowed primitive type (allowed: [\"string\"])","location":"/message"}]}"""))
         }
       }
 
@@ -103,9 +108,7 @@ class RegisterTrustControllerSpec extends PlaySpec
 
         withCallToPOST(Json.parse("""{"message":1,"numbers":"1111111111","postcode":"1111"}""")) { result =>
           status(result) mustBe BAD_REQUEST
-          val body = contentAsJson(result)
-
-          body must be (Json.parse("""{"message":"Invalid Json","code":0,"validationErrors":[{"message":"object has missing required properties ([\"code\",\"location\"])","location":"/"},{"message":"instance type (integer) does not match any allowed primitive type (allowed: [\"string\"])","location":"/message"},{"message":"string \"1111111111\" is too long (length: 10, maximum allowed: 9)","location":"/numbers"},{"message":"ECMA 262 regex \"^[A-Za-z0-9]{3,4} [A-Za-z0-9]{3}$\" does not match input string \"1111\"","location":"/postcode"}]}"""))
+          contentAsJson(result) must be (Json.parse("""{"message":"Invalid Json","code":0,"validationErrors":[{"message":"object has missing required properties ([\"code\",\"location\"])","location":"/"},{"message":"instance type (integer) does not match any allowed primitive type (allowed: [\"string\"])","location":"/message"},{"message":"string \"1111111111\" is too long (length: 10, maximum allowed: 9)","location":"/numbers"},{"message":"ECMA 262 regex \"^[A-Za-z0-9]{3,4} [A-Za-z0-9]{3}$\" does not match input string \"1111\"","location":"/postcode"}]}"""))
         }
       }
 
@@ -792,11 +795,6 @@ class RegisterTrustControllerSpec extends PlaySpec
   }
 
   val mockSchemaValidator = mock[JsonSchemaValidator]
-
-
-  object MultipleItemsSchema extends JsonSchemaValidator {
-    override val schemaLocation = "/SchemaValidation/MultipleItemsSchema.json"
-  }
 
   object SUT extends RegisterTrustController {
     override implicit def hc(implicit rh: RequestHeader): HeaderCarrier = mockHC
