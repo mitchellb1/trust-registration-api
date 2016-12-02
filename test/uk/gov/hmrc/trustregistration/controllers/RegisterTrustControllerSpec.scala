@@ -791,7 +791,7 @@ class RegisterTrustControllerSpec extends PlaySpec
     override val registerTrustService: RegisterTrustService = mockRegisterTrustService
     override val jsonSchemaValidator = mockSchemaValidator
 
-    override val schemaLocation = "/SchemaValidation/ThreeItemSchema.json"
+    override val schemaLocation = "/SchemaValidation/MultipleItemsSchema.json"
   }
 
   object SUTRealValidator extends RegisterTrustController {
@@ -801,7 +801,7 @@ class RegisterTrustControllerSpec extends PlaySpec
     override val registerTrustService: RegisterTrustService = mockRegisterTrustService
     override val jsonSchemaValidator = SchemaValidator
 
-    override val schemaLocation = "/SchemaValidation/ThreeItemSchema.json"
+    override val schemaLocation = "/SchemaValidation/MultipleItemsSchema.json"
   }
 
   private def withCalltoPOSTInvalidPayload(payload: String)(handler: Future[Result] => Any) = {
