@@ -182,22 +182,29 @@
           "$ref": "#/definitions/countryCodeType"
         },
         "line1": {
+          "maxLength": 28,
           "type": "string"
         },
         "line2": {
+          "maxLength": 28,
           "type": "string"
         },
         "line3": {
+          "maxLength": 28,
           "type": "string"
         },
         "line4": {
+          "maxLength": 17,
           "type": "string"
         },
         "postalCode": {
           "$ref": "#/definitions/postalCodeType"
         }
       },
-      "type": "object"
+      "type": "object",
+      "required" : [
+        "line1"
+      ]
     },
     "countryCodeType": {
       "description": "List of ISO Country Codes",
@@ -1011,6 +1018,7 @@
     },
     "postalCodeType": {
       "description": "Postal Code Type",
+      "pattern" : "^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([AZa-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))[0-9][A-Za-z]{2})$",
       "type": "string"
     },
     "propertyAssetsType": {
@@ -1144,6 +1152,7 @@
     },
     "telephoneNumberType": {
       "description": "telephone Number Type",
+      "maxLength": 19,
       "type": "string"
     },
     "trustType": {
@@ -1220,7 +1229,11 @@
           "$ref": "#/definitions/trusteesType"
         }
       },
-      "type": "object"
+      "type": "object",
+      "required" : [
+        "trustName",
+        "telephoneNumber"
+      ]
     },
     "trusteesType": {
       "description": "Trustees Type",

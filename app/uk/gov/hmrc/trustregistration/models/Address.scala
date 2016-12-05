@@ -27,5 +27,6 @@ case class Address (
                      countryCode: Option[String] = None)
 
 object Address {
+
   implicit val formats = Json.format[Address]
 }
