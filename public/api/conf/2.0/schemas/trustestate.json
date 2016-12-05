@@ -1201,7 +1201,7 @@
         "telephoneNumber": {
           "$ref": "#/definitions/telephoneNumberType"
         },
-        "trustName": {
+        "name": {
           "type": "string"
         },
         "trustTypeType": {
@@ -1231,7 +1231,7 @@
       },
       "type": "object",
       "required" : [
-        "trustName",
+        "name",
         "telephoneNumber"
       ]
     },
