@@ -21,6 +21,7 @@ import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models.TRN
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
+import uk.gov.hmrc.trustregistration.utils.JsonSchemaValidator
 
 import scala.concurrent.Future
 
@@ -41,4 +42,5 @@ trait RegisterTrustSandboxController extends RegisterTrustController {
 object RegisterTrustSandboxController extends RegisterTrustSandboxController {
   override val registerTrustService = RegisterTrustService
   override val metrics = ApplicationMetrics
+  override val jsonSchemaValidator = JsonSchemaValidator
 }

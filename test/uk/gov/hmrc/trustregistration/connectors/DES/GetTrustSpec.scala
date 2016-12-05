@@ -142,14 +142,6 @@ class GetTrustSpec extends PlaySpec
         val result = Await.result(SUT.getTrust("1234"),Duration.Inf)
         result mustBe InternalServerErrorResponse
       }
-
-      "DES returns a Trust that contains two different types of trusts" in {
-        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200,
-          Some(Json.parse(invalidTrustWithTwoTrustsJson)))))
-
-        val result = Await.result(SUT.getTrust("1234"),Duration.Inf)
-        result mustBe InternalServerErrorResponse
-      }
     }
   }
 }

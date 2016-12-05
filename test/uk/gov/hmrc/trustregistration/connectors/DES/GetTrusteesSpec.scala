@@ -67,32 +67,32 @@ class GetTrusteesSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
       }
 
       "DES returns a 200 response with a JSON array of Trustees containing an Address with none of the optional parameters" in {
-        val jsonReturn = """[{"title":"Mr","givenName":"Juan","familyName":"Doe","dateOfBirth" : "2012-04-23T18:25:43.511Z", "correspondenceAddress" : {"addressLine1" : "123 Any Street","isNonUkAddress" : false}}]"""
+        val jsonReturn = """[{"title":"Mr","givenName":"Juan","familyName":"Doe","dateOfBirth" : "2012-04-23T18:25:43.511Z", "correspondenceAddress" : {"line1" : "123 Any Street"}}]"""
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(jsonReturn)))))
         val result = Await.result(SUT.getTrustees("1234"),Duration.Inf)
-        result mustBe GetSuccessResponse(List(Individual("Mr","Juan","Doe",new DateTime("2012-04-23T18:25:43.511Z"),None,None,None,None,None,Some(Address(false, "123 Any Street")))))
+        result mustBe GetSuccessResponse(List(Individual("Mr","Juan","Doe",new DateTime("2012-04-23T18:25:43.511Z"),None,None,None,None,None,Some(Address("123 Any Street")))))
       }
 
       "DES returns a 200 response with a JSON array of Trustees containing an Address with some of the optional parameters" in {
-        val jsonReturn = """[{"title":"Mr","givenName":"Juan","familyName":"Doe","dateOfBirth" : "2012-04-23T18:25:43.511Z", "correspondenceAddress" : {"addressLine1" : "123 Any Street","addressLine2" : "Mowr Town","postcode" : "NE21 25A","isNonUkAddress" : false}}]"""
+        val jsonReturn = """[{"title":"Mr","givenName":"Juan","familyName":"Doe","dateOfBirth" : "2012-04-23T18:25:43.511Z", "correspondenceAddress" : {"line1" : "123 Any Street","line2" : "Mowr Town","postalCode" : "NE21 25A"}}]"""
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(jsonReturn)))))
         val result = Await.result(SUT.getTrustees("1234"),Duration.Inf)
-        result mustBe GetSuccessResponse(List(Individual("Mr","Juan","Doe",new DateTime("2012-04-23T18:25:43.511Z"),None,None,None,None,None,Some(Address(false, "123 Any Street",Some("Mowr Town"),None,None,Some("NE21 25A"))))))
+        result mustBe GetSuccessResponse(List(Individual("Mr","Juan","Doe",new DateTime("2012-04-23T18:25:43.511Z"),None,None,None,None,None,Some(Address("123 Any Street",Some("Mowr Town"),None,None,Some("NE21 25A"))))))
       }
 
       "DES returns a 200 response with a JSON array of Trustees containing an Address with all the optional parameters" in {
-        val jsonReturn = """[{"title":"Mr","givenName":"Juan","familyName":"Doe","dateOfBirth" : "2012-04-23T18:25:43.511Z", "correspondenceAddress" : {"addressLine1" : "123 Any Street","addressLine2" : "Mowr Town","addressLine3" : "Test","addressLine4" : "Test Test Test 523125223","postcode" : "NE21 25A","country" : "ZAR","isNonUkAddress" : false}}]"""
+        val jsonReturn = """[{"title":"Mr","givenName":"Juan","familyName":"Doe","dateOfBirth" : "2012-04-23T18:25:43.511Z", "correspondenceAddress" : {"line1" : "123 Any Street","line2" : "Mowr Town","line3" : "Test","line4" : "Test Test Test 523125223","postalCode" : "NE21 25A","country" : "ZAR"}}]"""
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(jsonReturn)))))
         val result = Await.result(SUT.getTrustees("1234"),Duration.Inf)
-        result mustBe GetSuccessResponse(List(Individual("Mr","Juan","Doe",new DateTime("2012-04-23T18:25:43.511Z"),None,None,None,None,None,Some(Address(false, "123 Any Street",Some("Mowr Town"),Some("Test"),Some("Test Test Test 523125223"),Some("NE21 25A"),Some("ZAR"))))))
+        result mustBe GetSuccessResponse(List(Individual("Mr","Juan","Doe",new DateTime("2012-04-23T18:25:43.511Z"),None,None,None,None,None,Some(Address("123 Any Street",Some("Mowr Town"),Some("Test"),Some("Test Test Test 523125223"),Some("NE21 25A"),None)))))
       }
 
       "DES returns a 200 response with a JSON array of Trustees containing an Address and Passport" in {
-        val jsonReturn = """[{"title":"Mr","givenName":"Juan","familyName":"Doe","dateOfBirth" : "2012-04-23T18:25:43.511Z","passport":{"identifier" : "AA12345","expiryDate" : "2012-04-23T18:25:43.511Z","countryOfIssue" : "ESP"}, "correspondenceAddress" : {"addressLine1" : "123 Any Street","addressLine2" : "Mowr Town","addressLine3" : "Test","addressLine4" : "Test Test Test 523125223","postcode" : "NE21 25A","country" : "ZAR","isNonUkAddress" : false}}]"""
+        val jsonReturn = """[{"title":"Mr","givenName":"Juan","familyName":"Doe","dateOfBirth" : "2012-04-23T18:25:43.511Z","passport":{"identifier" : "AA12345","expiryDate" : "2012-04-23T18:25:43.511Z","countryOfIssue" : "ESP"}, "correspondenceAddress" : {"line1" : "123 Any Street","line2" : "Mowr Town","line3" : "Test","line4" : "Test Test Test 523125223","postalCode" : "NE21 25A","country" : "ZAR"}}]"""
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(jsonReturn)))))
         val result = Await.result(SUT.getTrustees("1234"),Duration.Inf)
         val expectedPassport = Passport("AA12345", new DateTime("2012-04-23T18:25:43.511Z"), "ESP")
-        result mustBe GetSuccessResponse(List(Individual("Mr","Juan","Doe",new DateTime("2012-04-23T18:25:43.511Z"),None,None,None,None,Some(expectedPassport),Some(Address(false, "123 Any Street",Some("Mowr Town"),Some("Test"),Some("Test Test Test 523125223"),Some("NE21 25A"),Some("ZAR"))))))
+        result mustBe GetSuccessResponse(List(Individual("Mr","Juan","Doe",new DateTime("2012-04-23T18:25:43.511Z"),None,None,None,None,Some(expectedPassport),Some(Address("123 Any Street",Some("Mowr Town"),Some("Test"),Some("Test Test Test 523125223"),Some("NE21 25A"),None)))))
       }
 
       "DES returns a 200 response with a JSON array of Trustees containing all required fields" in {
@@ -108,23 +108,22 @@ class GetTrusteesSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
              "passport": {
                 "identifier": "123456",
                 "expiryDate": "2016-01-01T00:00:00.000Z",
-                "countryOfIssue": "United Kingdom"
+                "countryOfIssue": "ES"
              },
              "correspondenceAddress": {
-                "isNonUkAddress" : false,
-                "addressLine1": "A House",
-                "addressLine2": "A Street",
-                "addressLine3": "An Area",
-                "addressLine4": "A Town",
-                "postcode": "AB1 1AB",
-                "country": "United Kingdom"
+                "line1": "A House",
+                "line2": "A Street",
+                "line3": "An Area",
+                "line4": "A Town",
+                "postalCode": "AB1 1AB",
+                "countryCode": "ES"
              },
              "telephoneNumber": "019112345678"
          }]"""
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(jsonReturn)))))
         val result = Await.result(SUT.getTrustees("1234"),Duration.Inf)
-        val expectedPassport = Passport("123456", new DateTime("2016-01-01T00:00:00.000Z"), "United Kingdom")
-        val expectedAddress = Address(false,"A House", Some("A Street"), Some("An Area"), Some("A Town"), Some("AB1 1AB"), Some("United Kingdom"))
+        val expectedPassport = Passport("123456", new DateTime("2016-01-01T00:00:00.000Z"), "ES")
+        val expectedAddress = Address("A House", Some("A Street"), Some("An Area"), Some("A Town"), Some("AB1 1AB"), Some("ES"))
         result mustBe GetSuccessResponse(List(Individual("Mr", "John", "Doe", new DateTime("1900-01-01T00:00:00.000Z"),Some("B"), Some("1234567890"),Some(new DateTime("2016-01-01T00:00:00.000Z")), Some("019112345678"), Some(expectedPassport), Some(expectedAddress))))
       }
     }

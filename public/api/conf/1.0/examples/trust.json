@@ -1,99 +1,75 @@
 {
-  "trustestate": {
-    "name": "Sample Will Intestacy Trust",
+  "trust": {
+    "name": "Sample Will / Intestacy Trust",
     "correspondenceAddress": {
-      "isNonUkAddress": false,
-      "addressLine1": "Line 1",
-      "addressLine2": "Line 2",
-      "addressLine3": "Line 3",
-      "addressLine4": "Line 4",
-      "postcode": "NE1 2BR",
-      "country": "UK"
+      "isNonUkAddress": true,
+      "line1": "Address Line 1",
+      "line2": "Address Line 2",
+      "line3": "Address Line 3",
+      "line4": "Address Line 4",
+      "postalCode": "NE1 2BR",
+      "country": "FR"
     },
-    "telephoneNumber": "0191 234 5678",
+    "telephoneNumber": "0191 357 1596",
     "currentYear": "2016",
-    "commencementDate": "01/01/2016",
+    "commencementDate": "2016-12-25",
     "legality": {
       "governingCountry": "UK",
       "administrationCountry": "UK",
+      "previousOffshoreCountry": "",
       "isEstablishedUnderScottishLaw": false
     },
     "isTrustUkResident": true,
     "isSchedule5A": false,
-    "nonResidentType": "Foreign",
+    "nonResidentType": "N/A",
     "leadTrustee": {
       "individual": {
         "title": "Mr",
         "givenName": "Joe",
-        "otherName": "Fred",
-        "familyName": "Bloggs",
-        "dateOfBirth": "10/10/1967",
+        "otherName": "John",
+        "familyName": "Doe",
+        "dateOfBirth": "1989-12-31",
         "nino": "WA123456A",
         "passport": {
-          "identifier": "123435egxb",
-          "expiryDate": "12/12/2017",
+          "identifier": "b12344b23b45",
+          "expiryDate": "2018-12-25",
           "countryOfIssue": "UK"
         },
         "correspondenceAddress": {
           "isNonUkAddress": false,
-          "addressLine1": "Line 1",
-          "addressLine2": "Line 2",
-          "addressLine3": "Line 3",
-          "addressLine4": "Line 4",
-          "postcode": "NE1 2BR",
+          "line1": "Address Line 1",
+          "line2": "Address Line 2",
+          "line3": "Address Line 3",
+          "line4": "Address Line 4",
+          "postalCode": "NE1 2BR",
           "country": "UK"
         },
-        "telephoneNumber": "0191 234 5678"
+        "telephoneNumber": "0191 357 1596"
       }
     },
     "trustees": [
       {
-        "title": "Mrs",
-        "givenName": "Jane",
-        "otherName": "",
+        "title": "Mr",
+        "givenName": "Joe",
+        "otherName": "John",
         "familyName": "Doe",
-        "dateOfBirth": "12/08/1965",
+        "dateOfBirth": "1989-12-31",
         "nino": "WA123456A",
-        "dateOfDeath": "",
         "passport": {
-          "identifier": "3456574553456",
-          "expiryDate": "30/12/2016",
+          "identifier": "b12344b23b45",
+          "expiryDate": "2018-12-25",
           "countryOfIssue": "UK"
         },
         "correspondenceAddress": {
           "isNonUkAddress": false,
-          "addressLine1": "Line 1",
-          "addressLine2": "Line 2",
-          "addressLine3": "Line 3",
-          "addressLine4": "Line 4",
-          "postcode": "NE1 2BR",
+          "line1": "Address Line 1",
+          "line2": "Address Line 2",
+          "line3": "Address Line 3",
+          "line4": "Address Line 4",
+          "postalCode": "NE1 2BR",
           "country": "UK"
         },
-        "telephoneNumber": "0191 289 4563"
-      },
-      {
-        "title": "Dr",
-        "givenName": "Fiona",
-        "otherName": "Jane",
-        "familyName": "Bloggs",
-        "dateOfBirth": "12/12/1945",
-        "nino": "WR4356645A",
-        "dateOfDeath": "",
-        "passport": {
-          "identifier": "3657365778",
-          "expiryDate": "12/06/2020",
-          "countryOfIssue": "UK"
-        },
-        "correspondenceAddress": {
-          "isNonUkAddress": false,
-          "addressLine1": "Line 1",
-          "addressLine2": "Line 2",
-          "addressLine3": "Line 3",
-          "addressLine4": "Line 4",
-          "postcode": "NE1 2BR",
-          "country": "UK"
-        },
-        "telephoneNumber": "0121 558 9999"
+        "telephoneNumber": "0191 357 1596"
       }
     ],
     "protectors": {
@@ -101,41 +77,64 @@
         {
           "title": "Mr",
           "givenName": "Joe",
-          "otherName": "Fred",
-          "familyName": "Bloggs",
-          "dateOfBirth": "10/10/1967",
+          "otherName": "John",
+          "familyName": "Doe",
+          "dateOfBirth": "1989-12-31",
           "nino": "WA123456A",
           "passport": {
-            "identifier": "123435egxb",
-            "expiryDate": "12/12/2017",
+            "identifier": "b12344b23b45",
+            "expiryDate": "2018-12-25",
             "countryOfIssue": "UK"
           },
           "correspondenceAddress": {
             "isNonUkAddress": false,
-            "addressLine1": "Line 1",
-            "addressLine2": "Line 2",
-            "addressLine3": "Line 3",
-            "addressLine4": "Line 4",
-            "postcode": "NE1 2BR",
+            "line1": "Address Line 1",
+            "line2": "Address Line 2",
+            "line3": "Address Line 3",
+            "line4": "Address Line 4",
+            "postalCode": "NE1 2BR",
             "country": "UK"
           },
-          "telephoneNumber": "0191 234 5678"
+          "telephoneNumber": "0191 357 1596"
+        },
+        {
+          "title": "Mr",
+          "givenName": "Joe",
+          "otherName": "John",
+          "familyName": "Doe",
+          "dateOfBirth": "1989-12-31",
+          "nino": "WA123456A",
+          "passport": {
+            "identifier": "b12344b23b45",
+            "expiryDate": "2018-12-25",
+            "countryOfIssue": "UK"
+          },
+          "correspondenceAddress": {
+            "isNonUkAddress": false,
+            "line1": "Address Line 1",
+            "line2": "Address Line 2",
+            "line3": "Address Line 3",
+            "line4": "Address Line 4",
+            "postalCode": "NE1 2BR",
+            "country": "UK"
+          },
+          "telephoneNumber": "0191 357 1596"
         }
       ],
       "companies": [
         {
-          "name": "Protector Company",
-          "referenceNumber": "123456789",
+          "name": "Company Name",
+          "referenceNumber": "AAA4546BN",
           "correspondenceAddress": {
             "isNonUkAddress": false,
-            "addressLine1": "Line 1",
-            "addressLine2": "Line 2",
-            "addressLine3": "Line 3",
-            "addressLine4": "Line 4",
-            "postcode": "NE1 2BR",
+            "line1": "Address Line 1",
+            "line2": "Address Line 2",
+            "line3": "Address Line 3",
+            "line4": "Address Line 4",
+            "postalCode": "NE1 2BR",
             "country": "UK"
           },
-          "telephoneNumber": "0191 234 5678"
+          "telephoneNumber": "0191 357 1596"
         }
       ]
     },
@@ -143,88 +142,88 @@
       {
         "title": "Mr",
         "givenName": "Joe",
-        "otherName": "Fred",
-        "familyName": "Bloggs",
-        "dateOfBirth": "10/10/1967",
+        "otherName": "John",
+        "familyName": "Doe",
+        "dateOfBirth": "1989-12-31",
         "nino": "WA123456A",
         "passport": {
-          "identifier": "123435egxb",
-          "expiryDate": "12/12/2017",
+          "identifier": "b12344b23b45",
+          "expiryDate": "2018-12-25",
           "countryOfIssue": "UK"
         },
         "correspondenceAddress": {
           "isNonUkAddress": false,
-          "addressLine1": "Line 1",
-          "addressLine2": "Line 2",
-          "addressLine3": "Line 3",
-          "addressLine4": "Line 4",
-          "postcode": "NE1 2BR",
+          "line1": "Address Line 1",
+          "line2": "Address Line 2",
+          "line3": "Address Line 3",
+          "line4": "Address Line 4",
+          "postalCode": "NE1 2BR",
           "country": "UK"
         },
-        "telephoneNumber": "0191 234 5678"
+        "telephoneNumber": "0191 357 1596"
       }
     ],
     "declaration": {
       "title": "Mr",
       "givenName": "Joe",
-      "otherName": "Fred",
-      "familyName": "Bloggs",
-      "capacity": "Trustee",
-      "date": "01/01/2016"
+      "otherName": "John",
+      "familyName": "Doe",
+      "capacity": "Executor",
+      "date": "2016-12-25"
     },
     "willIntestacyTrust": {
       "assets": {
         "monetaryAssets": [
-          0
+          10000
         ],
         "propertyAssets": [
           {
-            "buildingLandName": "Name of Land",
+            "buildingLandName": "",
             "correspondenceAddress": {
               "isNonUkAddress": false,
-              "addressLine1": "Line 1",
-              "addressLine2": "Line 2",
-              "addressLine3": "Line 3",
-              "addressLine4": "Line 4",
-              "postcode": "NE1 2BR",
+              "line1": "Address Line 1",
+              "line2": "Address Line 2",
+              "line3": "Address Line 3",
+              "line4": "Address Line 4",
+              "postalCode": "NE1 2BR",
               "country": "UK"
             },
-            "propertyLandValue": 0,
-            "propertyLandEvalDate": "01/01/2016"
+            "propertyLandValue": 20000000,
+            "propertyLandEvalDate": "2016-12-25"
           }
         ],
         "shareAssets": [
           {
-            "shareNumber": 0,
+            "shareNumber": 4356,
             "shareClass": "A",
-            "shareType": "Share Type",
-            "companyRegistrationNumber": "CRN2113456789",
-            "shareValue": 0
+            "shareType": "FTSE 100",
+            "companyRegistrationNumber": "GGG2314dfs",
+            "shareValue": 256000
           }
         ],
         "businessAssets": [
           {
-            "buildingName": "Building Name",
-            "payeRef": "paye ref  32456",
-            "description": "description of business",
+            "businessName": "business Asset Name",
+            "payeRef": "23456",
+            "businessDescription": "We make things",
             "correspondenceAddress": {
               "isNonUkAddress": false,
-              "addressLine1": "Line 1",
-              "addressLine2": "Line 2",
-              "addressLine3": "Line 3",
-              "addressLine4": "Line 4",
-              "postcode": "NE1 2BR",
+              "line1": "Address Line 1",
+              "line2": "Address Line 2",
+              "line3": "Address Line 3",
+              "line4": "Address Line 4",
+              "postalCode": "NE1 2BR",
               "country": "UK"
             },
-            "value": 0,
-            "lastValuationDate": "01/01/2016"
+            "value": 1000000,
+            "lastValuationDate": "2016-12-25"
           }
         ],
         "otherAssets": [
           {
-            "description": "Asset Description",
-            "value": 0,
-            "lastValuationDate": "01/01/2016"
+            "OtherAssetDescription": "Another Asset",
+            "value": 10,
+            "lastValuationDate": "2016-12-25"
           }
         ]
       },
@@ -234,88 +233,95 @@
             "individual": {
               "title": "Mr",
               "givenName": "Joe",
-              "otherName": "Fred",
-              "familyName": "Bloggs",
-              "dateOfBirth": "10/10/1967",
+              "otherName": "John",
+              "familyName": "Doe",
+              "dateOfBirth": "1989-12-31",
               "nino": "WA123456A",
               "passport": {
-                "identifier": "123435egxb",
-                "expiryDate": "12/12/2017",
+                "identifier": "b12344b23b45",
+                "expiryDate": "2018-12-25",
                 "countryOfIssue": "UK"
               },
               "correspondenceAddress": {
                 "isNonUkAddress": false,
-                "addressLine1": "Line 1",
-                "addressLine2": "Line 2",
-                "addressLine3": "Line 3",
-                "addressLine4": "Line 4",
-                "postcode": "NE1 2BR",
+                "line1": "Address Line 1",
+                "line2": "Address Line 2",
+                "line3": "Address Line 3",
+                "line4": "Address Line 4",
+                "postalCode": "NE1 2BR",
                 "country": "UK"
               },
-              "telephoneNumber": "0191 234 5678"
+              "telephoneNumber": "0191 357 1596"
             },
             "isVulnerable": false,
-            "isIncomeAtTrusteeDiscretion": true,
-            "shareOfIncome": 30
+            "income": {
+              "isIncomeAtTrusteeDiscretion": true,
+              "shareOfIncome": 50
+            }
           }
         ],
         "charityBeneficiaries": [
           {
-            "name": "Charity Name",
-            "number": "123456789087654",
+            "name": "",
+            "number": "",
             "correspondenceAddress": {
               "isNonUkAddress": false,
-              "addressLine1": "Line 1",
-              "addressLine2": "Line 2",
-              "addressLine3": "Line 3",
-              "addressLine4": "Line 4",
-              "postcode": "NE1 2BR",
+              "line1": "Address Line 1",
+              "line2": "Address Line 2",
+              "line3": "Address Line 3",
+              "line4": "Address Line 4",
+              "postalCode": "NE1 2BR",
               "country": "UK"
             },
-            "isIncomeAtTrusteeDiscretion": false,
-            "shareOfIncome": 20
+            "income": {
+              "isIncomeAtTrusteeDiscretion": true,
+              "shareOfIncome": 10
+            }
           }
         ],
         "otherBeneficiaries": [
           {
-            "description": "Beneficiary Description",
+            "beneficiaryDescription": "",
             "correspondenceAddress": {
               "isNonUkAddress": false,
-              "addressLine1": "Line 1",
-              "addressLine2": "Line 2",
-              "addressLine3": "Line 3",
-              "addressLine4": "Line 4",
-              "postcode": "NE1 2BR",
+              "line1": "Address Line 1",
+              "line2": "Address Line 2",
+              "line3": "Address Line 3",
+              "line4": "Address Line 4",
+              "postalCode": "NE1 2BR",
               "country": "UK"
             },
-            "isIncomeAtTrusteeDiscretion": false,
-            "shareOfIncome": 50
+            "income": {
+              "isIncomeAtTrusteeDiscretion": false,
+              "shareOfIncome": 40
+            }
           }
         ]
       },
       "deceased": {
         "title": "Mr",
         "givenName": "Joe",
-        "otherName": "Fred",
-        "familyName": "Bloggs",
-        "dateOfBirth": "10/10/1967",
+        "otherName": "John",
+        "familyName": "Doe",
+        "dateOfBirth": "1989-12-31",
         "nino": "WA123456A",
         "passport": {
-          "identifier": "123435egxb",
-          "expiryDate": "12/12/2017",
+          "identifier": "b12344b23b45",
+          "expiryDate": "2018-12-25",
           "countryOfIssue": "UK"
         },
         "correspondenceAddress": {
           "isNonUkAddress": false,
-          "addressLine1": "Line 1",
-          "addressLine2": "Line 2",
-          "addressLine3": "Line 3",
-          "addressLine4": "Line 4",
-          "postcode": "NE1 2BR",
+          "line1": "Address Line 1",
+          "line2": "Address Line 2",
+          "line3": "Address Line 3",
+          "line4": "Address Line 4",
+          "postalCode": "NE1 2BR",
           "country": "UK"
         },
-        "telephoneNumber": "0191 234 5678"
-      }
+        "telephoneNumber": "0191 357 1596"
+      },
+      "dateOfDeath" : "2018-12-25"
     }
   }
 }

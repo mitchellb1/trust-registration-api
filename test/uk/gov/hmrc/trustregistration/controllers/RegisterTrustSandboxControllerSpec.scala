@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.trustregistration.controllers
 
-import org.joda.time.DateTime
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfter
@@ -24,13 +23,14 @@ import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.http.HeaderNames.{AUTHORIZATION => _, CONTENT_TYPE => _}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{RequestHeader, Result}
-import play.api.test.{FakeHeaders, FakeRequest}
 import play.api.test.Helpers._
+import play.api.test.{FakeHeaders, FakeRequest}
 import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
+import uk.gov.hmrc.trustregistration.utils.JsonSchemaValidator
+import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 
 import scala.concurrent.Future
 
@@ -90,6 +90,8 @@ class RegisterTrustSandboxControllerSpec extends PlaySpec
 
     override val metrics: ApplicationMetrics = mockMetrics
     override val registerTrustService: RegisterTrustService = mockRegisterTrustService
+    override val jsonSchemaValidator = JsonSchemaValidator
+
   }
 
   private def withCallToPOST(payload: JsValue)(handler: Future[Result] => Any) = {

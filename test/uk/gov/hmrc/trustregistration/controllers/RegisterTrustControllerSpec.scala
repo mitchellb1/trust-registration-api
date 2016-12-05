@@ -18,6 +18,9 @@ package uk.gov.hmrc.trustregistration.controllers
 
 
 import akka.stream.{ActorMaterializer, Materializer}
+import com.fasterxml.jackson.databind.JsonNode
+import com.github.fge.jackson.JsonLoader
+import com.google.i18n.phonenumbers.PhoneNumberUtil.ValidationResult
 import org.joda.time.DateTime
 import org.mockito.Matchers._
 import org.mockito.Mockito._
@@ -29,13 +32,16 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Request, RequestHeader, Result}
 import play.api.test.{FakeHeaders, FakeRequest}
 import play.api.test.Helpers._
+import play.mvc.BodyParser
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
+import uk.gov.hmrc.trustregistration.utils.{TrustsValidationError, _}
 
 import scala.concurrent.Future
+import play.api.libs.json.Json
 
 
 class RegisterTrustControllerSpec extends PlaySpec
@@ -46,15 +52,14 @@ class RegisterTrustControllerSpec extends PlaySpec
   with RegisterTrustServiceMocks {
 
   before {
-
-
     when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "AUTHORISED"))
 
+    when(mockSchemaValidator.validateAgainstSchema(anyString())).thenReturn(SuccessfulValidation)
   }
 
   "RegisterTrustController" must {
     "return created with a TRN" when {
-      "the register endpoint is called with a valid json payload" in {
+      "the register endpoint is called with a valid json payload" ignore {
         when(mockRegisterTrustService.registerTrust(any[Trust])(any[HeaderCarrier]))
           .thenReturn(Future.successful(Right(TRN("TRN-1234"))))
 
@@ -65,28 +70,41 @@ class RegisterTrustControllerSpec extends PlaySpec
       }
     }
     "Return a Bad Request" when {
-      "The json trust document is invalid" in {
-        withCallToPOST(Json.parse(invalidTrustWithTwoTrustsJson)) { result =>
-          status(result) mustBe BAD_REQUEST
-          contentAsString(result) must include("Must have one type of Trust")
-        }
-      }
       "The json trust document is missing" in {
         withCallToPOST(Json.parse("{}")) { result =>
           status(result) mustBe BAD_REQUEST
         }
       }
-    }
 
-    "Return an Internal Server Error" when {
-      "something is broken" in {
-        when(mockRegisterTrustService.registerTrust(any[Trust])(any[HeaderCarrier]))
-          .thenReturn(Future.successful(Left("503")))
+      "The json fails schema validation with a single error" in {
+        when(mockSchemaValidator.validateAgainstSchema(anyString)).thenReturn(FailedValidation("Invalid Json", 0, Seq(TrustsValidationError("object has missing required properties ([\"location\"])", "/"))))
+        withCallToPOST(Json.parse("""{"message":"","code":""}""")) { result =>
 
-        withCallToPOST(Json.parse(validTrustJson)) { result =>
-          status(result) mustBe INTERNAL_SERVER_ERROR
+          status(result) mustBe BAD_REQUEST
+          contentAsJson(result) must be (Json.parse("""{"message":"Invalid Json","code":0,"validationErrors":[{"message":"object has missing required properties ([\"location\"])","location":"/"}]}"""))
         }
       }
+
+      "The json fails schema validation with two errors" in {
+        when(mockSchemaValidator.validateAgainstSchema(anyString)).thenReturn(FailedValidation("Invalid Json", 0, Seq(TrustsValidationError("object has missing required properties ([\"code\",\"location\"])", "/"),TrustsValidationError("instance type (integer) does not match any allowed primitive type (allowed: [\"string\"])", "/message"))))
+
+        withCallToPOST(Json.parse("""{"message":1}""")) { result =>
+          status(result) mustBe BAD_REQUEST
+          val body = contentAsJson(result)
+
+          contentAsJson(result) must be (Json.parse("""{"message":"Invalid Json","code":0,"validationErrors":[{"message":"object has missing required properties ([\"code\",\"location\"])","location":"/"},{"message":"instance type (integer) does not match any allowed primitive type (allowed: [\"string\"])","location":"/message"}]}"""))
+        }
+      }
+
+      "The json fails schema validation with multiple errors" in {
+        when(mockSchemaValidator.validateAgainstSchema(anyString)).thenReturn(FailedValidation("Invalid Json", 0, Seq(TrustsValidationError("object has missing required properties ([\"code\",\"location\"])", "/"),TrustsValidationError("instance type (integer) does not match any allowed primitive type (allowed: [\"string\"])", "/message"),TrustsValidationError("string \"1111111111\" is too long (length: 10, maximum allowed: 9)", "/numbers"),TrustsValidationError("ECMA 262 regex \"^[A-Za-z0-9]{3,4} [A-Za-z0-9]{3}$\" does not match input string \"1111\"", "/postalCode"))))
+
+        withCallToPOST(Json.parse("""{"message":1,"numbers":"1111111111","postalCode":"1111"}""")) { result =>
+          status(result) mustBe BAD_REQUEST
+          contentAsJson(result) must be (Json.parse("""{"message":"Invalid Json","code":0,"validationErrors":[{"message":"object has missing required properties ([\"code\",\"location\"])","location":"/"},{"message":"instance type (integer) does not match any allowed primitive type (allowed: [\"string\"])","location":"/message"},{"message":"string \"1111111111\" is too long (length: 10, maximum allowed: 9)","location":"/numbers"},{"message":"ECMA 262 regex \"^[A-Za-z0-9]{3,4} [A-Za-z0-9]{3}$\" does not match input string \"1111\"","location":"/postalCode"}]}"""))
+        }
+      }
+
     }
   }
 
@@ -213,11 +231,10 @@ class RegisterTrustControllerSpec extends PlaySpec
           passport = Some(Passport(
             identifier = "IDENTIFIER",
             expiryDate = new DateTime("2000-01-01"),
-            countryOfIssue = "UK"
+            countryOfIssue = "ES"
           )),
           correspondenceAddress = Some(Address(
-            isNonUkAddress = false,
-            addressLine1 = "Address Line 1"
+            line1 = "Address Line 1"
           ))
         )
         when(mockRegisterTrustService.getTrustees(any[String])(any[HeaderCarrier]))
@@ -228,8 +245,8 @@ class RegisterTrustControllerSpec extends PlaySpec
         status(result) mustBe OK
         contentAsString(result) mustBe (
           """[{"title":"Mr","givenName":"John","familyName":"Doe","dateOfBirth":"1800-01-01",""" +
-            """"passport":{"identifier":"IDENTIFIER","expiryDate":"2000-01-01","countryOfIssue":"UK"},""" +
-            """"correspondenceAddress":{"isNonUkAddress":false,"addressLine1":"Address Line 1"}}]""")
+            """"passport":{"identifier":"IDENTIFIER","expiryDate":"2000-01-01","countryOfIssue":"ES"},""" +
+            """"correspondenceAddress":{"line1":"Address Line 1"}}]""")
       }
     }
 
@@ -289,7 +306,7 @@ class RegisterTrustControllerSpec extends PlaySpec
 
     "return 200 ok with valid json" when {
       "the endpoint is called with a valid identifier" in {
-        val validAddress = Address(false, "Fake Street 123, Testland")
+        val validAddress = Address("Fake Street 123, Testland")
         val validCompanySettlors = Settlors(None,Some(List(Company("Company",validAddress,"12345",Some("AAA5221")),Company("Company",validAddress,"12345",Some("AAA5221")))))
 
         val expectedSettlorsJson = ("""{"companies" : [{COMPANY},{COMPANY}]}""").replace("{COMPANY}", validCompanyJson)
@@ -368,11 +385,10 @@ class RegisterTrustControllerSpec extends PlaySpec
             passport = Some(Passport(
               identifier = "IDENTIFIER",
               expiryDate = new DateTime("2000-01-01"),
-              countryOfIssue = "UK"
+              countryOfIssue = "ES"
             )),
             correspondenceAddress = Some(Address(
-              isNonUkAddress = false,
-              addressLine1 = "Address Line 1"
+              line1 = "Address Line 1"
             ))
           )
           when(mockRegisterTrustService.getNaturalPersons(any[String])(any[HeaderCarrier]))
@@ -383,8 +399,8 @@ class RegisterTrustControllerSpec extends PlaySpec
           status(result) mustBe OK
           contentAsString(result) mustBe (
             """[{"title":"Mr","givenName":"John","familyName":"Doe","dateOfBirth":"1800-01-01",""" +
-              """"passport":{"identifier":"IDENTIFIER","expiryDate":"2000-01-01","countryOfIssue":"UK"},""" +
-              """"correspondenceAddress":{"isNonUkAddress":false,"addressLine1":"Address Line 1"}}]""")
+              """"passport":{"identifier":"IDENTIFIER","expiryDate":"2000-01-01","countryOfIssue":"ES"},""" +
+              """"correspondenceAddress":{"line1":"Address Line 1"}}]""")
         }
       }
 
@@ -460,8 +476,8 @@ class RegisterTrustControllerSpec extends PlaySpec
         status(result) mustBe OK
         contentAsString(result) mustBe (
           """{"correspondenceAddress":""" +
-            """{"isNonUkAddress":false,"addressLine1":"Line 1","addressLine2":"Line 2","addressLine3":"Line 3",""" +
-            """"addressLine4":"Line 4","postcode":"NE1 2BR","country":"UK"},""" +
+            """{"line1":"Line 1","line2":"Line 2","line3":"Line 3",""" +
+            """"line4":"Line 4","postalCode":"NE1 2BR","countryCode":"ES"},""" +
           """"telephoneNumber":"0191 234 5678"}""")
       }
     }
@@ -520,9 +536,9 @@ class RegisterTrustControllerSpec extends PlaySpec
         status(result) mustBe OK
         contentAsString(result) mustBe(
           """{"individual":{"title":"Dr","givenName":"Leo","familyName":"Spaceman","dateOfBirth":"1800-01-01",""" +
-          """"passport":{"identifier":"IDENTIFIER","expiryDate":"2020-01-01","countryOfIssue":"UK"},""" +
-          """"correspondenceAddress":{"isNonUkAddress":false,"addressLine1":"Line 1","addressLine2":"Line 2","addressLine3":"Line 3","addressLine4":"Line 4",""" +
-          """"postcode":"NE1 2BR","country":"UK"}}}"""
+          """"passport":{"identifier":"IDENTIFIER","expiryDate":"2020-01-01","countryOfIssue":"ES"},""" +
+          """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2","line3":"Line 3","line4":"Line 4",""" +
+          """"postalCode":"NE1 2BR","countryCode":"ES"}}}"""
         )
       }
     }
@@ -583,15 +599,15 @@ class RegisterTrustControllerSpec extends PlaySpec
         contentAsString(result) mustBe(
           """{"individualBeneficiaries":""" +
           """[{"individual":{"title":"Dr","givenName":"Leo","familyName":"Spaceman","dateOfBirth":"1800-01-01",""" +
-          """"passport":{"identifier":"IDENTIFIER","expiryDate":"2020-01-01","countryOfIssue":"UK"},""" +
-          """"correspondenceAddress":{"isNonUkAddress":false,"addressLine1":"Line 1","addressLine2":"Line 2","addressLine3":"Line 3",""" +
-          """"addressLine4":"Line 4","postcode":"NE1 2BR","country":"UK"}},"isVulnerable":false,"isIncomeAtTrusteeDiscretion":true,"shareOfIncome":30}],""" +
+          """"passport":{"identifier":"IDENTIFIER","expiryDate":"2020-01-01","countryOfIssue":"ES"},""" +
+          """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2","line3":"Line 3",""" +
+          """"line4":"Line 4","postalCode":"NE1 2BR","countryCode":"ES"}},"isVulnerable":false,"isIncomeAtTrusteeDiscretion":true,"shareOfIncome":30}],""" +
           """"charityBeneficiaries":[{"name":"Charity Name","number":"123456789087654",""" +
-          """"correspondenceAddress":{"isNonUkAddress":false,"addressLine1":"Line 1","addressLine2":"Line 2","addressLine3":"Line 3",""" +
-          """"addressLine4":"Line 4","postcode":"NE1 2BR","country":"UK"},"isIncomeAtTrusteeDiscretion":false,"shareOfIncome":20}],""" +
+          """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2","line3":"Line 3",""" +
+          """"line4":"Line 4","postalCode":"NE1 2BR","countryCode":"ES"},"isIncomeAtTrusteeDiscretion":false,"shareOfIncome":20}],""" +
           """"otherBeneficiaries":[{"description":"Beneficiary Description","correspondenceAddress":""" +
-          """{"isNonUkAddress":false,"addressLine1":"Line 1","addressLine2":"Line 2","addressLine3":"Line 3","addressLine4":"Line 4",""" +
-          """"postcode":"NE1 2BR","country":"UK"},"isIncomeAtTrusteeDiscretion":false,"shareOfIncome":50}]}"""
+          """{"line1":"Line 1","line2":"Line 2","line3":"Line 3","line4":"Line 4",""" +
+          """"postalCode":"NE1 2BR","countryCode":"ES"},"isIncomeAtTrusteeDiscretion":false,"shareOfIncome":50}]}"""
         )
       }
     }
@@ -651,11 +667,11 @@ class RegisterTrustControllerSpec extends PlaySpec
         status(result) mustBe OK
         contentAsString(result) mustBe(
           """{"individuals":[{"title":"Dr","givenName":"Leo","familyName":"Spaceman","dateOfBirth":"1800-01-01",""" +
-          """"passport":{"identifier":"IDENTIFIER","expiryDate":"2020-01-01","countryOfIssue":"UK"},""" +
-          """"correspondenceAddress":{"isNonUkAddress":false,"addressLine1":"Line 1","addressLine2":"Line 2",""" +
-          """"addressLine3":"Line 3","addressLine4":"Line 4","postcode":"NE1 2BR","country":"UK"}}],"companies":[""" +
-          """{"name":"Company","correspondenceAddress":{"isNonUkAddress":false,"addressLine1":"Line 1",""" +
-          """"addressLine2":"Line 2","addressLine3":"Line 3","addressLine4":"Line 4","postcode":"NE1 2BR","country":"UK"}""" +
+          """"passport":{"identifier":"IDENTIFIER","expiryDate":"2020-01-01","countryOfIssue":"ES"},""" +
+          """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2",""" +
+          """"line3":"Line 3","line4":"Line 4","postalCode":"NE1 2BR","countryCode":"ES"}}],"companies":[""" +
+          """{"name":"Company","correspondenceAddress":{"line1":"Line 1",""" +
+          """"line2":"Line 2","line3":"Line 3","line4":"Line 4","postalCode":"NE1 2BR","countryCode":"ES"}""" +
           ""","telephoneNumber":"12345","referenceNumber":"AAA5221"}]}"""
         )
       }
@@ -758,12 +774,18 @@ class RegisterTrustControllerSpec extends PlaySpec
 
   }
 
+  val mockSchemaValidator = mock[JsonSchemaValidator]
 
   object SUT extends RegisterTrustController {
     override implicit def hc(implicit rh: RequestHeader): HeaderCarrier = mockHC
 
     override val metrics: ApplicationMetrics = mockMetrics
     override val registerTrustService: RegisterTrustService = mockRegisterTrustService
+    override val jsonSchemaValidator = mockSchemaValidator
+  }
+
+  private def withCalltoPOSTInvalidPayload(payload: String)(handler: Future[Result] => Any) = {
+    handler(SUT.register.apply(registerRequestWithPayload(Json.parse(payload))))
   }
 
   private def withCallToPOST(payload: JsValue)(handler: Future[Result] => Any) = {

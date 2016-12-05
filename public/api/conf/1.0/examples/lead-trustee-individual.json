@@ -1,27 +1,27 @@
 {
-  "individual" : {
-    "title": "Mr",
-    "firstName": "John",
-    "middleName": "",
-    "surname": "Doe",
-    "country": "UK",
-    "isUkNational": true,
-    "nino": "WA123456C",
-    "passport": {
-      "identifier": "123456789",
-      "date": "2015-01-20"
+  "leadTrustee": {
+    "individual": {
+      "title": "Mr",
+      "givenName": "Joe",
+      "otherName": "John",
+      "familyName": "Doe",
+      "dateOfBirth": "1989-12-31",
+      "nino": "WA123456A",
+      "passport": {
+        "identifier": "b12344b23b45",
+        "expiryDate": "2018-12-25",
+        "countryOfIssue": "UK"
+      },
+      "correspondenceAddress": {
+        "isNonUkAddress": false,
+        "line1": "Address Line 1",
+        "line2": "Address Line 2",
+        "line3": "Address Line 3",
+        "line4": "Address Line 4",
+        "postalCode": "NE1 2BR",
+        "country": "UK"
+      },
+      "telephoneNumber": "0191 357 1596"
     }
-  },
-  "dateOfBirth" : "20-01-1900",
-  "correspondenceAddress" : {
-    "isNonUkAddress": true,
-    "addressLine1": "address line 1 value",
-    "addressLine2": "address line 2 value",
-    "addressLine3": "address line 3 value",
-    "addressLine4": "address line 4 value",
-    "postcode": "sample",
-    "Country": "sample"
-  },
-  "leadTrusteeDate" : "20-01-1900",
-  "leadTrusteeTelephoneNumber" : "00-000-000"
+  }
 }

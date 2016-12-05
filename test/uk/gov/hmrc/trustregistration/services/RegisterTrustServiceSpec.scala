@@ -18,7 +18,6 @@ package uk.gov.hmrc.trustregistration.services
 
 import org.mockito.Matchers._
 import org.mockito.Mockito.when
-import org.mockito.Mockito.mock
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import uk.gov.hmrc.play.http.HeaderCarrier

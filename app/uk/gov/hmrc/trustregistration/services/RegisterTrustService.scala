@@ -17,8 +17,8 @@
 package uk.gov.hmrc.trustregistration.services
 
 import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.connectors.DesConnector
+import uk.gov.hmrc.trustregistration.models._
 
 import scala.concurrent.Future
 
@@ -26,8 +26,8 @@ trait RegisterTrustService {
 
   val desConnector: DesConnector
 
-  def registerTrust(trust: Trust)(implicit hc : HeaderCarrier) : Future[Either[String,TRN]] = {
-    desConnector.registerTrust(trust)(hc)
+  def registerTrust(regDoc: Trust)(implicit hc : HeaderCarrier) : Future[Either[String,TRN]] = {
+    desConnector.registerTrust(regDoc)(hc)
   }
 
   def registerEstate(regDoc: EstateRegistrationDocument)(implicit hc : HeaderCarrier) : Future[Either[String,TRN]] = {

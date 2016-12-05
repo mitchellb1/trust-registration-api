@@ -16,17 +16,17 @@
 
 package uk.gov.hmrc.trustregistration.models
 
-import play.api.libs.json.{Json, Reads}
+import play.api.libs.json.Json
 
 case class Address (
-     isNonUkAddress: Boolean,
-     addressLine1: String,
-     addressLine2: Option[String] = None,
-     addressLine3: Option[String] = None,
-     addressLine4: Option[String] = None,
-     postcode: Option[String] = None,
-     country: Option[String] = None)
+                     line1: String,
+                     line2: Option[String] = None,
+                     line3: Option[String] = None,
+                     line4: Option[String] = None,
+                     postalCode: Option[String] = None,
+                     countryCode: Option[String] = None)
 
 object Address {
+
   implicit val formats = Json.format[Address]
 }

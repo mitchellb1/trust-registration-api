@@ -2,22 +2,22 @@
   "$schema": "http://json-schema.org/draft-04/schema",
   "id": "http://uk/gov/hmrc/trustregistration/raml/schemas/trusts.json",
   "type": "object",
-  "required": [
-    "trustestate"
-  ],
-  "properties": {
-    "trustestate": {
-      "type": "object",
-      "oneOf": [
-        {
-          "$ref": "#/definitions/trust"
-        },
-        {
-          "$ref": "#/definitions/estate"
-        }
-      ]
-    }
+  "trustEstate": {
+    "type": "object",
+    "properties": {
+      "trust": {
+        "$ref": "#/definitions/trust"
+      },
+      "estate": {
+        "$ref": "#/definitions/estate"
+      }
+    },
+    "oneOf": [
+      {"required": ["trust"]},
+      {"required": ["estate"]}
+    ]
   },
+
   "definitions": {
     "address": {
       "type": "object",
@@ -25,19 +25,19 @@
         "isNonUkAddress": {
           "type": "boolean"
         },
-        "addressLine1": {
+        "line1": {
           "type": "string"
         },
-        "addressLine2": {
+        "line2": {
           "type": "string"
         },
-        "addressLine3": {
+        "line3": {
           "type": "string"
         },
-        "addressLine4": {
+        "line4": {
           "type": "string"
         },
-        "postcode": {
+        "postalCode": {
           "type": "string"
         },
         "country": {
@@ -45,7 +45,7 @@
         }
       },
       "required": [
-        "addressLine1",
+        "line1",
         "isNonUkAddress"
       ]
     },
@@ -93,9 +93,6 @@
         "nino": {
           "type": "string"
         },
-        "dateOfDeath": {
-          "type": "string"
-        },
         "passport": {
           "type": "object",
           "properties": {
@@ -140,16 +137,8 @@
         }
       },
       "oneOf": [
-        {
-          "required": [
-            "individual"
-          ]
-        },
-        {
-          "required": [
-            "company"
-          ]
-        }
+        {"required": ["individual"]},
+        {"required": ["company"]}
       ]
     },
     "trustees": {
@@ -210,6 +199,21 @@
         "$ref": "#/definitions/individual"
       }
     },
+    "deceased": {
+      "type": "object",
+      "properties": {
+        "individual": {
+          "$ref": "#/definitions/individual"
+        },
+        "dateOfDeath": {
+          "type" : "string"
+        }
+      },
+      "required" : [
+        "individual",
+        "dateOfDeath"
+      ]
+    },
     "legality": {
       "type": "object",
       "properties": {
@@ -264,6 +268,21 @@
         "familyName",
         "capacity",
         "date"
+      ]
+    },
+    "income": {
+      "type": "object",
+      "properties": {
+        "isIncomeAtTrusteeDiscretion": {
+          "type": "boolean"
+        },
+        "shareOfIncome": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "isIncomeAtTrusteeDiscretion",
+        "shareOfIncome"
       ]
     },
 
@@ -332,13 +351,13 @@
       "items": {
         "type": "object",
         "properties": {
-          "buildingName": {
+          "businessName": {
             "type": "string"
           },
           "payeRef": {
             "type": "string"
           },
-          "description": {
+          "businessDescription": {
             "type": "string"
           },
           "correspondenceAddress": {
@@ -387,7 +406,7 @@
       "items": {
         "type": "object",
         "properties": {
-          "description": {
+          "OtherAssetDescription": {
             "type": "string"
           },
           "value": {
@@ -409,19 +428,19 @@
       "items": {
         "type": "object",
         "properties": {
-          "individual" : {"$ref": "#/definitions/individual"},
+          "individual": {
+            "$ref": "#/definitions/individual"
+          },
           "isVulnerable": {
             "type": "boolean"
           },
-          "isIncomeAtTrusteeDiscretion": {
-            "type": "boolean"
-          },
-          "shareOfIncome": {
-            "type": "number"
+          "income": {
+            "$ref": "#/definitions/income"
           }
         },
         "required": [
-          "isIncomeAtTrusteeDiscretion",
+          "individual",
+          "income",
           "isVulnerable"
         ]
       }
@@ -440,18 +459,37 @@
           "correspondenceAddress": {
             "$ref": "#/definitions/address"
           },
-          "isIncomeAtTrusteeDiscretion": {
-            "type": "boolean"
-          },
-          "shareOfIncome": {
-            "type": "number"
+          "income": {
+            "$ref": "#/definitions/income"
           }
         },
         "required": [
           "name",
           "number",
           "correspondenceAddress",
-          "isIncomeAtTrusteeDiscretion"
+          "income"
+        ]
+      }
+    },
+    "NotYetBornBeneficiaries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "beneficiaryDescription": {
+            "type": "string"
+          },
+          "correspondenceAddress": {
+            "$ref": "#/definitions/address"
+          },
+          "income": {
+            "$ref": "#/definitions/income"
+          }
+        },
+        "required": [
+          "beneficiaryDescription",
+          "correspondenceAddress",
+          "income"
         ]
       }
     },
@@ -460,23 +498,39 @@
       "items": {
         "type": "object",
         "properties": {
-          "description": {
+          "beneficiaryDescription": {
             "type": "string"
           },
           "correspondenceAddress": {
             "$ref": "#/definitions/address"
           },
-          "isIncomeAtTrusteeDiscretion": {
-            "type": "boolean"
-          },
-          "shareOfIncome": {
-            "type": "number"
+          "income": {
+            "$ref": "#/definitions/income"
           }
         },
         "required": [
-          "description",
+          "beneficiaryDescription",
           "correspondenceAddress",
-          "isIncomeAtTrusteeDiscretion"
+          "income"
+        ]
+      }
+    },
+
+    "buildingLandBeneficiaries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "correspondenceAddress": {
+            "$ref": "#/definitions/address"
+          },
+          "income": {
+            "$ref": "#/definitions/income"
+          }
+        },
+        "required": [
+          "correspondenceAddress",
+          "income"
         ]
       }
     },
@@ -540,24 +594,18 @@
             "charityBeneficiaries": {
               "$ref": "#/definitions/charityBeneficiaries"
             },
-            "otherBeneficiaries": {
-              "$ref": "#/definitions/otherBeneficiaries"
+            "NotYetBornBeneficiaries": {
+              "$ref": "#/definitions/NotYetBornBeneficiaries"
             }
           },
           "anyOf": [
-            {
-              "required": ["individualBeneficiaries"]
-            },
-            {
-              "required": ["charityBeneficiaries"]
-            },
-            {
-              "required": ["otherBeneficiaries"]
-            }
+            {"required": ["individualBeneficiaries"]},
+            {"required": ["charityBeneficiaries"]},
+            {"required": ["NotYetBornBeneficiaries"]}
           ]
         },
         "deceased": {
-          "$ref": "#/definitions/individual"
+          "$ref": "#/definitions/deceased"
         }
       },
       "required" : [
@@ -612,18 +660,15 @@
             "charityBeneficiaries": {
               "$ref": "#/definitions/charityBeneficiaries"
             },
-            "otherBeneficiaries": {
-              "$ref": "#/definitions/otherBeneficiaries"
+            "NotYetBornBeneficiaries": {
+              "$ref": "#/definitions/NotYetBornBeneficiaries"
             }
           },
           "anyOf": [
             {"required" : ["individualBeneficiaries"]},
             {"required" : ["charityBeneficiaries"]},
-            {"required" : ["otherBeneficiaries"]}
+            {"required" : ["NotYetBornBeneficiaries"]}
           ]
-        },
-        "deceased" : {
-          "$ref": "#/definitions/deceased"
         },
         "isHoldOverClaimed": {
           "type": "boolean"
@@ -675,22 +720,10 @@
               "$ref": "#/definitions/otherBeneficiaries"
             }
           },
-          "anyOf" :[
-            {
-              "required" : [
-                "buildingLandBeneficiaries"
-              ]
-            },
-            {
-              "required" : [
-                "otherBeneficiaries"
-              ]
-            }
+          "anyOf": [
+            {"required": ["buildingLandBeneficiaries"]},
+            {"required": ["otherBeneficiaries"]}
           ]
-
-        },
-        "deceased" : {
-          "$ref": "#/definitions/deceased"
         },
         "isMultiPurposeIncome": {
           "type" : "boolean"
@@ -706,7 +739,7 @@
     "flatManagementSinkingFundTrust" : {
       "type": "object",
       "properties": {
-        "assets" : {
+        "assets": {
           "type": "object",
           "properties": {
             "monetaryAssets": {
@@ -728,47 +761,67 @@
               "$ref": "#/definitions/otherAssets"
             }
           },
-          "anyOf" : [
-            {"required" : ["monetaryAssets"]},
-            {"required" : ["propertyAssets"]},
-            {"required" : ["shareAssets"]},
-            {"required" : ["businessAssets"]},
-            {"required" : ["partnershipAssets"]},
-            {"required" : ["otherAssets"]}
+          "anyOf": [
+            {
+              "required": [
+                "monetaryAssets"
+              ]
+            },
+            {
+              "required": [
+                "propertyAssets"
+              ]
+            },
+            {
+              "required": [
+                "shareAssets"
+              ]
+            },
+            {
+              "required": [
+                "businessAssets"
+              ]
+            },
+            {
+              "required": [
+                "partnershipAssets"
+              ]
+            },
+            {
+              "required": [
+                "otherAssets"
+              ]
+            }
           ]
         },
-        "settlors" : {
+        "settlors": {
           "$ref": "#/definitions/settlors"
         },
-        "beneficiaries" : {
+        "beneficiaries": {
           "type": "object",
           "properties": {
-            "individualBeneficiaries": {
-              "$ref": "#/definitions/individualBeneficiaries"
-            },
-            "employeeBeneficiaries": {
-              "$ref": "#/definitions/individualBeneficiaries"
-            },
-            "directorBeneficiaries": {
-              "$ref": "#/definitions/individualBeneficiaries"
-            },
-            "charityBeneficiaries":{
-              "$ref": "#/definitions/charityBeneficiaries"
+            "buildingLandBeneficiaries": {
+              "$ref": "#/definitions/buildingLandBeneficiaries"
             },
             "otherBeneficiaries": {
               "$ref": "#/definitions/otherBeneficiaries"
             }
           },
-          "anyOf" : [
-            {"required" : ["individualBeneficiaries"]},
-            {"required" : ["employeeBeneficiaries"]},
-            {"required" : ["directorBeneficiaries"]},
-            {"required" : ["charityBeneficiaries"]},
-            {"required" : ["otherBeneficiaries"]}
+          "anyOf": [
+            {
+              "required": [
+                "buildingLandBeneficiaries"
+              ]
+            },
+            {
+              "required": [
+                "otherBeneficiaries"
+              ]
+            }
           ]
         }
       },
-      "required" : [
+      "required": [
         "assets",
         "settlors",
         "beneficiaries"
@@ -830,6 +883,7 @@
           "type": "boolean"
         },
         "employerFinancedRetirementBenefitSchemeStartDate": {
+          "description" : "Employer Financed Retirement Benefit Scheme Start Date",
           "type": "string"
         }
       },
@@ -940,7 +994,7 @@
       "type": "object",
       "properties": {
         "deceased": {
-          "$ref": "#/definitions/deceased"
+          "$ref": "#/definitions/individual"
         },
         "personalRepresentative" : {
           "type": "object",
