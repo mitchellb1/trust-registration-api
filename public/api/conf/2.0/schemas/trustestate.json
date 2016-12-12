@@ -1153,6 +1153,7 @@
     "telephoneNumberType": {
       "description": "telephone Number Type",
       "maxLength": 19,
+      "pattern": "^(\\+)?([0-9\\(\\)\\ -]){1,}$",
       "type": "string"
     },
     "trustType": {
