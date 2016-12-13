@@ -771,22 +771,31 @@
           "$ref": "#/definitions/correspondenceAddressType"
         },
         "dateOfBirth": {
-          "type": "string"
+          "type": "string",
+          "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$"
         },
         "familyName": {
+          "maxLength": 47,
           "type": "string"
         },
         "givenName": {
+          "maxLength": 25,
           "type": "string"
         },
         "isUkNationalOrNonUkWithANino": {
           "type": "boolean"
         },
         "nino": {
+          "pattern" : "^(?!BG)(?!GB)(?!NK)(?!KN)(?!TN)(?!NT)(?!ZZ)(?:[A-CEGHJ-PR-TW-Z][A-CEGHJ-NPR-TW-Z])(?:\\d){6}([A-D]|\\s)?$",
           "type": "string"
         },
         "otherName": {
+          "maxLength" : 25,
           "type": "string"
+        },
+        "email" : {
+          "type" : "string",
+          "pattern" : "^[-aA-zZ0-9._%+']+@[-aA-zZ0-9.']+\\.[aA-zZ]{2,4}$"
         },
         "passportOrIdCard": {
           "additionalProperties": false,
@@ -795,9 +804,11 @@
               "$ref": "#/definitions/countryCodeType"
             },
             "expiryDate": {
+              "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
               "type": "string"
             },
             "referenceNumber": {
+              "maxLength" : 30,
               "type": "string"
             }
           },
@@ -807,6 +818,7 @@
           "$ref": "#/definitions/telephoneNumberType"
         },
         "title": {
+          "maxLength" : 4,
           "type": "string"
         }
       },
