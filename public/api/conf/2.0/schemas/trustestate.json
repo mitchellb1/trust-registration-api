@@ -822,6 +822,9 @@
           "type": "string"
         }
       },
+      "required" : [
+        "title", "givenName"
+      ],
       "type": "object"
     },
     "interVivoTrustType": {
