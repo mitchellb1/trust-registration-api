@@ -823,7 +823,7 @@
         }
       },
       "required" : [
-        "title", "givenName"
+        "title", "givenName", "familyName"
       ],
       "type": "object"
     },
