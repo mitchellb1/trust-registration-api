@@ -167,12 +167,10 @@
         },
         "referenceNumber": {
           "type": "string"
-        },
-        "telephoneNumber": {
-          "$ref": "#/definitions/telephoneNumberType"
         }
       },
-      "type": "object"
+      "type": "object",
+      "required": ["name", "correspondenceAddress", "referenceNumber"]
     },
     "correspondenceAddressType": {
       "description": "Correspondence Address Type",
@@ -793,10 +791,6 @@
           "maxLength" : 25,
           "type": "string"
         },
-        "email" : {
-          "type" : "string",
-          "pattern" : "^[-aA-zZ0-9._%+']+@[-aA-zZ0-9.']+\\.[aA-zZ]{2,4}$"
-        },
         "passportOrIdCard": {
           "additionalProperties": false,
           "properties": {
@@ -813,9 +807,6 @@
             }
           },
           "type": "object"
-        },
-        "telephoneNumber": {
-          "$ref": "#/definitions/telephoneNumberType"
         },
         "title": {
           "maxLength" : 4,
@@ -880,7 +871,7 @@
       "type": "object"
     },
     "leadTrusteeType": {
-      "description": "lead Trustee Type",
+      "description": "Lead Trustee Type",
       "additionalProperties": false,
       "properties": {
         "company": {
@@ -888,9 +879,20 @@
         },
         "individual": {
           "$ref": "#/definitions/individualType"
+        },
+        "telephoneNumber": {
+          "$ref": "#/definitions/telephoneNumberType"
+        },
+        "email" : {
+          "type" : "string",
+          "pattern" : "^[-aA-zZ0-9._%+']+@[-aA-zZ0-9.']+\\.[aA-zZ]{2,4}$"
         }
       },
-      "type": "object"
+      "type": "object",
+      "oneOf": [
+        {"required": ["individual", "telephoneNumber", "email"]},
+        {"required": ["company", "telephoneNumber", "email"]}
+      ]
     },
     "legalityType": {
       "description": "Legality Type",
@@ -1248,7 +1250,8 @@
       "type": "object",
       "required" : [
         "name",
-        "telephoneNumber"
+        "telephoneNumber",
+
       ]
     },
     "trusteesType": {
