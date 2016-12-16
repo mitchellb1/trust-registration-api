@@ -145,6 +145,6 @@ trait RegisterTrustController extends ApplicationBaseController {
 
 object RegisterTrustController extends RegisterTrustController {
   override val registerTrustService = RegisterTrustService
-  override val jsonSchemaValidator = JsonSchemaValidator
+  override lazy val jsonSchemaValidator = JsonSchemaValidator
   override val metrics = ApplicationMetrics
 }
