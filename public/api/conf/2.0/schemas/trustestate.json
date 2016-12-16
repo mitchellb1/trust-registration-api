@@ -167,7 +167,8 @@
           "$ref": "#/definitions/correspondenceAddressType"
         },
         "referenceNumber": {
-          "type": "string"
+          "type": "string",
+          "maxLength": 20
         },
         "telephoneNumber": {
           "$ref": "#/definitions/telephoneNumberType"
