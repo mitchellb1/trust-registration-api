@@ -56,7 +56,7 @@ class GetSettlorsSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
 
         val result = Await.result(SUT.getSettlors("1234"),Duration.Inf)
         val address = Address("Line 1", Some("Line 2"), Some("Line 3"), Some("Line 4"), Some("NE1 2BR"), Some("ES"))
-        val expectedCompanySettlors = Settlors(None,Some(List(Company("Company",address,"12345",Some("AAA5221")),Company("Company",address,"12345",Some("AAA5221")))))
+        val expectedCompanySettlors = Settlors(None,Some(List(Company("Company",address,Some("AAA5221")),Company("Company",address,Some("AAA5221")))))
 
         result mustBe GetSuccessResponse(expectedCompanySettlors)
       }

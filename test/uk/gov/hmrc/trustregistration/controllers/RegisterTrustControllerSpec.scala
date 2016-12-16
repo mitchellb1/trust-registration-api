@@ -307,7 +307,7 @@ class RegisterTrustControllerSpec extends PlaySpec
     "return 200 ok with valid json" when {
       "the endpoint is called with a valid identifier" in {
         val validAddress = Address("Fake Street 123, Testland")
-        val validCompanySettlors = Settlors(None,Some(List(Company("Company",validAddress,"12345",Some("AAA5221")),Company("Company",validAddress,"12345",Some("AAA5221")))))
+        val validCompanySettlors = Settlors(None,Some(List(Company("Company",validAddress,Some("AAA5221")),Company("Company",validAddress,Some("AAA5221")))))
 
         val expectedSettlorsJson = ("""{"companies" : [{COMPANY},{COMPANY}]}""").replace("{COMPANY}", validCompanyJson)
 
@@ -538,7 +538,7 @@ class RegisterTrustControllerSpec extends PlaySpec
           """{"individual":{"title":"Dr","givenName":"Leo","familyName":"Spaceman","dateOfBirth":"1800-01-01",""" +
           """"passport":{"identifier":"IDENTIFIER","expiryDate":"2020-01-01","countryOfIssue":"ES"},""" +
           """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2","line3":"Line 3","line4":"Line 4",""" +
-          """"postalCode":"NE1 2BR","countryCode":"ES"}}}"""
+          """"postalCode":"NE1 2BR","countryCode":"ES"}},"telephoneNumber":"1234567890","email":"test@test.com"}"""
         )
       }
     }
@@ -672,7 +672,7 @@ class RegisterTrustControllerSpec extends PlaySpec
           """"line3":"Line 3","line4":"Line 4","postalCode":"NE1 2BR","countryCode":"ES"}}],"companies":[""" +
           """{"name":"Company","correspondenceAddress":{"line1":"Line 1",""" +
           """"line2":"Line 2","line3":"Line 3","line4":"Line 4","postalCode":"NE1 2BR","countryCode":"ES"}""" +
-          ""","telephoneNumber":"12345","referenceNumber":"AAA5221"}]}"""
+          ""","referenceNumber":"AAA5221"}]}"""
         )
       }
     }
