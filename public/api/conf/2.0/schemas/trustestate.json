@@ -175,7 +175,10 @@
           "$ref": "#/definitions/emailType"
         }
       },
-      "type": "object"
+      "type": "object",
+      "required" : [
+        "name"
+      ]
     },
     "correspondenceAddressType": {
       "description": "Correspondence Address Type",
