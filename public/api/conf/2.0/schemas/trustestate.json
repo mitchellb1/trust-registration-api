@@ -178,7 +178,7 @@
       },
       "type": "object",
       "required" : [
-        "name"
+        "name","referenceNumber"
       ]
     },
     "correspondenceAddressType": {
