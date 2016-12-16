@@ -160,13 +160,18 @@
       "additionalProperties": false,
       "properties": {
         "name": {
-          "type": "string"
+          "type": "string",
+          "maxLength": 56
         },
         "correspondenceAddress": {
           "$ref": "#/definitions/correspondenceAddressType"
         },
         "referenceNumber": {
-          "type": "string"
+          "type": "string",
+          "maxLength": 20
+        },
+        "telephoneNumber": {
+          "$ref": "#/definitions/telephoneNumberType"
         }
       },
       "type": "object",
@@ -884,8 +889,7 @@
           "$ref": "#/definitions/telephoneNumberType"
         },
         "email" : {
-          "type" : "string",
-          "pattern" : "^[-aA-zZ0-9._%+']+@[-aA-zZ0-9.']+\\.[aA-zZ]{2,4}$"
+          "$ref": "#/definitions/emailType"
         }
       },
       "type": "object",
@@ -1172,6 +1176,10 @@
       "maxLength": 19,
       "pattern": "^(\\+)?([0-9\\(\\)\\ -]){1,}$",
       "type": "string"
+    },
+    "emailType":{
+      "type" : "string",
+      "pattern" : "^[-aA-zZ0-9._%+']+@[-aA-zZ0-9.']+\\.[aA-zZ]{2,4}$"
     },
     "trustType": {
       "description": "Main Trust Type",
