@@ -160,7 +160,8 @@
       "additionalProperties": false,
       "properties": {
         "name": {
-          "type": "string"
+          "type": "string",
+          "maxLength": 56
         },
         "correspondenceAddress": {
           "$ref": "#/definitions/correspondenceAddressType"
