@@ -19,7 +19,7 @@ package uk.gov.hmrc.trustregistration.models
 import play.api.libs.json.Json
 
 
-case class LeadTrustee(individual: Option[Individual] = None, company: Option[Company] = None) {
+case class LeadTrustee(individual: Option[Individual] = None, company: Option[Company] = None, telephoneNumber: String, email: String) {
   private val atleastOneTypeOfTrustee: Boolean = individual.isDefined || company.isDefined
   private val onlyOneTypeOfTrustee: Boolean = !(individual.isDefined && company.isDefined)
 

@@ -7,6 +7,5 @@
   "dateOfDeath": null,
   "nino": null,
   "passport": "{PASSPORT}",
-  "correspondenceAddress": "{ADDRESS}",
-  "telephoneNumber": null
+  "correspondenceAddress": "{ADDRESS}"
 }

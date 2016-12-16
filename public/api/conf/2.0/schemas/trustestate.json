@@ -172,15 +172,10 @@
         },
         "telephoneNumber": {
           "$ref": "#/definitions/telephoneNumberType"
-        },
-        "email" : {
-          "$ref": "#/definitions/emailType"
         }
       },
       "type": "object",
-      "required" : [
-        "name","referenceNumber"
-      ]
+      "required": ["name", "correspondenceAddress", "referenceNumber"]
     },
     "correspondenceAddressType": {
       "description": "Correspondence Address Type",
@@ -801,9 +796,6 @@
           "maxLength" : 25,
           "type": "string"
         },
-        "email" : {
-          "$ref": "#/definitions/emailType"
-        },
         "passportOrIdCard": {
           "additionalProperties": false,
           "properties": {
@@ -820,9 +812,6 @@
             }
           },
           "type": "object"
-        },
-        "telephoneNumber": {
-          "$ref": "#/definitions/telephoneNumberType"
         },
         "title": {
           "maxLength" : 4,
@@ -887,7 +876,7 @@
       "type": "object"
     },
     "leadTrusteeType": {
-      "description": "lead Trustee Type",
+      "description": "Lead Trustee Type",
       "additionalProperties": false,
       "properties": {
         "company": {
@@ -895,9 +884,19 @@
         },
         "individual": {
           "$ref": "#/definitions/individualType"
+        },
+        "telephoneNumber": {
+          "$ref": "#/definitions/telephoneNumberType"
+        },
+        "email" : {
+          "$ref": "#/definitions/emailType"
         }
       },
-      "type": "object"
+      "type": "object",
+      "oneOf": [
+        {"required": ["individual", "telephoneNumber", "email"]},
+        {"required": ["company", "telephoneNumber", "email"]}
+      ]
     },
     "legalityType": {
       "description": "Legality Type",
@@ -1259,7 +1258,8 @@
       "type": "object",
       "required" : [
         "name",
-        "telephoneNumber"
+        "telephoneNumber",
+        "leadTrustee"
       ]
     },
     "trusteesType": {

@@ -7,7 +7,9 @@
   "legality" : "{LEGALITY}",
   "isTrustUkResident" : true,
   "leadTrustee" : {
-    "individual" : "{INDIVIDUAL}"
+    "individual" : "{INDIVIDUAL}",
+    "telephoneNumber": "1234567890",
+    "email": "test@test.com"
   },
   "trustees" : [
     "{INDIVIDUAL}","{INDIVIDUAL}","{INDIVIDUAL}","{INDIVIDUAL}"

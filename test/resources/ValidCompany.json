@@ -1,6 +1,5 @@
 {
   "name" : "Company",
   "referenceNumber" : "AAA5221",
-  "correspondenceAddress" : "{ADDRESS}",
-  "telephoneNumber" : "12345"
+  "correspondenceAddress" : "{ADDRESS}"
 }

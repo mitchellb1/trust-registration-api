@@ -85,12 +85,14 @@ class RegisterTrustSandboxControllerSpec extends PlaySpec
     }
   }
 
+  val mockSchemaValidator = mock[JsonSchemaValidator]
+
   object SUT extends RegisterTrustSandboxController {
     override implicit def hc(implicit rh: RequestHeader): HeaderCarrier = mockHC
 
     override val metrics: ApplicationMetrics = mockMetrics
     override val registerTrustService: RegisterTrustService = mockRegisterTrustService
-    override val jsonSchemaValidator = JsonSchemaValidator
+    override val jsonSchemaValidator = mockSchemaValidator
 
   }
 
