@@ -159,7 +159,7 @@
       "description": "Company Type",
       "additionalProperties": false,
       "properties": {
-        "companyName": {
+        "name": {
           "type": "string"
         },
         "correspondenceAddress": {
@@ -170,9 +170,15 @@
         },
         "telephoneNumber": {
           "$ref": "#/definitions/telephoneNumberType"
+        },
+        "email" : {
+          "$ref": "#/definitions/emailType"
         }
       },
-      "type": "object"
+      "type": "object",
+      "required" : [
+        "name"
+      ]
     },
     "correspondenceAddressType": {
       "description": "Correspondence Address Type",
@@ -794,8 +800,7 @@
           "type": "string"
         },
         "email" : {
-          "type" : "string",
-          "pattern" : "^[-aA-zZ0-9._%+']+@[-aA-zZ0-9.']+\\.[aA-zZ]{2,4}$"
+          "$ref": "#/definitions/emailType"
         },
         "passportOrIdCard": {
           "additionalProperties": false,
@@ -1170,6 +1175,10 @@
       "maxLength": 19,
       "pattern": "^(\\+)?([0-9\\(\\)\\ -]){1,}$",
       "type": "string"
+    },
+    "emailType":{
+      "type" : "string",
+      "pattern" : "^[-aA-zZ0-9._%+']+@[-aA-zZ0-9.']+\\.[aA-zZ]{2,4}$"
     },
     "trustType": {
       "description": "Main Trust Type",
