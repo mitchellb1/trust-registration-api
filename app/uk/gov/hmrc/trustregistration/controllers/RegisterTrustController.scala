@@ -53,7 +53,23 @@ trait RegisterTrustController extends ApplicationBaseController {
                   }
                 }.recoverTotal {
                   e => {
-                    Future.successful(BadRequest(JsError.toFlatJson(e)))
+                    val error: JsValue = JsError.toJson(e)
+                    val message = error \\ "msg"
+                    //val location =
+                    //Future.successful(BadRequest(error))
+                    Future.successful(BadRequest(s"""
+    {
+      "message": "Invalid Json",
+      "code": 400,
+      "validationErrors": [
+      {
+        "message": "${message.head.toString().replace("\"","")}",
+        "location": "/trustEstate/trust/leadTrustee"
+      }
+      ]
+    }
+    """))
+                   // "message": "${message.head.toString().replace("\"","")}",
                   }
                 }
               }
