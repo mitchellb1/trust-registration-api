@@ -610,9 +610,6 @@
         },
         "isEmployerFinancedRetirementBenefitScheme": {
           "type": "boolean"
-        },
-        "settlors": {
-          "$ref": "#/definitions/settlorsType"
         }
       },
       "type": "object"
@@ -678,9 +675,6 @@
             }
           },
           "type": "object"
-        },
-        "settlors": {
-          "$ref": "#/definitions/settlorsType"
         }
       },
       "type": "object"
@@ -721,9 +715,6 @@
         },
         "isMultiPurposeIncome": {
           "type": "boolean"
-        },
-        "settlors": {
-          "$ref": "#/definitions/settlorsType"
         }
       },
       "type": "object"
@@ -868,9 +859,6 @@
         },
         "isHoldOverClaimed": {
           "type": "boolean"
-        },
-        "settlors": {
-          "$ref": "#/definitions/settlorsType"
         }
       },
       "type": "object"
@@ -1224,6 +1212,9 @@
         "protectors": {
           "$ref": "#/definitions/protectorsType"
         },
+        "settlors": {
+          "$ref": "#/definitions/settlorsType"
+        },
         "telephoneNumber": {
           "$ref": "#/definitions/telephoneNumberType"
         },
@@ -1322,9 +1313,6 @@
         },
         "deceased": {
           "$ref": "#/definitions/deceasedType"
-        },
-        "settlors": {
-          "$ref": "#/definitions/settlorsType"
         }
       },
       "type": "object"

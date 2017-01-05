@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ class EmploymentTrustSpec extends PlaySpec with ScalaDataExamples {
     "throw an exception" when{
       "there is no assets" in {
         val assets = Assets(None)
-        val ex = the[IllegalArgumentException] thrownBy (EmploymentTrust(assets,settlors,beneficiaries,true))
+        val ex = the[IllegalArgumentException] thrownBy (EmploymentTrust(assets,beneficiaries,true))
         ex.getMessage() mustEqual  ("requirement failed: Must have at least one type of Asset")
       }
 
@@ -34,13 +34,13 @@ class EmploymentTrustSpec extends PlaySpec with ScalaDataExamples {
 
         val beneficiaries = Beneficiaries(None,None,None,Some(List(charityBeneficiary)))
 
-        val ex = the[IllegalArgumentException] thrownBy EmploymentTrust(assets,settlors,beneficiaries, true)
+        val ex = the[IllegalArgumentException] thrownBy EmploymentTrust(assets,beneficiaries, true)
         ex.getMessage() mustEqual  ("requirement failed: Must have at least one required Beneficiary")
       }
 
       "a list of a type of asset is added but with no elements in it" in {
         val assets = Assets(Some(List()),Some(List()),Some(List()),Some(List()),Some(List()),Some(List()))
-        val ex = the[IllegalArgumentException] thrownBy (EmploymentTrust(assets,settlors, beneficiaries, true))
+        val ex = the[IllegalArgumentException] thrownBy (EmploymentTrust(assets, beneficiaries, true))
         ex.getMessage() mustEqual  "requirement failed: Must have at least one type of Asset"
       }
     }
@@ -48,13 +48,13 @@ class EmploymentTrustSpec extends PlaySpec with ScalaDataExamples {
     "not throw an exception" when {
       "there is one asset" in {
         val assets = Assets(Some(List(2.0f,2.5f)))
-        noException should be thrownBy (EmploymentTrust(assets,settlors,beneficiaries,true))
+        noException should be thrownBy (EmploymentTrust(assets,beneficiaries,true))
       }
 
       "there is more than one type of asset" in {
         val propertyAssets = PropertyAsset(address,2.2f)
         val assets = Assets(Some(List(2.0f,2.5f)),Some(List(propertyAssets)))
-        noException should be thrownBy (EmploymentTrust(assets,settlors,beneficiaries,true))
+        noException should be thrownBy (EmploymentTrust(assets,beneficiaries,true))
       }
     }
   }
