@@ -16,6 +16,11 @@
       "{INDIVIDUAL}","{INDIVIDUAL}"
     ]
   },
+  "settlors" : {
+    "individuals" :[
+      "{INDIVIDUAL}","{INDIVIDUAL}"
+    ]
+  },
   "naturalPeople" : [
     "{INDIVIDUAL}","{INDIVIDUAL}","{INDIVIDUAL}","{INDIVIDUAL}"
   ],

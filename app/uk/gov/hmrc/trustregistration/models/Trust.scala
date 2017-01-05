@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ case class Trust(name: String,
                  leadTrustee: LeadTrustee,
                  trustees: Trustees,
                  protectors: Protectors,
+                 settlors: Settlors,
                  naturalPeople: List[Individual] = Nil,
                  willIntestacyTrust: Option[WillIntestacyTrust] = None,
                  interVivoTrust: Option[InterVivoTrust] = None,
@@ -45,4 +46,3 @@ object Trust{
   implicit val dateWrites: Writes[DateTime] = Writes { (dt: DateTime) => JsString(dt.toString("yyyy-MM-dd")) }
   implicit val formats = Json.format[Trust]
 }
-

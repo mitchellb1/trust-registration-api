@@ -7,11 +7,6 @@
       "{OTHERASSETS}","{OTHERASSETS}"
     ]
   },
-  "settlors" : {
-    "individuals" : [
-      "{INDIVIDUAL}","{INDIVIDUAL}"
-    ]
-  },
   "beneficiaries" : {
     "otherBeneficiaries" : [
       "{OTHERBENEFICIARY}"

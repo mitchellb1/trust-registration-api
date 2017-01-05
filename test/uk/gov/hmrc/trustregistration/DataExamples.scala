@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -265,24 +265,25 @@ trait ScalaDataExamples {
   val willIntestacyTrust = WillIntestacyTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false,true,Some(30))))),individual)
 
   val trust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),legality,true,leadTrusteeIndividual,Trustees(None, None),
-    Protectors(Some(List(individual,individual))),List(individual,individual,individual,individual),Some(willIntestacyTrust))
+    Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),List(individual,individual,individual,individual),Some(willIntestacyTrust))
 
   val otherAsset = OtherAsset("This is a test description",1234,Some(new DateTime("1800-01-01")))
   val assetsWithOtherAsset = Assets(None,None,Some(List(shareAsset,shareAsset)),None,None,Some(List(otherAsset,otherAsset)))
-  val heritageFund = Some(HeritageMaintenanceFundTrust(assetsWithOtherAsset,Settlors(Some(List(individual,individual))),Beneficiaries(None,None,None,None,Some(List(otherBeneficiary))),true,Some(individual)))
+
+  val heritageFund = Some(HeritageMaintenanceFundTrust(assetsWithOtherAsset,Beneficiaries(None,None,None,None,Some(List(otherBeneficiary))),true,Some(individual)))
 
   val trustWithHeritageMaintenance = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),legality,true,leadTrusteeIndividual, Trustees(None, None),
-    Protectors(Some(List(individual,individual))),List(individual,individual,individual,individual),None,None,heritageFund)
+    Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),List(individual,individual,individual,individual),None,None,heritageFund)
 
-  val employmentTrust = Some(EmploymentTrust(assets,Settlors(Some(List(individual,individual))),Beneficiaries(Some(List(IndividualBeneficiary(individual,false,true,Some(30))))),true,Some(new DateTime("1940-01-01"))))
+  val employmentTrust = Some(EmploymentTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false,true,Some(30))))),true,Some(new DateTime("1940-01-01"))))
   val trustWithEmploymentTrust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),legality,true,leadTrusteeIndividual, Trustees(None, None),
-    Protectors(Some(List(individual,individual))),List(individual,individual,individual,individual),None,None,None,None,employmentTrust)
+    Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),List(individual,individual,individual,individual),None,None,None,None,employmentTrust)
 
-  val flatManagementFund = Some(FlatManagementSinkingFundTrust(assets,Settlors(Some(List(individual,individual))),Beneficiaries(Some(List(IndividualBeneficiary(individual,false,true,Some(30)))))))
+  val flatManagementFund = Some(FlatManagementSinkingFundTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false,true,Some(30)))))))
   val trustWithFlatManagementFund = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),legality,true,leadTrusteeIndividual, Trustees(None, None),
-    Protectors(Some(List(individual,individual))),List(individual,individual,individual,individual),None,None,None,flatManagementFund)
+    Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),List(individual,individual,individual,individual),None,None,None,flatManagementFund)
 
-  val interVivoTrust = Some(InterVivoTrust(assets,Settlors(Some(List(individual,individual))),Beneficiaries(Some(List(IndividualBeneficiary(individual,false,true,Some(30))))),true,Some(individual)))
+  val interVivoTrust = Some(InterVivoTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false,true,Some(30))))),true,Some(individual)))
   val trustWithInterVivoTrust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),legality,true,leadTrusteeIndividual, Trustees(None, None),
-    Protectors(Some(List(individual,individual))),List(individual,individual,individual,individual),None,interVivoTrust)
+    Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),List(individual,individual,individual,individual),None,interVivoTrust)
 }

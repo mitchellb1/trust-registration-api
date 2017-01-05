@@ -7,11 +7,6 @@
       "{BUSINESSASSETS}","{BUSINESSASSETS}"
     ]
   },
-  "settlors" : {
-    "individuals" : [
-      "{INDIVIDUAL}","{INDIVIDUAL}"
-    ]
-  },
   "beneficiaries" : {
     "individualBeneficiaries" : [
       "{INDIVIDUALBENEFICIARY}"
