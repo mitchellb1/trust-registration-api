@@ -32,6 +32,20 @@ class ProtectorsSpec extends PlaySpec with JsonExamples with ScalaDataExamples {
       val details = Json.toJson[Protectors](emptyProtectors).toString()
       details must be ("{}")
     }
+    "throw an exception" when {
+      "there are more than two individual protectors" in {
+        val ex = the [IllegalArgumentException] thrownBy Protectors(Some(List(individual, individual, individual)), None)
+        ex.getMessage mustEqual  "requirement failed: Must have no more than two protectors"
+      }
+      "there are more than two company protectors" in {
+        val ex = the [IllegalArgumentException] thrownBy Protectors(None, Some(List(company, company, company)))
+        ex.getMessage mustEqual  "requirement failed: Must have no more than two protectors"
+      }
+      "there are more than two protectors (in any combination)" in {
+        val ex = the [IllegalArgumentException] thrownBy Protectors(Some(List(individual)), Some(List(company, company)))
+        ex.getMessage mustEqual  "requirement failed: Must have no more than two protectors"
+      }
+    }
   }
 
 }
