@@ -1250,7 +1250,8 @@
       "required" : [
         "name",
         "telephoneNumber",
-        "leadTrustee"
+        "leadTrustee",
+        "settlors"
       ]
     },
     "trusteesType": {
