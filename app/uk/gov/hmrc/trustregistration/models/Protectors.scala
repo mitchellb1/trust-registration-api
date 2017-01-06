@@ -18,7 +18,11 @@ package uk.gov.hmrc.trustregistration.models
 
 import play.api.libs.json.{Json, Writes}
 
-case class Protectors(individuals: Option[List[Individual]] = None, companies: Option[List[Company]] = None)
+case class Protectors(individuals: Option[List[Individual]] = None, companies: Option[List[Company]] = None) {
+  val noMoreThanTwoProtectors = (individuals.getOrElse(Nil).size + companies.getOrElse(Nil).size <= 2)
+
+  require(noMoreThanTwoProtectors, "Must have no more than two protectors")
+}
 
 object Protectors{
   implicit val protectorsFormats = Json.format[Protectors]
