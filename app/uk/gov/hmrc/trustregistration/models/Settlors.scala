@@ -22,7 +22,7 @@ import play.api.libs.json.Json
 case class Settlors(individuals: Option[List[Individual]] = None, companies: Option[List[Company]] = None) {
   private val atleastOneTypeOfSettlor: Boolean = individuals.isDefined || companies.isDefined
 
-  require(atleastOneTypeOfSettlor, "Must have either an individual or company settlor")
+  require(atleastOneTypeOfSettlor, "Must have either at least one settlor")
 
 }
 object Settlors{
