@@ -25,7 +25,7 @@ class SettlorsSpec extends PlaySpec {
     "throw an exception" when {
       "there are no individuals or companies" in {
         val ex = the [IllegalArgumentException] thrownBy Settlors(None, None)
-        ex.getMessage mustEqual  "requirement failed: Must have either at least one settlor"
+        ex.getMessage mustEqual  "requirement failed: Must have at least one settlor"
       }
     }
   }
