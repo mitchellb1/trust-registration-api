@@ -1060,52 +1060,22 @@
     },
     "protectorsType": {
       "description": "protectors Type",
-      "type": "object",
-      "anyOf": [
-        {
-          "properties": {
-            "companies": {
-              "type": "array",
-              "maxItems": 1,
-              "items": {
-                "$ref": "#/definitions/companyType"
-              }
-            },
-            "individuals": {
-              "type": "array",
-              "maxItems": 1,
-              "items": {
-                "$ref": "#/definitions/individualType"
-              }
-            }
-          },
-          "additionalProperties": false
+      "additionalProperties": false,
+      "properties": {
+        "companies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/companyType"
+          }
         },
-        {
-          "properties": {
-            "companies": {
-              "type": "array",
-              "maxItems": 2,
-              "items": {
-                "$ref": "#/definitions/companyType"
-              }
-            }
-          },
-          "additionalProperties": false
-        },
-        {
-          "properties": {
-            "individuals": {
-              "type": "array",
-              "maxItems": 2,
-              "items": {
-                "$ref": "#/definitions/individualType"
-              }
-            }
-          },
-          "additionalProperties": false
+        "individuals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/individualType"
+          }
         }
-      ]
+      },
+      "type": "object"
     },
     "residentTypeType": {
       "description": "Possible Domiciles\n\t\t\tCode   Title\n\t\t\t----   -----\n\t\t\t0001   Settlor domiciled Trustees nonresident\n\t\t\t0002   Settlor non domiciled becomes domiciled then resident\n\t\t\t0003   Trustee ceases to be resident\n\t\t",
@@ -1128,49 +1098,21 @@
     },
     "settlorsType": {
       "description": "Settlors Type",
-      "type": "object",
-      "anyOf": [
-        {
-          "properties": {
-            "companies": {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "$ref": "#/definitions/companyType"
-              }
-            },
-            "individuals": {
-              "type": "array",
-              "minItems": 0,
-              "items": {
-                "$ref": "#/definitions/individualType"
-              }
-            }
-          },
-          "additionalProperties": false,
-          "required": ["companies"]
+      "additionalProperties": false,
+      "properties": {
+        "companies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/companyType"
+          }
         },
-        {
-          "properties": {
-            "companies": {
-              "type": "array",
-              "minItems": 0,
-              "items": {
-                "$ref": "#/definitions/companyType"
-              }
-            },
-            "individuals": {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "$ref": "#/definitions/individualType"
-              }
-            }
-          },
-          "additionalProperties": false,
-          "required": ["individuals"]
+        "individuals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/individualType"
+          }
         }
-      ]
+      }
     },
     "shareAssetsType": {
       "description": "Share Assets Type",
