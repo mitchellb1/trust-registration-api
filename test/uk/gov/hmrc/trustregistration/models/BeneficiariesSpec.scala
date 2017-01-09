@@ -34,6 +34,14 @@ class BeneficiariesSpec extends PlaySpec with JsonExamples with ScalaDataExample
         val ex = the[IllegalArgumentException] thrownBy Beneficiaries(individualBeneficiaries = Some(List[IndividualBeneficiary]()))
         ex.getMessage() mustEqual invalidBeneficiariesError
       }
+      "an employee beneficiaries option exist but it's an empty list" in {
+        val ex = the[IllegalArgumentException] thrownBy Beneficiaries(employeeBeneficiaries = Some(List[EmployeeBeneficiary]()))
+        ex.getMessage() mustEqual invalidBeneficiariesError
+      }
+      "a director beneficiaries option exist but it's an empty list" in {
+        val ex = the[IllegalArgumentException] thrownBy Beneficiaries(directorBeneficiaries = Some(List[DirectorBeneficiary]()))
+        ex.getMessage() mustEqual invalidBeneficiariesError
+      }
       "a charity beneficiaries option exists but it's an empty list" in {
         val ex = the[IllegalArgumentException] thrownBy Beneficiaries(charityBeneficiaries = Some(List[CharityBeneficiary]()))
         ex.getMessage() mustEqual invalidBeneficiariesError
