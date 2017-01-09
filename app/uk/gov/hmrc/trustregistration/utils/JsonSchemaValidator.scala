@@ -22,6 +22,7 @@ import com.github.fge.jackson.JsonLoader
 import com.github.fge.jsonschema.core.report.LogLevel.ERROR
 import com.github.fge.jsonschema.core.report.ProcessingReport
 import com.github.fge.jsonschema.main.{JsonSchema, JsonSchemaFactory}
+import play.api.Logger
 
 import scala.collection.JavaConverters._
 import scala.util.{Success, Try}
@@ -49,7 +50,10 @@ trait JsonSchemaValidator {
           if (validationOutput.isSuccess) {
             SuccessfulValidation
           } else {
-            FailedValidation("Invalid Json",0, getValidationErrors(validationOutput))
+            val failedValidation = FailedValidation("Invalid Json",0, getValidationErrors(validationOutput))
+            Logger.info("Failed schema validation")
+            Logger.debug(failedValidation.toString)
+            failedValidation
           }
         }
       }
