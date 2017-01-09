@@ -58,23 +58,27 @@ trait RegisterTrustController extends ApplicationBaseController {
                     //val location =
                     //Future.successful(BadRequest(error))
                     Future.successful(BadRequest(s"""
-    {
-      "message": "Invalid Json",
-      "code": 400,
-      "validationErrors": [
-      {
-        "message": "${message.head.toString().replace("\"","")}",
-        "location": "/trustEstate/trust/leadTrustee"
-      }
-      ]
-    }
-    """))
-                   // "message": "${message.head.toString().replace("\"","")}",
+                                                  {
+                                                    "message": "Invalid Json",
+                                                    "code": 400,
+                                                    "validationErrors": [
+                                                    {
+                                                      "message": "${message.head.toString().replace("\"","")}",
+                                                      "location": "/trustEstate/trust/leadTrustee"
+                                                    }
+                                                    ]
+                                                  }
+                                                  """))
                   }
                 }
               }
               catch {
-                case e => Future.successful(BadRequest(s"""{"message": "Exception: ${e.getMessage()}"}"""))
+                case e: Throwable => {
+                  val error = e.getMessage().substring(20)
+
+                  Future.successful(BadRequest(error))
+                }
+                //case e => Future.successful(BadRequest(s"""{"message": "Exception: ${e.getMessage()}"}"""))
               }
             }
           }
