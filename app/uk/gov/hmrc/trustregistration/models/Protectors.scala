@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.trustregistration.models
 
-import play.api.libs.json.{Json, Writes}
+import play.api.libs.json.Json
 
 case class Protectors(individuals: Option[List[Individual]] = None, companies: Option[List[Company]] = None) {
   val noMoreThanTwoProtectors = (individuals.getOrElse(Nil).size + companies.getOrElse(Nil).size <= 2)

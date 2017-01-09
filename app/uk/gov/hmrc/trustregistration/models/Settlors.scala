@@ -20,9 +20,20 @@ import play.api.libs.json.Json
 
 
 case class Settlors(individuals: Option[List[Individual]] = None, companies: Option[List[Company]] = None) {
-  private val atleastOneTypeOfSettlor: Boolean = individuals.isDefined || companies.isDefined
 
-  require(atleastOneTypeOfSettlor, "Must have at least one settlor")
+  val moreThanZeroSettlor = individuals.getOrElse(Nil).size + companies.getOrElse(Nil).size > 0
+
+  require(moreThanZeroSettlor,
+    s"""{\"message\": \"Invalid Json\",
+         \"code\": 0,
+         \"validationErrors\": [
+         {
+           \"message\": \"object has missing required properties ([\\\"settlors\\\"])\",
+           \"location\": \"/trustEstate/trust"
+         }
+         ]
+       }""".stripMargin
+                                )
 
 }
 object Settlors{

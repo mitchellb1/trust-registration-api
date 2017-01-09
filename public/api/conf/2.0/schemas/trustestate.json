@@ -1251,7 +1251,8 @@
         "name",
         "telephoneNumber",
         "leadTrustee",
-        "settlors"
+        "settlors",
+        "protectors"
       ]
     },
     "trusteesType": {
