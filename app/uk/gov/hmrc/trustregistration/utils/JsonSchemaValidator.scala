@@ -96,5 +96,5 @@ trait JsonSchemaValidator {
 }
 
 object JsonSchemaValidator extends JsonSchemaValidator {
-  lazy val schema: JsonNode = JsonLoader.fromPath("public/api/conf/2.0/schemas/trustestate.json")
+  lazy val schema: JsonNode = JsonLoader.fromPath("conf/trustestate.json")
 }
