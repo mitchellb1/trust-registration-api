@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.trustregistration.utils
 
+import java.io.{PrintWriter, StringWriter}
+
 import com.fasterxml.jackson.core.{JsonFactory, JsonParser}
 import com.fasterxml.jackson.databind.{JsonNode, ObjectMapper}
 import com.github.fge.jackson.JsonLoader
@@ -60,6 +62,15 @@ trait JsonSchemaValidator {
     }
     catch {
       case ex: Exception => {
+
+        Logger.debug(s"Error validating Json request against Schema: ${ex.getMessage}")
+
+        // log stack trace
+        val sw = new StringWriter
+        ex.printStackTrace(new PrintWriter(sw))
+        Logger.debug(sw.toString)
+        // ---------------
+
         if (ex.getMessage.contains("Duplicate")) {
           FailedValidation("Duplicated Elements", 0, Nil)
         } else {
