@@ -24,7 +24,7 @@ import com.github.fge.jackson.JsonLoader
 import com.github.fge.jsonschema.core.report.LogLevel.ERROR
 import com.github.fge.jsonschema.core.report.ProcessingReport
 import com.github.fge.jsonschema.main.{JsonSchema, JsonSchemaFactory}
-import play.api.Logger
+import play.api.{Logger, Play}
 
 import scala.collection.JavaConverters._
 import scala.util.{Success, Try}
@@ -107,5 +107,7 @@ trait JsonSchemaValidator {
 }
 
 object JsonSchemaValidator extends JsonSchemaValidator {
-  lazy val schema: JsonNode = JsonLoader.fromPath("public/api/conf/2.0/schemas/trustestate.json")
+  import play.api.Play.current
+
+  lazy val schema: JsonNode = JsonLoader.fromPath(s"${Play.application.path}/public/api/conf/2.0/schemas/trustestate.json")
 }
