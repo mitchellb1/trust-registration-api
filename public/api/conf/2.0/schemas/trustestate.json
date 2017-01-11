@@ -923,9 +923,15 @@
     "naturalPeopleType": {
       "description": "Natural People Individual Type",
       "additionalProperties": false,
+      "properties": {
+        "individuals": {
           "type": "array",
+          "minItems": 0,
+          "maxItems": 2,
           "items": {
             "$ref": "#/definitions/individualType"
+          }
+        }
       }
     },
     "otherAssetsType": {

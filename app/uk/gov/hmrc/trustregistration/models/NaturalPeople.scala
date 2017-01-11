@@ -18,21 +18,21 @@ package uk.gov.hmrc.trustregistration.models
 
 import play.api.libs.json.Json
 
-case class Protectors(individuals: Option[List[Individual]] = None, companies: Option[List[Company]] = None) {
-  val noMoreThanTwoProtectors = (individuals.getOrElse(Nil).size + companies.getOrElse(Nil).size <= 2)
+case class NaturalPeople(individuals: List[Individual]){
+  val noMoreThanTwoNaturalPeople = (individuals.size <= 2)
 
-  require(noMoreThanTwoProtectors,
+  require(noMoreThanTwoNaturalPeople,
     s"""{\"message\": \"Invalid Json\",
          \"code\": 0,
          \"validationErrors\": [
          {
-           \"message\": \"object has too many elements ([\\\"protectors\\\"])\",
-           \"location\": \"/trustEstate/trust/protectors\"
+           \"message\": \"object has too many elements ([\\\"naturalPeople\\\"])\",
+           \"location\": \"/trustEstate/trust/naturalPeople\"
          }
          ]
        }""".stripMargin)
 }
 
-object Protectors{
-  implicit val protectorsFormats = Json.format[Protectors]
+object NaturalPeople {
+  implicit val naturalPeopleFormats = Json.format[NaturalPeople]
 }

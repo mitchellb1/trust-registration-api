@@ -24,8 +24,10 @@
       "{INDIVIDUAL}","{INDIVIDUAL}"
     ]
   },
-  "naturalPeople" : [
-    "{INDIVIDUAL}","{INDIVIDUAL}","{INDIVIDUAL}","{INDIVIDUAL}"
-  ],
+  "naturalPeople" : {
+    "individuals" :[
+      "{INDIVIDUAL}","{INDIVIDUAL}"
+    ]
+  },
   "flatManagementSinkingFundTrust" : "{FLATMANAGEMENTSINKINGTRUST}"
 }
