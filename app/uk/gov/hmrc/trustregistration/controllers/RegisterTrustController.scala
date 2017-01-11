@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.trustregistration.controllers
 
-import play.api.libs.json.{JsError, JsValue, Json}
+import play.api.libs.json.{JsError, JsObject, JsValue, Json}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
@@ -55,8 +55,6 @@ trait RegisterTrustController extends ApplicationBaseController {
                   e => {
                     val error: JsValue = JsError.toJson(e)
                     val message = error \\ "msg"
-                    //val location =
-                    //Future.successful(BadRequest(error))
                     Future.successful(BadRequest(s"""
                                                   {
                                                     "message": "Invalid Json",
@@ -64,7 +62,7 @@ trait RegisterTrustController extends ApplicationBaseController {
                                                     "validationErrors": [
                                                     {
                                                       "message": "${message.head.toString().replace("\"","")}",
-                                                      "location": "/trustEstate/trust/leadTrustee"
+                                                      "location":"${error.as[JsObject].keys.head.replace("obj.","").replace(".","/")}"
                                                     }
                                                     ]
                                                   }
