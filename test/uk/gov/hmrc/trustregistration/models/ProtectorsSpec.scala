@@ -47,5 +47,4 @@ class ProtectorsSpec extends PlaySpec with JsonExamples with ScalaDataExamples {
       }
     }
   }
-
 }
