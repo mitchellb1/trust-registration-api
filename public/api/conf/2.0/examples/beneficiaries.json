@@ -3,7 +3,6 @@
     "individualBeneficiaries": [
       {
         "individual": {
-          "title": "Mr",
           "givenName": "Joe",
           "otherName": "Fred",
           "familyName": "Bloggs",

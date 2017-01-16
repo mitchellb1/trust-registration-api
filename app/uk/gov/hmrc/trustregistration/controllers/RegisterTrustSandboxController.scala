@@ -39,6 +39,7 @@ trait RegisterTrustSandboxController extends RegisterTrustController {
     }
 }
 
+
 object RegisterTrustSandboxController extends RegisterTrustSandboxController {
   override val registerTrustService = RegisterTrustService
   override val metrics = ApplicationMetrics

@@ -179,7 +179,6 @@ trait ScalaDataExamples {
   )
 
   val individual = Individual(
-    title = "Dr",
     givenName = "Leo",
     otherName = None,
     familyName = "Spaceman",

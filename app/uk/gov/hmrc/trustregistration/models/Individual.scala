@@ -20,7 +20,6 @@ import org.joda.time.DateTime
 import play.api.libs.json.{JsString, Json, Reads, Writes}
 
 case class Individual(
-     title: String,
      givenName: String,
      familyName: String,
      dateOfBirth: DateTime,

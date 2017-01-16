@@ -1,7 +1,6 @@
 {
   "deceased" : {
     "individual": {
-      "title": "Mr",
       "firstName": "John",
       "middleName": "",
       "surname": "Doe",
@@ -33,7 +32,6 @@
   "worthMoreThan2500000AtTimeOfDeath" : true,
   "personalRepresentative" : {
     "individual": {
-      "title": "Mr",
       "firstName": "John",
       "middleName": "",
       "surname": "Doe",

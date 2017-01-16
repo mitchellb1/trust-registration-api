@@ -28,7 +28,6 @@ import uk.gov.hmrc.trustregistration.models._
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
-import scala.io.Source
 
 
 class GetSettlorsSpec extends PlaySpec with OneAppPerSuite with DESConnectorMocks with BeforeAndAfter with JsonExamples {
@@ -43,8 +42,8 @@ class GetSettlorsSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
         val result = Await.result(SUT.getSettlors("1234"),Duration.Inf)
         val passport = Passport("IDENTIFIER",new DateTime("2020-01-01"),"ES")
         val address = Address("Line 1", Some("Line 2"), Some("Line 3"), Some("Line 4"), Some("NE1 2BR"), Some("ES"))
-        val expectedIndividualSettlors = Settlors(Some(List(Individual("Dr","Leo","Spaceman",new DateTime("1800-01-01"),None,None,None,None,Some(passport),Some(address)),
-          Individual("Dr","Leo","Spaceman",new DateTime("1800-01-01"),None,None,None,None,Some(passport),Some(address)))))
+        val expectedIndividualSettlors = Settlors(Some(List(Individual("Leo","Spaceman",new DateTime("1800-01-01"),None,None,None,None,Some(passport),Some(address)),
+          Individual("Leo","Spaceman",new DateTime("1800-01-01"),None,None,None,None,Some(passport),Some(address)))))
 
         result mustBe GetSuccessResponse(expectedIndividualSettlors)
       }
