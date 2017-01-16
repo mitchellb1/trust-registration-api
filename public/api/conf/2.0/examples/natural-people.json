@@ -1,7 +1,6 @@
 {
   "naturalPeople": [
     {
-      "title": "Mr",
       "givenName": "Joe",
       "otherName": "John",
       "familyName": "Doe",
@@ -24,7 +23,6 @@
       "telephoneNumber": "0191 357 1596"
     },
     {
-      "title": "Mr",
       "givenName": "Joe",
       "otherName": "John",
       "familyName": "Doe",

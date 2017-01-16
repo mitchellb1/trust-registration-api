@@ -24,7 +24,6 @@
     "nonResidentType": "N/A",
     "leadTrustee": {
       "individual": {
-        "title": "Mr",
         "givenName": "Joe",
         "otherName": "John",
         "familyName": "Doe",
@@ -49,7 +48,6 @@
     },
     "trustees": [
       {
-        "title": "Mr",
         "givenName": "Joe",
         "otherName": "John",
         "familyName": "Doe",
@@ -74,9 +72,7 @@
     ],
     "protectors": {
       "individuals": [
-        {
-          "title": "Mr",
-          "givenName": "Joe",
+        { "givenName": "Joe",
           "otherName": "John",
           "familyName": "Doe",
           "dateOfBirth": "1989-12-31",
@@ -98,7 +94,6 @@
           "telephoneNumber": "0191 357 1596"
         },
         {
-          "title": "Mr",
           "givenName": "Joe",
           "otherName": "John",
           "familyName": "Doe",
@@ -140,7 +135,6 @@
     },
     "naturalPeople": [
       {
-        "title": "Mr",
         "givenName": "Joe",
         "otherName": "John",
         "familyName": "Doe",
@@ -164,7 +158,6 @@
       }
     ],
     "declaration": {
-      "title": "Mr",
       "givenName": "Joe",
       "otherName": "John",
       "familyName": "Doe",
@@ -231,7 +224,6 @@
         "individualBeneficiaries": [
           {
             "individual": {
-              "title": "Mr",
               "givenName": "Joe",
               "otherName": "John",
               "familyName": "Doe",
@@ -299,7 +291,6 @@
         ]
       },
       "deceased": {
-        "title": "Mr",
         "givenName": "Joe",
         "otherName": "John",
         "familyName": "Doe",

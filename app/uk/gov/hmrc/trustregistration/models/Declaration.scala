@@ -20,8 +20,7 @@ import play.api.libs.json.{Json, Reads}
 import org.joda.time.DateTime
 
 
-case class Declaration (title: String,
-                        givenName: String,
+case class Declaration (givenName: String,
                         familyName: String,
                         capacity: String,
                         date: DateTime,

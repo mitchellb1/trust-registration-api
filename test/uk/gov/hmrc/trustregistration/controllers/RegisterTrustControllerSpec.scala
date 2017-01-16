@@ -17,31 +17,24 @@
 package uk.gov.hmrc.trustregistration.controllers
 
 
-import akka.stream.{ActorMaterializer, Materializer}
-import com.fasterxml.jackson.databind.JsonNode
-import com.github.fge.jackson.JsonLoader
-import com.google.i18n.phonenumbers.PhoneNumberUtil.ValidationResult
 import org.joda.time.DateTime
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.http.HeaderNames.{AUTHORIZATION => _, CONTENT_TYPE => _}
-import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Request, RequestHeader, Result}
-import play.api.test.{FakeHeaders, FakeRequest}
+import play.api.mvc.{RequestHeader, Result}
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.mvc.BodyParser
 import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
 import uk.gov.hmrc.trustregistration.utils.{TrustsValidationError, _}
+import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 
 import scala.concurrent.Future
-import play.api.libs.json.Json
 
 
 class RegisterTrustControllerSpec extends PlaySpec
@@ -225,7 +218,6 @@ class RegisterTrustControllerSpec extends PlaySpec
     "return 200 ok with valid json" when {
       "the endpoint is called with a valid identifier" in {
         val individual = Individual(
-          title = "Mr",
           givenName = "John",
           familyName = "Doe",
           dateOfBirth = new DateTime("1800-01-01"),
@@ -245,7 +237,7 @@ class RegisterTrustControllerSpec extends PlaySpec
 
         status(result) mustBe OK
         contentAsString(result) mustBe (
-          """[{"title":"Mr","givenName":"John","familyName":"Doe","dateOfBirth":"1800-01-01",""" +
+          """[{"givenName":"John","familyName":"Doe","dateOfBirth":"1800-01-01",""" +
             """"passport":{"identifier":"IDENTIFIER","expiryDate":"2000-01-01","countryOfIssue":"ES"},""" +
             """"correspondenceAddress":{"line1":"Address Line 1"}}]""")
       }
@@ -379,7 +371,6 @@ class RegisterTrustControllerSpec extends PlaySpec
       "return 200 ok with valid json" when {
         "the endpoint is called with a valid identifier" in {
           val individual = Individual(
-            title = "Mr",
             givenName = "John",
             familyName = "Doe",
             dateOfBirth = new DateTime("1800-01-01"),
@@ -399,7 +390,7 @@ class RegisterTrustControllerSpec extends PlaySpec
 
           status(result) mustBe OK
           contentAsString(result) mustBe (
-            """[{"title":"Mr","givenName":"John","familyName":"Doe","dateOfBirth":"1800-01-01",""" +
+            """[{"givenName":"John","familyName":"Doe","dateOfBirth":"1800-01-01",""" +
               """"passport":{"identifier":"IDENTIFIER","expiryDate":"2000-01-01","countryOfIssue":"ES"},""" +
               """"correspondenceAddress":{"line1":"Address Line 1"}}]""")
         }
@@ -536,7 +527,7 @@ class RegisterTrustControllerSpec extends PlaySpec
 
         status(result) mustBe OK
         contentAsString(result) mustBe(
-          """{"individual":{"title":"Dr","givenName":"Leo","familyName":"Spaceman","dateOfBirth":"1800-01-01",""" +
+          """{"individual":{"givenName":"Leo","familyName":"Spaceman","dateOfBirth":"1800-01-01",""" +
           """"passport":{"identifier":"IDENTIFIER","expiryDate":"2020-01-01","countryOfIssue":"ES"},""" +
           """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2","line3":"Line 3","line4":"Line 4",""" +
           """"postalCode":"NE1 2BR","countryCode":"ES"}},"telephoneNumber":"1234567890","email":"test@test.com"}"""
@@ -599,7 +590,7 @@ class RegisterTrustControllerSpec extends PlaySpec
         status(result) mustBe OK
         contentAsString(result) mustBe(
           """{"individualBeneficiaries":""" +
-          """[{"individual":{"title":"Dr","givenName":"Leo","familyName":"Spaceman","dateOfBirth":"1800-01-01",""" +
+          """[{"individual":{"givenName":"Leo","familyName":"Spaceman","dateOfBirth":"1800-01-01",""" +
           """"passport":{"identifier":"IDENTIFIER","expiryDate":"2020-01-01","countryOfIssue":"ES"},""" +
           """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2","line3":"Line 3",""" +
           """"line4":"Line 4","postalCode":"NE1 2BR","countryCode":"ES"}},"isVulnerable":false,"isIncomeAtTrusteeDiscretion":true,"shareOfIncome":30}],""" +
@@ -667,7 +658,7 @@ class RegisterTrustControllerSpec extends PlaySpec
 
         status(result) mustBe OK
         contentAsString(result) mustBe(
-          """{"individuals":[{"title":"Dr","givenName":"Leo","familyName":"Spaceman","dateOfBirth":"1800-01-01",""" +
+          """{"individuals":[{"givenName":"Leo","familyName":"Spaceman","dateOfBirth":"1800-01-01",""" +
           """"passport":{"identifier":"IDENTIFIER","expiryDate":"2020-01-01","countryOfIssue":"ES"},""" +
           """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2",""" +
           """"line3":"Line 3","line4":"Line 4","postalCode":"NE1 2BR","countryCode":"ES"}}],"companies":[""" +

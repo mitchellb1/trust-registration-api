@@ -508,9 +508,6 @@
         },
         "otherName": {
           "type": "string"
-        },
-        "title": {
-          "type": "string"
         }
       },
       "type": "object"
@@ -806,14 +803,10 @@
             }
           },
           "type": "object"
-        },
-        "title": {
-          "maxLength" : 4,
-          "type": "string"
         }
       },
       "required" : [
-        "title", "givenName", "familyName"
+        "givenName", "familyName"
       ],
       "type": "object"
     },
