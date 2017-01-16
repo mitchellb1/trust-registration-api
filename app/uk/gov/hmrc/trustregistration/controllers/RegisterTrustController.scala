@@ -73,7 +73,6 @@ trait RegisterTrustController extends ApplicationBaseController {
               catch {
                 case e: Throwable => {
                   val error = e.getMessage().substring(20)
-
                   Future.successful(BadRequest(error))
                 }
                 //case e => Future.successful(BadRequest(s"""{"message": "Exception: ${e.getMessage()}"}"""))

@@ -235,7 +235,8 @@ class RegisterTrustControllerSpec extends PlaySpec
             countryOfIssue = "ES"
           )),
           correspondenceAddress = Some(Address(
-            line1 = "Address Line 1"
+            line1 = "Address Line 1",
+            countryCode = "ES"
           ))
         )
         when(mockRegisterTrustService.getTrustees(any[String])(any[HeaderCarrier]))
@@ -247,7 +248,7 @@ class RegisterTrustControllerSpec extends PlaySpec
         contentAsString(result) mustBe (
           """[{"title":"Mr","givenName":"John","familyName":"Doe","dateOfBirth":"1800-01-01",""" +
             """"passport":{"identifier":"IDENTIFIER","expiryDate":"2000-01-01","countryOfIssue":"ES"},""" +
-            """"correspondenceAddress":{"line1":"Address Line 1"}}]""")
+            """"correspondenceAddress":{"line1":"Address Line 1","countryCode":"ES"}}]""")
       }
     }
 
@@ -307,7 +308,7 @@ class RegisterTrustControllerSpec extends PlaySpec
 
     "return 200 ok with valid json" when {
       "the endpoint is called with a valid identifier" in {
-        val validAddress = Address("Fake Street 123, Testland")
+        val validAddress = Address("Fake Street 123, Testland",None,None,None,None,"ES")
         val validCompanySettlors = Settlors(None,Some(List(Company("Company",validAddress,Some("AAA5221")),Company("Company",validAddress,Some("AAA5221")))))
 
         val expectedSettlorsJson = ("""{"companies" : [{COMPANY},{COMPANY}]}""").replace("{COMPANY}", validCompanyJson)
@@ -389,7 +390,8 @@ class RegisterTrustControllerSpec extends PlaySpec
               countryOfIssue = "ES"
             )),
             correspondenceAddress = Some(Address(
-              line1 = "Address Line 1"
+              line1 = "Address Line 1",
+              countryCode = "ES"
             ))
           )
           when(mockRegisterTrustService.getNaturalPersons(any[String])(any[HeaderCarrier]))
@@ -401,7 +403,7 @@ class RegisterTrustControllerSpec extends PlaySpec
           contentAsString(result) mustBe (
             """[{"title":"Mr","givenName":"John","familyName":"Doe","dateOfBirth":"1800-01-01",""" +
               """"passport":{"identifier":"IDENTIFIER","expiryDate":"2000-01-01","countryOfIssue":"ES"},""" +
-              """"correspondenceAddress":{"line1":"Address Line 1"}}]""")
+              """"correspondenceAddress":{"line1":"Address Line 1","countryCode":"ES"}}]""")
         }
       }
 
@@ -663,7 +665,7 @@ class RegisterTrustControllerSpec extends PlaySpec
         when(mockRegisterTrustService.getProtectors(any[String])(any[HeaderCarrier]))
           .thenReturn(Future.successful(new GetSuccessResponse[Protectors](protectors)))
 
-        val result = SUT.getProtectors("sadfg").apply(FakeRequest("GET", ""))
+        val result = SUT.getProtectors("sadg").apply(FakeRequest("GET", ""))
 
         status(result) mustBe OK
         contentAsString(result) mustBe(

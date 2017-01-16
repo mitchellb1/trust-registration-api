@@ -25,7 +25,19 @@ case class Address (
                      line3: Option[String] = None,
                      line4: Option[String] = None,
                      postalCode: Option[String] = None,
-                     countryCode: Option[String] = None)
+                     countryCode: String){
+  val postCodeMissingForGbAddress: Boolean = countryCode == "GB" && postalCode.fold(true)(_.trim.isEmpty)
+
+  require(!postCodeMissingForGbAddress, s"""{\"message\": \"Invalid Json\",
+         \"code\": 0,
+         \"validationErrors\": [
+         {
+           \"message\": \"missing field ([\\\"postalCode\\\"])\",
+           \"location\": \"/trustEstate/trust/\"
+         }
+         ]
+       }""".stripMargin)
+}
 
 object Address {
   implicit val addressReads: Reads[Address] = (
@@ -34,8 +46,9 @@ object Address {
     (JsPath \\ "line3").readNullable[String] and
     (JsPath \\ "line4").readNullable[String] and
     (JsPath \\ "postalCode").readNullable[String] and
-    (JsPath \\ "countryCode").readNullable[String]
+    (JsPath \\ "countryCode").read[String]
   )(Address.apply _)
 
   implicit val addressWrites = Json.writes[Address]
 }
+
