@@ -17,10 +17,8 @@
 package uk.gov.hmrc.trustregistration.models
 
 import play.api.libs.json.Json
-
-
 case class Legality(governingCountryCode: String,
-               administrationCountryCode: String,
+               administrationCountryCode: Option[String]=None,
                isEstablishedUnderScottishLaw: Boolean,
                previousOffshoreCountryCode: Option[String]=None)
 
