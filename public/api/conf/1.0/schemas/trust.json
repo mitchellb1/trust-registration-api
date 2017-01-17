@@ -76,8 +76,6 @@
       "type": "object",
       "properties": {
         "title": {
-          "type": "string"
-        },
         "givenName": {
           "type": "string"
         },

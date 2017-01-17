@@ -489,6 +489,9 @@
       "description": "Declaration Type",
       "additionalProperties": false,
       "properties": {
+        "correspondenceAddress": {
+          "$ref": "#/definitions/correspondenceAddressType"
+        },
         "capacity": {
           "$ref": "#/definitions/roleType"
         },
@@ -505,9 +508,6 @@
           "type": "string"
         },
         "otherName": {
-          "type": "string"
-        },
-        "title": {
           "type": "string"
         }
       },
@@ -804,14 +804,10 @@
             }
           },
           "type": "object"
-        },
-        "title": {
-          "maxLength" : 4,
-          "type": "string"
         }
       },
       "required" : [
-        "title", "givenName", "familyName"
+        "givenName", "familyName"
       ],
       "type": "object"
     },
@@ -904,6 +900,10 @@
           "$ref": "#/definitions/countryCodeType"
         }
       },
+      "required" : [
+        "governingCountryCode",
+        "isEstablishedUnderScottishLaw"
+      ],
       "type": "object"
     },
     "monetaryAssetsType": {
@@ -1180,26 +1180,29 @@
       "description": "Main Trust Type",
       "additionalProperties": true,
       "properties": {
-        "commencementDate": {
+        "name": {
           "type": "string"
         },
         "correspondenceAddress": {
           "$ref": "#/definitions/correspondenceAddressType"
         },
-        "currentYear": {
-          "type": "string"
+        "telephoneNumber": {
+          "$ref": "#/definitions/telephoneNumberType"
         },
-        "declaration": {
-          "$ref": "#/definitions/declarationType"
-        },
-        "isNonResTypeIHTA84S218": {
+        "isTCGA925A": {
           "type": "boolean"
         },
         "isS218IHTA84": {
           "type": "boolean"
         },
-        "isTCGA925A": {
+        "isNonResTypeIHTA84S218": {
           "type": "boolean"
+        },
+        "nonResidentType": {
+          "$ref": "#/definitions/residentTypeType"
+        },
+        "settlors": {
+          "$ref": "#/definitions/settlorsType"
         },
         "isTrustUkResident": {
           "type": "boolean"
@@ -1210,24 +1213,25 @@
         "legality": {
           "$ref": "#/definitions/legalityType"
         },
+        "declaration": {
+          "$ref": "#/definitions/declarationType"
+        },
         "naturalPeople": {
           "$ref": "#/definitions/naturalPeopleType"
-        },
-        "nonResidentType": {
-          "$ref": "#/definitions/residentTypeType"
         },
         "protectors": {
           "$ref": "#/definitions/protectorsType"
         },
-        "settlors": {
-          "$ref": "#/definitions/settlorsType"
+        "trustees": {
+          "$ref": "#/definitions/trusteesType"
         },
-        "telephoneNumber": {
-          "$ref": "#/definitions/telephoneNumberType"
-        },
-        "name": {
+        "commencementDate": {
           "type": "string"
         },
+        "currentYear": {
+          "type": "string"
+        },
+
         "trustTypeType": {
           "additionalProperties": false,
           "properties": {
@@ -1248,9 +1252,6 @@
             }
           },
           "type": "object"
-        },
-        "trustees": {
-          "$ref": "#/definitions/trusteesType"
         }
       },
       "type": "object",
@@ -1259,7 +1260,8 @@
         "telephoneNumber",
         "leadTrustee",
         "settlors",
-        "protectors"
+        "protectors",
+        "legality"
       ]
     },
     "trusteesType": {

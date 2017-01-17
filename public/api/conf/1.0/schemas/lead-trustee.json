@@ -112,9 +112,6 @@
       "description": "Individual details",
       "type": "object",
       "properties": {
-        "title": {
-          "type": "string"
-        },
         "givenName": {
           "type": "string"
         },
@@ -160,7 +157,6 @@
         }
       },
       "required": [
-        "title",
         "givenName",
         "familyName",
         "dateOfBirth"
