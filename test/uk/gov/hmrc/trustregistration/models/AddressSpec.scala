@@ -24,7 +24,7 @@ class  AddressSpec extends PlaySpec with JsonExamples with ScalaDataExamples {
 
   val addressGb = """{"addressGB": {"line1": "123 Easy Street", "postalCode": "AB1 1AB", "countryCode":"GB"}}"""
   val addressNonGb = """{"addressNonGB": {"line1": "123 Easy Street", "countryCode":"ES"}}"""
-  val addressLegacy = """{"line1": "123 Easy Street", "postalCode": "AB1 1AB","countryCode":"ES"}""" // TODO: Take this out once we've ported over to new address style
+  val addressLegacy = """{"line1": "123 Easy Street", "countryCode":"ES"}""" // TODO: Take this out once we've ported over to new address style
 
   "Address" must {
     "serialize from Json" when {
@@ -44,7 +44,7 @@ class  AddressSpec extends PlaySpec with JsonExamples with ScalaDataExamples {
         val address: Address = Json.parse(addressLegacy).as[Address]
 
         address.line1 mustBe "123 Easy Street"
-        address.postalCode mustBe Some("AB1 1AB")
+        address.postalCode.isDefined mustBe false
       }
     }
 
@@ -59,6 +59,15 @@ class  AddressSpec extends PlaySpec with JsonExamples with ScalaDataExamples {
         ex.getMessage must include("missing field")
       }
 
+      "the country code is not GB and there is a postcode" in {
+        val ex = the [IllegalArgumentException] thrownBy Address("test",None,None,None,Some("NE40 4US"),"ES")
+        ex.getMessage must include("not required field")
+      }
+
+      "the country code is not GB and there is an empty string for postcode" in {
+        val ex = the [IllegalArgumentException] thrownBy Address("test",None,None,None,Some(""),"ES")
+        ex.getMessage must include("not required field")
+      }
     }
   }
 

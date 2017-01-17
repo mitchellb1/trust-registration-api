@@ -26,7 +26,9 @@ case class Address (
                      line4: Option[String] = None,
                      postalCode: Option[String] = None,
                      countryCode: String){
-  val postCodeMissingForGbAddress: Boolean = countryCode == "GB" && postalCode.fold(true)(_.trim.isEmpty)
+  val postCodeMissingForGbAddress = countryCode == "GB" && postalCode.fold(true)(_.trim.isEmpty)
+  val postalCodeNotPresentForNonGbAddresses = if (countryCode != "GB") !postalCode.isDefined else true
+
 
   require(!postCodeMissingForGbAddress, s"""{\"message\": \"Invalid Json\",
          \"code\": 0,
@@ -37,6 +39,17 @@ case class Address (
          }
          ]
        }""".stripMargin)
+
+
+  require(postalCodeNotPresentForNonGbAddresses, s"""{\"message\": \"Invalid Json\",
+       \"code\": 0,
+       \"validationErrors\": [
+       {
+         \"message\": \"not required field ([\\\"postalCode\\\"])\",
+         \"location\": \"/trustEstate/trust/\"
+       }
+       ]
+     }""".stripMargin)
 }
 
 object Address {

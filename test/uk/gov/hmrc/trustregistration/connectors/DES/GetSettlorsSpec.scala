@@ -41,7 +41,7 @@ class GetSettlorsSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
 
         val result = Await.result(SUT.getSettlors("1234"),Duration.Inf)
         val passport = Passport("IDENTIFIER",new DateTime("2020-01-01"),"ES")
-        val address = Address("Line 1", Some("Line 2"), Some("Line 3"), Some("Line 4"), Some("NE1 2BR"), "ES")
+        val address = Address("Line 1", Some("Line 2"), Some("Line 3"), Some("Line 4"),None, "ES")
         val expectedIndividualSettlors = Settlors(Some(List(Individual("Leo","Spaceman",new DateTime("1800-01-01"),None,None,None,None,Some(passport),Some(address)),
         Individual("Leo","Spaceman",new DateTime("1800-01-01"),None,None,None,None,Some(passport),Some(address)))))
         result mustBe GetSuccessResponse(expectedIndividualSettlors)
@@ -53,7 +53,7 @@ class GetSettlorsSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
           Some(Json.parse(validSettlorsJson)))))
 
         val result = Await.result(SUT.getSettlors("1234"),Duration.Inf)
-        val address = Address("Line 1", Some("Line 2"), Some("Line 3"), Some("Line 4"), Some("NE1 2BR"), "ES")
+        val address = Address("Line 1", Some("Line 2"), Some("Line 3"), Some("Line 4"),None, "ES")
         val expectedCompanySettlors = Settlors(None,Some(List(Company("Company",address,Some("AAA5221")),Company("Company",address,Some("AAA5221")))))
 
         result mustBe GetSuccessResponse(expectedCompanySettlors)
