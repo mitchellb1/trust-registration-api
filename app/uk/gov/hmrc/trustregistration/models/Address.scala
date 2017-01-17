@@ -64,4 +64,3 @@ object Address {
 
   implicit val addressWrites = Json.writes[Address]
 }
-
