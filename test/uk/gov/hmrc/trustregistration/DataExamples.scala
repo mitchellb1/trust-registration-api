@@ -168,8 +168,8 @@ trait ScalaDataExamples {
     line2 = Some("Line 2"),
     line3 = Some("Line 3"),
     line4 = Some("Line 4"),
-    postalCode = Some("NE1 2BR"),
-    countryCode = Some("ES")
+    postalCode = None,
+    countryCode = "ES"
   )
 
   val passport = Passport(

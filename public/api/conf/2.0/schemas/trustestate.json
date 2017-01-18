@@ -206,7 +206,8 @@
       },
       "type": "object",
       "required" : [
-        "line1"
+        "line1",
+        "countryCode"
       ]
     },
     "countryCodeType": {
