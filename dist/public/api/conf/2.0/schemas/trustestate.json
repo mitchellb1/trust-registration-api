@@ -206,7 +206,8 @@
       },
       "type": "object",
       "required" : [
-        "line1"
+        "line1",
+        "countryCode"
       ]
     },
     "countryCodeType": {
@@ -1168,7 +1169,7 @@
     "telephoneNumberType": {
       "description": "telephone Number Type",
       "maxLength": 19,
-      "pattern": "^(\\+)?([0-9\\(\\)\\ -]){1,}$",
+      "pattern": "^(\\+\\d\\d)?\\s?[\\d\\(]?\\d{0,5}[\\d\\)][\\s\\d]{0,15}$",
       "type": "string"
     },
     "emailType":{
