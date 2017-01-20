@@ -29,9 +29,8 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
         ex.getMessage() mustEqual  ("requirement failed: Must have at least one type of Asset")
       }
 
-      "a list of a type of asset is added but with no elements in it" in {
-        val assets = Assets(Some(List()),Some(List()),Some(List()),Some(List()),Some(List()),Some(List()))
-        val ex = the[IllegalArgumentException] thrownBy (FlatManagementSinkingFundTrust(assets, beneficiaries))
+      "no assets are defined" in {
+        val ex = the[IllegalArgumentException] thrownBy (FlatManagementSinkingFundTrust(Assets(), beneficiaries))
         ex.getMessage() mustEqual  "requirement failed: Must have at least one type of Asset"
       }
     }
