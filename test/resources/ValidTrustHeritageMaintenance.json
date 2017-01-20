@@ -29,5 +29,7 @@
       "{INDIVIDUAL}","{INDIVIDUAL}"
     ]
   },
-  "heritageMaintenanceFundTrust" : "{HERITAGEMAINTENANCETRUST}"
+  "trustTypeType": {
+    "heritageMaintenanceFundTrust": "{HERITAGEMAINTENANCETRUST}"
+  }
 }

@@ -29,5 +29,7 @@
       "{INDIVIDUAL}","{INDIVIDUAL}"
     ]
   },
-  "employmentTrust" : "{EMPLOYMENTTRUST}"
+  "trustTypeType": {
+    "employmentTrust" : "{EMPLOYMENTTRUST}"
+  }
 }

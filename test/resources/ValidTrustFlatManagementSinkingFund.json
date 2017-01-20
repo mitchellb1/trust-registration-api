@@ -29,5 +29,7 @@
       "{INDIVIDUAL}","{INDIVIDUAL}"
     ]
   },
-  "flatManagementSinkingFundTrust" : "{FLATMANAGEMENTSINKINGTRUST}"
+  "trustTypeType": {
+    "flatManagementSinkingFundTrust": "{FLATMANAGEMENTSINKINGTRUST}"
+  }
 }

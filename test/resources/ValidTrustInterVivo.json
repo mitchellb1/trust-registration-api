@@ -29,5 +29,7 @@
       "{INDIVIDUAL}","{INDIVIDUAL}"
     ]
   },
-  "interVivoTrust" : "{INTERVIVOTRUST}"
+  "trustTypeType": {
+    "interVivoTrust" : "{INTERVIVOTRUST}"
+  }
 }

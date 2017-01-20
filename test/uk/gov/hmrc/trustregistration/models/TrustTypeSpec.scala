@@ -16,55 +16,26 @@
 
 package uk.gov.hmrc.trustregistration.models
 
-import org.joda.time.DateTime
 import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
 
-
-class TrustSpec extends PlaySpec with ScalaDataExamples {
-
-  "Trust" must {
+class TrustTypeSpec extends PlaySpec with ScalaDataExamples {
+  "TrustType" must {
     "throw an exception" when {
-
       "no trust type is defined" in {
-        val ex = the[IllegalArgumentException] thrownBy Trust(
-          name = "Test",
-          correspondenceAddress = address,
-          telephoneNumber = "123456",
-          currentYear = "1920",
-          commencementDate = DateTime.now(),
-          legality = legality,
-          isTrustUkResident = true,
-          leadTrustee = leadTrusteeIndividual,
-          trustees = Trustees(),
-          protectors = protectors,
-          settlors = settlors
-        )
+        val ex = the[IllegalArgumentException] thrownBy TrustType()
 
         ex.getMessage mustEqual  "requirement failed: Must have a Trust type"
       }
 
       "more than one trust type is defined" in {
-        val ex = the[IllegalArgumentException] thrownBy Trust(
-          name = "Test",
-          correspondenceAddress = address,
-          telephoneNumber = "123456",
-          currentYear = "1920",
-          commencementDate = DateTime.now(),
-          legality = legality,
-          isTrustUkResident = true,
-          leadTrustee = leadTrusteeIndividual,
-          trustees = Trustees(),
-          protectors = protectors,
-          settlors = settlors,
+        val ex = the[IllegalArgumentException] thrownBy TrustType(
           willIntestacyTrust = Some(willIntestacyTrust),
           heritageMaintenanceFundTrust = heritageFund
         )
 
         ex.getMessage mustEqual  "requirement failed: Must have only one Trust type"
       }
-
     }
   }
-
 }
