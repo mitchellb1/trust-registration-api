@@ -82,8 +82,6 @@ trait JsonExamples {
 
 
   lazy val validFlatManagementSinkingFundTrustJson = Source.fromFile(getClass.getResource("/ValidFlatManagementSinkingFundTrust.json").getPath).mkString
-    .replace("\"{SHAREASSETS}\"", validShareAssetJson)
-    .replace("\"{BUSINESSASSETS}\"", validBusinessAssetJson)
     .replace("\"{INDIVIDUAL}\"", validIndividualJson )
     .replace("\"{ADDRESS}\"", validAddressJson)
     .replace("\"{INDIVIDUALBENEFICIARY}\"", validIndividualBeneficiary)
@@ -279,7 +277,7 @@ trait ScalaDataExamples {
   val trustWithEmploymentTrust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),legality,true,leadTrusteeIndividual, Trustees(None, None),
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(List(individual,individual))),None,None,None,None,employmentTrust)
 
-  val flatManagementFund = Some(FlatManagementSinkingFundTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false,true,Some(30)))))))
+  val flatManagementFund = Some(FlatManagementSinkingFundTrust(Assets(Some(List(100f, 2.5f, 75f))),Beneficiaries(Some(List(IndividualBeneficiary(individual,false,true,Some(30)))))))
   val trustWithFlatManagementFund = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),legality,true,leadTrusteeIndividual, Trustees(None, None),
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(List(individual,individual))),None,None,None,flatManagementFund)
 

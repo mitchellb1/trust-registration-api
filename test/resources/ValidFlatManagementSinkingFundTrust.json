@@ -1,11 +1,6 @@
 {
   "assets" : {
-    "shareAssets" : [
-      "{SHAREASSETS}","{SHAREASSETS}"
-    ],
-    "businessAssets" : [
-      "{BUSINESSASSETS}","{BUSINESSASSETS}"
-    ]
+    "monetaryAssets" : [100, 2.50, 75]
   },
   "beneficiaries" : {
     "individualBeneficiaries" : [
