@@ -26,7 +26,7 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
   "Flat Management Sinking Fund Trust" must {
     "throw an exception" when{
       "no assets are defined" in {
-        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(Assets(), beneficiaries)
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(Assets())
         ex.getMessage mustEqual  "requirement failed: Must have at least one Monetary Asset"
       }
 
@@ -35,7 +35,7 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
           propertyAssets = Some(List(PropertyAsset(address, 1f)))
         )
 
-        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets, beneficiaries)
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets)
         ex.getMessage mustEqual  "requirement failed: Only monetary assets are allowed"
       }
 
@@ -44,7 +44,7 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
           shareAssets = Some(List(ShareAsset(1, "Test", "Test", "Test", 5.0f)))
         )
 
-        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets, beneficiaries)
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets)
         ex.getMessage mustEqual  "requirement failed: Only monetary assets are allowed"
       }
 
@@ -53,7 +53,7 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
           partnershipAssets = Some(List(PartnershipAsset("Test", "Test", DateTime.now)))
         )
 
-        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets, beneficiaries)
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets)
         ex.getMessage mustEqual  "requirement failed: Only monetary assets are allowed"
       }
 
@@ -62,7 +62,7 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
           businessAssets = Some(List(BusinessAsset("Test", "Test", "Test", address, 1000f)))
         )
 
-        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets, beneficiaries)
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets)
         ex.getMessage mustEqual  "requirement failed: Only monetary assets are allowed"
       }
 
@@ -71,7 +71,7 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
           otherAssets = Some(List(OtherAsset("Test",5.0f)))
         )
 
-        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets, beneficiaries)
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets)
         ex.getMessage mustEqual  "requirement failed: Only monetary assets are allowed"
       }
     }
@@ -79,7 +79,7 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
     "not throw an exception" when {
       "there is a valid monetary asset" in {
         val assets = Assets(monetaryAssets = Some(List(2.0f, 2.5f)))
-        noException should be thrownBy FlatManagementSinkingFundTrust(assets,beneficiaries)
+        noException should be thrownBy FlatManagementSinkingFundTrust(assets)
       }
     }
   }
