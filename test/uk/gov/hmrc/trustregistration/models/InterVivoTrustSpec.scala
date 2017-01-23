@@ -36,9 +36,8 @@ class InterVivoTrustSpec extends PlaySpec with ScalaDataExamples with JsonExampl
         ex.getMessage() mustEqual  ("requirement failed: Must have at least one required Beneficiary")
       }
 
-      "a list of a type of asset is added but with no elements in it" in {
-        val assets = Assets(Some(List()),Some(List()),Some(List()),Some(List()),Some(List()),Some(List()))
-        val ex = the[IllegalArgumentException] thrownBy (InterVivoTrust(assets, beneficiaries, true))
+      "no assets are defined" in {
+        val ex = the[IllegalArgumentException] thrownBy (InterVivoTrust(Assets(), beneficiaries, true))
         ex.getMessage() mustEqual  "requirement failed: Must have at least one type of Asset"
       }
     }

@@ -36,6 +36,13 @@ class AssetsSpec extends PlaySpec with ScalaDataExamples with JsonExamples{
    }
  }
 
+  "Monetary Assets" must {
+    "have at least one value if they are defined" in {
+      val ex = the [IllegalArgumentException] thrownBy Assets(monetaryAssets = Some(Nil))
+      ex.getMessage mustEqual  "requirement failed: If monetary assets are defined, at least one must be provided"
+    }
+  }
+
   "ShareAssets" must {
     "be parsed correctly from a valid JSON" in {
       val result = Json.parse(validShareAssetJson).as[ShareAsset]

@@ -16,36 +16,70 @@
 
 package uk.gov.hmrc.trustregistration.models
 
+import org.joda.time.DateTime
 import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
 
 
 class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples {
+
   "Flat Management Sinking Fund Trust" must {
     "throw an exception" when{
-      "there is no assets" in {
-        val assets = Assets(None)
-        val ex = the[IllegalArgumentException] thrownBy (FlatManagementSinkingFundTrust(assets,beneficiaries))
-        ex.getMessage() mustEqual  ("requirement failed: Must have at least one type of Asset")
+      "no assets are defined" in {
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(Assets())
+        ex.getMessage mustEqual  "requirement failed: Must have at least one Monetary Asset"
       }
 
-      "a list of a type of asset is added but with no elements in it" in {
-        val assets = Assets(Some(List()),Some(List()),Some(List()),Some(List()),Some(List()),Some(List()))
-        val ex = the[IllegalArgumentException] thrownBy (FlatManagementSinkingFundTrust(assets, beneficiaries))
-        ex.getMessage() mustEqual  "requirement failed: Must have at least one type of Asset"
+      "a property asset is defined" in {
+        val assets = Assets(
+          propertyAssets = Some(List(PropertyAsset(address, 1f)))
+        )
+
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets)
+        ex.getMessage mustEqual  "requirement failed: Only monetary assets are allowed"
+      }
+
+      "a share asset is defined" in {
+        val assets = Assets(
+          shareAssets = Some(List(ShareAsset(1, "Test", "Test", "Test", 5.0f)))
+        )
+
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets)
+        ex.getMessage mustEqual  "requirement failed: Only monetary assets are allowed"
+      }
+
+      "a partnership asset is defined" in {
+        val assets = Assets(
+          partnershipAssets = Some(List(PartnershipAsset("Test", "Test", DateTime.now)))
+        )
+
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets)
+        ex.getMessage mustEqual  "requirement failed: Only monetary assets are allowed"
+      }
+
+      "a business asset is defined" in {
+        val assets = Assets(
+          businessAssets = Some(List(BusinessAsset("Test", "Test", "Test", address, 1000f)))
+        )
+
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets)
+        ex.getMessage mustEqual  "requirement failed: Only monetary assets are allowed"
+      }
+
+      "an other asset is defined" in {
+        val assets = Assets(
+          otherAssets = Some(List(OtherAsset("Test",5.0f)))
+        )
+
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets)
+        ex.getMessage mustEqual  "requirement failed: Only monetary assets are allowed"
       }
     }
 
     "not throw an exception" when {
-      "there is one asset" in {
-        val assets = Assets(Some(List(2.0f,2.5f)))
-        noException should be thrownBy (FlatManagementSinkingFundTrust(assets,beneficiaries))
-      }
-
-      "there is more than one type of asset" in {
-        val otherAsset = OtherAsset("Test",5.0f)
-        val assets = Assets(Some(List(2.0f,2.5f)),None,None,None,None,Some(List(otherAsset)))
-        noException should be thrownBy (FlatManagementSinkingFundTrust(assets,beneficiaries))
+      "there is a valid monetary asset" in {
+        val assets = Assets(monetaryAssets = Some(List(2.0f, 2.5f)))
+        noException should be thrownBy FlatManagementSinkingFundTrust(assets)
       }
     }
   }
