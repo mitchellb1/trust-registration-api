@@ -700,6 +700,9 @@
               "$ref": "#/definitions/shareAssetsType"
             }
           },
+          "anyOf" : [
+            "shareAssets"
+          ],
           "type": "object"
         },
         "beneficiaries": {
@@ -1131,37 +1134,54 @@
             "additionalProperties": false,
             "properties": {
               "numberShares": {
+                "description": "Number of shares held",
                 "type": "number"
               },
-              "shareClass": {
-                "type": "string"
+              "shareCompanyName": {
+                "description": "Name of company in which shares held",
+                "type": "string",
+                "maxLength": 56
               },
               "shareCompanyRegistrationNumber": {
-                "type": "string"
+                "description": "Company registration number in which shares held",
+                "type": "string",
+                "maxLength": 15
               },
-              "shareType": {
-                "description": "Possible share types\n\t\t\t\t\t\t\t\t\t\tCode   Title\n\t\t\t\t\t\t\t\t\t\t----   -----\n\t\t\t\t\t\t\t\t\t\t0001    Ordinary shares\n\t\t\t\t\t\t\t\t\t\t0002 \tNon-voting shares\n\t\t\t\t\t\t\t\t\t\t0003 \tRedeemable shares\n\t\t\t\t\t\t\t\t\t\t0004\tPreference shares\n\t\t\t\t\t\t\t\t\t\t0005 \tDeferred ordinary shares\n\t\t\t\t\t\t\t\t\t\t0006 \tManagement shares\n\t\t\t\t\t\t\t\t\t\t0007 \tOther classes of shares\n\t\t\t\t\t\t\t\t\t\t0008 \tVoting shares\n\t\t\t\t\t\t\t\t\t\t0009 \tDividend shares\n\t\t\t\t\t\t\t\t\t\t0010 \tCapital share\n\t\t\t\t\t\t\t\t\t\t0011 \tOther\n\t\t\t\t\t\t\t\t\t",
+              "shareClass": {
+                "description": "Possible share classes",
                 "enum": [
-                  "0001",
-                  "0002",
-                  "0003",
-                  "0004",
-                  "0005",
-                  "0006",
-                  "0007",
-                  "0008",
-                  "0009",
-                  "0010",
-                  "0011"
+                  "Ordinary",
+                  "Preference",
+                  "Deferred",
+                  "Growth",
+                  "Other"
                 ],
                 "type": "string"
               },
-              "shareValue": {
+              "shareType": {
+                "description": "Possible share types",
+                "enum": [
+                  "Quoted",
+                  "Unquoted"
+                ],
+                "type": "string"
+              },
+              "currentShareValue": {
+                "description": "Current share value",
                 "type": "number"
               }
             },
+            "required" :  [
+              "numberShares",
+              "shareCompanyName",
+              "shareCompanyRegistrationNumber",
+              "shareClass",
+              "shareType",
+              "shareValue"
+            ],
             "type": "object"
-          }
+          },
+          "minItems" : 1
         }
       },
       "type": "object"
