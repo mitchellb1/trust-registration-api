@@ -62,7 +62,7 @@ trait RegisterTrustController extends ApplicationBaseController {
                                                     "validationErrors": [
                                                     {
                                                       "message": "${message.head.toString().replace("\"","")}",
-                                                      "location":"${error.as[JsObject].keys.head.replace("obj.","").replace(".","/")}"
+                                                      "location":"/${error.as[JsObject].keys.head.replace("obj.","").replace(".","/")}"
                                                     }
                                                     ]
                                                   }
