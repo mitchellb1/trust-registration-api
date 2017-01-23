@@ -20,9 +20,10 @@ import play.api.libs.json.{Json, Reads}
 import org.joda.time.DateTime
 
 
-case class Declaration (givenName: String,
+case class Declaration (correspondenceAddress: Address,
+                        confirmation: Boolean,
+                        givenName: String,
                         familyName: String,
-                        capacity: String,
                         date: DateTime,
                         otherName: Option[String] = None)
 
