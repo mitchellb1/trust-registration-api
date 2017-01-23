@@ -58,7 +58,7 @@ trait RegisterTrustController extends ApplicationBaseController {
                     Future.successful(BadRequest(s"""
                                                   {
                                                     "message": "Invalid Json",
-                                                    "code": 400,
+                                                    "code": 0,
                                                     "validationErrors": [
                                                     {
                                                       "message": "${message.head.toString().replace("\"","")}",
