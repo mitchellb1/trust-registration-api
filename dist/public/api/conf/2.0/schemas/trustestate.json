@@ -492,25 +492,29 @@
         "correspondenceAddress": {
           "$ref": "#/definitions/correspondenceAddressType"
         },
-        "capacity": {
-          "$ref": "#/definitions/roleType"
-        },
         "confirmation": {
           "type": "boolean"
         },
-        "dateOfDeclaration": {
+        "date": {
+          "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
           "type": "string"
         },
         "familyName": {
+          "maxLength": 47,
           "type": "string"
         },
         "givenName": {
+          "maxLength": 25,
           "type": "string"
         },
         "otherName": {
+          "maxLength": 25,
           "type": "string"
         }
       },
+      "required" : [
+        "givenName", "familyName", "correspondenceAddress", "date", "confirmation"
+      ],
       "type": "object"
     },
     "directorBeneficiariesType": {
@@ -1223,7 +1227,8 @@
           "$ref": "#/definitions/trusteesType"
         },
         "commencementDate": {
-          "type": "string"
+          "type": "string",
+          "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$"
         },
         "yearsOfTaxConsequence" :{
           "type": "array",
