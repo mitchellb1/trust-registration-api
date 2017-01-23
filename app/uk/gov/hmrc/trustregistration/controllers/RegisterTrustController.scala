@@ -26,13 +26,13 @@ import uk.gov.hmrc.trustregistration.utils.{FailedValidation, JsonSchemaValidato
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-
 trait RegisterTrustController extends ApplicationBaseController {
 
   val jsonSchemaValidator: JsonSchemaValidator
 
   def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     authorised("register", "") {
+
           val jsonString = request.body.toString()
           val validationResult = jsonSchemaValidator.validateAgainstSchema(jsonString)
 
@@ -58,11 +58,11 @@ trait RegisterTrustController extends ApplicationBaseController {
                     Future.successful(BadRequest(s"""
                                                   {
                                                     "message": "Invalid Json",
-                                                    "code": 400,
+                                                    "code": 0,
                                                     "validationErrors": [
                                                     {
                                                       "message": "${message.head.toString().replace("\"","")}",
-                                                      "location":"${error.as[JsObject].keys.head.replace("obj.","").replace(".","/")}"
+                                                      "location":"/${error.as[JsObject].keys.head.replace("obj.","").replace(".","/")}"
                                                     }
                                                     ]
                                                   }
