@@ -24,12 +24,12 @@ case class TrustType (
   flatManagementSinkingFundTrust: Option[FlatManagementSinkingFundTrust] = None,
   employmentTrust: Option[EmploymentTrust] = None
 ) {
-  val activeTrustTypes = List(willIntestacyTrust.isDefined, interVivoTrust.isDefined, heritageMaintenanceFundTrust.isDefined,
-    flatManagementSinkingFundTrust.isDefined, employmentTrust.isDefined).filter(i => i)
+  val numberOfSubmittedTrustTypes = List(willIntestacyTrust.isDefined, interVivoTrust.isDefined, heritageMaintenanceFundTrust.isDefined,
+    flatManagementSinkingFundTrust.isDefined, employmentTrust.isDefined).filter(i => i).size
 
 
-  require(activeTrustTypes.size > 0, "Must have a Trust type")
-  require(activeTrustTypes.size == 1, "Must have only one Trust type")
+  require(numberOfSubmittedTrustTypes > 0, "Must have a Trust type")
+  require(numberOfSubmittedTrustTypes == 1, "Must have only one Trust type")
 }
 
 object TrustType {
