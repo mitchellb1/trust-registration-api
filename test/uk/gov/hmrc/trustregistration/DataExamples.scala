@@ -61,8 +61,6 @@ trait JsonExamples {
     .mkString
     .replace(""""{ADDRESS}"""", validAddressJson)
 
-
-
   lazy val validBeneficiariesJson = s"""{"individualBeneficiaries":[$validIndividualBeneficiary],"charityBeneficiaries":[$validCharityBeneficiary],"otherBeneficiaries":[$validOtherBeneficiary]}"""
 
   lazy val invalidBeneficiariesJson = s"""{"charityBeneficiaries": [$invalidCharityBeneficiary]}"""
@@ -108,7 +106,8 @@ trait JsonExamples {
 
   lazy val validLegalityJson = Source.fromFile(getClass.getResource("/ValidLegality.json").getPath).mkString
 
-  lazy val validTrustJson = Source.fromFile(getClass.getResource("/ValidTrust.json").getPath).mkString
+  lazy val
+  validTrustJson = Source.fromFile(getClass.getResource("/ValidTrust.json").getPath).mkString
     .replace("\"{WILLINTESTACYTRUST}\"", validWillIntestacyTrustJson)
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
     .replace("\"{ADDRESS}\"", validAddressJson)
@@ -158,7 +157,6 @@ trait JsonExamples {
     .replace("\"{ADDRESS}\"", validAddressJson)
     .replace("\"{LEGALITY}\"", validLegalityJson)
 }
-
 trait ScalaDataExamples {
 
   val settlors = Settlors(Some(List(individual)))
@@ -263,7 +261,7 @@ trait ScalaDataExamples {
 
   val willIntestacyTrust = WillIntestacyTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false,true,Some(30))))),individual)
 
-  val trust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),legality,true,leadTrusteeIndividual,Trustees(None, None),
+  val trust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),Some(List(2015,2016)),legality,true,leadTrusteeIndividual,Trustees(None, None),
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(List(individual,individual))),Some(willIntestacyTrust))
 
   val otherAsset = OtherAsset("This is a test description",1234,Some(new DateTime("1800-01-01")))
@@ -272,18 +270,18 @@ trait ScalaDataExamples {
 
   val heritageFund = Some(HeritageMaintenanceFundTrust(assetsWithOtherAsset,Beneficiaries(None,None,None,None,Some(List(otherBeneficiary))),true,Some(individual)))
 
-  val trustWithHeritageMaintenance = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),legality,true,leadTrusteeIndividual, Trustees(None, None),
+  val trustWithHeritageMaintenance = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),Some(List(2015,2016)),legality,true,leadTrusteeIndividual, Trustees(None, None),
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(List(individual,individual))),None,None,heritageFund)
 
   val employmentTrust = Some(EmploymentTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false,true,Some(30))))),true,Some(new DateTime("1940-01-01"))))
-  val trustWithEmploymentTrust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),legality,true,leadTrusteeIndividual, Trustees(None, None),
+  val trustWithEmploymentTrust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),Some(List(2015,2016)),legality,true,leadTrusteeIndividual, Trustees(None, None),
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(List(individual,individual))),None,None,None,None,employmentTrust)
 
   val flatManagementFund = Some(FlatManagementSinkingFundTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false,true,Some(30)))))))
-  val trustWithFlatManagementFund = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),legality,true,leadTrusteeIndividual, Trustees(None, None),
+  val trustWithFlatManagementFund = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),Some(List(2015,2016)),legality,true,leadTrusteeIndividual, Trustees(None, None),
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(List(individual,individual))),None,None,None,flatManagementFund)
 
   val interVivoTrust = Some(InterVivoTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false,true,Some(30))))),true,Some(individual)))
-  val trustWithInterVivoTrust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),legality,true,leadTrusteeIndividual, Trustees(None, None),
+  val trustWithInterVivoTrust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),Some(List(2015,2016)),legality,true,leadTrusteeIndividual, Trustees(None, None),
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(List(individual,individual))),None,interVivoTrust)
 }

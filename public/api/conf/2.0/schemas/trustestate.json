@@ -1226,12 +1226,20 @@
           "$ref": "#/definitions/trusteesType"
         },
         "commencementDate": {
-          "type": "string"
+          "type": "string",
+          "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$"
+        },
+        "yearsOfTaxConsequence" :{
+          "type": "array",
+          "items": {
+            "value": {
+              "type": "number"
+            }
+          }
         },
         "currentYear": {
           "type": "string"
         },
-
         "trustTypeType": {
           "additionalProperties": false,
           "properties": {
@@ -1261,7 +1269,8 @@
         "leadTrustee",
         "settlors",
         "protectors",
-        "legality"
+        "legality",
+        "commencementDate"
       ]
     },
     "trusteesType": {

@@ -29,7 +29,6 @@ import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 import scala.io.Source
 
-
 class GetTrustSpec extends PlaySpec
   with OneAppPerSuite
   with DESConnectorMocks

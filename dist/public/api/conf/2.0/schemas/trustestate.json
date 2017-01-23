@@ -1228,10 +1228,17 @@
         "commencementDate": {
           "type": "string"
         },
+        "yearsOfTaxConsequence" :{
+          "type": "array",
+          "items": {
+            "value": {
+              "type": "number"
+            }
+          }
+        },
         "currentYear": {
           "type": "string"
         },
-
         "trustTypeType": {
           "additionalProperties": false,
           "properties": {
@@ -1261,7 +1268,8 @@
         "leadTrustee",
         "settlors",
         "protectors",
-        "legality"
+        "legality",
+        "commencementDate"
       ]
     },
     "trusteesType": {
