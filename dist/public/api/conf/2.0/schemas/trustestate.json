@@ -673,17 +673,15 @@
         "beneficiaries": {
           "additionalProperties": false,
           "properties": {
-            "buildingLandBeneficiary": {
-              "$ref": "#/definitions/buildingLandBeneficiariesType"
-            },
             "otherBeneficiaries": {
               "$ref": "#/definitions/otherBeneficiariesType"
             }
           },
+          "required": ["otherBeneficiaries"],
           "type": "object"
         }
       },
-      "required": ["assets"],
+      "required": ["assets", "beneficiaries"],
       "type": "object"
     },
     "heritageMaintenanceFundTrustType": {
@@ -964,27 +962,22 @@
     "otherBeneficiariesType": {
       "description": "Other Beneficiaries Type",
       "additionalProperties": false,
-      "properties": {
-        "otherBeneficiary": {
-          "type": "array",
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "beneficiaryDescription": {
-                "type": "string"
-              },
-              "correspondenceAddress": {
-                "$ref": "#/definitions/correspondenceAddressType"
-              },
-              "income": {
-                "$ref": "#/definitions/incomeType"
-              }
-            },
-            "type": "object"
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "beneficiaryDescription": {
+            "maxLength": 56,
+            "type": "string"
+          },
+          "correspondenceAddress": {
+            "$ref": "#/definitions/correspondenceAddressType"
           }
-        }
-      },
-      "type": "object"
+        },
+        "type": "object",
+        "required": ["beneficiaryDescription", "correspondenceAddress"]
+      }
     },
     "partnershipAssetsType": {
       "description": "Partnership Assets Type",
