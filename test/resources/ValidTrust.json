@@ -30,5 +30,7 @@
       "{INDIVIDUAL}","{INDIVIDUAL}"
     ]
   },
-  "willIntestacyTrust" : "{WILLINTESTACYTRUST}"
+  "trustTypeType": {
+    "willIntestacyTrust" : "{WILLINTESTACYTRUST}"
+  }
 }

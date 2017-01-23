@@ -38,9 +38,8 @@ class WillIntestacyTrustSpec extends PlaySpec with ScalaDataExamples{
         ex.getMessage() mustEqual  "requirement failed: Must have at least one required Beneficiary"
       }
 
-      "a list of a type of asset is added but with no elements in it" in {
-        val assets = Assets(Some(List()),Some(List()),Some(List()),Some(List()),Some(List()),Some(List()))
-        val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(assets,beneficiaries, individual))
+      "no assets are defined" in {
+        val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(Assets(), beneficiaries, individual))
         ex.getMessage() mustEqual  "requirement failed: Must have at least one type of Asset"
       }
     }

@@ -667,6 +667,7 @@
               "$ref": "#/definitions/monetaryAssetsType"
             }
           },
+          "required": ["monetaryAssets"],
           "type": "object"
         },
         "beneficiaries": {
@@ -682,6 +683,7 @@
           "type": "object"
         }
       },
+      "required": ["assets"],
       "type": "object"
     },
     "heritageMaintenanceFundTrustType": {
@@ -912,18 +914,13 @@
     },
     "monetaryAssetsType": {
       "description": "Monetary Assets Type",
-      "additionalProperties": false,
-      "properties": {
-        "monetaryAsset": {
-          "type": "array",
-          "items": {
-            "value": {
-              "type": "number"
-            }
-          }
+      "type": "array",
+      "items": {
+        "value": {
+          "type": "number"
         }
       },
-      "type": "object"
+      "minItems": 1
     },
     "naturalPeopleType": {
       "description": "Natural People Individual Type",
@@ -1263,6 +1260,9 @@
               "$ref": "#/definitions/willIntestacyTrustType"
             }
           },
+          "oneOf": [
+            {"required": ["flatManagementSinkingFundTrust"]}
+          ],
           "type": "object"
         }
       },
@@ -1274,6 +1274,7 @@
         "settlors",
         "protectors",
         "legality",
+        "trustTypeType",
         "commencementDate"
       ]
     },
