@@ -24,6 +24,7 @@ case class Trust(name: String,
                  telephoneNumber: String,
                  currentYear: String,
                  commencementDate: DateTime,
+                 yearsOfTaxConsequence: Option[List[Int]] = None,
                  legality: Legality,
                  isTrustUkResident: Boolean,
                  leadTrustee: LeadTrustee,
@@ -36,6 +37,7 @@ case class Trust(name: String,
                  isSchedule5A: Option[Boolean] = None,
                  nonResidentType: Option[String] = None
 )
+
 
 object Trust{
   implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
