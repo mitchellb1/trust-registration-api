@@ -74,8 +74,12 @@
         }
       },
       "anyOf" : [
-        {"required": ["flatManagementSinkingFundTrust"]},
-        {"required": ["heritageMaintenanceFundTrustType"]}
+        {"required": ["buildingLandBeneficiaries"]},
+        {"required": ["charityBeneficiaries"]},
+        {"required": ["directorBeneficiaries"]},
+        {"required": ["employeeBeneficiaries"]},
+        {"required": ["charityBeneficiaries"]},
+        {"required": ["individualBeneficiaries"]}
       ],
       "type": "object"
     },
@@ -1147,12 +1151,12 @@
                 "description": "Number of shares held",
                 "type": "number"
               },
-              "shareCompanyName": {
+              "shareName": {
                 "description": "Name of company in which shares held",
                 "type": "string",
                 "maxLength": 56
               },
-              "shareCompanyRegistrationNumber": {
+              "shareRegistrationNumber": {
                 "description": "Company registration number in which shares held",
                 "type": "string",
                 "maxLength": 15
@@ -1183,8 +1187,8 @@
             },
             "required" :  [
               "numberShares",
-              "shareCompanyName",
-              "shareCompanyRegistrationNumber",
+              "shareName",
+              "shareRegistrationNumber",
               "shareClass",
               "shareType",
               "shareValue"
