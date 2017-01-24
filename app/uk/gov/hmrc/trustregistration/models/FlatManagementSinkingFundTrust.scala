@@ -19,12 +19,14 @@ package uk.gov.hmrc.trustregistration.models
 import play.api.libs.json.Json
 
 
-case class FlatManagementSinkingFundTrust(assets: Assets) {
+case class FlatManagementSinkingFundTrust(assets: Assets , beneficiaries: Beneficiaries) {
   private val onlyMonetaryAsset = !assets.otherAssets.isDefined && !assets.shareAssets.isDefined && !assets.propertyAssets.isDefined && !assets.partnershipAssets.isDefined && !assets.businessAssets.isDefined
   private val atleastOneMonetaryAsset: Boolean = (assets.monetaryAssets.isDefined && assets.monetaryAssets.get.size > 0)
+  private val onlyOtherBeneficiary = !beneficiaries.individualBeneficiaries.isDefined && !beneficiaries.employeeBeneficiaries.isDefined && !beneficiaries.directorBeneficiaries.isDefined && !beneficiaries.charityBeneficiaries.isDefined
 
   require(onlyMonetaryAsset, "Only monetary assets are allowed")
-  require(atleastOneMonetaryAsset, "Must have at least one Monetary Asset")
+  require(atleastOneMonetaryAsset, "Must have at least one monetary asset")
+  require(onlyOtherBeneficiary, "Only other beneficiaries are allowed")
 }
 
 object FlatManagementSinkingFundTrust{

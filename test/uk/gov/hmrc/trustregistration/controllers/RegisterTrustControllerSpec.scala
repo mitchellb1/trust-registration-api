@@ -599,9 +599,9 @@ class RegisterTrustControllerSpec extends PlaySpec
           """"charityBeneficiaries":[{"name":"Charity Name","number":"123456789087654",""" +
           """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2","line3":"Line 3",""" +
           """"line4":"Line 4","countryCode":"ES"},"isIncomeAtTrusteeDiscretion":false,"shareOfIncome":20}],""" +
-          """"otherBeneficiaries":[{"description":"Beneficiary Description","correspondenceAddress":""" +
+          """"otherBeneficiaries":[{"beneficiaryDescription":"Beneficiary Description","correspondenceAddress":""" +
           """{"line1":"Line 1","line2":"Line 2","line3":"Line 3","line4":"Line 4",""" +
-          """"countryCode":"ES"},"isIncomeAtTrusteeDiscretion":false,"shareOfIncome":50}]}"""
+          """"countryCode":"ES"}}]}"""
         )
       }
     }
