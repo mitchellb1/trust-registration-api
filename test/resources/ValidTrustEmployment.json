@@ -30,7 +30,7 @@
       "{INDIVIDUAL}","{INDIVIDUAL}"
     ]
   },
-  "trustTypeType": {
+  "trustType": {
     "employmentTrust" : "{EMPLOYMENTTRUST}"
   }
 }

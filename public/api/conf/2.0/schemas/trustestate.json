@@ -44,6 +44,10 @@
           "$ref": "#/definitions/shareAssetsType"
         }
       },
+      "anyOf" : [
+        {"required": ["monetaryAssets"]},
+        {"required": ["shareAssets"]}
+      ],
       "type": "object"
     },
     "beneficiariesType": {
@@ -69,6 +73,10 @@
           "$ref": "#/definitions/otherBeneficiariesType"
         }
       },
+      "anyOf" : [
+        {"required": ["flatManagementSinkingFundTrust"]},
+        {"required": ["heritageMaintenanceFundTrustType"]}
+      ],
       "type": "object"
     },
     "buildingLandBeneficiariesType": {
@@ -707,7 +715,8 @@
             }
           },
           "anyOf" : [
-            "shareAssets"
+            {"required": ["monetaryAssets"]},
+            {"required": ["shareAssets"]}
           ],
           "type": "object"
         },
@@ -1261,7 +1270,7 @@
         "currentYear": {
           "type": "string"
         },
-        "trustTypeType": {
+        "trustType": {
           "additionalProperties": false,
           "properties": {
             "employmentTrust": {
@@ -1281,7 +1290,8 @@
             }
           },
           "oneOf": [
-            {"required": ["flatManagementSinkingFundTrust"]}
+            {"required": ["flatManagementSinkingFundTrust"]},
+            {"required": ["heritageMaintenanceFundTrustType"]}
           ],
           "type": "object"
         }
@@ -1294,7 +1304,7 @@
         "settlors",
         "protectors",
         "legality",
-        "trustTypeType",
+        "trustType",
         "commencementDate"
       ]
     },

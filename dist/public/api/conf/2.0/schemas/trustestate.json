@@ -1085,7 +1085,7 @@
       },
       "type": "object"
     },
-    "residentTypeType": {
+    "residentType": {
       "description": "Possible Domiciles\n\t\t\tCode   Title\n\t\t\t----   -----\n\t\t\t0001   Settlor domiciled Trustees nonresident\n\t\t\t0002   Settlor non domiciled becomes domiciled then resident\n\t\t\t0003   Trustee ceases to be resident\n\t\t",
       "enum": [
         "0001",
@@ -1241,7 +1241,7 @@
         "currentYear": {
           "type": "string"
         },
-        "trustTypeType": {
+        "trustType": {
           "additionalProperties": false,
           "properties": {
             "employmentTrust": {
@@ -1274,7 +1274,7 @@
         "settlors",
         "protectors",
         "legality",
-        "trustTypeType",
+        "trustType",
         "commencementDate"
       ]
     },

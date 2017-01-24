@@ -1,8 +1,8 @@
 {
-  "shareNumber" : 1234,
-  "shareClass" : "Test",
-  "shareType" : "Test",
-  "companyRegistrationNumber" : "1234",
-  "shareValue" : 1234
+  "numberShares" : 1234,
+  "sharecompanyName" : "sharecompanyName",
+  "shareCompanyRegistrationNumber" : "shareCompanyRegistrationNumber",
+  "shareClass" : "shareClass",
+  "shareType" : "shareType",
+  "currentShareValue" : 123400.50
 }
-
