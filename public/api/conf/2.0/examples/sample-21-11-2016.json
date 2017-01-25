@@ -497,7 +497,7 @@
 			"trustName": {
 				"$": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 			},
-			"trustTypeType": {
+			"trustType": {
 				"employmentTrust": {
 					"assets": {
 						"businessAssets": {

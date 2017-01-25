@@ -32,7 +32,7 @@ case class Trust(name: String,
                  protectors: Protectors,
                  settlors: Settlors,
                  naturalPeople: Option[NaturalPeople] = None,
-                 trustTypeType: TrustType,
+                 trustType: TrustType,
                  declaration: Option[Declaration] = None,
                  isSchedule5A: Option[Boolean] = None,
                  nonResidentType: Option[String] = None
