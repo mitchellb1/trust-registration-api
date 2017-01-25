@@ -60,10 +60,8 @@ object CharityBeneficiary{
 }
 
 case class OtherBeneficiary(
-   description: String,
-   correspondenceAddress: Address,
-   isIncomeAtTrusteeDiscretion: Boolean,
-   shareOfIncome: Option[Float])
+   beneficiaryDescription: String,
+   correspondenceAddress: Address)
 
 object OtherBeneficiary{
   implicit val otherBeneficiaryFormats = Json.format[OtherBeneficiary]

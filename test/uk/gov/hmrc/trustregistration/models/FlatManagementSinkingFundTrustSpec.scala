@@ -25,9 +25,12 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
 
   "Flat Management Sinking Fund Trust" must {
     "throw an exception" when{
+
+      // assets
+
       "no assets are defined" in {
-        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(Assets())
-        ex.getMessage mustEqual  "requirement failed: Must have at least one Monetary Asset"
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(Assets() , Beneficiaries(otherBeneficiaries = otherBeneficiaries))
+        ex.getMessage mustEqual  "requirement failed: Must have at least one monetary asset"
       }
 
       "a property asset is defined" in {
@@ -35,7 +38,7 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
           propertyAssets = Some(List(PropertyAsset(address, 1f)))
         )
 
-        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets)
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries))
         ex.getMessage mustEqual  "requirement failed: Only monetary assets are allowed"
       }
 
@@ -44,7 +47,7 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
           shareAssets = Some(List(ShareAsset(1234,"sharecompanyName","shareCompanyRegistrationNumber","shareClass","shareType",123400.00f)))
         )
 
-        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets)
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries))
         ex.getMessage mustEqual  "requirement failed: Only monetary assets are allowed"
       }
 
@@ -53,7 +56,7 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
           partnershipAssets = Some(List(PartnershipAsset("Test", "Test", DateTime.now)))
         )
 
-        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets)
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries))
         ex.getMessage mustEqual  "requirement failed: Only monetary assets are allowed"
       }
 
@@ -62,7 +65,7 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
           businessAssets = Some(List(BusinessAsset("Test", "Test", "Test", address, 1000f)))
         )
 
-        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets)
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries))
         ex.getMessage mustEqual  "requirement failed: Only monetary assets are allowed"
       }
 
@@ -71,15 +74,60 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
           otherAssets = Some(List(OtherAsset("Test",5.0f)))
         )
 
-        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets)
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries))
         ex.getMessage mustEqual  "requirement failed: Only monetary assets are allowed"
       }
+
+      // beneficiaries
+
+      "no beneficiaries are defined" in {
+        val assets = Assets(monetaryAssets = Some(List(2.0f, 2.5f)))
+
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets, Beneficiaries())
+        ex.getMessage mustEqual  "requirement failed: Must have at least one beneficiary"
+      }
+
+      "an empty list of other beneficiaries are sent" in {
+        val assets = Assets(monetaryAssets = Some(List(2.0f, 2.5f)))
+
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets, Beneficiaries(otherBeneficiaries = Some(List())))
+        ex.getMessage mustEqual  "requirement failed: Must have at least one beneficiary"
+      }
+
+      "a individual beneficiaries is defined" in {
+        val assets = Assets(monetaryAssets = Some(List(2.0f, 2.5f)))
+
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(individualBeneficiaries = Some(List(individualBeneficiary))))
+        ex.getMessage mustEqual  "requirement failed: Only other beneficiaries are allowed"
+      }
+
+      "a employee beneficiaries is defined" in {
+        val assets = Assets(monetaryAssets = Some(List(2.0f, 2.5f)))
+
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(employeeBeneficiaries = Some(List(employeeBeneficiary))))
+        ex.getMessage mustEqual  "requirement failed: Only other beneficiaries are allowed"
+      }
+
+      "a director beneficiaries is defined" in {
+        val assets = Assets(monetaryAssets = Some(List(2.0f, 2.5f)))
+
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(directorBeneficiaries = Some(List(directorBeneficiary))))
+        ex.getMessage mustEqual  "requirement failed: Only other beneficiaries are allowed"
+      }
+
+      "a charity beneficiaries is defined" in {
+        val assets = Assets(monetaryAssets = Some(List(2.0f, 2.5f)))
+
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(charityBeneficiaries = Some(List(charityBeneficiary))))
+        ex.getMessage mustEqual  "requirement failed: Only other beneficiaries are allowed"
+      }
+
     }
 
     "not throw an exception" when {
-      "there is a valid monetary asset" in {
+      "there is a valid monetary asset and a valid other beneficiary" in {
         val assets = Assets(monetaryAssets = Some(List(2.0f, 2.5f)))
-        noException should be thrownBy FlatManagementSinkingFundTrust(assets)
+        noException should be thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries))
       }
     }
   }

@@ -104,8 +104,7 @@ trait JsonExamples {
 
   lazy val validLegalityJson = Source.fromFile(getClass.getResource("/ValidLegality.json").getPath).mkString
 
-  lazy val
-  validTrustJson = Source.fromFile(getClass.getResource("/ValidTrust.json").getPath).mkString
+  lazy val validTrustJson = Source.fromFile(getClass.getResource("/ValidTrust.json").getPath).mkString
     .replace("\"{WILLINTESTACYTRUST}\"", validWillIntestacyTrustJson)
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
     .replace("\"{ADDRESS}\"", validAddressJson)
@@ -116,6 +115,7 @@ trait JsonExamples {
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
     .replace("\"{ADDRESS}\"", validAddressJson)
     .replace("\"{LEGALITY}\"", validLegalityJson)
+    .replace("\"{OTHERBENEFICIARY}\"", validOtherBeneficiary)
 
   lazy val validInterVivoTrustFundJson = Source.fromFile(getClass.getResource("/ValidInterVivoTrust.json").getPath).mkString
     .replace("\"{SHAREASSETS}\"", validShareAssetJson)
@@ -223,6 +223,12 @@ trait ScalaDataExamples {
     shareOfIncome = Some(30)
   )
 
+  val directorBeneficiary = DirectorBeneficiary(individual = individual,
+    isVulnerable = false,
+    isIncomeAtTrusteeDiscretion = true,
+    shareOfIncome = Some(30)
+  )
+
   val charityBeneficiary = CharityBeneficiary(
     name = "Charity Name",
     number = "123456789087654",
@@ -232,10 +238,8 @@ trait ScalaDataExamples {
   )
 
   val otherBeneficiary = OtherBeneficiary(
-    description = "Beneficiary Description",
-    correspondenceAddress = address,
-    isIncomeAtTrusteeDiscretion = false,
-    shareOfIncome = Some(50)
+    beneficiaryDescription = "Beneficiary Description",
+    correspondenceAddress = address
   )
 
   val beneficiaries = Beneficiaries(
@@ -243,6 +247,8 @@ trait ScalaDataExamples {
     charityBeneficiaries = Some(List(charityBeneficiary)),
     otherBeneficiaries = Some(List(otherBeneficiary))
   )
+
+  val otherBeneficiaries = Some(List(otherBeneficiary))
 
   val protectors = Protectors(
     individuals = Some(List(individual)),
@@ -276,7 +282,7 @@ trait ScalaDataExamples {
   val trustWithEmploymentTrust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),Some(List(2015,2016)),legality,true,leadTrusteeIndividual, Trustees(None, None),
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(List(individual,individual))), TrustType(employmentTrust = employmentTrust))
 
-  val flatManagementFund = Some(FlatManagementSinkingFundTrust(monetaryAssets))
+  val flatManagementFund = Some(FlatManagementSinkingFundTrust(monetaryAssets , Beneficiaries(otherBeneficiaries = otherBeneficiaries)))
   val trustWithFlatManagementFund = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),Some(List(2015,2016)),legality,true,leadTrusteeIndividual, Trustees(None, None),
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(List(individual,individual))), TrustType(flatManagementSinkingFundTrust = flatManagementFund))
 
