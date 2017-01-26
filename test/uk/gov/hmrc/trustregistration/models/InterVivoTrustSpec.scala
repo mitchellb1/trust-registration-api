@@ -49,7 +49,6 @@ class InterVivoTrustSpec extends PlaySpec with ScalaDataExamples with JsonExampl
       }
 
       "there is more than one type of asset" in {
-        val otherAsset = OtherAsset("Test",5.0f)
         val assets = Assets(Some(List(2.0f,2.5f)),None,None,None,None,Some(List(otherAsset)))
         noException should be thrownBy (InterVivoTrust(assets,beneficiaries,true))
       }

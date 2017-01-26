@@ -105,7 +105,8 @@
       },
       "type": "object"
     },
-    "businessAssetsType": {
+    "businessAssetsType":
+    {
       "description": "Business Assets Type",
       "additionalProperties": false,
       "properties": {
@@ -718,7 +719,8 @@
           },
           "anyOf" : [
             {"required": ["monetaryAssets"]},
-            {"required": ["shareAssets"]}
+            {"required": ["shareAssets"]},
+            {"required": ["otherAssets"]}
           ],
           "type": "object"
         },
@@ -959,16 +961,19 @@
           "items": {
             "additionalProperties": false,
             "properties": {
-              "OtherAssetDescription": {
+              "otherAssetDescription": {
+                "maxLength": 30,
                 "type": "string"
               },
               "lastValuationDate": {
+                "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
                 "type": "string"
               },
               "value": {
                 "type": "number"
               }
             },
+            "required": ["otherAssetDescription", "lastValuationDate"],
             "type": "object"
           }
         }

@@ -29,6 +29,18 @@ class HeritageMaintenanceFundTrustSpec extends PlaySpec with ScalaDataExamples {
         ex.getMessage() mustEqual ("requirement failed: Must have at least one type of Asset")
       }
 
+      "a partnership asset is defined" in {
+        val assets =    Assets(None, None, None, Some(List(partnershipAsset)), None, None)
+        val ex = the[IllegalArgumentException] thrownBy (HeritageMaintenanceFundTrust(assets,beneficiaries,true))
+        ex.getMessage() mustEqual ("requirement failed: Must not allow this type of asset")
+      }
+
+      "a busines asset is defined" in {
+        val assets = Assets(None, None, None, None, Some(List(businessAsset)), None)
+        val ex = the[IllegalArgumentException] thrownBy (HeritageMaintenanceFundTrust(assets,beneficiaries,true))
+        ex.getMessage() mustEqual ("requirement failed: Must not allow this type of asset")
+      }
+
       "the required beneficiaries are not there" in {
         val assets = Assets(Some(List(2.0f,2.5f)))
         val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)))
@@ -49,8 +61,14 @@ class HeritageMaintenanceFundTrustSpec extends PlaySpec with ScalaDataExamples {
       }
 
       "there is more than one type of asset" in {
-        val otherAsset = OtherAsset("Test",5.0f)
-        val assets = Assets(Some(List(2.0f,2.5f)),None,None,None,None,Some(List(otherAsset)))
+        val otherAssets = otherAsset
+        val assets = Assets(Some(List(2.0f,2.5f)),None,None,None,None,Some(List(otherAssets)))
+        noException should be thrownBy (HeritageMaintenanceFundTrust(assets,beneficiaries,true))
+      }
+
+      "there is other asset defined" in {
+        val otherAssets = otherAsset
+        val assets = Assets(None,None,None,None,None,Some(List(otherAssets)))
         noException should be thrownBy (HeritageMaintenanceFundTrust(assets,beneficiaries,true))
       }
     }
