@@ -1068,10 +1068,10 @@
           },
           "propertyLandValue": {
             "type": "number"
-          },
-          "required": ["correspondenceAddress", "propertyLandValue"]
+          }
         },
-        "type": "object"
+        "type": "object",
+        "required": ["correspondenceAddress", "propertyLandValue"]
       }
     },
     "protectorsType": {
