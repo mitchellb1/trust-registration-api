@@ -718,7 +718,8 @@
           },
           "anyOf" : [
             {"required": ["monetaryAssets"]},
-            {"required": ["shareAssets"]}
+            {"required": ["shareAssets"]},
+            {"required": ["propertyAssets"]}
           ],
           "type": "object"
         },
@@ -1050,30 +1051,28 @@
     "propertyAssetsType": {
       "description": "Property Assets Type",
       "additionalProperties": false,
-      "properties": {
-        "propertyAsset": {
-          "type": "array",
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "buildingLandName": {
-                "type": "string"
-              },
-              "correspondenceAddress": {
-                "$ref": "#/definitions/correspondenceAddressType"
-              },
-              "propertyLandEvalDate": {
-                "type": "string"
-              },
-              "propertyLandValue": {
-                "type": "number"
-              }
-            },
-            "type": "object"
-          }
-        }
-      },
-      "type": "object"
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "buildingLandName": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "correspondenceAddress": {
+            "$ref": "#/definitions/correspondenceAddressType"
+          },
+          "propertyLandEvalDate": {
+            "type": "string",
+            "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$"
+          },
+          "propertyLandValue": {
+            "type": "number"
+          },
+          "required": ["correspondenceAddress", "propertyLandValue"]
+        },
+        "type": "object"
+      }
     },
     "protectorsType": {
       "description": "protectors Type",
