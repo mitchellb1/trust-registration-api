@@ -1133,64 +1133,59 @@
     "shareAssetsType": {
       "description": "Share Assets Type",
       "additionalProperties": false,
-      "properties": {
-        "shareAssets": {
-          "type": "array",
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "numberShares": {
-                "description": "Number of shares held",
-                "type": "number"
-              },
-              "shareName": {
-                "description": "Name of company in which shares held",
-                "type": "string",
-                "maxLength": 56
-              },
-              "shareRegistrationNumber": {
-                "description": "Company registration number in which shares held",
-                "type": "string",
-                "maxLength": 15
-              },
-              "shareClass": {
-                "description": "Possible share classes",
-                "enum": [
-                  "Ordinary",
-                  "Preference",
-                  "Deferred",
-                  "Growth",
-                  "Other"
-                ],
-                "type": "string"
-              },
-              "shareType": {
-                "description": "Possible share types",
-                "enum": [
-                  "Quoted",
-                  "Unquoted"
-                ],
-                "type": "string"
-              },
-              "currentShareValue": {
-                "description": "Current share value",
-                "type": "number"
-              }
-            },
-            "required" :  [
-              "numberShares",
-              "shareName",
-              "shareRegistrationNumber",
-              "shareClass",
-              "shareType",
-              "shareValue"
-            ],
-            "type": "object"
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "numberShares": {
+            "description": "Number of shares held",
+            "type": "number"
           },
-          "minItems" : 1
-        }
+          "shareName": {
+            "description": "Name of company in which shares held",
+            "type": "string",
+            "maxLength": 56
+          },
+          "shareRegistrationNumber": {
+            "description": "Company registration number in which shares held",
+            "type": "string",
+            "maxLength": 15
+          },
+          "shareClass": {
+            "description": "Possible share classes",
+            "enum": [
+              "Ordinary",
+              "Preference",
+              "Deferred",
+              "Growth",
+              "Other"
+            ],
+            "type": "string"
+          },
+          "shareType": {
+            "description": "Possible share types",
+            "enum": [
+              "Quoted",
+              "Unquoted"
+            ],
+            "type": "string"
+          },
+          "currentShareValue": {
+            "description": "Current share value",
+            "type": "number"
+          }
+        },
+        "required" :  [
+          "numberShares",
+          "shareName",
+          "shareRegistrationNumber",
+          "shareClass",
+          "shareType",
+          "shareValue"
+        ],
+        "type": "object"
       },
-      "type": "object"
+      "minItems" : 1
     },
     "telephoneNumberType": {
       "description": "telephone Number Type",
