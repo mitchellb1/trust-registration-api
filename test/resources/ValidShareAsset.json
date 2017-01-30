@@ -1,6 +1,6 @@
 {
   "numberShares" : 1234,
-  "sharecompanyName" : "sharecompanyName",
+  "shareCompanyName" : "shareCompanyName",
   "shareCompanyRegistrationNumber" : "shareCompanyRegistrationNumber",
   "shareClass" : "shareClass",
   "shareType" : "shareType",
