@@ -743,7 +743,8 @@
           "type": "boolean"
         }
       },
-      "type": "object"
+      "type": "object",
+      "required": ["assets", "beneficiaries", "isMultiPurposeIncome"]
     },
     "incomeType": {
       "description": "Income Type",
