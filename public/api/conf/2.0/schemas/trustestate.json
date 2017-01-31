@@ -975,7 +975,7 @@
               "type": "number"
             }
           },
-          "required": ["otherAssetDescription", "lastValuationDate"],
+          "required": ["otherAssetDescription", "lastValuationDate","value"],
           "type": "object"
         }
     },
