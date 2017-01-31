@@ -720,7 +720,8 @@
           "anyOf" : [
             {"required": ["monetaryAssets"]},
             {"required": ["shareAssets"]},
-            {"required": ["otherAssets"]}
+            {"required": ["otherAssets"]},
+            {"required": ["propertyAssets"]}
           ],
           "type": "object"
         },
@@ -734,6 +735,10 @@
               "$ref": "#/definitions/otherBeneficiariesType"
             }
           },
+          "anyOf" : [
+            {"required": ["buildingLandBeneficiary"]},
+            {"required": ["otherBeneficiaries"]}
+          ],
           "type": "object"
         },
         "isMultiPurposeIncome": {
@@ -1055,30 +1060,28 @@
     "propertyAssetsType": {
       "description": "Property Assets Type",
       "additionalProperties": false,
-      "properties": {
-        "propertyAsset": {
-          "type": "array",
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "buildingLandName": {
-                "type": "string"
-              },
-              "correspondenceAddress": {
-                "$ref": "#/definitions/correspondenceAddressType"
-              },
-              "propertyLandEvalDate": {
-                "type": "string"
-              },
-              "propertyLandValue": {
-                "type": "number"
-              }
-            },
-            "type": "object"
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "buildingLandName": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "correspondenceAddress": {
+            "$ref": "#/definitions/correspondenceAddressType"
+          },
+          "propertyLandEvalDate": {
+            "type": "string",
+            "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$"
+          },
+          "propertyLandValue": {
+            "type": "number"
           }
-        }
-      },
-      "type": "object"
+        },
+        "type": "object",
+        "required": ["correspondenceAddress", "propertyLandValue"]
+      }
     },
     "protectorsType": {
       "description": "protectors Type",
@@ -1138,65 +1141,59 @@
     },
     "shareAssetsType": {
       "description": "Share Assets Type",
-      "additionalProperties": false,
-      "properties": {
-        "shareAssets": {
-          "type": "array",
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "numberShares": {
-                "description": "Number of shares held",
-                "type": "number"
-              },
-              "shareName": {
-                "description": "Name of company in which shares held",
-                "type": "string",
-                "maxLength": 56
-              },
-              "shareRegistrationNumber": {
-                "description": "Company registration number in which shares held",
-                "type": "string",
-                "maxLength": 15
-              },
-              "shareClass": {
-                "description": "Possible share classes",
-                "enum": [
-                  "Ordinary",
-                  "Preference",
-                  "Deferred",
-                  "Growth",
-                  "Other"
-                ],
-                "type": "string"
-              },
-              "shareType": {
-                "description": "Possible share types",
-                "enum": [
-                  "Quoted",
-                  "Unquoted"
-                ],
-                "type": "string"
-              },
-              "currentShareValue": {
-                "description": "Current share value",
-                "type": "number"
-              }
+        "type": "array",
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "numberShares": {
+              "description": "Number of shares held",
+              "type": "number"
             },
-            "required" :  [
-              "numberShares",
-              "shareName",
-              "shareRegistrationNumber",
-              "shareClass",
-              "shareType",
-              "shareValue"
-            ],
-            "type": "object"
+            "shareCompanyName": {
+              "description": "Name of company in which shares held",
+              "type": "string",
+              "maxLength": 56
+            },
+            "shareCompanyRegistrationNumber": {
+              "description": "Company registration number in which shares held",
+              "type": "string",
+              "maxLength": 15
+            },
+            "shareClass": {
+              "description": "Possible share classes",
+              "enum": [
+                "Ordinary",
+                "Preference",
+                "Deferred",
+                "Growth",
+                "Other"
+              ],
+              "type": "string"
+            },
+            "shareType": {
+              "description": "Possible share types",
+              "enum": [
+                "Quoted",
+                "Unquoted"
+              ],
+              "type": "string"
+            },
+            "currentShareValue": {
+              "description": "Current share value",
+              "type": "number"
+            }
           },
-          "minItems" : 1
-        }
-      },
-      "type": "object"
+          "required" :  [
+            "numberShares",
+            "shareCompanyName",
+            "shareCompanyRegistrationNumber",
+            "shareClass",
+            "shareType",
+            "currentShareValue"
+          ],
+          "type": "object"
+        },
+        "minItems" : 1
     },
     "telephoneNumberType": {
       "description": "telephone Number Type",

@@ -44,7 +44,7 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
 
       "a share asset is defined" in {
         val assets = Assets(
-          shareAssets = Some(List(ShareAsset(1234,"sharecompanyName","shareCompanyRegistrationNumber","shareClass","shareType",123400.00f)))
+          shareAssets = Some(List(ShareAsset(1234,"shareCompanyName","shareCompanyRegistrationNumber","shareClass","shareType",123400.00f)))
         )
 
         val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries))
