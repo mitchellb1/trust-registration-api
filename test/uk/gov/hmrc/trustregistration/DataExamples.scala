@@ -259,7 +259,7 @@ trait ScalaDataExamples {
 
   val businessAsset = BusinessAsset("Test","Test","This is a description",address,1234, Some(new DateTime("1940-04-04")))
 
-  val shareAsset = ShareAsset(1234,"sharecompanyName","shareCompanyRegistrationNumber","shareClass","shareType",123400.50f)
+  val shareAsset = ShareAsset(1234,"shareCompanyName","shareCompanyRegistrationNumber","shareClass","shareType",123400.50f)
 
   val assets = Assets(None,None,Some(List(shareAsset,shareAsset)),None,Some(List(businessAsset,businessAsset)))
 
