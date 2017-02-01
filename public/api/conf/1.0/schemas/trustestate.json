@@ -105,7 +105,8 @@
       },
       "type": "object"
     },
-    "businessAssetsType": {
+    "businessAssetsType":
+    {
       "description": "Business Assets Type",
       "additionalProperties": false,
       "properties": {
@@ -719,6 +720,7 @@
           "anyOf" : [
             {"required": ["monetaryAssets"]},
             {"required": ["shareAssets"]},
+            {"required": ["otherAssets"]},
             {"required": ["propertyAssets"]}
           ],
           "type": "object"
@@ -743,7 +745,8 @@
           "type": "boolean"
         }
       },
-      "type": "object"
+      "type": "object",
+      "required": ["assets", "beneficiaries", "isMultiPurposeIncome"]
     },
     "incomeType": {
       "description": "Income Type",
@@ -957,28 +960,25 @@
     },
     "otherAssetsType": {
       "description": "Other Assets Type",
-      "additionalProperties": false,
-      "properties": {
-        "otherAssets": {
-          "type": "array",
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "OtherAssetDescription": {
-                "type": "string"
-              },
-              "lastValuationDate": {
-                "type": "string"
-              },
-              "value": {
-                "type": "number"
-              }
+      "type" : "array",
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "otherAssetDescription": {
+              "maxLength": 30,
+              "type": "string"
             },
-            "type": "object"
-          }
+            "lastValuationDate": {
+              "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+              "type": "string"
+            },
+            "value": {
+              "type": "number"
+            }
+          },
+          "required": ["otherAssetDescription", "lastValuationDate","value"],
+          "type": "object"
         }
-      },
-      "type": "object"
     },
     "otherBeneficiariesType": {
       "description": "Other Beneficiaries Type",
