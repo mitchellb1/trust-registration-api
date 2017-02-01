@@ -4,11 +4,11 @@
       "givenName": "Joe",
       "otherName": "Fred",
       "familyName": "Bloggs",
-      "dateOfBirth": "1967-10-10",
+      "dateOfBirth": "10/10/1967",
       "nino": "WA123456A",
       "passport": {
         "identifier": "123435egxb",
-        "expiryDate": "2017-12-12",
+        "expiryDate": "12/12/2017",
         "countryOfIssue": "UK"
       },
       "correspondenceAddress": {
@@ -38,14 +38,6 @@
       },
       "telephoneNumber": "0191 234 5678"
     }
-  ],
-  "_links": {
-    "self": {
-      "href" : "/trusts/2234567890/protectors"
-    },
-    "trust": {
-      "href" : "/trusts/2234567890"
-    }
-  }
+  ]
 }
 

@@ -72,7 +72,8 @@
     ],
     "protectors": {
       "individuals": [
-        { "givenName": "Joe",
+        {
+          "givenName": "Joe",
           "otherName": "John",
           "familyName": "Doe",
           "dateOfBirth": "1989-12-31",

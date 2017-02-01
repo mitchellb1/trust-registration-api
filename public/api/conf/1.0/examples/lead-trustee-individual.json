@@ -1,6 +1,4 @@
 {
-  "leadTrustee": {
-    "individual": {
       "givenName": "Joe",
       "otherName": "John",
       "familyName": "Doe",
@@ -21,6 +19,5 @@
         "country": "UK"
       },
       "telephoneNumber": "0191 357 1596"
-    }
-  }
+
 }
