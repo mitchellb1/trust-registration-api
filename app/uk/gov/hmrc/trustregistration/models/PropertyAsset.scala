@@ -21,7 +21,7 @@ import play.api.libs.json.{JsString, Json, Reads, Writes}
 
 
 case class PropertyAsset(correspondenceAddress : Address,
-                         propertyLandValue: Float,
+                         propertyLandValue: Long,
                          buildingLandName: Option[String] = None,
                          propertyLandEvalDate: Option[DateTime] = None)
 
