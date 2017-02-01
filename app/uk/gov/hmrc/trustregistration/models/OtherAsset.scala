@@ -20,7 +20,7 @@ import org.joda.time.DateTime
 import play.api.libs.json.{JsString, Json, Reads, Writes}
 
 
-case class OtherAsset(otherAssetDescription: String, value: Option[Float] = None, lastValuationDate: DateTime)
+case class OtherAsset(otherAssetDescription: String, value: Option[Long] = None, lastValuationDate: DateTime)
 
 object OtherAsset{
   implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
