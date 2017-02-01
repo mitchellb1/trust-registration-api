@@ -1,5 +1,4 @@
 {
-  "description" : "This is a test description",
-  "value" : 1234,
+  "otherAssetDescription" : "This is a test description",
   "lastValuationDate" : "1800-01-01"
 }

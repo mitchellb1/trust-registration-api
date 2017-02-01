@@ -35,7 +35,7 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
 
       "a property asset is defined" in {
         val assets = Assets(
-          propertyAssets = Some(List(PropertyAsset(address, 1f)))
+          propertyAssets = Some(List(PropertyAsset(address, 1L)))
         )
 
         val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries))
@@ -44,7 +44,7 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
 
       "a share asset is defined" in {
         val assets = Assets(
-          shareAssets = Some(List(ShareAsset(1234,"sharecompanyName","shareCompanyRegistrationNumber","shareClass","shareType",123400.00f)))
+          shareAssets = Some(List(ShareAsset(1234,"shareCompanyName","shareCompanyRegistrationNumber","shareClass","shareType",123400.00f)))
         )
 
         val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries))
@@ -71,7 +71,7 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
 
       "an other asset is defined" in {
         val assets = Assets(
-          otherAssets = Some(List(OtherAsset("Test",5.0f)))
+          otherAssets = Some(List(otherAsset))
         )
 
         val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries))
