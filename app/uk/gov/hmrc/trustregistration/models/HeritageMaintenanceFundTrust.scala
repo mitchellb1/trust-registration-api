@@ -30,6 +30,9 @@ case class HeritageMaintenanceFundTrust(assets: Assets,
 
   private val atleastOneRequiredBeneficiary: Boolean = (beneficiaries.otherBeneficiaries.isDefined) //We need to add buildingLandBeneficiaries here when it is defined.
 
+  private val incorrectAsset: Boolean = !assets.partnershipAssets.isDefined && !assets.businessAssets.isDefined
+
+  require(incorrectAsset, "Must not allow this type of asset")
   require(atleastOneTypeOfAsset, "Must have at least one type of Asset")
   require(atleastOneRequiredBeneficiary, "Must have at least one required Beneficiary")
 
