@@ -607,7 +607,7 @@
             {"required": ["monetaryAssets"]},
             {"required": ["otherAssets"]},
             {"required": ["propertyAssets"]},
-            {"required": ["shareAssets"]},
+            {"required": ["shareAssets"]}
           ]
         },
         "beneficiaries": {
