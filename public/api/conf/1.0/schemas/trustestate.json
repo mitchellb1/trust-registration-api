@@ -105,8 +105,7 @@
       },
       "type": "object"
     },
-    "businessAssetsType":
-    {
+    "businessAssetsType":  {
       "description": "Business Assets Type",
       "additionalProperties": false,
       "properties": {
@@ -728,17 +727,11 @@
         "beneficiaries": {
           "additionalProperties": false,
           "properties": {
-            "buildingLandBeneficiary": {
-              "$ref": "#/definitions/buildingLandBeneficiariesType"
-            },
             "otherBeneficiaries": {
               "$ref": "#/definitions/otherBeneficiariesType"
             }
           },
-          "anyOf" : [
-            {"required": ["buildingLandBeneficiary"]},
-            {"required": ["otherBeneficiaries"]}
-          ],
+          "required": ["otherBeneficiaries"],
           "type": "object"
         },
         "isMultiPurposeIncome": {
