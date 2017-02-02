@@ -1285,7 +1285,8 @@
           },
           "oneOf": [
             {"required": ["flatManagementSinkingFundTrust"]},
-            {"required": ["heritageMaintenanceFundTrust"]}
+            {"required": ["heritageMaintenanceFundTrust"]},
+            {"required": ["employmentTrust"]}
           ],
           "type": "object"
         }
