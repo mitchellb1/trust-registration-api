@@ -20,9 +20,7 @@ import play.api.libs.json.{JsArray, JsValue, Json, Writes}
 
 case class IndividualBeneficiary(
   individual: Individual,
-  isVulnerable: Boolean,
-  isIncomeAtTrusteeDiscretion: Boolean,
-  shareOfIncome: Option[Float])
+  isVulnerable: Boolean)
 
 object IndividualBeneficiary{
   implicit val individualBeneficiaryFormats = Json.format[IndividualBeneficiary]

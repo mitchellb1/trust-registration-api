@@ -1,6 +1,4 @@
 {
   "individual": "{INDIVIDUAL}",
-  "isVulnerable": false,
-  "isIncomeAtTrusteeDiscretion": true,
-  "shareOfIncome": 30
+  "isVulnerable": false
 }
