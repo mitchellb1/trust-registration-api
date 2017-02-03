@@ -33,7 +33,8 @@ case class EmploymentTrust(assets: Assets,
   private val atleastOneRequiredBenefciary: Boolean = (beneficiaries.individualBeneficiaries.isDefined ||
     beneficiaries.directorBeneficiaries.isDefined ||
     beneficiaries.employeeBeneficiaries.isDefined ||
-    beneficiaries.otherBeneficiaries.isDefined)
+    beneficiaries.otherBeneficiaries.isDefined ||
+    beneficiaries.trustBeneficiaries.isDefined)
 
   require(atleastOneTypeOfAsset, "Must have at least one type of Asset")
   require(atleastOneRequiredBenefciary, "Must have at least one required Beneficiary")

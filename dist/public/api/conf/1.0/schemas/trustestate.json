@@ -71,6 +71,9 @@
         },
         "otherBeneficiaries": {
           "$ref": "#/definitions/otherBeneficiariesType"
+        },
+        "trustBeneficiaries": {
+          "$ref": "#/definitions/trustBeneficiariesType"
         }
       },
       "anyOf" : [
@@ -80,6 +83,7 @@
         {"required": ["employeeBeneficiaries"]},
         {"required": ["charityBeneficiaries"]},
         {"required": ["individualBeneficiaries"]}
+        {"required": ["trustBeneficiaries"]}
       ],
       "type": "object"
     },
@@ -624,12 +628,16 @@
             },
             "otherBeneficiaries": {
               "$ref": "#/definitions/otherBeneficiariesType"
+            },
+            "trustBeneficiaries": {
+              "$ref": "#/definitions/trustBeneficiariesType"
             }
           },
           "type": "object",
           "anyOf": [
             {"required": ["individualBeneficiaries"]},
-            {"required": ["otherBeneficiaries"]}
+            {"required": ["otherBeneficiaries"]},
+            {"required": ["trustBeneficiaries"]}
           ]
         },
         "employerFinancedRetirementBenefitSchemeStartDate": {
@@ -1196,6 +1204,29 @@
     "emailType":{
       "type" : "string",
       "pattern" : "^[-aA-zZ0-9._%+']+@[-aA-zZ0-9.']+\\.[aA-zZ]{2,4}$"
+    },
+    "trustBeneficiariesType": {
+      "description": "Trust Beneficiaries Type",
+      "additionalProperties": false,
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "trustBeneficiaryName": {
+            "string": "#/definitions/individualType"
+          },
+          "trustBeneficiaryUTR": {
+            "pattern": "^[0-9]{10}$",
+            "string": "#/definitions/individualType"
+          },
+          "correspondenceAddress": {
+            "$ref": "#/definitions/correspondenceAddressType"
+          }
+        },
+        "type": "object",
+        "required": ["trustBeneficiaryName", "correspondenceAddress"]
+      },
+      "minItems": 1
     },
     "trustType": {
       "description": "Main Trust Type",

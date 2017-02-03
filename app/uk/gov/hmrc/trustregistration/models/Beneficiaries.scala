@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.trustregistration.models
 
-import play.api.libs.json.{JsArray, JsValue, Json, Writes}
+import play.api.libs.json.Json
 
 case class IndividualBeneficiary(
   individual: Individual,
@@ -65,18 +65,28 @@ object OtherBeneficiary{
   implicit val otherBeneficiaryFormats = Json.format[OtherBeneficiary]
 }
 
+case class TrustBeneficiary(
+                             trustBeneficiaryName: String,
+                             trustBeneficiaryUTR: String,
+                             correspondenceAddress: Address)
+object TrustBeneficiary{
+  implicit val trustBeneficiaryFormats = Json.format[TrustBeneficiary]
+}
+
 case class Beneficiaries(
   individualBeneficiaries: Option[List[IndividualBeneficiary]] = None,
   employeeBeneficiaries: Option[List[EmployeeBeneficiary]] = None,
   directorBeneficiaries: Option[List[DirectorBeneficiary]] = None,
   charityBeneficiaries: Option[List[CharityBeneficiary]] = None,
-  otherBeneficiaries: Option[List[OtherBeneficiary]] = None) {
+  otherBeneficiaries: Option[List[OtherBeneficiary]] = None,
+  trustBeneficiaries: Option[List[TrustBeneficiary]] = None) {
   private val atLeastOneBeneficiary: Boolean =
     (individualBeneficiaries.isDefined && individualBeneficiaries.get.size > 0) ||
     (employeeBeneficiaries.isDefined && employeeBeneficiaries.get.size > 0) ||
     (directorBeneficiaries.isDefined && directorBeneficiaries.get.size > 0) ||
     (charityBeneficiaries.isDefined && charityBeneficiaries.get.size > 0) ||
-    (otherBeneficiaries.isDefined && otherBeneficiaries.get.size > 0)
+    (otherBeneficiaries.isDefined && otherBeneficiaries.get.size > 0 ||
+    (trustBeneficiaries.isDefined && trustBeneficiaries.get.size > 0))
 
   require(atLeastOneBeneficiary, "Must have at least one beneficiary")
 }
