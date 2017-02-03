@@ -25,7 +25,7 @@ class EmploymentTrustSpec extends PlaySpec with ScalaDataExamples {
     "throw an exception" when{
       "there is no assets" in {
         val assets = Assets(None)
-        val ex = the[IllegalArgumentException] thrownBy (EmploymentTrust(assets,beneficiaries,true))
+        val ex = the[IllegalArgumentException] thrownBy (EmploymentTrust(assets,beneficiaries,Some(true)))
         ex.getMessage() mustEqual  ("requirement failed: Must have at least one type of Asset")
       }
 
@@ -34,12 +34,12 @@ class EmploymentTrustSpec extends PlaySpec with ScalaDataExamples {
 
         val beneficiaries = Beneficiaries(None,None,None,Some(List(charityBeneficiary)))
 
-        val ex = the[IllegalArgumentException] thrownBy EmploymentTrust(assets,beneficiaries, true)
+        val ex = the[IllegalArgumentException] thrownBy EmploymentTrust(assets,beneficiaries, Some(true))
         ex.getMessage() mustEqual  ("requirement failed: Must have at least one required Beneficiary")
       }
 
       "no assets are defined" in {
-        val ex = the[IllegalArgumentException] thrownBy (EmploymentTrust(Assets(), beneficiaries, true))
+        val ex = the[IllegalArgumentException] thrownBy (EmploymentTrust(Assets(), beneficiaries, Some(true)))
         ex.getMessage() mustEqual  "requirement failed: Must have at least one type of Asset"
       }
     }
@@ -47,13 +47,13 @@ class EmploymentTrustSpec extends PlaySpec with ScalaDataExamples {
     "not throw an exception" when {
       "there is one asset" in {
         val assets = Assets(Some(List(2.0f,2.5f)))
-        noException should be thrownBy (EmploymentTrust(assets,beneficiaries,true))
+        noException should be thrownBy (EmploymentTrust(assets,beneficiaries,Some(true)))
       }
 
       "there is more than one type of asset" in {
         val propertyAssets = PropertyAsset(address,2L)
         val assets = Assets(Some(List(2.0f,2.5f)),Some(List(propertyAssets)))
-        noException should be thrownBy (EmploymentTrust(assets,beneficiaries,true))
+        noException should be thrownBy (EmploymentTrust(assets,beneficiaries,Some(true)))
       }
     }
   }

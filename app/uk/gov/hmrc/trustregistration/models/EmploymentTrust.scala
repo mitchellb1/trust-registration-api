@@ -22,7 +22,7 @@ import play.api.libs.json.{Json, Reads}
 
 case class EmploymentTrust(assets: Assets,
                            beneficiaries: Beneficiaries,
-                           isEmployerFinancedRetirementBenefitScheme: Boolean,
+                           isEmployerFinancedRetirementBenefitScheme: Option[Boolean] = None,
                            employerFinancedRetirementBenefitSchemeStartDate: Option[DateTime] = None) {
 
   private val atleastOneTypeOfAsset: Boolean = ((assets.monetaryAssets.isDefined && assets.monetaryAssets.get.size > 0) ||

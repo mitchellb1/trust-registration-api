@@ -55,7 +55,7 @@ trait RegisterTrustController extends ApplicationBaseController {
                   e => {
                     val error: JsValue = JsError.toJson(e)
                     val message = error \\ "msg"
-                    Future.successful(BadRequest(s"""
+                    Future.successful(BadRequest(Json.parse(s"""
                                                   {
                                                     "message": "Invalid Json",
                                                     "code": 0,
@@ -66,7 +66,7 @@ trait RegisterTrustController extends ApplicationBaseController {
                                                     }
                                                     ]
                                                   }
-                                                  """))
+                                                  """)))
                   }
                 }
               }

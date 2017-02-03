@@ -602,7 +602,13 @@
               "$ref": "#/definitions/shareAssetsType"
             }
           },
-          "type": "object"
+          "type": "object",
+          "anyOf": [
+            {"required": ["monetaryAssets"]},
+            {"required": ["otherAssets"]},
+            {"required": ["propertyAssets"]},
+            {"required": ["shareAssets"]}
+          ]
         },
         "beneficiaries": {
           "additionalProperties": false,
@@ -620,7 +626,11 @@
               "$ref": "#/definitions/otherBeneficiariesType"
             }
           },
-          "type": "object"
+          "type": "object",
+          "anyOf": [
+            {"required": ["individualBeneficiaries"]},
+            {"required": ["otherBeneficiaries"]}
+          ]
         },
         "employerFinancedRetirementBenefitSchemeStartDate": {
           "type": "string"
@@ -757,27 +767,21 @@
     "individualBeneficiariesType": {
       "description": "Individual Beneficiaries Type",
       "additionalProperties": false,
-      "properties": {
-        "individualBeneficiaries": {
-          "type": "array",
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "income": {
-                "$ref": "#/definitions/incomeType"
-              },
-              "individual": {
-                "$ref": "#/definitions/individualType"
-              },
-              "isVulnerable": {
-                "type": "boolean"
-              }
-            },
-            "type": "object"
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "individual": {
+            "$ref": "#/definitions/individualType"
+          },
+          "isVulnerable": {
+            "type": "boolean"
           }
-        }
+        },
+        "type": "object",
+        "required": ["individual", "isVulnerable"]
       },
-      "type": "object"
+      "minItems": 1
     },
     "individualType": {
       "description": "Individual Type",
@@ -1278,7 +1282,8 @@
           },
           "oneOf": [
             {"required": ["flatManagementSinkingFundTrust"]},
-            {"required": ["heritageMaintenanceFundTrust"]}
+            {"required": ["heritageMaintenanceFundTrust"]},
+            {"required": ["employmentTrust"]}
           ],
           "type": "object"
         }
