@@ -55,6 +55,12 @@ class EmploymentTrustSpec extends PlaySpec with ScalaDataExamples {
         val assets = Assets(Some(List(2.0f,2.5f)),Some(List(propertyAssets)))
         noException should be thrownBy (EmploymentTrust(assets,beneficiaries,Some(true)))
       }
+      "there is a employee type of beneficiary" in {
+        val propertyAssets = PropertyAsset(address,2L)
+        val assets = Assets(Some(List(2.0f,2.5f)),Some(List(propertyAssets)))
+        val beneficiaries = Beneficiaries(None,Some(List(employeeBeneficiary)),None,None,None)
+        noException should be thrownBy (EmploymentTrust(assets,beneficiaries,Some(true)))
+      }
     }
   }
 }
