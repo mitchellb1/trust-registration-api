@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.trustregistration.models
 
-import play.api.libs.json.{JsArray, JsValue, Json, Writes}
+import play.api.libs.json.Json
 
 case class IndividualBeneficiary(
   individual: Individual,
@@ -28,9 +28,7 @@ object IndividualBeneficiary{
 
 case class EmployeeBeneficiary(
   individual: Individual,
-  isVulnerable: Boolean,
-  isIncomeAtTrusteeDiscretion: Boolean,
-  shareOfIncome: Option[Float])
+  isVulnerable: Boolean)
 
 object EmployeeBeneficiary{
   implicit val employeeBeneficiaryFormats = Json.format[EmployeeBeneficiary]
