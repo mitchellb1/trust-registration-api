@@ -24,7 +24,7 @@ class NaturalPeopleSpec extends PlaySpec with JsonExamples with ScalaDataExample
   "Natural People" must {
     "throw an exception" when {
       "there are more than two natural people" in {
-        val ex = the [IllegalArgumentException] thrownBy NaturalPeople(List(individual, individual, individual))
+        val ex = the [IllegalArgumentException] thrownBy NaturalPeople(Some(List(individual, individual, individual)))
         ex.getMessage must include("object has too many elements")
       }
     }
