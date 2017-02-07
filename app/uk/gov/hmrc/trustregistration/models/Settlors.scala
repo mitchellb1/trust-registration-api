@@ -29,7 +29,7 @@ case class Settlors(individuals: Option[List[Individual]] = None, companies: Opt
          \"validationErrors\": [
          {
            \"message\": \"object has missing required properties ([\\\"settlors\\\"])\",
-           \"location\": \"/trustEstate/trust\"
+           \"location\": \"/trustEstate/trust/settlors\"
          }
          ]
        }""".stripMargin
