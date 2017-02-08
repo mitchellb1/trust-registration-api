@@ -74,6 +74,9 @@
         },
         "trustBeneficiaries": {
           "$ref": "#/definitions/trustBeneficiariesType"
+        },
+        "companyBeneficiaries" : {
+          "$ref": "#/definitions/companyBeneficiariesType"
         }
       },
       "anyOf" : [
@@ -83,7 +86,8 @@
         {"required": ["employeeBeneficiaries"]},
         {"required": ["charityBeneficiaries"]},
         {"required": ["individualBeneficiaries"]},
-        {"required": ["trustBeneficiaries"]}
+        {"required": ["trustBeneficiaries"]},
+        {"required": ["companyBeneficiaries"]}
       ],
       "type": "object"
     },
@@ -170,6 +174,22 @@
         }
       },
       "type": "object"
+    },
+    "companyBeneficiariesType": {
+      "description": "Company Beneficiaries Type",
+      "additionalProperties": false,
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "company": {
+            "$ref": "#/definitions/companyType"
+          }
+        },
+        "type": "object",
+        "required": ["company"]
+      },
+      "minItems": 1
     },
     "companyType": {
       "description": "Company Type",
@@ -611,6 +631,9 @@
             "individualBeneficiaries": {
               "$ref": "#/definitions/individualBeneficiariesType"
             },
+            "companyBeneficiaries" : {
+              "$ref": "#/definitions/companyBeneficiariesType"
+            },
             "otherBeneficiaries": {
               "$ref": "#/definitions/otherBeneficiariesType"
             },
@@ -624,6 +647,7 @@
             {"required": ["directorBeneficiaries"]},
             {"required": ["otherBeneficiaries"]},
             {"required": ["trustBeneficiaries"]},
+            {"required": ["companyBeneficiaries"]},
             {"required": ["employeeBeneficiaries"]}
           ]
         },
@@ -1200,7 +1224,7 @@
         "additionalProperties": false,
         "properties": {
           "trustBeneficiaryName": {
-            "type" :  "#/definitions/individualType"
+            "type" : "string"
           },
           "trustBeneficiaryUTR": {
             "pattern": "^[0-9]{10}$",

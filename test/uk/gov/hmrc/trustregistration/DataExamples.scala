@@ -227,7 +227,7 @@ trait ScalaDataExamples {
 
   val trustBeneficiary = TrustBeneficiary(
     trustBeneficiaryName = "trust beneficiary Name",
-    trustBeneficiaryUTR = "2134567",
+    trustBeneficiaryUTR = Some("2134567"),
     correspondenceAddress = address
   )
 

@@ -74,6 +74,9 @@
         },
         "trustBeneficiaries": {
           "$ref": "#/definitions/trustBeneficiariesType"
+        },
+        "companyBeneficiaries" : {
+          "$ref": "#/definitions/companyBeneficiariesType"
         }
       },
       "anyOf" : [
@@ -83,7 +86,8 @@
         {"required": ["employeeBeneficiaries"]},
         {"required": ["charityBeneficiaries"]},
         {"required": ["individualBeneficiaries"]},
-        {"required": ["trustBeneficiaries"]}
+        {"required": ["trustBeneficiaries"]},
+        {"required": ["companyBeneficiaries"]}
       ],
       "type": "object"
     },
@@ -170,6 +174,22 @@
         }
       },
       "type": "object"
+    },
+    "companyBeneficiariesType": {
+      "description": "Company Beneficiaries Type",
+      "additionalProperties": false,
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "company": {
+            "$ref": "#/definitions/companyType"
+          }
+        },
+        "type": "object",
+        "required": ["company"]
+      },
+      "minItems": 1
     },
     "companyType": {
       "description": "Company Type",
@@ -611,6 +631,9 @@
             "individualBeneficiaries": {
               "$ref": "#/definitions/individualBeneficiariesType"
             },
+            "companyBeneficiaries" : {
+              "$ref": "#/definitions/companyBeneficiariesType"
+            },
             "otherBeneficiaries": {
               "$ref": "#/definitions/otherBeneficiariesType"
             },
@@ -624,6 +647,7 @@
             {"required": ["directorBeneficiaries"]},
             {"required": ["otherBeneficiaries"]},
             {"required": ["trustBeneficiaries"]},
+            {"required": ["companyBeneficiaries"]},
             {"required": ["employeeBeneficiaries"]}
           ]
         },
@@ -953,24 +977,24 @@
     "otherAssetsType": {
       "description": "Other Assets Type",
       "type" : "array",
-        "items": {
-          "additionalProperties": false,
-          "properties": {
-            "otherAssetDescription": {
-              "maxLength": 30,
-              "type": "string"
-            },
-            "lastValuationDate": {
-              "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
-              "type": "string"
-            },
-            "value": {
-              "type": "number"
-            }
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "otherAssetDescription": {
+            "maxLength": 30,
+            "type": "string"
           },
-          "required": ["otherAssetDescription", "lastValuationDate","value"],
-          "type": "object"
-        }
+          "lastValuationDate": {
+            "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          }
+        },
+        "required": ["otherAssetDescription", "lastValuationDate","value"],
+        "type": "object"
+      }
     },
     "otherBeneficiariesType": {
       "description": "Other Beneficiaries Type",
@@ -1128,59 +1152,59 @@
     },
     "shareAssetsType": {
       "description": "Share Assets Type",
-        "type": "array",
-        "items": {
-          "additionalProperties": false,
-          "properties": {
-            "numberShares": {
-              "description": "Number of shares held",
-              "type": "number"
-            },
-            "shareCompanyName": {
-              "description": "Name of company in which shares held",
-              "type": "string",
-              "maxLength": 56
-            },
-            "shareCompanyRegistrationNumber": {
-              "description": "Company registration number in which shares held",
-              "type": "string",
-              "maxLength": 15
-            },
-            "shareClass": {
-              "description": "Possible share classes",
-              "enum": [
-                "Ordinary",
-                "Preference",
-                "Deferred",
-                "Growth",
-                "Other"
-              ],
-              "type": "string"
-            },
-            "shareType": {
-              "description": "Possible share types",
-              "enum": [
-                "Quoted",
-                "Unquoted"
-              ],
-              "type": "string"
-            },
-            "currentShareValue": {
-              "description": "Current share value",
-              "type": "number"
-            }
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "numberShares": {
+            "description": "Number of shares held",
+            "type": "number"
           },
-          "required" :  [
-            "numberShares",
-            "shareCompanyName",
-            "shareCompanyRegistrationNumber",
-            "shareClass",
-            "shareType",
-            "currentShareValue"
-          ],
-          "type": "object"
+          "shareCompanyName": {
+            "description": "Name of company in which shares held",
+            "type": "string",
+            "maxLength": 56
+          },
+          "shareCompanyRegistrationNumber": {
+            "description": "Company registration number in which shares held",
+            "type": "string",
+            "maxLength": 15
+          },
+          "shareClass": {
+            "description": "Possible share classes",
+            "enum": [
+              "Ordinary",
+              "Preference",
+              "Deferred",
+              "Growth",
+              "Other"
+            ],
+            "type": "string"
+          },
+          "shareType": {
+            "description": "Possible share types",
+            "enum": [
+              "Quoted",
+              "Unquoted"
+            ],
+            "type": "string"
+          },
+          "currentShareValue": {
+            "description": "Current share value",
+            "type": "number"
+          }
         },
-        "minItems" : 1
+        "required" :  [
+          "numberShares",
+          "shareCompanyName",
+          "shareCompanyRegistrationNumber",
+          "shareClass",
+          "shareType",
+          "currentShareValue"
+        ],
+        "type": "object"
+      },
+      "minItems" : 1
     },
     "telephoneNumberType": {
       "description": "telephone Number Type",

@@ -19,53 +19,53 @@ package uk.gov.hmrc.trustregistration.models
 import play.api.libs.json.Json
 
 case class IndividualBeneficiary(
-  individual: Individual,
-  isVulnerable: Boolean)
+                                  individual: Individual,
+                                  isVulnerable: Boolean)
 
-object IndividualBeneficiary{
+object IndividualBeneficiary {
   implicit val individualBeneficiaryFormats = Json.format[IndividualBeneficiary]
 }
 
 case class EmployeeBeneficiary(
-  individual: Individual,
-  isVulnerable: Boolean)
+                                individual: Individual,
+                                isVulnerable: Boolean)
 
-object EmployeeBeneficiary{
+object EmployeeBeneficiary {
   implicit val employeeBeneficiaryFormats = Json.format[EmployeeBeneficiary]
 }
 
 case class DirectorBeneficiary(
-  individual: Individual)
+                                individual: Individual)
 
-object DirectorBeneficiary{
+
+object DirectorBeneficiary {
   implicit val directorBeneficiaryFormats = Json.format[DirectorBeneficiary]
 }
 case class CharityBeneficiary(
-   name: String,
-   number: String,
-   correspondenceAddress: Address,
-   isIncomeAtTrusteeDiscretion: Boolean,
-   shareOfIncome: Option[Float])
+                               name: String,
+                               number: String,
+                               correspondenceAddress: Address,
+                               isIncomeAtTrusteeDiscretion: Boolean,
+                               shareOfIncome: Option[Float])
 
-object CharityBeneficiary{
+object CharityBeneficiary {
   implicit val charityBeneficiaryFormats = Json.format[CharityBeneficiary]
 }
 case class OtherBeneficiary(
-   beneficiaryDescription: String,
-   correspondenceAddress: Address)
+                             beneficiaryDescription: String,
+                             correspondenceAddress: Address)
 
-object OtherBeneficiary{
+object OtherBeneficiary {
   implicit val otherBeneficiaryFormats = Json.format[OtherBeneficiary]
 }
+
 
 case class TrustBeneficiary(
                              trustBeneficiaryName: String,
                              trustBeneficiaryUTR: Option[String] = None,
                              correspondenceAddress: Address)
 
-object TrustBeneficiary{
-  implicit val trustBeneficiaryFormats = Json.format[TrustBeneficiary]
-}
+case class CompanyBeneficiary(company: Company)
 
 case class Beneficiaries(
   individualBeneficiaries: Option[List[IndividualBeneficiary]] = None,
@@ -73,18 +73,27 @@ case class Beneficiaries(
   directorBeneficiaries: Option[List[DirectorBeneficiary]] = None,
   charityBeneficiaries: Option[List[CharityBeneficiary]] = None,
   otherBeneficiaries: Option[List[OtherBeneficiary]] = None,
-  trustBeneficiaries: Option[List[TrustBeneficiary]] = None) {
+  trustBeneficiaries: Option[List[TrustBeneficiary]] = None,
+  companyBeneficiaries: Option[List[CompanyBeneficiary]] = None){
   private val atLeastOneBeneficiary: Boolean =
     (individualBeneficiaries.isDefined && individualBeneficiaries.get.size > 0) ||
     (employeeBeneficiaries.isDefined && employeeBeneficiaries.get.size > 0) ||
     (directorBeneficiaries.isDefined && directorBeneficiaries.get.size > 0) ||
     (charityBeneficiaries.isDefined && charityBeneficiaries.get.size > 0) ||
     (otherBeneficiaries.isDefined && otherBeneficiaries.get.size > 0 ||
-    (trustBeneficiaries.isDefined && trustBeneficiaries.get.size > 0))
-
+    (trustBeneficiaries.isDefined && trustBeneficiaries.get.size > 0)||
+    (companyBeneficiaries.isDefined && companyBeneficiaries.get.size > 0))
   require(atLeastOneBeneficiary, "Must have at least one beneficiary")
 }
 
-object Beneficiaries{
+object TrustBeneficiary{
+  implicit val trustBeneficiaryFormats = Json.format[TrustBeneficiary]
+}
+
+object CompanyBeneficiary {
+  implicit val companyBeneficiaryFormats = Json.format[CompanyBeneficiary]
+}
+
+object Beneficiaries {
   implicit val beneficiariesFormat = Json.format[Beneficiaries]
 }
