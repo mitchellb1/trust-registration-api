@@ -72,6 +72,9 @@
         "otherBeneficiaries": {
           "$ref": "#/definitions/otherBeneficiariesType"
         },
+        "trustBeneficiaries": {
+          "$ref": "#/definitions/trustBeneficiariesType"
+        },
         "companyBeneficiaries" : {
           "$ref": "#/definitions/companyBeneficiariesType"
         }
@@ -83,6 +86,7 @@
         {"required": ["employeeBeneficiaries"]},
         {"required": ["charityBeneficiaries"]},
         {"required": ["individualBeneficiaries"]},
+        {"required": ["trustBeneficiaries"]},
         {"required": ["companyBeneficiaries"]}
       ],
       "type": "object"
@@ -632,6 +636,9 @@
             },
             "otherBeneficiaries": {
               "$ref": "#/definitions/otherBeneficiariesType"
+            },
+            "trustBeneficiaries": {
+              "$ref": "#/definitions/trustBeneficiariesType"
             }
           },
           "type": "object",
@@ -639,6 +646,7 @@
             {"required": ["individualBeneficiaries"]},
             {"required": ["directorBeneficiaries"]},
             {"required": ["otherBeneficiaries"]},
+            {"required": ["trustBeneficiaries"]},
             {"required": ["companyBeneficiaries"]},
             {"required": ["employeeBeneficiaries"]}
           ]
@@ -1207,6 +1215,29 @@
     "emailType":{
       "type" : "string",
       "pattern" : "^[-aA-zZ0-9._%+']+@[-aA-zZ0-9.']+\\.[aA-zZ]{2,4}$"
+    },
+    "trustBeneficiariesType": {
+      "description": "Trust Beneficiaries Type",
+      "additionalProperties": false,
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "trustBeneficiaryName": {
+            "type" : "string"
+          },
+          "trustBeneficiaryUTR": {
+            "pattern": "^[0-9]{10}$",
+            "type" : "string"
+          },
+          "correspondenceAddress": {
+            "$ref": "#/definitions/correspondenceAddressType"
+          }
+        },
+        "type": "object",
+        "required": ["trustBeneficiaryName", "correspondenceAddress"]
+      },
+      "minItems": 1
     },
     "trustType": {
       "description": "Main Trust Type",
