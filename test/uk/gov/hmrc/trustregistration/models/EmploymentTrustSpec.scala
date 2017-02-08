@@ -32,7 +32,7 @@ class EmploymentTrustSpec extends PlaySpec with ScalaDataExamples {
       "the wrong Beneficiaries are defined" in {
         val assets = Assets(Some(List(2.0f,2.5f)))
 
-        val beneficiaries = Beneficiaries(None,None,None,Some(List(charityBeneficiary)))
+        val beneficiaries = Beneficiaries(None,None,None,Some(List(charityBeneficiary)),None,None)
 
         val ex = the[IllegalArgumentException] thrownBy EmploymentTrust(assets,beneficiaries, Some(true))
         ex.getMessage() mustEqual  ("requirement failed: Must have at least one required Beneficiary")
@@ -55,6 +55,32 @@ class EmploymentTrustSpec extends PlaySpec with ScalaDataExamples {
         val assets = Assets(Some(List(2.0f,2.5f)),Some(List(propertyAssets)))
         noException should be thrownBy (EmploymentTrust(assets,beneficiaries,Some(true)))
       }
+
+      "there is one beneficiary" in {
+        val assets = Assets(Some(List(2.0f,2.5f)))
+        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None)
+        noException should be thrownBy (EmploymentTrust(assets,beneficiaries,Some(true)))
+      }
+
+      "there is more than one type of beneficiary" in {
+        val propertyAssets = PropertyAsset(address,2L)
+        val assets = Assets(Some(List(2.0f,2.5f)),Some(List(propertyAssets)))
+        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,Some(List(trustBeneficiary)))
+        noException should be thrownBy (EmploymentTrust(assets,beneficiaries,Some(true)))
+      }
+      "there is a trust type of beneficiary" in {
+        val propertyAssets = PropertyAsset(address,2L)
+        val assets = Assets(Some(List(2.0f,2.5f)),Some(List(propertyAssets)))
+        val beneficiaries = Beneficiaries(None,None,None,None,None,Some(List(trustBeneficiary)))
+        noException should be thrownBy (EmploymentTrust(assets,beneficiaries,Some(true)))
+      }
+      "there is a individual type of beneficiary" in {
+        val propertyAssets = PropertyAsset(address, 2L)
+        val assets = Assets(Some(List(2.0f, 2.5f)), Some(List(propertyAssets)))
+        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)), None, None, None, None, None)
+        noException should be thrownBy (EmploymentTrust(assets,beneficiaries,Some(true)))
+      }
+
       "there is a employee type of beneficiary" in {
         val propertyAssets = PropertyAsset(address,2L)
         val assets = Assets(Some(List(2.0f,2.5f)),Some(List(propertyAssets)))
