@@ -32,7 +32,7 @@ class WillIntestacyTrustSpec extends PlaySpec with ScalaDataExamples{
       "the wrong Beneficiaries are defined" in {
         val assets = Assets(Some(List(2.0f,2.5f)))
 
-        val beneficiaries = Beneficiaries(None,Some(List(employeeBeneficiary)))
+        val beneficiaries = Beneficiaries(None,None,Some(List(employeeBeneficiary)))
 
         val ex = the[IllegalArgumentException] thrownBy WillIntestacyTrust(assets,beneficiaries, individual)
         ex.getMessage() mustEqual  "requirement failed: Must have at least one required Beneficiary"

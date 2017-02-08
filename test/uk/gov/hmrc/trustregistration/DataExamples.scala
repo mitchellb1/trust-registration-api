@@ -65,7 +65,7 @@ trait JsonExamples {
     .mkString
     .replace(""""{ADDRESS}"""", validAddressJson)
 
-  lazy val validBeneficiariesJson = s"""{"individualBeneficiaries":[$validIndividualBeneficiary],"charityBeneficiaries":[$validCharityBeneficiary],"otherBeneficiaries":[$validOtherBeneficiary],"employeeBeneficiaries":[$validEmployeeBeneficiary],}"""
+  lazy val validBeneficiariesJson = s"""{"individualBeneficiaries":[$validIndividualBeneficiary],"charityBeneficiaries":[$validCharityBeneficiary],"otherBeneficiaries":[$validOtherBeneficiary],"employeeBeneficiaries":[$validEmployeeBeneficiary]}"""
 
   lazy val invalidBeneficiariesJson = s"""{"charityBeneficiaries": [$invalidCharityBeneficiary]}"""
 
@@ -94,7 +94,7 @@ trait JsonExamples {
     .replace("\"{INDIVIDUAL}\"", validIndividualJson )
     .replace("\"{ADDRESS}\"", validAddressJson)
     .replace("\"{INDIVIDUALBENEFICIARY}\"", validIndividualBeneficiary)
-    .replace("\"{EMPLOYEEBENEFICIARY}\"", validEmployeeBeneficiary)
+
 
   lazy val validHeritageMaintenanceFundTrustJson = Source.fromFile(getClass.getResource("/ValidHeritageMaintenanceFundTrust.json").getPath).mkString
     .replace("\"{SHAREASSETS}\"", validShareAssetJson)
@@ -244,9 +244,10 @@ trait ScalaDataExamples {
 
   val beneficiaries = Beneficiaries(
     individualBeneficiaries = Some(List(individualBeneficiary)),
+    employeeBeneficiaries = Some(List(employeeBeneficiary)),
     charityBeneficiaries = Some(List(charityBeneficiary)),
-    otherBeneficiaries = Some(List(otherBeneficiary))
-  )
+    otherBeneficiaries = Some(List(otherBeneficiary)))
+
   val otherBeneficiaries = Some(List(otherBeneficiary))
   val protectors = Protectors(
     individuals = Some(List(individual)),

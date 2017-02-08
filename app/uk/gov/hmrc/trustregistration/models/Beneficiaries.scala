@@ -61,10 +61,11 @@ object OtherBeneficiary{
 
 case class Beneficiaries(
   individualBeneficiaries: Option[List[IndividualBeneficiary]] = None,
-  employeeBeneficiaries: Option[List[EmployeeBeneficiary]] = None,
   directorBeneficiaries: Option[List[DirectorBeneficiary]] = None,
+  employeeBeneficiaries: Option[List[EmployeeBeneficiary]] = None,
   charityBeneficiaries: Option[List[CharityBeneficiary]] = None,
-  otherBeneficiaries: Option[List[OtherBeneficiary]] = None) {
+  otherBeneficiaries: Option[List[OtherBeneficiary]] = None
+  ) {
   private val atLeastOneBeneficiary: Boolean =
     (individualBeneficiaries.isDefined && individualBeneficiaries.get.size > 0) ||
     (employeeBeneficiaries.isDefined && employeeBeneficiaries.get.size > 0) ||
