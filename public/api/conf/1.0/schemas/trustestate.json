@@ -1208,11 +1208,11 @@
         "additionalProperties": false,
         "properties": {
           "trustBeneficiaryName": {
-            "string": "#/definitions/individualType"
+            "type" :  "#/definitions/individualType"
           },
           "trustBeneficiaryUTR": {
             "pattern": "^[0-9]{10}$",
-            "string": "#/definitions/individualType"
+            "type" : "string"
           },
           "correspondenceAddress": {
             "$ref": "#/definitions/correspondenceAddressType"
