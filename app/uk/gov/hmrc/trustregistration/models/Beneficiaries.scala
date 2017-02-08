@@ -27,7 +27,6 @@ object IndividualBeneficiary{
 }
 
 case class EmployeeBeneficiary(
-
   individual: Individual,
   isVulnerable: Boolean)
 

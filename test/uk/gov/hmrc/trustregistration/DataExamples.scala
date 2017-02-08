@@ -51,6 +51,10 @@ trait JsonExamples {
                                             .mkString
                                             .replace(""""{INDIVIDUAL}"""", validIndividualJson)
 
+  lazy val validEmployeeBeneficiary = Source.fromFile(getClass.getResource("/ValidEmployeeBeneficiary.json").getPath)
+    .mkString
+    .replace(""""{INDIVIDUAL}"""", validIndividualJson)
+
   lazy val validCharityBeneficiary = Source.fromFile(getClass.getResource("/ValidCharityBeneficiary.json").getPath)
     .mkString
     .replace(""""{ADDRESS}"""", validAddressJson)
@@ -90,6 +94,8 @@ trait JsonExamples {
     .replace("\"{INDIVIDUAL}\"", validIndividualJson )
     .replace("\"{ADDRESS}\"", validAddressJson)
     .replace("\"{INDIVIDUALBENEFICIARY}\"", validIndividualBeneficiary)
+    .replace("\"{EMPLOYEEBENEFICIARY}\"", validEmployeeBeneficiary)
+
 
   lazy val validHeritageMaintenanceFundTrustJson = Source.fromFile(getClass.getResource("/ValidHeritageMaintenanceFundTrust.json").getPath).mkString
     .replace("\"{SHAREASSETS}\"", validShareAssetJson)
@@ -212,9 +218,7 @@ trait ScalaDataExamples {
   val validEstateWithDeceased = Estate(true,true,true,false,None,Some(individual),Some(false),Some(false),Some(false))
 
   val employeeBeneficiary = EmployeeBeneficiary(individual = individual,
-    isVulnerable = false,
-    isIncomeAtTrusteeDiscretion = false,
-    shareOfIncome = Some(20))
+    isVulnerable = false)
 
   val individualBeneficiary = IndividualBeneficiary(
     individual = individual,
