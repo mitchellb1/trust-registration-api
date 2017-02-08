@@ -27,8 +27,7 @@ object IndividualBeneficiary{
 }
 
 case class EmployeeBeneficiary(
-  individual: Individual,
-  isVulnerable: Boolean)
+  individual: Individual)
 
 object EmployeeBeneficiary{
   implicit val employeeBeneficiaryFormats = Json.format[EmployeeBeneficiary]

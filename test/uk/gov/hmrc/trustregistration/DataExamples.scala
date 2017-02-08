@@ -65,7 +65,7 @@ trait JsonExamples {
     .mkString
     .replace(""""{ADDRESS}"""", validAddressJson)
 
-  lazy val validBeneficiariesJson = s"""{"individualBeneficiaries":[$validIndividualBeneficiary],"charityBeneficiaries":[$validCharityBeneficiary],"otherBeneficiaries":[$validOtherBeneficiary]}"""
+  lazy val validBeneficiariesJson = s"""{"individualBeneficiaries":[$validIndividualBeneficiary],"charityBeneficiaries":[$validCharityBeneficiary],"otherBeneficiaries":[$validOtherBeneficiary],"employeeBeneficiaries":[$validEmployeeBeneficiary],}"""
 
   lazy val invalidBeneficiariesJson = s"""{"charityBeneficiaries": [$invalidCharityBeneficiary]}"""
 
@@ -162,7 +162,7 @@ trait JsonExamples {
 }
 trait ScalaDataExamples {
 
-  val settlors = Settlors(Some(List(individual)))
+ val settlors = Settlors(Some(List(individual)))
 
   val address = Address(
     line1 = "Line 1",
@@ -218,8 +218,7 @@ trait ScalaDataExamples {
 
 
   val employeeBeneficiary = EmployeeBeneficiary(
-    individual = individual,
-    isVulnerable = false)
+    individual = individual)
 
   val individualBeneficiary = IndividualBeneficiary(
     individual = individual,
