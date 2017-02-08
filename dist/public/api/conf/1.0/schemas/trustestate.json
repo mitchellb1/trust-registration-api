@@ -83,7 +83,7 @@
         {"required": ["employeeBeneficiaries"]},
         {"required": ["charityBeneficiaries"]},
         {"required": ["individualBeneficiaries"]},
-        {"required": ["companyBeneficiariesType"]}
+        {"required": ["companyBeneficiaries"]}
       ],
       "type": "object"
     },
@@ -627,6 +627,9 @@
             "individualBeneficiaries": {
               "$ref": "#/definitions/individualBeneficiariesType"
             },
+            "companyBeneficiaries" : {
+              "$ref": "#/definitions/companyBeneficiariesType"
+            },
             "otherBeneficiaries": {
               "$ref": "#/definitions/otherBeneficiariesType"
             }
@@ -636,6 +639,7 @@
             {"required": ["individualBeneficiaries"]},
             {"required": ["directorBeneficiaries"]},
             {"required": ["otherBeneficiaries"]},
+            {"required": ["companyBeneficiaries"]},
             {"required": ["employeeBeneficiaries"]}
           ]
         },
