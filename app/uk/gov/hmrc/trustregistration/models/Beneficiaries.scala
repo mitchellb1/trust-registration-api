@@ -35,10 +35,7 @@ object EmployeeBeneficiary{
 }
 
 case class DirectorBeneficiary(
-  individual: Individual,
-  isVulnerable: Boolean,
-  isIncomeAtTrusteeDiscretion: Boolean,
-  shareOfIncome: Option[Float])
+  individual: Individual)
 
 object DirectorBeneficiary{
   implicit val directorBeneficiaryFormats = Json.format[DirectorBeneficiary]
