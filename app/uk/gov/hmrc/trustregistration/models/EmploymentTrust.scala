@@ -19,7 +19,6 @@ package uk.gov.hmrc.trustregistration.models
 import org.joda.time.DateTime
 import play.api.libs.json.{Json, Reads}
 
-
 case class EmploymentTrust(assets: Assets,
                            beneficiaries: Beneficiaries,
                            isEmployerFinancedRetirementBenefitScheme: Option[Boolean] = None,

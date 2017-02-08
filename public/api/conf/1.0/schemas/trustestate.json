@@ -548,27 +548,21 @@
     "employeeBeneficiariesType": {
       "description": "Employee Beneficiaries Type",
       "additionalProperties": false,
-      "properties": {
-        "employeeBeneficiaries": {
-          "type": "array",
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "income": {
-                "$ref": "#/definitions/incomeType"
-              },
-              "individual": {
-                "$ref": "#/definitions/individualType"
-              },
-              "isVulnerable": {
-                "type": "boolean"
-              }
-            },
-            "type": "object"
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "individual": {
+            "$ref": "#/definitions/individualType"
+          },
+          "isVulnerable": {
+            "type": "boolean"
           }
-        }
+        },
+        "type": "object",
+        "required": ["individual", "isVulnerable"]
       },
-      "type": "object"
+      "minItems": 1
     },
     "employmentTrustType": {
       "description": "Employee Trust Type",
@@ -621,7 +615,8 @@
           "anyOf": [
             {"required": ["individualBeneficiaries"]},
             {"required": ["directorBeneficiaries"]},
-            {"required": ["otherBeneficiaries"]}
+            {"required": ["otherBeneficiaries"]},
+            {"required": ["employeeBeneficiaries"]}
           ]
         },
         "employerFinancedRetirementBenefitSchemeStartDate": {
@@ -1087,11 +1082,11 @@
       "type": "object"
     },
     "residentTypeType": {
-      "description": "Possible Domiciles\n\t\t\tCode   Title\n\t\t\t----   -----\n\t\t\t0001   Settlor domiciled Trustees nonresident\n\t\t\t0002   Settlor non domiciled becomes domiciled then resident\n\t\t\t0003   Trustee ceases to be resident\n\t\t",
+      "description": "Possible Domicile combinations",
       "enum": [
-        "0001",
-        "0002",
-        "0003"
+        "NonResidentDomiciled",
+        "NonResidentNonDomiciled",
+        "NonResidentCeaseResident"
       ],
       "type": "string"
     },
