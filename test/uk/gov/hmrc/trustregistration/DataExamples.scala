@@ -232,8 +232,8 @@ trait ScalaDataExamples {
   )
 
   val directorBeneficiary = DirectorBeneficiary(
-    individual = individual
-  )
+    individual = individual)
+
 
   val charityBeneficiary = CharityBeneficiary(
     name = "Charity Name",

@@ -40,7 +40,6 @@ case class DirectorBeneficiary(
 object DirectorBeneficiary{
   implicit val directorBeneficiaryFormats = Json.format[DirectorBeneficiary]
 }
-
 case class CharityBeneficiary(
    name: String,
    number: String,
@@ -51,7 +50,6 @@ case class CharityBeneficiary(
 object CharityBeneficiary{
   implicit val charityBeneficiaryFormats = Json.format[CharityBeneficiary]
 }
-
 case class OtherBeneficiary(
    beneficiaryDescription: String,
    correspondenceAddress: Address)
@@ -62,8 +60,9 @@ object OtherBeneficiary{
 
 case class TrustBeneficiary(
                              trustBeneficiaryName: String,
-                             trustBeneficiaryUTR: String,
+                             trustBeneficiaryUTR: Option[String] = None,
                              correspondenceAddress: Address)
+
 object TrustBeneficiary{
   implicit val trustBeneficiaryFormats = Json.format[TrustBeneficiary]
 }
