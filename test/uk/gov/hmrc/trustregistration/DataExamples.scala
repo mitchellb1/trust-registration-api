@@ -225,16 +225,15 @@ trait ScalaDataExamples {
     isVulnerable = false
   )
 
+
   val trustBeneficiary = TrustBeneficiary(
     trustBeneficiaryName = "trust beneficiary Name",
     trustBeneficiaryUTR = "2134567",
     correspondenceAddress = address
   )
+  val directorBeneficiary = DirectorBeneficiary(
+    individual = individual
 
-  val directorBeneficiary = DirectorBeneficiary(individual = individual,
-    isVulnerable = false,
-    isIncomeAtTrusteeDiscretion = true,
-    shareOfIncome = Some(30)
   )
 
   val charityBeneficiary = CharityBeneficiary(
