@@ -225,10 +225,8 @@ trait ScalaDataExamples {
     isVulnerable = false
   )
 
-  val directorBeneficiary = DirectorBeneficiary(individual = individual,
-    isVulnerable = false,
-    isIncomeAtTrusteeDiscretion = true,
-    shareOfIncome = Some(30)
+  val directorBeneficiary = DirectorBeneficiary(
+    individual = individual
   )
 
   val charityBeneficiary = CharityBeneficiary(
