@@ -1510,14 +1510,6 @@
 									"postalCode": {
 										"$": "aaaaaaaaaa"
 									}
-								},
-								"income": {
-									"isIncomeAtTrusteeDiscretion": {
-										"$": true
-									},
-									"shareOfIncome": {
-										"$": 0
-									}
 								}
 							}
 						},
@@ -1858,14 +1850,6 @@
 									},
 									"postalCode": {
 										"$": "aaaaaaaaaa"
-									}
-								},
-								"income": {
-									"isIncomeAtTrusteeDiscretion": {
-										"$": true
-									},
-									"shareOfIncome": {
-										"$": 0
 									}
 								}
 							}

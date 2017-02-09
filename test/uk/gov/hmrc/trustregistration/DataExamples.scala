@@ -236,11 +236,9 @@ trait ScalaDataExamples {
 
 
   val charityBeneficiary = CharityBeneficiary(
-    name = "Charity Name",
-    number = "123456789087654",
-    correspondenceAddress = address,
-    isIncomeAtTrusteeDiscretion = false,
-    shareOfIncome = Some(20)
+    charityName = "Charity Name",
+    charityNumber = "123456789087654",
+    correspondenceAddress = address
   )
 
   val otherBeneficiary = OtherBeneficiary(

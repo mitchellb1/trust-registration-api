@@ -28,7 +28,6 @@ object IndividualBeneficiary {
 
 case class EmployeeBeneficiary(individual: Individual)
 
-
 object EmployeeBeneficiary {
   implicit val employeeBeneficiaryFormats = Json.format[EmployeeBeneficiary]
 }
@@ -36,20 +35,18 @@ object EmployeeBeneficiary {
 case class DirectorBeneficiary(
                                 individual: Individual)
 
-
 object DirectorBeneficiary {
   implicit val directorBeneficiaryFormats = Json.format[DirectorBeneficiary]
 }
-case class CharityBeneficiary(
-                               name: String,
-                               number: String,
-                               correspondenceAddress: Address,
-                               isIncomeAtTrusteeDiscretion: Boolean,
-                               shareOfIncome: Option[Float])
+
+case class CharityBeneficiary(charityName: String,
+                              charityNumber: String,
+                              correspondenceAddress: Address)
 
 object CharityBeneficiary {
   implicit val charityBeneficiaryFormats = Json.format[CharityBeneficiary]
 }
+
 case class OtherBeneficiary(
                              beneficiaryDescription: String,
                              correspondenceAddress: Address)
@@ -57,7 +54,6 @@ case class OtherBeneficiary(
 object OtherBeneficiary {
   implicit val otherBeneficiaryFormats = Json.format[OtherBeneficiary]
 }
-
 
 case class TrustBeneficiary(
                              trustBeneficiaryName: String,
