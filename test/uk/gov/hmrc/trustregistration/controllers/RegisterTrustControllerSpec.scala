@@ -586,22 +586,23 @@ class RegisterTrustControllerSpec extends PlaySpec
       "the endpoint is called with a valid identifier" in {
         when(mockRegisterTrustService.getBeneficiaries(any[String])(any[HeaderCarrier]))
           .thenReturn(Future.successful(new GetSuccessResponse[Beneficiaries](beneficiaries)))
-
         val result = SUT.getBeneficiaries("sadfg").apply(FakeRequest("GET", ""))
-
         status(result) mustBe OK
+        println(contentAsString(result))
         contentAsString(result) mustBe(
-          """{"individualBeneficiaries":""" +
-          """[{"individual":{"givenName":"Leo","familyName":"Spaceman","dateOfBirth":"1800-01-01",""" +
-          """"passport":{"identifier":"IDENTIFIER","expiryDate":"2020-01-01","countryOfIssue":"ES"},""" +
-          """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2","line3":"Line 3",""" +
-          """"line4":"Line 4","countryCode":"ES"}},"isVulnerable":false}],""" +
-          """"charityBeneficiaries":[{"name":"Charity Name","number":"123456789087654",""" +
-          """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2","line3":"Line 3",""" +
-          """"line4":"Line 4","countryCode":"ES"},"isIncomeAtTrusteeDiscretion":false,"shareOfIncome":20}],""" +
-          """"otherBeneficiaries":[{"beneficiaryDescription":"Beneficiary Description","correspondenceAddress":""" +
-          """{"line1":"Line 1","line2":"Line 2","line3":"Line 3","line4":"Line 4",""" +
-          """"countryCode":"ES"}}]}"""
+          """{"individualBeneficiaries":[{"individual":{"givenName":"Leo","""+
+            """"familyName":"Spaceman","dateOfBirth":"1800-01-01","passport":{"identifier":"IDENTIFIER","""+
+            """"expiryDate":"2020-01-01","countryOfIssue":"ES"},"""+
+            """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2","line3":"Line 3","line4":"Line 4","countryCode":"ES"}},"""+
+            """"isVulnerable":false}],"employeeBeneficiaries":[{"individual":{"givenName":"Leo","""+
+            """"familyName":"Spaceman","dateOfBirth":"1800-01-01","passport":{"identifier":"IDENTIFIER","""+
+            """"expiryDate":"2020-01-01","countryOfIssue":"ES"},"""+
+            """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2","line3":"Line 3","line4":"Line 4","countryCode":"ES"}}}],"""+
+          """"charityBeneficiaries":[{"name":"Charity Name","number":"123456789087654","""+
+          """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2","line3":"Line 3","line4":"Line 4","countryCode":"ES"},"""+
+          """"isIncomeAtTrusteeDiscretion":false,"shareOfIncome":20}],"""+
+          """"otherBeneficiaries":[{"beneficiaryDescription":"Beneficiary Description","""+
+          """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2","line3":"Line 3","line4":"Line 4","countryCode":"ES"}}]}"""
         )
       }
     }

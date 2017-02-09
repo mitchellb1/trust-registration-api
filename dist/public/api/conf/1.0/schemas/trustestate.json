@@ -72,6 +72,12 @@
         },
         "otherBeneficiaries": {
           "$ref": "#/definitions/otherBeneficiariesType"
+        },
+        "trustBeneficiaries": {
+          "$ref": "#/definitions/trustBeneficiariesType"
+        },
+        "companyBeneficiaries" : {
+          "$ref": "#/definitions/companyBeneficiariesType"
         }
       },
       "anyOf" : [
@@ -80,7 +86,9 @@
         {"required": ["directorBeneficiaries"]},
         {"required": ["employeeBeneficiaries"]},
         {"required": ["charityBeneficiaries"]},
-        {"required": ["individualBeneficiaries"]}
+        {"required": ["individualBeneficiaries"]},
+        {"required": ["trustBeneficiaries"]},
+        {"required": ["companyBeneficiaries"]}
       ],
       "type": "object"
     },
@@ -176,6 +184,22 @@
         }
       },
       "type": "object"
+    },
+    "companyBeneficiariesType": {
+      "description": "Company Beneficiaries Type",
+      "additionalProperties": false,
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "company": {
+            "$ref": "#/definitions/companyType"
+          }
+        },
+        "type": "object",
+        "required": ["company"]
+      },
+      "minItems": 1
     },
     "companyType": {
       "description": "Company Type",
@@ -564,13 +588,10 @@
         "properties": {
           "individual": {
             "$ref": "#/definitions/individualType"
-          },
-          "isVulnerable": {
-            "type": "boolean"
           }
         },
-        "type": "object",
-        "required": ["individual", "isVulnerable"]
+        "required": ["individual"],
+        "type": "object"
       },
       "minItems": 1
     },
@@ -618,8 +639,14 @@
             "individualBeneficiaries": {
               "$ref": "#/definitions/individualBeneficiariesType"
             },
+            "companyBeneficiaries" : {
+              "$ref": "#/definitions/companyBeneficiariesType"
+            },
             "otherBeneficiaries": {
               "$ref": "#/definitions/otherBeneficiariesType"
+            },
+            "trustBeneficiaries": {
+              "$ref": "#/definitions/trustBeneficiariesType"
             }
           },
           "type": "object",
@@ -627,16 +654,17 @@
             {"required": ["individualBeneficiaries"]},
             {"required": ["directorBeneficiaries"]},
             {"required": ["otherBeneficiaries"]},
+            {"required": ["trustBeneficiaries"]},
+            {"required": ["companyBeneficiaries"]},
             {"required": ["employeeBeneficiaries"]}
           ]
         },
         "employerFinancedRetirementBenefitSchemeStartDate": {
-          "type": "string"
-        },
-        "isEmployerFinancedRetirementBenefitScheme": {
-          "type": "boolean"
+          "type": "string",
+          "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$"
         }
       },
+      "required": ["assets", "beneficiaries"],
       "type": "object"
     },
     "estateType": {
@@ -1194,6 +1222,29 @@
     "emailType":{
       "type" : "string",
       "pattern" : "^[-aA-zZ0-9._%+']+@[-aA-zZ0-9.']+\\.[aA-zZ]{2,4}$"
+    },
+    "trustBeneficiariesType": {
+      "description": "Trust Beneficiaries Type",
+      "additionalProperties": false,
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "trustBeneficiaryName": {
+            "type" : "string"
+          },
+          "trustBeneficiaryUTR": {
+            "pattern": "^[0-9]{10}$",
+            "type" : "string"
+          },
+          "correspondenceAddress": {
+            "$ref": "#/definitions/correspondenceAddressType"
+          }
+        },
+        "type": "object",
+        "required": ["trustBeneficiaryName", "correspondenceAddress"]
+      },
+      "minItems": 1
     },
     "trustType": {
       "description": "Main Trust Type",
