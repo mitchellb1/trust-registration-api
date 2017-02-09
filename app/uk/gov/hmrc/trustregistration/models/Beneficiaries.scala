@@ -26,9 +26,8 @@ object IndividualBeneficiary {
   implicit val individualBeneficiaryFormats = Json.format[IndividualBeneficiary]
 }
 
-case class EmployeeBeneficiary(
-                                individual: Individual,
-                                isVulnerable: Boolean)
+case class EmployeeBeneficiary(individual: Individual)
+
 
 object EmployeeBeneficiary {
   implicit val employeeBeneficiaryFormats = Json.format[EmployeeBeneficiary]
@@ -75,6 +74,7 @@ case class Beneficiaries(
   otherBeneficiaries: Option[List[OtherBeneficiary]] = None,
   trustBeneficiaries: Option[List[TrustBeneficiary]] = None,
   companyBeneficiaries: Option[List[CompanyBeneficiary]] = None){
+
   private val atLeastOneBeneficiary: Boolean =
     (individualBeneficiaries.isDefined && individualBeneficiaries.get.size > 0) ||
     (employeeBeneficiaries.isDefined && employeeBeneficiaries.get.size > 0) ||
