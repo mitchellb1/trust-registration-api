@@ -31,7 +31,7 @@ class InterVivoTrustSpec extends PlaySpec with ScalaDataExamples with JsonExampl
 
       "the required beneficiaries are not there" in {
         val assets = Assets(Some(List(2.0f,2.5f)))
-        val beneficiaries = Beneficiaries(None,None,Some(List(employeeBeneficiary)))
+        val beneficiaries = Beneficiaries(None,Some(List(employeeBeneficiary)))
         val ex = the[IllegalArgumentException] thrownBy (InterVivoTrust(assets,beneficiaries,true))
         ex.getMessage() mustEqual  ("requirement failed: Must have at least one required Beneficiary")
       }
