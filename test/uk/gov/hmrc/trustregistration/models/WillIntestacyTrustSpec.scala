@@ -24,7 +24,7 @@ class WillIntestacyTrustSpec extends PlaySpec with ScalaDataExamples{
     "throw an exception" when{
       "there is no assets" in {
         val assets = Assets(None)
-        val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(assets,beneficiaries, individual))
+        val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(assets,beneficiaries))
         ex.getMessage() mustEqual  "requirement failed: Must have at least one type of Asset"
       }
 
@@ -33,12 +33,12 @@ class WillIntestacyTrustSpec extends PlaySpec with ScalaDataExamples{
 
         val beneficiaries = Beneficiaries(None,Some(List(employeeBeneficiary)))
 
-        val ex = the[IllegalArgumentException] thrownBy WillIntestacyTrust(assets,beneficiaries, individual)
+        val ex = the[IllegalArgumentException] thrownBy WillIntestacyTrust(assets,beneficiaries)
         ex.getMessage() mustEqual  "requirement failed: Must have at least one required Beneficiary"
       }
 
       "no assets are defined" in {
-        val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(Assets(), beneficiaries, individual))
+        val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(Assets(), beneficiaries))
         ex.getMessage() mustEqual  "requirement failed: Must have at least one type of Asset"
       }
     }
@@ -46,12 +46,12 @@ class WillIntestacyTrustSpec extends PlaySpec with ScalaDataExamples{
     "not throw an exception" when {
       "there is one asset" in {
         val assets = Assets(Some(List(2.0f,2.5f)))
-        noException should be thrownBy (WillIntestacyTrust(assets,beneficiaries, individual))
+        noException should be thrownBy (WillIntestacyTrust(assets,beneficiaries))
       }
 
       "there is more than one type of asset" in {
         val assets = Assets(Some(List(2.0f,2.5f)),None,None,None,None,Some(List(otherAsset)))
-        noException should be thrownBy (WillIntestacyTrust(assets,beneficiaries, individual))
+        noException should be thrownBy (WillIntestacyTrust(assets,beneficiaries))
       }
     }
   }

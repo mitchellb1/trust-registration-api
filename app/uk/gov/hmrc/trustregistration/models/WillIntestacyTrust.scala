@@ -19,7 +19,7 @@ package uk.gov.hmrc.trustregistration.models
 import play.api.libs.json.Json
 
 
-case class WillIntestacyTrust(assets: Assets, beneficiaries: Beneficiaries, deceased: Individual) {
+case class WillIntestacyTrust(assets: Assets, beneficiaries: Beneficiaries) {
 
   private val atleastOneTypeOfAsset: Boolean = ((assets.monetaryAssets.isDefined && assets.monetaryAssets.get.size > 0) ||
     (assets.propertyAssets.isDefined && assets.propertyAssets.get.size > 0) ||
@@ -35,7 +35,6 @@ case class WillIntestacyTrust(assets: Assets, beneficiaries: Beneficiaries, dece
   require(atleastOneTypeOfAsset, "Must have at least one type of Asset")
   require(containsRequiredBeneficiaries, "Must have at least one required Beneficiary")
 }
-
 object WillIntestacyTrust{
   implicit val formats = Json.format[WillIntestacyTrust]
 }

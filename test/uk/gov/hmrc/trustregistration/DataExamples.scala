@@ -270,7 +270,7 @@ trait ScalaDataExamples {
 
   val monetaryAssets = Assets(monetaryAssets = Some(List(100f, 2.50f, 75f)))
 
-  val willIntestacyTrust = WillIntestacyTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false)))),individual)
+  val willIntestacyTrust = WillIntestacyTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false)))))
 
   val trust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),Some(List(2015,2016)),legality,true,leadTrusteeIndividual,Trustees(None, None),
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(Some(List(individual,individual)))), TrustType(willIntestacyTrust = Some(willIntestacyTrust)))
