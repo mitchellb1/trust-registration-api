@@ -21,10 +21,10 @@ import play.api.libs.json.{JsString, Json, Reads, Writes}
 
 
 
-case class BusinessAsset(buildingName: String,
-                         payeRef: String,
+case class BusinessAsset(buildingName: Option[String] = None,
+                         payeRef: Option[String] = None,
                          description: String,
-                         correspondenceAddress: Address,
+                         correspondenceAddress: Option[Address] = None,
                          value: Int,
                          company: Company)
 
