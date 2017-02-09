@@ -25,8 +25,8 @@ case class BusinessAsset(buildingName: String,
                          payeRef: String,
                          description: String,
                          correspondenceAddress: Address,
-                         value: Float,
-                         lastValuationDate: Option[DateTime] = None)
+                         value: Int,
+                         company: Company)
 
 object BusinessAsset{
   implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))

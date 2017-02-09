@@ -255,7 +255,7 @@ trait ScalaDataExamples {
 
   val legality = Legality("ES",Some("ES"),true,None)
 
-  val businessAsset = BusinessAsset("Test","Test","This is a description",address,1234, Some(new DateTime("1940-04-04")))
+  val businessAsset = BusinessAsset("Test","Test","This is a description",address,1234, company)
 
   val shareAsset = ShareAsset(1234,"shareCompanyName","shareCompanyRegistrationNumber","shareClass","shareType",123400.50f)
 

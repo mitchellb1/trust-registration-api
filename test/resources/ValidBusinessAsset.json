@@ -4,5 +4,10 @@
   "description" : "This is a description",
   "correspondenceAddress" : "{ADDRESS}",
   "value" : 1234,
-  "lastValuationDate" : "1940-04-04"
+  "lastValuationDate" : "1940-04-04",
+  "company" : {
+    "name" : "Company",
+    "referenceNumber" : "AAA5221",
+    "correspondenceAddress" : "{ADDRESS}"
+  }
 }
