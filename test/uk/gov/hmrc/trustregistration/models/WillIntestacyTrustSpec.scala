@@ -19,7 +19,6 @@ package uk.gov.hmrc.trustregistration.models
 import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
 
-
 class WillIntestacyTrustSpec extends PlaySpec with ScalaDataExamples{
   "WillIntestacyTrust" must{
     "throw an exception" when{
