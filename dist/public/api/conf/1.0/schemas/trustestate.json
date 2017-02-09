@@ -578,13 +578,10 @@
         "properties": {
           "individual": {
             "$ref": "#/definitions/individualType"
-          },
-          "isVulnerable": {
-            "type": "boolean"
           }
         },
-        "type": "object",
-        "required": ["individual", "isVulnerable"]
+        "required": ["individual"],
+        "type": "object"
       },
       "minItems": 1
     },
