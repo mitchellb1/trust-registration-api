@@ -509,17 +509,16 @@
       "description": "Deceased Individual Type",
       "additionalProperties": false,
       "properties": {
-        "correspondenceAddress": {
-          "$ref": "#/definitions/correspondenceAddressType"
-        },
         "dateOfDeath": {
+          "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
           "type": "string"
         },
         "individual": {
           "$ref": "#/definitions/individualType"
         }
       },
-      "type": "object"
+      "type": "object",
+      "required": ["dateOfDeath", "individual"]
     },
     "declarationType": {
       "description": "Declaration Type",
@@ -1431,10 +1430,13 @@
         },
         "deceased": {
           "$ref": "#/definitions/deceasedType"
+        },
+        "dovTypeAddition": {
+          "type": "boolean"
         }
       },
       "type": "object",
-      "required": ["assets", "beneficiaries"]
+      "required": ["assets", "beneficiaries", "deceased", "dovTypeAddition"]
     }
   }
 }
