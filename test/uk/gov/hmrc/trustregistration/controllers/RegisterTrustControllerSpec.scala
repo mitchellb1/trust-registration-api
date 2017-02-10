@@ -598,9 +598,9 @@ class RegisterTrustControllerSpec extends PlaySpec
             """"familyName":"Spaceman","dateOfBirth":"1800-01-01","passport":{"identifier":"IDENTIFIER","""+
             """"expiryDate":"2020-01-01","countryOfIssue":"ES"},"""+
             """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2","line3":"Line 3","line4":"Line 4","countryCode":"ES"}}}],"""+
-          """"charityBeneficiaries":[{"name":"Charity Name","number":"123456789087654","""+
-          """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2","line3":"Line 3","line4":"Line 4","countryCode":"ES"},"""+
-          """"isIncomeAtTrusteeDiscretion":false,"shareOfIncome":20}],"""+
+          """"charityBeneficiaries":[{"charityName":"Charity Name","charityNumber":"123456789087654","""+
+          """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2","line3":"Line 3","line4":"Line 4","countryCode":"ES"}"""+
+          """}],"""+
           """"otherBeneficiaries":[{"beneficiaryDescription":"Beneficiary Description","""+
           """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2","line3":"Line 3","line4":"Line 4","countryCode":"ES"}}]}"""
         )

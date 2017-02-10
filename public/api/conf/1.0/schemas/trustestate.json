@@ -141,30 +141,24 @@
     "charityBeneficiariesType": {
       "description": "Charity Beneficiaries Type",
       "additionalProperties": false,
-      "properties": {
-        "charityBeneficiaries": {
-          "type": "array",
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "charityName": {
-                "type": "string"
-              },
-              "charityNumber": {
-                "type": "string"
-              },
-              "correspondenceAddress": {
-                "$ref": "#/definitions/correspondenceAddressType"
-              },
-              "income": {
-                "$ref": "#/definitions/incomeType"
-              }
-            },
-            "type": "object"
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "charityName": {
+            "type": "string"
+          },
+          "charityNumber": {
+            "type": "string"
+          },
+          "correspondenceAddress": {
+            "$ref": "#/definitions/correspondenceAddressType"
           }
-        }
+        },
+        "type": "object",
+        "required": ["charityName","charityNumber","correspondenceAddress"]
       },
-      "type": "object"
+      "minItems": 1
     },
     "companyBeneficiariesType": {
       "description": "Company Beneficiaries Type",
@@ -1333,7 +1327,8 @@
           "oneOf": [
             {"required": ["flatManagementSinkingFundTrust"]},
             {"required": ["heritageMaintenanceFundTrust"]},
-            {"required": ["employmentTrust"]}
+            {"required": ["employmentTrust"]},
+            {"required": ["willIntestacyTrust"]}
           ],
           "type": "object"
         }
@@ -1391,7 +1386,14 @@
               "$ref": "#/definitions/shareAssetsType"
             }
           },
-          "type": "object"
+          "type": "object",
+          "anyOf": [
+            {"required": ["businessAssets"]},
+            {"required": ["monetaryAssets"]},
+            {"required": ["otherAssets"]},
+            {"required": ["propertyAssets"]},
+            {"required": ["shareAssets"]}
+            ]
         },
         "beneficiaries": {
           "additionalProperties": false,
@@ -1406,13 +1408,19 @@
               "$ref": "#/definitions/otherBeneficiariesType"
             }
           },
-          "type": "object"
+          "type": "object",
+          "anyOf": [
+            {"required": ["charityBeneficiaries"]},
+            {"required": ["individualBeneficiaries"]},
+            {"required": ["otherBeneficiaries"]}
+          ]
         },
         "deceased": {
           "$ref": "#/definitions/deceasedType"
         }
       },
-      "type": "object"
+      "type": "object",
+      "required": ["assets", "beneficiaries"]
     }
   }
 }
