@@ -647,6 +647,9 @@
             },
             "trustBeneficiaries": {
               "$ref": "#/definitions/trustBeneficiariesType"
+            },
+            "unidentifiedBeneficiaries": {
+              "$ref": "#/definitions/unidentifiedBeneficiariesType"
             }
           },
           "type": "object",
@@ -656,6 +659,7 @@
             {"required": ["otherBeneficiaries"]},
             {"required": ["trustBeneficiaries"]},
             {"required": ["companyBeneficiaries"]},
+            {"required": ["unidentifiedBeneficiaries"]},
             {"required": ["employeeBeneficiaries"]}
           ]
         },
@@ -1222,6 +1226,22 @@
     "emailType":{
       "type" : "string",
       "pattern" : "^[-aA-zZ0-9._%+']+@[-aA-zZ0-9.']+\\.[aA-zZ]{2,4}$"
+    },
+    "unidentifiedBeneficiariesType": {
+      "description": "Unidentified Beneficiaries Type",
+      "additionalProperties": false,
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "type" : "string"
+          }
+        },
+        "type": "object",
+        "required": ["description"]
+      },
+      "minItems": 1
     },
     "trustBeneficiariesType": {
       "description": "Trust Beneficiaries Type",
