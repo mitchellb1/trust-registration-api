@@ -184,7 +184,6 @@ trait ScalaDataExamples {
     otherName = None,
     familyName = "Spaceman",
     dateOfBirth = new DateTime("1800-01-01"),
-    dateOfDeath = None,
     nino = None,
     passport = Some(passport),
     correspondenceAddress = Some(address),

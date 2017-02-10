@@ -55,7 +55,7 @@ class GetTrusteesSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(jsonReturn)))))
         val result = Await.result(SUT.getTrustees("1234"),Duration.Inf)
         val expectedPassport = Passport("AA12345", new DateTime("2012-04-23T18:25:43.511Z"), "ESP")
-        result mustBe GetSuccessResponse(List(Individual("Juan","Doe",new DateTime("2012-04-23T18:25:43.511Z"),None,None,None,None,Some(expectedPassport))))
+        result mustBe GetSuccessResponse(List(Individual("Juan","Doe",new DateTime("2012-04-23T18:25:43.511Z"),None,None,None,Some(expectedPassport))))
       }
 
       "DES returns a 200 response with a JSON array of Trustees containing a Passport when given a 'null' address" in {
@@ -63,28 +63,28 @@ class GetTrusteesSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(jsonReturn)))))
         val result = Await.result(SUT.getTrustees("1234"),Duration.Inf)
         val expectedPassport = Passport("AA12345", new DateTime("2012-04-23T18:25:43.511Z"), "ESP")
-        result mustBe GetSuccessResponse(List(Individual("Juan","Doe",new DateTime("2012-04-23T18:25:43.511Z"),None,None,None,None,Some(expectedPassport))))
+        result mustBe GetSuccessResponse(List(Individual("Juan","Doe",new DateTime("2012-04-23T18:25:43.511Z"),None,None,None,Some(expectedPassport))))
       }
 
       "DES returns a 200 response with a JSON array of Trustees containing an Address with none of the optional parameters" in {
         val jsonReturn = """[{"givenName":"Juan","familyName":"Doe","dateOfBirth" : "2012-04-23T18:25:43.511Z", "correspondenceAddress" : {"line1" : "123 Any Street","countryCode":"ES"}}]"""
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(jsonReturn)))))
         val result = Await.result(SUT.getTrustees("1234"),Duration.Inf)
-        result mustBe GetSuccessResponse(List(Individual("Juan","Doe",new DateTime("2012-04-23T18:25:43.511Z"),None,None,None,None,None,Some(Address("123 Any Street",None,None,None,None,"ES")))))
+        result mustBe GetSuccessResponse(List(Individual("Juan","Doe",new DateTime("2012-04-23T18:25:43.511Z"),None,None,None,None,Some(Address("123 Any Street",None,None,None,None,"ES")))))
       }
 
       "DES returns a 200 response with a JSON array of Trustees containing an Address with some of the optional parameters" in {
         val jsonReturn = """[{"givenName":"Juan","familyName":"Doe","dateOfBirth" : "2012-04-23T18:25:43.511Z", "correspondenceAddress" : {"line1" : "123 Any Street","line2" : "Mowr Town","countryCode":"ES"}}]"""
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(jsonReturn)))))
         val result = Await.result(SUT.getTrustees("1234"),Duration.Inf)
-        result mustBe GetSuccessResponse(List(Individual("Juan","Doe",new DateTime("2012-04-23T18:25:43.511Z"),None,None,None,None,None,Some(Address("123 Any Street",Some("Mowr Town"),None,None,None,"ES")))))
+        result mustBe GetSuccessResponse(List(Individual("Juan","Doe",new DateTime("2012-04-23T18:25:43.511Z"),None,None,None,None,Some(Address("123 Any Street",Some("Mowr Town"),None,None,None,"ES")))))
       }
 
       "DES returns a 200 response with a JSON array of Trustees containing an Address with all the optional parameters" in {
         val jsonReturn = """[{"givenName":"Juan","familyName":"Doe","dateOfBirth" : "2012-04-23T18:25:43.511Z", "correspondenceAddress" : {"line1" : "123 Any Street","line2" : "Mowr Town","line3" : "Test","line4" : "Test Test Test 523125223","countryCode" : "ZAR"}}]"""
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(jsonReturn)))))
         val result = Await.result(SUT.getTrustees("1234"),Duration.Inf)
-        result mustBe GetSuccessResponse(List(Individual("Juan","Doe",new DateTime("2012-04-23T18:25:43.511Z"),None,None,None,None,None,Some(Address("123 Any Street",Some("Mowr Town"),Some("Test"),Some("Test Test Test 523125223"),None,"ZAR")))))
+        result mustBe GetSuccessResponse(List(Individual("Juan","Doe",new DateTime("2012-04-23T18:25:43.511Z"),None,None,None,None,Some(Address("123 Any Street",Some("Mowr Town"),Some("Test"),Some("Test Test Test 523125223"),None,"ZAR")))))
       }
 
       "DES returns a 200 response with a JSON array of Trustees containing an Address and Passport" in {
@@ -92,7 +92,7 @@ class GetTrusteesSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(jsonReturn)))))
         val result = Await.result(SUT.getTrustees("1234"),Duration.Inf)
         val expectedPassport = Passport("AA12345", new DateTime("2012-04-23T18:25:43.511Z"), "ESP")
-        result mustBe GetSuccessResponse(List(Individual("Juan","Doe",new DateTime("2012-04-23T18:25:43.511Z"),None,None,None,None,Some(expectedPassport),Some(Address("123 Any Street",Some("Mowr Town"),Some("Test"),Some("Test Test Test 523125223"),None,"ZAR")))))
+        result mustBe GetSuccessResponse(List(Individual("Juan","Doe",new DateTime("2012-04-23T18:25:43.511Z"),None,None,None,Some(expectedPassport),Some(Address("123 Any Street",Some("Mowr Town"),Some("Test"),Some("Test Test Test 523125223"),None,"ZAR")))))
       }
 
       "DES returns a 200 response with a JSON array of Trustees containing all required fields" in {
@@ -103,7 +103,6 @@ class GetTrusteesSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
              "familyName": "Doe",
              "dateOfBirth": "1900-01-01T00:00:00.000Z",
              "nino": "1234567890",
-             "dateOfDeath": "2016-01-01T00:00:00.000Z",
              "passport": {
                 "identifier": "123456",
                 "expiryDate": "2016-01-01T00:00:00.000Z",
@@ -122,7 +121,7 @@ class GetTrusteesSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
         val result = Await.result(SUT.getTrustees("1234"),Duration.Inf)
         val expectedPassport = Passport("123456", new DateTime("2016-01-01T00:00:00.000Z"), "ES")
         val expectedAddress = Address("A House", Some("A Street"), Some("An Area"), Some("A Town"),None, "ES")
-        result mustBe GetSuccessResponse(List(Individual("John", "Doe", new DateTime("1900-01-01T00:00:00.000Z"),Some("B"), Some("1234567890"),Some(new DateTime("2016-01-01T00:00:00.000Z")), Some("019112345678"), Some(expectedPassport), Some(expectedAddress))))
+        result mustBe GetSuccessResponse(List(Individual("John", "Doe", new DateTime("1900-01-01T00:00:00.000Z"),Some("B"), Some("1234567890"), Some("019112345678"), Some(expectedPassport), Some(expectedAddress))))
       }
     }
 
