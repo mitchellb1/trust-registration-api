@@ -23,7 +23,6 @@ import uk.gov.hmrc.trustregistration.JsonExamples
 
 class DeceasedSpec extends PlaySpec with JsonExamples {
 
-  val validDeceasedJson = s"""{"individual": $validIndividualJson, "dateOfDeath": "2000-01-01"}"""
   val invalidDeceasedJsonBadDate = s"""{"individual": $validIndividualJson, "dateOfDeath": "01/01/2000"}"""
   val invalidDeceasedJsonIndividual = s"""{"individual": $invalidIndividualJson, "dateOfDeath": "2000-01-01"}"""
 
@@ -38,12 +37,12 @@ class DeceasedSpec extends PlaySpec with JsonExamples {
     }
     "throw an exception" when {
       "an incorrect date format is used" in {
-        val ex = the [IllegalArgumentException] thrownBy Json.parse(invalidDeceasedJsonBadDate).as[Deceased]
+        val ex = the[IllegalArgumentException] thrownBy Json.parse(invalidDeceasedJsonBadDate).as[Deceased]
 
         ex.getMessage must include ("""Invalid format: "01/01/2000" is malformed""")
       }
       "an invalid individual is used" in {
-        val ex = the [JsResultException] thrownBy Json.parse(invalidDeceasedJsonIndividual).as[Deceased]
+        val ex = the[JsResultException] thrownBy Json.parse(invalidDeceasedJsonIndividual).as[Deceased]
 
         ex.errors.head._1.toString() mustBe "/individual/dateOfBirth"
       }

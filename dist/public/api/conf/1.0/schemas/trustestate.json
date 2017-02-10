@@ -1431,12 +1431,12 @@
         "deceased": {
           "$ref": "#/definitions/deceasedType"
         },
-        "dovTypeAddition": {
+        "isDovTypeAddition": {
           "type": "boolean"
         }
       },
       "type": "object",
-      "required": ["assets", "beneficiaries", "deceased", "dovTypeAddition"]
+      "required": ["assets", "beneficiaries", "deceased", "isDovTypeAddition"]
     }
   }
 }

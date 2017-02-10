@@ -30,6 +30,9 @@ trait JsonExamples {
     .replace("\"{PASSPORT}\"", validPassportJson)
     .replace("\"{ADDRESS}\"", validAddressJson)
   lazy val invalidIndividualJson = Source.fromFile(getClass.getResource("/InvalidIndividual.json").getPath).mkString
+
+  lazy val validDeceasedJson = s"""{"individual":${validIndividualJson},"dateOfDeath":"2000-01-01"}"""
+
   lazy val validCompanyJson = Source
     .fromFile(getClass.getResource("/ValidCompany.json").getPath)
     .mkString
@@ -81,6 +84,7 @@ trait JsonExamples {
     .replace("\"{SHAREASSETS}\"", validShareAssetJson)
     .replace("\"{BUSINESSASSETS}\"", validBusinessAssetJson)
     .replace("\"{INDIVIDUALBENEFICIARY}\"", validIndividualBeneficiary)
+    .replace("\"{DECEASED}\"", validDeceasedJson)
 
 
   lazy val validFlatManagementSinkingFundTrustJson = Source.fromFile(getClass.getResource("/ValidFlatManagementSinkingFundTrust.json").getPath).mkString
@@ -106,6 +110,7 @@ trait JsonExamples {
   lazy val invalidWillIntestacyTrustJson = Source.fromFile(getClass.getResource("/InvalidWillInstestacyTrust.json").getPath).mkString
     .replace("\"{BUSINESSASSETS}\"", validBusinessAssetJson)
     .replace("\"{INDIVIDUALBENEFICIARY}\"", validIndividualBeneficiary)
+    .replace("\"{DECEASED}\"", validDeceasedJson)
 
   lazy val validLegalityJson = Source.fromFile(getClass.getResource("/ValidLegality.json").getPath).mkString
 
@@ -269,7 +274,9 @@ trait ScalaDataExamples {
 
   val monetaryAssets = Assets(monetaryAssets = Some(List(100f, 2.50f, 75f)))
 
-  val willIntestacyTrust = WillIntestacyTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false)))))
+  val deceased = Deceased(individual, new DateTime(2000, 1, 1, 0, 0))
+
+  val willIntestacyTrust = WillIntestacyTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false)))), deceased, true)
 
   val trust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),Some(List(2015,2016)),legality,true,leadTrusteeIndividual,Trustees(None, None),
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(Some(List(individual,individual)))), TrustType(willIntestacyTrust = Some(willIntestacyTrust)))
