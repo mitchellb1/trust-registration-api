@@ -28,6 +28,16 @@ case class Assets(monetaryAssets: Option[List[Float]] = None,
   private val mustHaveAtleastOneValueWhenMonetaryAssetsDefined: Boolean = (!monetaryAssets.isDefined || monetaryAssets.isDefined && monetaryAssets.get.size > 0)
 
   require(mustHaveAtleastOneValueWhenMonetaryAssetsDefined , "If monetary assets are defined, at least one must be provided")
+
+  private val atLeastOneAsset: Boolean =
+    (monetaryAssets.isDefined && monetaryAssets.get.size > 0) ||
+      (propertyAssets.isDefined && propertyAssets.get.size > 0) ||
+      (shareAssets.isDefined && shareAssets.get.size > 0) ||
+      (partnershipAssets.isDefined && partnershipAssets.get.size > 0) ||
+      (businessAssets.isDefined && businessAssets.get.size > 0 ||
+      (otherAssets.isDefined && otherAssets.get.size > 0))
+
+  require(atLeastOneAsset, "Must have at least one Asset")
 }
 
 object Assets {
