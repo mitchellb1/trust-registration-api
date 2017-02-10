@@ -114,30 +114,17 @@
       },
       "type": "object"
     },
-    "businessAssetsType":  {
+    "businessAssetsType": {
       "description": "Business Assets Type",
-      "additionalProperties": false,
-      "properties": {
-        "businessAssets": {
-          "type": "array",
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "businessDescription": {
-                "type": "string",
-                "maxLength": 56
-              },
-              "businessName": {
-                "type": "string"
-              },
-              "businessPayeRef": {
+      "type" : "array",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "businessDescription": {
                 "type": "string"
               },
               "businessValue": {
                 "type": "number"
-              },
-              "correspondenceAddress": {
-                "$ref": "#/definitions/correspondenceAddressType"
               },
               "company": {
                 "$ref": "#/definitions/companyType"
@@ -150,10 +137,7 @@
               "company"
             ]
           }
-        }
       },
-      "type": "object"
-    },
     "charityBeneficiariesType": {
       "description": "Charity Beneficiaries Type",
       "additionalProperties": false,

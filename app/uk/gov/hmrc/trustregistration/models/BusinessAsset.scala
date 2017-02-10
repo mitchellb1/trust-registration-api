@@ -16,20 +16,12 @@
 
 package uk.gov.hmrc.trustregistration.models
 
-import org.joda.time.DateTime
-import play.api.libs.json.{JsString, Json, Reads, Writes}
+import play.api.libs.json.Json
 
-
-
-case class BusinessAsset(buildingName: Option[String] = None,
-                         payeRef: Option[String] = None,
-                         description: String,
-                         correspondenceAddress: Option[Address] = None,
-                         value: Int,
+case class BusinessAsset(businessDescription: String,
+                         businessValue: Int,
                          company: Company)
 
 object BusinessAsset{
-  implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
-  implicit val dateWrites: Writes[DateTime] = Writes { (dt: DateTime) => JsString(dt.toString("yyyy-MM-dd")) }
   implicit val formats = Json.format[BusinessAsset]
 }
