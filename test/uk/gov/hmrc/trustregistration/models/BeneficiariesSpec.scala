@@ -54,6 +54,11 @@ class BeneficiariesSpec extends PlaySpec with JsonExamples with ScalaDataExample
         val ex = the[IllegalArgumentException] thrownBy Beneficiaries(companyBeneficiaries = Some(List[CompanyBeneficiary]()))
         ex.getMessage() mustEqual invalidBeneficiariesError
       }
+
+      "an unidentified beneficiaries option exists but it's an empty list" in {
+        val ex = the[IllegalArgumentException] thrownBy Beneficiaries(unidentifiedBeneficiaries = Some(List[UnidentifiedBeneficiary]()))
+        ex.getMessage() mustEqual invalidBeneficiariesError
+      }
     }
     "exclude none values from the serialized response" in {
       val indBeneficiaries = new Beneficiaries(individualBeneficiaries = Some(List(individualBeneficiary)))

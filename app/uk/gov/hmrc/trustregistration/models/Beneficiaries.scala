@@ -43,6 +43,7 @@ case class CharityBeneficiary(charityName: String,
                               charityNumber: String,
                               correspondenceAddress: Address)
 
+
 object CharityBeneficiary {
   implicit val charityBeneficiaryFormats = Json.format[CharityBeneficiary]
 }
@@ -60,36 +61,48 @@ case class TrustBeneficiary(
                              trustBeneficiaryUTR: Option[String] = None,
                              correspondenceAddress: Address)
 
-case class CompanyBeneficiary(company: Company)
-
-case class Beneficiaries(
-  individualBeneficiaries: Option[List[IndividualBeneficiary]] = None,
-  employeeBeneficiaries: Option[List[EmployeeBeneficiary]] = None,
-  directorBeneficiaries: Option[List[DirectorBeneficiary]] = None,
-  charityBeneficiaries: Option[List[CharityBeneficiary]] = None,
-  otherBeneficiaries: Option[List[OtherBeneficiary]] = None,
-  trustBeneficiaries: Option[List[TrustBeneficiary]] = None,
-  companyBeneficiaries: Option[List[CompanyBeneficiary]] = None){
-
-  private val atLeastOneBeneficiary: Boolean =
-    (individualBeneficiaries.isDefined && individualBeneficiaries.get.size > 0) ||
-    (employeeBeneficiaries.isDefined && employeeBeneficiaries.get.size > 0) ||
-    (directorBeneficiaries.isDefined && directorBeneficiaries.get.size > 0) ||
-    (charityBeneficiaries.isDefined && charityBeneficiaries.get.size > 0) ||
-    (otherBeneficiaries.isDefined && otherBeneficiaries.get.size > 0 ||
-    (trustBeneficiaries.isDefined && trustBeneficiaries.get.size > 0)||
-    (companyBeneficiaries.isDefined && companyBeneficiaries.get.size > 0))
-  require(atLeastOneBeneficiary, "Must have at least one beneficiary")
-}
-
-object TrustBeneficiary{
+object TrustBeneficiary {
   implicit val trustBeneficiaryFormats = Json.format[TrustBeneficiary]
 }
+
+case class CompanyBeneficiary(company: Company)
 
 object CompanyBeneficiary {
   implicit val companyBeneficiaryFormats = Json.format[CompanyBeneficiary]
 }
 
+case class UnidentifiedBeneficiary(description: String)
+
+object UnidentifiedBeneficiary {
+  implicit val unidentifiedBeneficiaryFormats = Json.format[UnidentifiedBeneficiary]
+}
+
+case class Beneficiaries(
+                          individualBeneficiaries: Option[List[IndividualBeneficiary]] = None,
+                          employeeBeneficiaries: Option[List[EmployeeBeneficiary]] = None,
+                          directorBeneficiaries: Option[List[DirectorBeneficiary]] = None,
+                          charityBeneficiaries: Option[List[CharityBeneficiary]] = None,
+                          otherBeneficiaries: Option[List[OtherBeneficiary]] = None,
+                          trustBeneficiaries: Option[List[TrustBeneficiary]] = None,
+                          companyBeneficiaries: Option[List[CompanyBeneficiary]] = None,
+                          unidentifiedBeneficiaries: Option[List[UnidentifiedBeneficiary]] = None) {
+
+  private val atLeastOneBeneficiary: Boolean =
+    (individualBeneficiaries.isDefined && individualBeneficiaries.get.size > 0) ||
+      (employeeBeneficiaries.isDefined && employeeBeneficiaries.get.size > 0) ||
+      (directorBeneficiaries.isDefined && directorBeneficiaries.get.size > 0) ||
+      (charityBeneficiaries.isDefined && charityBeneficiaries.get.size > 0) ||
+      (otherBeneficiaries.isDefined && otherBeneficiaries.get.size > 0 ||
+        (trustBeneficiaries.isDefined && trustBeneficiaries.get.size > 0) ||
+        (companyBeneficiaries.isDefined && companyBeneficiaries.get.size > 0)) ||
+      (unidentifiedBeneficiaries.isDefined && unidentifiedBeneficiaries.get.size > 0)
+
+  require(atLeastOneBeneficiary, "Must have at least one beneficiary")
+}
+
 object Beneficiaries {
   implicit val beneficiariesFormat = Json.format[Beneficiaries]
 }
+
+
+
