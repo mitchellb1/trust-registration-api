@@ -46,7 +46,8 @@
       },
       "anyOf" : [
         {"required": ["monetaryAssets"]},
-        {"required": ["shareAssets"]}
+        {"required": ["shareAssets"]},
+        {"required": ["businessAssets"]}
       ],
       "type": "object"
     },
@@ -113,40 +114,30 @@
       },
       "type": "object"
     },
-    "businessAssetsType":  {
+    "businessAssetsType": {
       "description": "Business Assets Type",
-      "additionalProperties": false,
-      "properties": {
-        "businessAssets": {
-          "type": "array",
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "businessDescription": {
-                "type": "string"
-              },
-              "businessName": {
-                "type": "string"
-              },
-              "businessPayeRef": {
+      "type" : "array",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "businessDescription": {
                 "type": "string"
               },
               "businessValue": {
                 "type": "number"
               },
-              "correspondenceAddress": {
-                "$ref": "#/definitions/correspondenceAddressType"
-              },
-              "lastValuationDate": {
-                "type": "string"
+              "company": {
+                "$ref": "#/definitions/companyType"
               }
             },
-            "type": "object"
+            "type": "object",
+            "required" : [
+              "businessDescription",
+              "businessValue",
+              "company"
+            ]
           }
-        }
       },
-      "type": "object"
-    },
     "charityBeneficiariesType": {
       "description": "Charity Beneficiaries Type",
       "additionalProperties": false,
@@ -613,7 +604,8 @@
             {"required": ["monetaryAssets"]},
             {"required": ["otherAssets"]},
             {"required": ["propertyAssets"]},
-            {"required": ["shareAssets"]}
+            {"required": ["shareAssets"]},
+            {"required": ["businessAssets"]}
           ]
         },
         "beneficiaries": {
