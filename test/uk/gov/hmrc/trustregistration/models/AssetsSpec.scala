@@ -17,45 +17,48 @@
 package uk.gov.hmrc.trustregistration.models
 
 import org.scalatestplus.play.PlaySpec
-import play.api.libs.json.Json
 import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 
 class AssetsSpec extends PlaySpec with ScalaDataExamples with JsonExamples{
- "Assets" must {
-   "be parsed correctly from a valid JSON" in {
-     val jsonInput ="""{
-            "shareAssets" : ["{SHAREASSETS}","{SHAREASSETS}"],
-            "businessAssets" : ["{BUSINESSASSETS}","{BUSINESSASSETS}"]
-         }"""
-       .mkString.replace("\"{SHAREASSETS}\"", validShareAssetJson)
-       .replace("\"{BUSINESSASSETS}\"", validBusinessAssetJson)
-       .replace("\"{ADDRESS}\"", validAddressJson)
 
-     val result = Json.parse(jsonInput).as[Assets]
-     result mustBe(assets)
-   }
- }
+  //These tests now made specificly in the individual trusts
 
-  "Monetary Assets" must {
-    "have at least one value if they are defined" in {
-      val ex = the [IllegalArgumentException] thrownBy Assets(monetaryAssets = Some(Nil))
-      ex.getMessage mustEqual  "requirement failed: If monetary assets are defined, at least one must be provided"
-    }
-  }
 
-  "ShareAssets" must {
-    "be parsed correctly from a valid JSON" in {
-      val result = Json.parse(validShareAssetJson).as[ShareAsset]
-      result mustBe(shareAsset)
-    }
-  }
-
-  "BusinessAssets" must {
-    "be parsed correctly from a valid JSON" in {
-      val jsonInput = validBusinessAssetJson.mkString.replace("\"{ADDRESS}\"", validAddressJson)
-      val result = Json.parse(jsonInput).as[BusinessAsset]
-      result mustBe(businessAsset)
-    }
-  }
+// "Assets" must {
+//   "be parsed correctly from a valid JSON" in {
+//     val jsonInput ="""{
+//            "shareAssets" : ["{SHAREASSETS}","{SHAREASSETS}"],
+//            "businessAssets" : ["{BUSINESSASSETS}","{BUSINESSASSETS}"]
+//         }"""
+//       .mkString.replace("\"{SHAREASSETS}\"", validShareAssetJson)
+//       .replace("\"{BUSINESSASSETS}\"", validBusinessAssetJson)
+//       .replace("\"{ADDRESS}\"", validAddressJson)
+//
+//     val result = Json.parse(jsonInput).as[Assets]
+//     result mustBe(assets)
+//   }
+// }
+//
+//  "Monetary Assets" must {
+//    "have at least one value if they are defined" in {
+//      val ex = the [IllegalArgumentException] thrownBy Assets(monetaryAssets = Some(Nil))
+//      ex.getMessage mustEqual  "requirement failed: If monetary assets are defined, at least one must be provided"
+//    }
+//  }
+//
+//  "ShareAssets" must {
+//    "be parsed correctly from a valid JSON" in {
+//      val result = Json.parse(validShareAssetJson).as[ShareAsset]
+//      result mustBe(shareAsset)
+//    }
+//  }
+//
+//  "BusinessAssets" must {
+//    "be parsed correctly from a valid JSON" in {
+//      val jsonInput = validBusinessAssetJson.mkString.replace("\"{ADDRESS}\"", validAddressJson)
+//      val result = Json.parse(jsonInput).as[BusinessAsset]
+//      result mustBe(businessAsset)
+//    }
+//  }
 
 }

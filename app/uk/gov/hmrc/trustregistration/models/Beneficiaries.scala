@@ -28,7 +28,6 @@ object IndividualBeneficiary {
 
 case class EmployeeBeneficiary(individual: Individual)
 
-
 object EmployeeBeneficiary {
   implicit val employeeBeneficiaryFormats = Json.format[EmployeeBeneficiary]
 }
@@ -36,17 +35,14 @@ object EmployeeBeneficiary {
 case class DirectorBeneficiary(
                                 individual: Individual)
 
-
 object DirectorBeneficiary {
   implicit val directorBeneficiaryFormats = Json.format[DirectorBeneficiary]
 }
 
-case class CharityBeneficiary(
-                               name: String,
-                               number: String,
-                               correspondenceAddress: Address,
-                               isIncomeAtTrusteeDiscretion: Boolean,
-                               shareOfIncome: Option[Float])
+case class CharityBeneficiary(charityName: String,
+                              charityNumber: String,
+                              correspondenceAddress: Address)
+
 
 object CharityBeneficiary {
   implicit val charityBeneficiaryFormats = Json.format[CharityBeneficiary]
@@ -59,7 +55,6 @@ case class OtherBeneficiary(
 object OtherBeneficiary {
   implicit val otherBeneficiaryFormats = Json.format[OtherBeneficiary]
 }
-
 
 case class TrustBeneficiary(
                              trustBeneficiaryName: String,
@@ -91,18 +86,21 @@ case class Beneficiaries(
                           trustBeneficiaries: Option[List[TrustBeneficiary]] = None,
                           companyBeneficiaries: Option[List[CompanyBeneficiary]] = None,
                           unidentifiedBeneficiaries: Option[List[UnidentifiedBeneficiary]] = None) {
+  //These tests now made specificly in the individual trusts
 
-  private val atLeastOneBeneficiary: Boolean =
-    (individualBeneficiaries.isDefined && individualBeneficiaries.get.size > 0) ||
-      (employeeBeneficiaries.isDefined && employeeBeneficiaries.get.size > 0) ||
-      (directorBeneficiaries.isDefined && directorBeneficiaries.get.size > 0) ||
-      (charityBeneficiaries.isDefined && charityBeneficiaries.get.size > 0) ||
-      (otherBeneficiaries.isDefined && otherBeneficiaries.get.size > 0 ||
-        (trustBeneficiaries.isDefined && trustBeneficiaries.get.size > 0) ||
-        (companyBeneficiaries.isDefined && companyBeneficiaries.get.size > 0)) ||
-      (unidentifiedBeneficiaries.isDefined && unidentifiedBeneficiaries.get.size > 0)
 
-  require(atLeastOneBeneficiary, "Must have at least one beneficiary")
+//  private val atLeastOneBeneficiary: Boolean =(
+//    (individualBeneficiaries.isDefined && individualBeneficiaries.get.size > 0) ||
+//    (employeeBeneficiaries.isDefined && employeeBeneficiaries.get.size > 0) ||
+//    (directorBeneficiaries.isDefined && directorBeneficiaries.get.size > 0) ||
+//    (charityBeneficiaries.isDefined && charityBeneficiaries.get.size > 0) ||
+//    (otherBeneficiaries.isDefined && otherBeneficiaries.get.size > 0) ||
+//    (trustBeneficiaries.isDefined && trustBeneficiaries.get.size > 0) ||
+//    (companyBeneficiaries.isDefined && companyBeneficiaries.get.size > 0) ||
+//    (unidentifiedBeneficiaries.isDefined && unidentifiedBeneficiaries.get.size > 0)
+//    )
+//
+//  require(atLeastOneBeneficiary, "Must have at least one type Beneficiary")
 }
 
 object Beneficiaries {

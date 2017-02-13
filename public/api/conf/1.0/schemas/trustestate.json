@@ -49,12 +49,12 @@
         }
       },
       "anyOf" : [
-        {"required": ["businessAssets"]},
         {"required": ["monetaryAssets"]},
         {"required": ["otherAssets"]},
         {"required": ["partnershipAssets"]},
         {"required": ["propertyAssets"]},
-        {"required": ["shareAssets"]}
+        {"required": ["shareAssets"]},
+        {"required": ["businessAssets"]}
       ],
       "type": "object"
     },
@@ -62,9 +62,6 @@
       "description": "All possible beneficiary types",
       "additionalProperties": false,
       "properties": {
-        "buildingLandBeneficiaries": {
-          "$ref": "#/definitions/buildingLandBeneficiariesType"
-        },
         "charityBeneficiaries": {
           "$ref": "#/definitions/charityBeneficiariesType"
         },
@@ -91,7 +88,6 @@
         }
       },
       "anyOf" : [
-        {"required": ["buildingLandBeneficiaries"]},
         {"required": ["charityBeneficiaries"]},
         {"required": ["directorBeneficiaries"]},
         {"required": ["employeeBeneficiaries"]},
@@ -125,67 +121,51 @@
       },
       "type": "object"
     },
-    "businessAssetsType":  {
+    "businessAssetsType": {
       "description": "Business Assets Type",
-      "additionalProperties": false,
-      "properties": {
-        "businessAssets": {
-          "type": "array",
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "businessDescription": {
-                "type": "string"
-              },
-              "businessName": {
-                "type": "string"
-              },
-              "businessPayeRef": {
+      "type" : "array",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "businessDescription": {
                 "type": "string"
               },
               "businessValue": {
                 "type": "number"
               },
-              "correspondenceAddress": {
-                "$ref": "#/definitions/correspondenceAddressType"
-              },
-              "lastValuationDate": {
-                "type": "string"
+              "company": {
+                "$ref": "#/definitions/companyType"
               }
             },
-            "type": "object"
+            "type": "object",
+            "required" : [
+              "businessDescription",
+              "businessValue",
+              "company"
+            ]
           }
-        }
       },
-      "type": "object"
-    },
     "charityBeneficiariesType": {
       "description": "Charity Beneficiaries Type",
       "additionalProperties": false,
-      "properties": {
-        "charityBeneficiaries": {
-          "type": "array",
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "charityName": {
-                "type": "string"
-              },
-              "charityNumber": {
-                "type": "string"
-              },
-              "correspondenceAddress": {
-                "$ref": "#/definitions/correspondenceAddressType"
-              },
-              "income": {
-                "$ref": "#/definitions/incomeType"
-              }
-            },
-            "type": "object"
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "charityName": {
+            "type": "string"
+          },
+          "charityNumber": {
+            "type": "string"
+          },
+          "correspondenceAddress": {
+            "$ref": "#/definitions/correspondenceAddressType"
           }
-        }
+        },
+        "type": "object",
+        "required": ["charityName","charityNumber","correspondenceAddress"]
       },
-      "type": "object"
+      "minItems": 1
     },
     "companyBeneficiariesType": {
       "description": "Company Beneficiaries Type",
@@ -624,7 +604,8 @@
             {"required": ["monetaryAssets"]},
             {"required": ["otherAssets"]},
             {"required": ["propertyAssets"]},
-            {"required": ["shareAssets"]}
+            {"required": ["shareAssets"]},
+            {"required": ["businessAssets"]}
           ]
         },
         "beneficiaries": {
@@ -1440,7 +1421,7 @@
             },
             "companyBeneficiaries": {
               "$ref": "#/definitions/companyBeneficiariesType"
-            },
+            }
           },
           "type": "object",
           "anyOf": [

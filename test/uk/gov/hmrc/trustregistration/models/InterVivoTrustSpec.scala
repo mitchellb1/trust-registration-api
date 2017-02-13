@@ -21,37 +21,5 @@ import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 
 
 class InterVivoTrustSpec extends PlaySpec with ScalaDataExamples with JsonExamples{
-  "Inter Vivo Fund Trust" must {
-    "throw an exception" when{
-      "there is no assets" in {
-        val assets = Assets(None)
-        val ex = the[IllegalArgumentException] thrownBy (InterVivoTrust(assets,beneficiaries,true))
-        ex.getMessage() mustEqual  ("requirement failed: Must have at least one type of Asset")
-      }
 
-      "the required beneficiaries are not there" in {
-        val assets = Assets(Some(List(2.0f,2.5f)))
-        val beneficiaries = Beneficiaries(None,Some(List(employeeBeneficiary)))
-        val ex = the[IllegalArgumentException] thrownBy (InterVivoTrust(assets,beneficiaries,true))
-        ex.getMessage() mustEqual  ("requirement failed: Must have at least one required Beneficiary")
-      }
-
-      "no assets are defined" in {
-        val ex = the[IllegalArgumentException] thrownBy (InterVivoTrust(Assets(), beneficiaries, true))
-        ex.getMessage() mustEqual  "requirement failed: Must have at least one type of Asset"
-      }
-    }
-
-    "not throw an exception" when {
-      "there is one asset" in {
-        val assets = Assets(Some(List(2.0f,2.5f)))
-        noException should be thrownBy (InterVivoTrust(assets,beneficiaries,true))
-      }
-
-      "there is more than one type of asset" in {
-        val assets = Assets(Some(List(2.0f,2.5f)),None,None,None,None,Some(List(otherAsset)))
-        noException should be thrownBy (InterVivoTrust(assets,beneficiaries,true))
-      }
-    }
-  }
 }

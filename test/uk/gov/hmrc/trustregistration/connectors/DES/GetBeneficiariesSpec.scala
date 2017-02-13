@@ -78,13 +78,7 @@ class GetBeneficiariesSpec extends PlaySpec with OneAppPerSuite with DESConnecto
         verify(mockAudit, times(1)).doAudit(auditFailureMessage, SUT.AuditGetBeneficiariesIdentifier)
       }
 
-      "DES returns a 200 with empty Json data" in {
-        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse("{}")))))
-        val result = Await.result(SUT.getBeneficiaries("1234"),Duration.Inf)
-        result mustBe InternalServerErrorResponse
 
-        verify(mockAudit, times(1)).doAudit(auditFailureMessage, SUT.AuditGetBeneficiariesIdentifier)
-      }
 
       "DES returns a 200 with invalid Json data" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(invalidBeneficiariesJson)))))

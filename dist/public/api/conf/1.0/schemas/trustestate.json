@@ -19,6 +19,10 @@
           "$ref": "#/definitions/estateType"
         }
       },
+      "oneOf" : [
+        {"required": ["trust"]},
+        {"required": ["estate"]}
+      ],
       "type": "object"
     },
     "assetsType": {
@@ -46,7 +50,11 @@
       },
       "anyOf" : [
         {"required": ["monetaryAssets"]},
-        {"required": ["shareAssets"]}
+        {"required": ["otherAssets"]},
+        {"required": ["partnershipAssets"]},
+        {"required": ["propertyAssets"]},
+        {"required": ["shareAssets"]},
+        {"required": ["businessAssets"]}
       ],
       "type": "object"
     },
@@ -77,6 +85,9 @@
         },
         "companyBeneficiaries" : {
           "$ref": "#/definitions/companyBeneficiariesType"
+        },
+        "unidentifiedBeneficiaries" : {
+          "$ref": "#/definitions/unidentifiedBeneficiariesType"
         }
       },
       "anyOf" : [
@@ -87,7 +98,8 @@
         {"required": ["charityBeneficiaries"]},
         {"required": ["individualBeneficiaries"]},
         {"required": ["trustBeneficiaries"]},
-        {"required": ["companyBeneficiaries"]}
+        {"required": ["companyBeneficiaries"]},
+        {"required": ["unidentifiedBeneficiaries"]}
       ],
       "type": "object"
     },
@@ -113,67 +125,51 @@
       },
       "type": "object"
     },
-    "businessAssetsType":  {
+    "businessAssetsType": {
       "description": "Business Assets Type",
-      "additionalProperties": false,
-      "properties": {
-        "businessAssets": {
-          "type": "array",
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "businessDescription": {
-                "type": "string"
-              },
-              "businessName": {
-                "type": "string"
-              },
-              "businessPayeRef": {
-                "type": "string"
-              },
-              "businessValue": {
-                "type": "number"
-              },
-              "correspondenceAddress": {
-                "$ref": "#/definitions/correspondenceAddressType"
-              },
-              "lastValuationDate": {
-                "type": "string"
-              }
-            },
-            "type": "object"
+      "type" : "array",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "businessDescription": {
+            "type": "string"
+          },
+          "businessValue": {
+            "type": "number"
+          },
+          "company": {
+            "$ref": "#/definitions/companyType"
           }
-        }
-      },
-      "type": "object"
+        },
+        "type": "object",
+        "required" : [
+          "businessDescription",
+          "businessValue",
+          "company"
+        ]
+      }
     },
     "charityBeneficiariesType": {
       "description": "Charity Beneficiaries Type",
       "additionalProperties": false,
-      "properties": {
-        "charityBeneficiaries": {
-          "type": "array",
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "charityName": {
-                "type": "string"
-              },
-              "charityNumber": {
-                "type": "string"
-              },
-              "correspondenceAddress": {
-                "$ref": "#/definitions/correspondenceAddressType"
-              },
-              "income": {
-                "$ref": "#/definitions/incomeType"
-              }
-            },
-            "type": "object"
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "charityName": {
+            "type": "string"
+          },
+          "charityNumber": {
+            "type": "string"
+          },
+          "correspondenceAddress": {
+            "$ref": "#/definitions/correspondenceAddressType"
           }
-        }
+        },
+        "type": "object",
+        "required": ["charityName","charityNumber","correspondenceAddress"]
       },
-      "type": "object"
+      "minItems": 1
     },
     "companyBeneficiariesType": {
       "description": "Company Beneficiaries Type",
@@ -612,7 +608,8 @@
             {"required": ["monetaryAssets"]},
             {"required": ["otherAssets"]},
             {"required": ["propertyAssets"]},
-            {"required": ["shareAssets"]}
+            {"required": ["shareAssets"]},
+            {"required": ["businessAssets"]}
           ]
         },
         "beneficiaries": {
@@ -1383,49 +1380,61 @@
         "assets": {
           "additionalProperties": false,
           "properties": {
-            "businessAssets": {
-              "$ref": "#/definitions/businessAssetsType"
-            },
             "monetaryAssets": {
               "$ref": "#/definitions/monetaryAssetsType"
-            },
-            "otherAssets": {
-              "$ref": "#/definitions/otherAssetsType"
             },
             "propertyAssets": {
               "$ref": "#/definitions/propertyAssetsType"
             },
             "shareAssets": {
               "$ref": "#/definitions/shareAssetsType"
+            },
+            "businessAssets": {
+              "$ref": "#/definitions/businessAssetsType"
+            },
+            "otherAssets": {
+              "$ref": "#/definitions/otherAssetsType"
             }
           },
           "type": "object",
           "anyOf": [
-            {"required": ["businessAssets"]},
             {"required": ["monetaryAssets"]},
-            {"required": ["otherAssets"]},
             {"required": ["propertyAssets"]},
-            {"required": ["shareAssets"]}
+            {"required": ["shareAssets"]},
+            {"required": ["businessAssets"]},
+            {"required": ["otherAssets"]}
           ]
         },
         "beneficiaries": {
           "additionalProperties": false,
           "properties": {
-            "charityBeneficiaries": {
-              "$ref": "#/definitions/charityBeneficiariesType"
-            },
             "individualBeneficiaries": {
               "$ref": "#/definitions/individualBeneficiariesType"
             },
+            "charityBeneficiaries": {
+              "$ref": "#/definitions/charityBeneficiariesType"
+            },
+            "trustBeneficiaries": {
+              "$ref": "#/definitions/trustBeneficiariesType"
+            },
+            "unidentifiedBeneficiaries": {
+              "$ref": "#/definitions/unidentifiedBeneficiariesType"
+            },
             "otherBeneficiaries": {
               "$ref": "#/definitions/otherBeneficiariesType"
+            },
+            "companyBeneficiaries": {
+              "$ref": "#/definitions/companyBeneficiariesType"
             }
           },
           "type": "object",
           "anyOf": [
-            {"required": ["charityBeneficiaries"]},
             {"required": ["individualBeneficiaries"]},
-            {"required": ["otherBeneficiaries"]}
+            {"required": ["charityBeneficiaries"]},
+            {"required": ["trustBeneficiaries"]},
+            {"required": ["unidentifiedBeneficiaries"]},
+            {"required": ["otherBeneficiaries"]},
+            {"required": ["companyBeneficiaries"]}
           ]
         },
         "deceased": {

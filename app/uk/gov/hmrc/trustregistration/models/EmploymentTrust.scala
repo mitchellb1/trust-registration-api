@@ -24,19 +24,46 @@ case class EmploymentTrust(assets: Assets,
                            isEmployerFinancedRetirementBenefitScheme: Option[Boolean] = None,
                            employerFinancedRetirementBenefitSchemeStartDate: Option[DateTime] = None) {
 
-  private val atleastOneTypeOfAsset: Boolean = ((assets.monetaryAssets.isDefined && assets.monetaryAssets.get.size > 0) ||
+//  private val atleastOneTypeOfAsset: Boolean = ((assets.monetaryAssets.isDefined && assets.monetaryAssets.get.size > 0) ||
+//    (assets.propertyAssets.isDefined && assets.propertyAssets.get.size > 0) ||
+//    (assets.shareAssets.isDefined && assets.shareAssets.get.size > 0) ||
+//    (assets.businessAssets.isDefined && assets.businessAssets.get.size > 0))
+//
+//  private val atleastOneRequiredBenefciary: Boolean = (beneficiaries.individualBeneficiaries.isDefined ||
+//    beneficiaries.directorBeneficiaries.isDefined ||
+//    beneficiaries.employeeBeneficiaries.isDefined ||
+//    beneficiaries.otherBeneficiaries.isDefined ||
+//    beneficiaries.trustBeneficiaries.isDefined)
+//
+//  require(atleastOneTypeOfAsset, "Must have at least one type of Asset")
+//  require(atleastOneRequiredBenefciary, "Must have at least one required Beneficiary")
+
+
+
+  private val atleastOneTypeOfRequiredAsset: Boolean = ((assets.monetaryAssets.isDefined && assets.monetaryAssets.get.size > 0) ||
     (assets.propertyAssets.isDefined && assets.propertyAssets.get.size > 0) ||
     (assets.shareAssets.isDefined && assets.shareAssets.get.size > 0) ||
-    (assets.businessAssets.isDefined && assets.businessAssets.get.size > 0))
+    (assets.businessAssets.isDefined && assets.businessAssets.get.size > 0) ||
+    (assets.otherAssets.isDefined && assets.otherAssets.get.size > 0))
+  require(atleastOneTypeOfRequiredAsset, "Must have at least one type of required Asset")
 
-  private val atleastOneRequiredBenefciary: Boolean = (beneficiaries.individualBeneficiaries.isDefined ||
-    beneficiaries.directorBeneficiaries.isDefined ||
-    beneficiaries.employeeBeneficiaries.isDefined ||
-    beneficiaries.otherBeneficiaries.isDefined ||
-    beneficiaries.trustBeneficiaries.isDefined)
+  private val noOtherTypesOfAsset: Boolean = ((assets.partnershipAssets.isDefined ) )
+  require(!noOtherTypesOfAsset, "Must have no other types of Asset")
 
-  require(atleastOneTypeOfAsset, "Must have at least one type of Asset")
-  require(atleastOneRequiredBenefciary, "Must have at least one required Beneficiary")
+
+  private val atleastOneTypeOfRequiredBeneficiaries: Boolean = ((beneficiaries.individualBeneficiaries.isDefined && beneficiaries.individualBeneficiaries.get.size > 0) ||
+    (beneficiaries.directorBeneficiaries.isDefined && beneficiaries.directorBeneficiaries.get.size > 0) ||
+    (beneficiaries.otherBeneficiaries.isDefined && beneficiaries.otherBeneficiaries.get.size > 0) ||
+    (beneficiaries.trustBeneficiaries.isDefined && beneficiaries.trustBeneficiaries.get.size > 0) ||
+    (beneficiaries.unidentifiedBeneficiaries.isDefined && beneficiaries.unidentifiedBeneficiaries.get.size > 0) ||
+    (beneficiaries.employeeBeneficiaries.isDefined && beneficiaries.employeeBeneficiaries.get.size > 0) ||
+    (beneficiaries.companyBeneficiaries.isDefined && beneficiaries.companyBeneficiaries.get.size > 0) )
+  require(atleastOneTypeOfRequiredBeneficiaries, "Must have at least one type of required Beneficiary")
+
+  private val noOtherTypesOfBeneficiaries: Boolean = beneficiaries.charityBeneficiaries.isDefined
+  require(!noOtherTypesOfBeneficiaries, "Must have no other types of Beneficiary")
+
+
 }
 
 object EmploymentTrust{

@@ -235,16 +235,18 @@ trait ScalaDataExamples {
     correspondenceAddress = address
   )
 
+  val companyBeneficiary = CompanyBeneficiary(
+    company = company
+  )
+
   val directorBeneficiary = DirectorBeneficiary(
     individual = individual)
 
 
   val charityBeneficiary = CharityBeneficiary(
-    name = "Charity Name",
-    number = "123456789087654",
-    correspondenceAddress = address,
-    isIncomeAtTrusteeDiscretion = false,
-    shareOfIncome = Some(20)
+    charityName = "Charity Name",
+    charityNumber = "123456789087654",
+    correspondenceAddress = address
   )
 
   val otherBeneficiary = OtherBeneficiary(
@@ -266,7 +268,7 @@ trait ScalaDataExamples {
 
   val legality = Legality("ES",Some("ES"),true,None)
 
-  val businessAsset = BusinessAsset("Test","Test","This is a description",address,1234, Some(new DateTime("1940-04-04")))
+  val businessAsset = BusinessAsset("This is a description",1234, company)
 
   val shareAsset = ShareAsset(1234,"shareCompanyName","shareCompanyRegistrationNumber","shareClass","shareType",123400.50f)
 
