@@ -24,22 +24,6 @@ case class EmploymentTrust(assets: Assets,
                            isEmployerFinancedRetirementBenefitScheme: Option[Boolean] = None,
                            employerFinancedRetirementBenefitSchemeStartDate: Option[DateTime] = None) {
 
-//  private val atleastOneTypeOfAsset: Boolean = ((assets.monetaryAssets.isDefined && assets.monetaryAssets.get.size > 0) ||
-//    (assets.propertyAssets.isDefined && assets.propertyAssets.get.size > 0) ||
-//    (assets.shareAssets.isDefined && assets.shareAssets.get.size > 0) ||
-//    (assets.businessAssets.isDefined && assets.businessAssets.get.size > 0))
-//
-//  private val atleastOneRequiredBenefciary: Boolean = (beneficiaries.individualBeneficiaries.isDefined ||
-//    beneficiaries.directorBeneficiaries.isDefined ||
-//    beneficiaries.employeeBeneficiaries.isDefined ||
-//    beneficiaries.otherBeneficiaries.isDefined ||
-//    beneficiaries.trustBeneficiaries.isDefined)
-//
-//  require(atleastOneTypeOfAsset, "Must have at least one type of Asset")
-//  require(atleastOneRequiredBenefciary, "Must have at least one required Beneficiary")
-
-
-
   private val atleastOneTypeOfRequiredAsset: Boolean = ((assets.monetaryAssets.isDefined && assets.monetaryAssets.get.size > 0) ||
     (assets.propertyAssets.isDefined && assets.propertyAssets.get.size > 0) ||
     (assets.shareAssets.isDefined && assets.shareAssets.get.size > 0) ||

@@ -62,9 +62,6 @@
       "description": "All possible beneficiary types",
       "additionalProperties": false,
       "properties": {
-        "buildingLandBeneficiaries": {
-          "$ref": "#/definitions/buildingLandBeneficiariesType"
-        },
         "charityBeneficiaries": {
           "$ref": "#/definitions/charityBeneficiariesType"
         },
@@ -91,7 +88,6 @@
         }
       },
       "anyOf" : [
-        {"required": ["buildingLandBeneficiaries"]},
         {"required": ["charityBeneficiaries"]},
         {"required": ["directorBeneficiaries"]},
         {"required": ["employeeBeneficiaries"]},

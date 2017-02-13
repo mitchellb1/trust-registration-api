@@ -86,21 +86,6 @@ case class Beneficiaries(
                           trustBeneficiaries: Option[List[TrustBeneficiary]] = None,
                           companyBeneficiaries: Option[List[CompanyBeneficiary]] = None,
                           unidentifiedBeneficiaries: Option[List[UnidentifiedBeneficiary]] = None) {
-  //These tests now made specificly in the individual trusts
-
-
-//  private val atLeastOneBeneficiary: Boolean =(
-//    (individualBeneficiaries.isDefined && individualBeneficiaries.get.size > 0) ||
-//    (employeeBeneficiaries.isDefined && employeeBeneficiaries.get.size > 0) ||
-//    (directorBeneficiaries.isDefined && directorBeneficiaries.get.size > 0) ||
-//    (charityBeneficiaries.isDefined && charityBeneficiaries.get.size > 0) ||
-//    (otherBeneficiaries.isDefined && otherBeneficiaries.get.size > 0) ||
-//    (trustBeneficiaries.isDefined && trustBeneficiaries.get.size > 0) ||
-//    (companyBeneficiaries.isDefined && companyBeneficiaries.get.size > 0) ||
-//    (unidentifiedBeneficiaries.isDefined && unidentifiedBeneficiaries.get.size > 0)
-//    )
-//
-//  require(atLeastOneBeneficiary, "Must have at least one type Beneficiary")
 }
 
 object Beneficiaries {
