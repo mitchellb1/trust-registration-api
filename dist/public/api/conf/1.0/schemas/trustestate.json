@@ -593,9 +593,6 @@
             "monetaryAssets": {
               "$ref": "#/definitions/monetaryAssetsType"
             },
-            "otherAssets": {
-              "$ref": "#/definitions/otherAssetsType"
-            },
             "propertyAssets": {
               "$ref": "#/definitions/propertyAssetsType"
             },
@@ -606,7 +603,6 @@
           "type": "object",
           "anyOf": [
             {"required": ["monetaryAssets"]},
-            {"required": ["otherAssets"]},
             {"required": ["propertyAssets"]},
             {"required": ["shareAssets"]},
             {"required": ["businessAssets"]}
@@ -847,7 +843,7 @@
         }
       },
       "required" : [
-        "givenName", "familyName"
+        "givenName", "familyName", "dateOfBirth"
       ],
       "type": "object"
     },
