@@ -837,7 +837,7 @@
         }
       },
       "required" : [
-        "givenName", "familyName"
+        "givenName", "familyName", "dateOfBirth"
       ],
       "type": "object"
     },
