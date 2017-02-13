@@ -22,20 +22,6 @@ case class InterVivoTrust(assets: Assets,
                           beneficiaries: Beneficiaries,
                           isHoldOverClaim: Boolean,
                           deceased: Option[Individual] = None){
-  private val atleastOneTypeOfAsset: Boolean = ((assets.monetaryAssets.isDefined && assets.monetaryAssets.get.size > 0) ||
-    (assets.propertyAssets.isDefined && assets.propertyAssets.get.size > 0) ||
-    (assets.shareAssets.isDefined && assets.shareAssets.get.size > 0)||
-    (assets.businessAssets.isDefined && assets.shareAssets.get.size > 0) ||
-    (assets.partnershipAssets.isDefined && assets.partnershipAssets.get.size > 0) ||
-    (assets.otherAssets.isDefined && assets.otherAssets.get.size > 0))
-
-
-  private val containsRequiredBeneficiaries: Boolean = (beneficiaries.individualBeneficiaries.isDefined ||
-    beneficiaries.charityBeneficiaries.isDefined ||
-    beneficiaries.otherBeneficiaries.isDefined)
-
-  require(atleastOneTypeOfAsset, "Must have at least one type of Asset")
-  require(containsRequiredBeneficiaries, "Must have at least one required Beneficiary")
 }
 
 

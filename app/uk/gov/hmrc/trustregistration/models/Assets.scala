@@ -24,10 +24,6 @@ case class Assets(monetaryAssets: Option[List[Float]] = None,
                   partnershipAssets : Option[List[PartnershipAsset]] = None,
                   businessAssets: Option[List[BusinessAsset]] = None,
                   otherAssets: Option[List[OtherAsset]] = None) {
-
-  private val mustHaveAtleastOneValueWhenMonetaryAssetsDefined: Boolean = (!monetaryAssets.isDefined || monetaryAssets.isDefined && monetaryAssets.get.size > 0)
-
-  require(mustHaveAtleastOneValueWhenMonetaryAssetsDefined , "If monetary assets are defined, at least one must be provided")
 }
 
 object Assets {

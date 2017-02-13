@@ -19,39 +19,50 @@ package uk.gov.hmrc.trustregistration.models
 import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
 
-class WillIntestacyTrustSpec extends PlaySpec with ScalaDataExamples{
+class WillIntestacyTrustSpec extends PlaySpec with ScalaDataExamples {
+
   "WillIntestacyTrust" must{
-    "throw an exception" when{
-      "there is no assets" in {
-        val assets = Assets(None)
-        val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(assets,beneficiaries))
-        ex.getMessage() mustEqual  "requirement failed: Must have at least one type of Asset"
+      "throw an exception" when{
+        "there are no assets" in {
+          val assets = Assets(None,None,None,None,None,None)
+          val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None)
+          val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(assets,beneficiaries, deceased, true))
+          ex.getMessage() mustEqual  "requirement failed: Must have at least one type of required Asset"
+        }
+
+        "there are no beneficiaries" in {
+          val assets = Assets(None,None,None,None,None,Some(List(otherAsset)))
+          val beneficiaries = Beneficiaries(None,None,None,None,None,None,None,None)
+          val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(assets,beneficiaries, deceased, true))
+          ex.getMessage() mustEqual  "requirement failed: Must have at least one type of required Beneficiary"
+        }
+
+        "the wrong Beneficiaries are defined" in {
+          val assets = Assets(Some(List(2.0f,2.5f)),None,None,None,None,None)
+          val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)), Some(List(employeeBeneficiary)), Some(List(directorBeneficiary)), None, None, None, None, None)
+          val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(assets,beneficiaries, deceased, true))
+          ex.getMessage() mustEqual  "requirement failed: Must have no other types of Beneficiary"
+        }
+
+        "the wrong assets are defined" in {
+          val assets = Assets(Some(List(2.0f,2.5f)),None,Some(List(shareAsset)),Some(List(partnershipAsset)),None,None)
+          val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None)
+          val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(assets,beneficiaries, deceased, true))
+          ex.getMessage() mustEqual  "requirement failed: Must have no other types of Asset"
+        }
       }
-
-      "the wrong Beneficiaries are defined" in {
-        val assets = Assets(Some(List(2.0f,2.5f)))
-
-        val beneficiaries = Beneficiaries(None,Some(List(employeeBeneficiary)))
-
-        val ex = the[IllegalArgumentException] thrownBy WillIntestacyTrust(assets,beneficiaries)
-        ex.getMessage() mustEqual  "requirement failed: Must have at least one required Beneficiary"
-      }
-
-      "no assets are defined" in {
-        val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(Assets(), beneficiaries))
-        ex.getMessage() mustEqual  "requirement failed: Must have at least one type of Asset"
-      }
-    }
 
     "not throw an exception" when {
       "there is one asset" in {
         val assets = Assets(Some(List(2.0f,2.5f)))
-        noException should be thrownBy (WillIntestacyTrust(assets,beneficiaries))
+        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None)
+        noException should be thrownBy (WillIntestacyTrust(assets, beneficiaries, deceased, true))
       }
 
       "there is more than one type of asset" in {
         val assets = Assets(Some(List(2.0f,2.5f)),None,None,None,None,Some(List(otherAsset)))
-        noException should be thrownBy (WillIntestacyTrust(assets,beneficiaries))
+        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None)
+        noException should be thrownBy (WillIntestacyTrust(assets, beneficiaries, deceased, true))
       }
     }
   }

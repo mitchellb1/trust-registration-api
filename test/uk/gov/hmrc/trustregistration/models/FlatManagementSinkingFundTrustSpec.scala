@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.trustregistration.models
 
-import org.joda.time.DateTime
 import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
 
@@ -29,97 +28,103 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
       // assets
 
       "no assets are defined" in {
-        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(Assets() , Beneficiaries(otherBeneficiaries = otherBeneficiaries))
-        ex.getMessage mustEqual  "requirement failed: Must have at least one monetary asset"
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(Assets(None) , Beneficiaries(otherBeneficiaries = otherBeneficiaries))
+        ex.getMessage mustEqual  "requirement failed: Must have at least one type of required Asset"
       }
 
       "a property asset is defined" in {
+
         val assets = Assets(
+          monetaryAssets = Some(List(2.0f,2.5f)),
           propertyAssets = Some(List(PropertyAsset(address, 1L)))
         )
 
         val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries))
-        ex.getMessage mustEqual  "requirement failed: Only monetary assets are allowed"
+        ex.getMessage mustEqual  "requirement failed: Must have no other types of Asset"
       }
 
       "a share asset is defined" in {
         val assets = Assets(
+          monetaryAssets = Some(List(2.0f,2.5f)),
           shareAssets = Some(List(ShareAsset(1234,"shareCompanyName","shareCompanyRegistrationNumber","shareClass","shareType",123400.00f)))
         )
 
         val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries))
-        ex.getMessage mustEqual  "requirement failed: Only monetary assets are allowed"
+        ex.getMessage mustEqual  "requirement failed: Must have no other types of Asset"
       }
 
       "a partnership asset is defined" in {
         val assets = Assets(
-          partnershipAssets = Some(List(PartnershipAsset("Test", "Test", DateTime.now)))
+          monetaryAssets = Some(List(2.0f,2.5f)),
+          partnershipAssets = Some(List(partnershipAsset))
         )
 
         val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries))
-        ex.getMessage mustEqual  "requirement failed: Only monetary assets are allowed"
+        ex.getMessage mustEqual  "requirement failed: Must have no other types of Asset"
       }
 
       "a business asset is defined" in {
         val assets = Assets(
-          businessAssets = Some(List(BusinessAsset("Test", 1000, company)))
+          monetaryAssets = Some(List(2.0f,2.5f)),
+          businessAssets = Some(List(businessAsset))
         )
 
         val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries))
-        ex.getMessage mustEqual  "requirement failed: Only monetary assets are allowed"
+        ex.getMessage mustEqual  "requirement failed: Must have no other types of Asset"
       }
 
       "an other asset is defined" in {
         val assets = Assets(
+          monetaryAssets = Some(List(2.0f,2.5f)),
           otherAssets = Some(List(otherAsset))
         )
 
         val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries))
-        ex.getMessage mustEqual  "requirement failed: Only monetary assets are allowed"
+        ex.getMessage mustEqual  "requirement failed: Must have no other types of Asset"
       }
 
       // beneficiaries
 
       "no beneficiaries are defined" in {
         val assets = Assets(monetaryAssets = Some(List(2.0f, 2.5f)))
-
+        val beneficiaries = Beneficiaries(None,None,None,None,None,None,None,None)
         val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets, Beneficiaries())
-        ex.getMessage mustEqual  "requirement failed: Must have at least one beneficiary"
+        ex.getMessage mustEqual  "requirement failed: Must have at least one type of required Beneficiary"
       }
 
       "an empty list of other beneficiaries are sent" in {
         val assets = Assets(monetaryAssets = Some(List(2.0f, 2.5f)))
 
         val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets, Beneficiaries(otherBeneficiaries = Some(List())))
-        ex.getMessage mustEqual  "requirement failed: Must have at least one beneficiary"
+        ex.getMessage mustEqual  "requirement failed: Must have at least one type of required Beneficiary"
       }
 
       "a individual beneficiaries is defined" in {
         val assets = Assets(monetaryAssets = Some(List(2.0f, 2.5f)))
 
-        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(individualBeneficiaries = Some(List(individualBeneficiary))))
-        ex.getMessage mustEqual  "requirement failed: Only other beneficiaries are allowed"
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries, individualBeneficiaries = Some(List(individualBeneficiary))))
+        ex.getMessage mustEqual  "requirement failed: Must have no other types of Beneficiary"
       }
 
       "a employee beneficiaries is defined" in {
         val assets = Assets(monetaryAssets = Some(List(2.0f, 2.5f)))
 
-        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(employeeBeneficiaries = Some(List(employeeBeneficiary))))
-        ex.getMessage mustEqual  "requirement failed: Only other beneficiaries are allowed"
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries, employeeBeneficiaries = Some(List(employeeBeneficiary))))
+        ex.getMessage mustEqual  "requirement failed: Must have no other types of Beneficiary"
       }
 
       "a director beneficiaries is defined" in {
         val assets = Assets(monetaryAssets = Some(List(2.0f, 2.5f)))
 
-        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(directorBeneficiaries = Some(List(directorBeneficiary))))
-        ex.getMessage mustEqual  "requirement failed: Only other beneficiaries are allowed"
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries, directorBeneficiaries = Some(List(directorBeneficiary))))
+        ex.getMessage mustEqual  "requirement failed: Must have no other types of Beneficiary"
       }
 
       "a charity beneficiaries is defined" in {
         val assets = Assets(monetaryAssets = Some(List(2.0f, 2.5f)))
 
-        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(charityBeneficiaries = Some(List(charityBeneficiary))))
-        ex.getMessage mustEqual  "requirement failed: Only other beneficiaries are allowed"
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries, charityBeneficiaries = Some(List(charityBeneficiary))))
+        ex.getMessage mustEqual  "requirement failed: Must have no other types of Beneficiary"
       }
 
     }

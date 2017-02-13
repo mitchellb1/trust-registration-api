@@ -12,5 +12,6 @@
       "{INDIVIDUALBENEFICIARY}"
     ]
   },
-  "deceased" : "{INDIVIDUAL}"
+  "deceased" : "{DECEASED}",
+  "isDovTypeAddition": true
 }

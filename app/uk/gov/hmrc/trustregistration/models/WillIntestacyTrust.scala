@@ -19,21 +19,31 @@ package uk.gov.hmrc.trustregistration.models
 import play.api.libs.json.Json
 
 
-case class WillIntestacyTrust(assets: Assets, beneficiaries: Beneficiaries) {
+case class WillIntestacyTrust(assets: Assets, beneficiaries: Beneficiaries, deceased: Deceased, isDovTypeAddition: Boolean) {
 
-  private val atleastOneTypeOfAsset: Boolean = ((assets.monetaryAssets.isDefined && assets.monetaryAssets.get.size > 0) ||
+  private val atleastOneTypeOfRequiredAsset: Boolean = (assets.monetaryAssets.isDefined && assets.monetaryAssets.get.size > 0) ||
     (assets.propertyAssets.isDefined && assets.propertyAssets.get.size > 0) ||
-    (assets.shareAssets.isDefined && assets.shareAssets.get.size > 0)||
-    (assets.businessAssets.isDefined && assets.shareAssets.get.size > 0) ||
-    (assets.otherAssets.isDefined && assets.otherAssets.get.size > 0))
+    (assets.shareAssets.isDefined && assets.shareAssets.get.size > 0) ||
+    (assets.businessAssets.isDefined && assets.businessAssets.get.size > 0) ||
+    (assets.otherAssets.isDefined && assets.otherAssets.get.size > 0)
+  require(atleastOneTypeOfRequiredAsset, "Must have at least one type of required Asset")
+
+  private val noOtherTypesOfAsset: Boolean = ((assets.partnershipAssets.isDefined ) )
+  require(!noOtherTypesOfAsset, "Must have no other types of Asset")
 
 
-  private val containsRequiredBeneficiaries: Boolean = (beneficiaries.individualBeneficiaries.isDefined ||
-    beneficiaries.charityBeneficiaries.isDefined ||
-    beneficiaries.otherBeneficiaries.isDefined)
+  private val atleastOneTypeOfRequiredBeneficiaries: Boolean = (beneficiaries.individualBeneficiaries.isDefined && beneficiaries.individualBeneficiaries.get.size > 0) ||
+    (beneficiaries.charityBeneficiaries.isDefined && beneficiaries.charityBeneficiaries.get.size > 0) ||
+    (beneficiaries.otherBeneficiaries.isDefined && beneficiaries.otherBeneficiaries.get.size > 0) ||
+    (beneficiaries.trustBeneficiaries.isDefined && beneficiaries.trustBeneficiaries.get.size > 0) ||
+    (beneficiaries.unidentifiedBeneficiaries.isDefined && beneficiaries.unidentifiedBeneficiaries.get.size > 0) ||
+    (beneficiaries.companyBeneficiaries.isDefined && beneficiaries.companyBeneficiaries.get.size > 0)
+  require(atleastOneTypeOfRequiredBeneficiaries, "Must have at least one type of required Beneficiary")
 
-  require(atleastOneTypeOfAsset, "Must have at least one type of Asset")
-  require(containsRequiredBeneficiaries, "Must have at least one required Beneficiary")
+  private val noOtherTypesOfBeneficiaries: Boolean = (beneficiaries.employeeBeneficiaries.isDefined ||
+                                                      beneficiaries.directorBeneficiaries.isDefined )
+  require(!noOtherTypesOfBeneficiaries, "Must have no other types of Beneficiary")
+
 }
 object WillIntestacyTrust{
   implicit val formats = Json.format[WillIntestacyTrust]

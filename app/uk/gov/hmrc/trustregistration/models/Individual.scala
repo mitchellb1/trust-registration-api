@@ -25,7 +25,6 @@ case class Individual(
      dateOfBirth: DateTime,
      otherName: Option[String]= None,
      nino: Option[String]= None,
-     dateOfDeath: Option[DateTime]= None,
      telephoneNumber: Option[String]= None,
      passport: Option[Passport] = None,
      correspondenceAddress: Option[Address] = None)

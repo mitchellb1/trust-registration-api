@@ -25,50 +25,55 @@ class HeritageMaintenanceFundTrustSpec extends PlaySpec with ScalaDataExamples {
     "throw an exception" when{
       "there is no assets" in {
         val assets = Assets(None)
+        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None)
         val ex = the[IllegalArgumentException] thrownBy (HeritageMaintenanceFundTrust(assets,beneficiaries,true))
-        ex.getMessage() mustEqual ("requirement failed: Must have at least one type of Asset")
+        ex.getMessage() mustEqual ("requirement failed: Must have at least one type of required Asset")
       }
 
       "a partnership asset is defined" in {
-        val assets =    Assets(None, None, None, Some(List(partnershipAsset)), None, None)
+        val assets =    Assets(Some(List(2.0f,2.5f)), None, None, Some(List(partnershipAsset)), None, None)
+        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None)
         val ex = the[IllegalArgumentException] thrownBy (HeritageMaintenanceFundTrust(assets,beneficiaries,true))
-        ex.getMessage() mustEqual ("requirement failed: Must not allow this type of asset")
+        ex.getMessage() mustEqual ("requirement failed: Must have no other types of Asset")
       }
 
-      "a busines asset is defined" in {
-        val assets = Assets(None, None, None, None, Some(List(businessAsset)), None)
+      "a business asset is defined" in {
+        val assets = Assets(Some(List(2.0f,2.5f)), None, None, None, Some(List(businessAsset)), None)
+        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None)
         val ex = the[IllegalArgumentException] thrownBy (HeritageMaintenanceFundTrust(assets,beneficiaries,true))
-        ex.getMessage() mustEqual ("requirement failed: Must not allow this type of asset")
+        ex.getMessage() mustEqual ("requirement failed: Must have no other types of Asset")
       }
 
       "the required beneficiaries are not there" in {
         val assets = Assets(Some(List(2.0f,2.5f)))
-        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)))
+        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None)
         val ex = the[IllegalArgumentException] thrownBy (HeritageMaintenanceFundTrust(assets,beneficiaries,true))
-        ex.getMessage() mustEqual  ("requirement failed: Must have at least one required Beneficiary")
+        ex.getMessage() mustEqual  ("requirement failed: Must have at least one type of required Beneficiary")
       }
 
       "no assets are defined" in {
+        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None)
         val ex = the[IllegalArgumentException] thrownBy (HeritageMaintenanceFundTrust(Assets(), beneficiaries, true))
-        ex.getMessage() mustEqual  "requirement failed: Must have at least one type of Asset"
+        ex.getMessage() mustEqual  "requirement failed: Must have at least one type of required Asset"
       }
     }
 
     "not throw an exception" when {
       "there is one asset" in {
         val assets = Assets(Some(List(2.0f,2.5f)))
+        val beneficiaries = Beneficiaries(None,None,None,None,otherBeneficiaries,None,None,None)
         noException should be thrownBy (HeritageMaintenanceFundTrust(assets,beneficiaries,true))
       }
 
       "there is more than one type of asset" in {
-        val otherAssets = otherAsset
-        val assets = Assets(Some(List(2.0f,2.5f)),None,None,None,None,Some(List(otherAssets)))
+        val assets = Assets(Some(List(2.0f,2.5f)),None,None,None,None,Some(List(otherAsset)))
+        val beneficiaries = Beneficiaries(None,None,None,None,otherBeneficiaries,None,None,None)
         noException should be thrownBy (HeritageMaintenanceFundTrust(assets,beneficiaries,true))
       }
 
       "there is other asset defined" in {
-        val otherAssets = otherAsset
-        val assets = Assets(None,None,None,None,None,Some(List(otherAssets)))
+        val assets = Assets(Some(List(2.0f,2.5f)),None,None,None,None,Some(List(otherAsset)))
+        val beneficiaries = Beneficiaries(None,None,None,None,otherBeneficiaries,None,None,None)
         noException should be thrownBy (HeritageMaintenanceFundTrust(assets,beneficiaries,true))
       }
     }

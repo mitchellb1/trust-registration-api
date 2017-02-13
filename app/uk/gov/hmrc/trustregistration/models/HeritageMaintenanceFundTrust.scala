@@ -23,18 +23,29 @@ case class HeritageMaintenanceFundTrust(assets: Assets,
                                         isMultiPurposeIncome: Boolean,
                                         deceased: Option[Individual] = None) {
 
-  private val atleastOneTypeOfAsset: Boolean = ((assets.monetaryAssets.isDefined && assets.monetaryAssets.get.size > 0)||
-    (assets.propertyAssets.isDefined && assets.propertyAssets.get.size > 0)||
+  private val atleastOneTypeOfRequiredAsset: Boolean = ((assets.monetaryAssets.isDefined && assets.monetaryAssets.get.size > 0) ||
+    (assets.propertyAssets.isDefined && assets.propertyAssets.get.size > 0) ||
     (assets.shareAssets.isDefined && assets.shareAssets.get.size > 0) ||
+
     (assets.otherAssets.isDefined && assets.otherAssets.get.size > 0))
+  require(atleastOneTypeOfRequiredAsset, "Must have at least one type of required Asset")
 
-  private val atleastOneRequiredBeneficiary: Boolean = beneficiaries.otherBeneficiaries.isDefined
+  private val noOtherTypesOfAsset: Boolean = (assets.partnershipAssets.isDefined || assets.businessAssets.isDefined)
+  require(!noOtherTypesOfAsset, "Must have no other types of Asset")
 
-  private val incorrectAsset: Boolean = !assets.partnershipAssets.isDefined && !assets.businessAssets.isDefined
 
-  require(incorrectAsset, "Must not allow this type of asset")
-  require(atleastOneTypeOfAsset, "Must have at least one type of Asset")
-  require(atleastOneRequiredBeneficiary, "Must have at least one required Beneficiary")
+  private val atleastOneTypeOfRequiredBeneficiaries: Boolean = (
+    (beneficiaries.otherBeneficiaries.isDefined && beneficiaries.otherBeneficiaries.get.size > 0)  )
+  require(atleastOneTypeOfRequiredBeneficiaries, "Must have at least one type of required Beneficiary")
+
+  private val noOtherTypesOfBeneficiaries: Boolean = ((beneficiaries.employeeBeneficiaries.isDefined ) ||
+                                                      (beneficiaries.directorBeneficiaries.isDefined )||
+                                                      (beneficiaries.trustBeneficiaries.isDefined) ||
+                                                      (beneficiaries.unidentifiedBeneficiaries.isDefined) ||
+                                                      (beneficiaries.companyBeneficiaries.isDefined)||
+                                                      (beneficiaries.individualBeneficiaries.isDefined) ||
+                                                      (beneficiaries.charityBeneficiaries.isDefined) )
+  require(!noOtherTypesOfBeneficiaries, "Must have no other types of Beneficiary")
 }
 
 object HeritageMaintenanceFundTrust{
