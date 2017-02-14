@@ -20,7 +20,7 @@ import org.joda.time.DateTime
 import play.api.libs.json.{JsString, Json, Reads, Writes}
 
 
-case class PartnershipAsset(tradeOrProfession: String, utr: String, startOfPartnership: DateTime)
+case class PartnershipAsset(partnershipName: String, partnershipUTR: String, startOfPartnership: DateTime)
 
 object PartnershipAsset{
   implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
