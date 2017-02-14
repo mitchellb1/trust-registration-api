@@ -35,7 +35,7 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
       "a property asset is defined" in {
 
         val assets = Assets(
-          monetaryAssets = Some(List(2.0f,2.5f)),
+          monetaryAssets = Some(List(2,2)),
           propertyAssets = Some(List(PropertyAsset(address, 1L)))
         )
 
@@ -45,8 +45,8 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
 
       "a share asset is defined" in {
         val assets = Assets(
-          monetaryAssets = Some(List(2.0f,2.5f)),
-          shareAssets = Some(List(ShareAsset(1234,"shareCompanyName","shareCompanyRegistrationNumber","shareClass","shareType",123400.00f)))
+          monetaryAssets = Some(List(2,2)),
+          shareAssets = Some(List(ShareAsset(1234,"shareCompanyName","shareCompanyRegistrationNumber","shareClass","shareType",123400)))
         )
 
         val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries))
@@ -55,7 +55,7 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
 
       "a partnership asset is defined" in {
         val assets = Assets(
-          monetaryAssets = Some(List(2.0f,2.5f)),
+          monetaryAssets = Some(List(2,2)),
           partnershipAssets = Some(List(partnershipAsset))
         )
 
@@ -65,7 +65,7 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
 
       "a business asset is defined" in {
         val assets = Assets(
-          monetaryAssets = Some(List(2.0f,2.5f)),
+          monetaryAssets = Some(List(2,2)),
           businessAssets = Some(List(businessAsset))
         )
 
@@ -75,7 +75,7 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
 
       "an other asset is defined" in {
         val assets = Assets(
-          monetaryAssets = Some(List(2.0f,2.5f)),
+          monetaryAssets = Some(List(2,2)),
           otherAssets = Some(List(otherAsset))
         )
 
@@ -86,42 +86,42 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
       // beneficiaries
 
       "no beneficiaries are defined" in {
-        val assets = Assets(monetaryAssets = Some(List(2.0f, 2.5f)))
+        val assets = Assets(monetaryAssets = Some(List(2, 2)))
         val beneficiaries = Beneficiaries(None,None,None,None,None,None,None,None)
         val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets, Beneficiaries())
         ex.getMessage mustEqual  "requirement failed: Must have at least one type of required Beneficiary"
       }
 
       "an empty list of other beneficiaries are sent" in {
-        val assets = Assets(monetaryAssets = Some(List(2.0f, 2.5f)))
+        val assets = Assets(monetaryAssets = Some(List(2, 2)))
 
         val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets, Beneficiaries(otherBeneficiaries = Some(List())))
         ex.getMessage mustEqual  "requirement failed: Must have at least one type of required Beneficiary"
       }
 
       "a individual beneficiaries is defined" in {
-        val assets = Assets(monetaryAssets = Some(List(2.0f, 2.5f)))
+        val assets = Assets(monetaryAssets = Some(List(2, 2)))
 
         val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries, individualBeneficiaries = Some(List(individualBeneficiary))))
         ex.getMessage mustEqual  "requirement failed: Must have no other types of Beneficiary"
       }
 
       "a employee beneficiaries is defined" in {
-        val assets = Assets(monetaryAssets = Some(List(2.0f, 2.5f)))
+        val assets = Assets(monetaryAssets = Some(List(2, 2)))
 
         val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries, employeeBeneficiaries = Some(List(employeeBeneficiary))))
         ex.getMessage mustEqual  "requirement failed: Must have no other types of Beneficiary"
       }
 
       "a director beneficiaries is defined" in {
-        val assets = Assets(monetaryAssets = Some(List(2.0f, 2.5f)))
+        val assets = Assets(monetaryAssets = Some(List(2, 2)))
 
         val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries, directorBeneficiaries = Some(List(directorBeneficiary))))
         ex.getMessage mustEqual  "requirement failed: Must have no other types of Beneficiary"
       }
 
       "a charity beneficiaries is defined" in {
-        val assets = Assets(monetaryAssets = Some(List(2.0f, 2.5f)))
+        val assets = Assets(monetaryAssets = Some(List(2, 2)))
 
         val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries, charityBeneficiaries = Some(List(charityBeneficiary))))
         ex.getMessage mustEqual  "requirement failed: Must have no other types of Beneficiary"
@@ -131,7 +131,7 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
 
     "not throw an exception" when {
       "there is a valid monetary asset and a valid other beneficiary" in {
-        val assets = Assets(monetaryAssets = Some(List(2.0f, 2.5f)))
+        val assets = Assets(monetaryAssets = Some(List(2, 2)))
         noException should be thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries))
       }
     }

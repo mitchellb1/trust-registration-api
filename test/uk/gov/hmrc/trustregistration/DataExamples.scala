@@ -268,13 +268,13 @@ trait ScalaDataExamples {
 
   val legality = Legality("ES",Some("ES"),true,None)
 
-  val businessAsset = BusinessAsset("This is a description",1234, company)
+  val businessAsset = BusinessAsset("This is a description",1234L, company)
 
-  val shareAsset = ShareAsset(1234,"shareCompanyName","shareCompanyRegistrationNumber","shareClass","shareType",123400.50f)
+  val shareAsset = ShareAsset(1234L,"shareCompanyName","shareCompanyRegistrationNumber","shareClass","shareType",123400L)
 
   val assets = Assets(None,None,Some(List(shareAsset,shareAsset)),None,Some(List(businessAsset,businessAsset)))
 
-  val monetaryAssets = Assets(monetaryAssets = Some(List(100f, 2.50f, 75f)))
+  val monetaryAssets = Assets(monetaryAssets = Some(List(100L, 2L, 75L)))
 
   val deceased = Deceased(individual, new DateTime(2000, 1, 1, 0, 0))
 

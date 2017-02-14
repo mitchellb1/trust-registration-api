@@ -38,14 +38,14 @@ class WillIntestacyTrustSpec extends PlaySpec with ScalaDataExamples {
         }
 
         "the wrong Beneficiaries are defined" in {
-          val assets = Assets(Some(List(2.0f,2.5f)),None,None,None,None,None)
+          val assets = Assets(Some(List(2,2)),None,None,None,None,None)
           val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)), Some(List(employeeBeneficiary)), Some(List(directorBeneficiary)), None, None, None, None, None)
           val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(assets,beneficiaries, deceased, true))
           ex.getMessage() mustEqual  "requirement failed: Must have no other types of Beneficiary"
         }
 
         "the wrong assets are defined" in {
-          val assets = Assets(Some(List(2.0f,2.5f)),None,Some(List(shareAsset)),Some(List(partnershipAsset)),None,None)
+          val assets = Assets(Some(List(2,2)),None,Some(List(shareAsset)),Some(List(partnershipAsset)),None,None)
           val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None)
           val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(assets,beneficiaries, deceased, true))
           ex.getMessage() mustEqual  "requirement failed: Must have no other types of Asset"
@@ -54,13 +54,13 @@ class WillIntestacyTrustSpec extends PlaySpec with ScalaDataExamples {
 
     "not throw an exception" when {
       "there is one asset" in {
-        val assets = Assets(Some(List(2.0f,2.5f)))
+        val assets = Assets(Some(List(2,2)))
         val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None)
         noException should be thrownBy (WillIntestacyTrust(assets, beneficiaries, deceased, true))
       }
 
       "there is more than one type of asset" in {
-        val assets = Assets(Some(List(2.0f,2.5f)),None,None,None,None,Some(List(otherAsset)))
+        val assets = Assets(Some(List(2,2)),None,None,None,None,Some(List(otherAsset)))
         val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None)
         noException should be thrownBy (WillIntestacyTrust(assets, beneficiaries, deceased, true))
       }

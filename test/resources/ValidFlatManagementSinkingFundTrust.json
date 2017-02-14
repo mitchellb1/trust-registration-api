@@ -1,6 +1,6 @@
 {
   "assets" : {
-    "monetaryAssets" : [100, 2.50, 75]
+    "monetaryAssets" : [100, 2, 75]
   },
   "beneficiaries" : {
     "otherBeneficiaries" : [

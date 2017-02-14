@@ -18,7 +18,7 @@ package uk.gov.hmrc.trustregistration.models
 
 import play.api.libs.json.Json
 
-case class Assets(monetaryAssets: Option[List[Float]] = None,
+case class Assets(monetaryAssets: Option[List[Long]] = None,
                   propertyAssets: Option[List[PropertyAsset]] = None,
                   shareAssets : Option[List[ShareAsset]] = None,
                   partnershipAssets : Option[List[PartnershipAsset]] = None,
