@@ -36,10 +36,10 @@ case class HeritageMaintenanceFundTrust(assets: Assets,
   private val noOtherTypesOfAsset: Boolean = (assets.partnershipAssets.isDefined || assets.businessAssets.isDefined)
   require(!noOtherTypesOfAsset, "Must have no other types of Asset")
 
-
   private val atleastOneTypeOfRequiredBeneficiaries: Boolean = (
     (beneficiaries.otherBeneficiaries.isDefined && beneficiaries.otherBeneficiaries.get.size > 0))
   require(atleastOneTypeOfRequiredBeneficiaries, "Must have at least one type of required Beneficiary")
+
 
   private val noOtherTypesOfBeneficiaries: Boolean = ((beneficiaries.employeeBeneficiaries.isDefined) ||
     (beneficiaries.directorBeneficiaries.isDefined) ||
@@ -47,8 +47,10 @@ case class HeritageMaintenanceFundTrust(assets: Assets,
     (beneficiaries.unidentifiedBeneficiaries.isDefined) ||
     (beneficiaries.companyBeneficiaries.isDefined) ||
     (beneficiaries.individualBeneficiaries.isDefined) ||
-    (beneficiaries.charityBeneficiaries.isDefined))
+    (beneficiaries.charityBeneficiaries.isDefined) ||
+    (beneficiaries.largeNumbersCompanyBeneficiaries.isDefined))
   require(!noOtherTypesOfBeneficiaries, "Must have no other types of Beneficiary")
+
 }
 
 object HeritageMaintenanceFundTrust {

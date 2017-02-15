@@ -109,6 +109,13 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
         ex.getMessage mustEqual  "requirement failed: Must have no other types of Beneficiary"
       }
 
+      "a large number company beneficiary is defined" in {
+        val assets = Assets(monetaryAssets = Some(List(2, 2)))
+
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries, largeNumbersCompanyBeneficiaries = Some(List(largeNumbersCompanyBeneficiary))))
+        ex.getMessage mustEqual  "requirement failed: Must have no other types of Beneficiary"
+      }
+
       "a employee beneficiaries is defined" in {
         val assets = Assets(monetaryAssets = Some(List(2, 2)))
 

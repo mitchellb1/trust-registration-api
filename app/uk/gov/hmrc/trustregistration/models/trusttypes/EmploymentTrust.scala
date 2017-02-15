@@ -43,7 +43,8 @@ case class EmploymentTrust(assets: Assets,
     (beneficiaries.trustBeneficiaries.isDefined && beneficiaries.trustBeneficiaries.get.size > 0) ||
     (beneficiaries.unidentifiedBeneficiaries.isDefined && beneficiaries.unidentifiedBeneficiaries.get.size > 0) ||
     (beneficiaries.employeeBeneficiaries.isDefined && beneficiaries.employeeBeneficiaries.get.size > 0) ||
-    (beneficiaries.companyBeneficiaries.isDefined && beneficiaries.companyBeneficiaries.get.size > 0))
+    (beneficiaries.companyBeneficiaries.isDefined && beneficiaries.companyBeneficiaries.get.size > 0) ||
+    (beneficiaries.largeNumbersCompanyBeneficiaries.isDefined && beneficiaries.largeNumbersCompanyBeneficiaries.get.size > 0))
   require(atleastOneTypeOfRequiredBeneficiaries, "Must have at least one type of required Beneficiary")
 
   private val noOtherTypesOfBeneficiaries: Boolean = beneficiaries.charityBeneficiaries.isDefined
