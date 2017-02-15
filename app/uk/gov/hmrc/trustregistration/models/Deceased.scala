@@ -19,7 +19,7 @@ package uk.gov.hmrc.trustregistration.models
 import org.joda.time.DateTime
 import play.api.libs.json.{JsString, Json, Reads, Writes}
 
-case class Deceased (individual: Individual, dateOfDeath: DateTime)
+case class Deceased(individual: Individual, dateOfDeath: DateTime)
 
 object Deceased {
   implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))

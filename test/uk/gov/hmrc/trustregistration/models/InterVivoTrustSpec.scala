@@ -17,6 +17,9 @@
 package uk.gov.hmrc.trustregistration.models
 
 import org.scalatestplus.play.PlaySpec
+import uk.gov.hmrc.trustregistration.models.assets.Assets
+import uk.gov.hmrc.trustregistration.models.beneficiaries.Beneficiaries
+import uk.gov.hmrc.trustregistration.models.trusttypes.InterVivoTrust
 import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 
 

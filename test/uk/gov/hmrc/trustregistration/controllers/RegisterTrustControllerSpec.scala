@@ -30,6 +30,7 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
+import uk.gov.hmrc.trustregistration.models.beneficiaries.Beneficiaries
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
 import uk.gov.hmrc.trustregistration.utils.{TrustsValidationError, _}
 import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}

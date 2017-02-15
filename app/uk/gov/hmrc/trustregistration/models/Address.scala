@@ -16,21 +16,22 @@
 
 package uk.gov.hmrc.trustregistration.models
 
-import play.api.libs.json.{JsPath, Json, Reads}
 import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Reads}
 
-case class Address (
-                     line1: String,
-                     line2: Option[String] = None,
-                     line3: Option[String] = None,
-                     line4: Option[String] = None,
-                     postalCode: Option[String] = None,
-                     countryCode: String){
+case class Address(
+                    line1: String,
+                    line2: Option[String] = None,
+                    line3: Option[String] = None,
+                    line4: Option[String] = None,
+                    postalCode: Option[String] = None,
+                    countryCode: String) {
   val postCodeMissingForGbAddress = countryCode == "GB" && postalCode.fold(true)(_.trim.isEmpty)
   val postalCodeNotPresentForNonGbAddresses = if (countryCode != "GB") !postalCode.isDefined else true
 
 
-  require(!postCodeMissingForGbAddress, s"""{\"message\": \"Invalid Json\",
+  require(!postCodeMissingForGbAddress,
+    s"""{\"message\": \"Invalid Json\",
          \"code\": 0,
          \"validationErrors\": [
          {
@@ -41,7 +42,8 @@ case class Address (
        }""".stripMargin)
 
 
-  require(postalCodeNotPresentForNonGbAddresses, s"""{\"message\": \"Invalid Json\",
+  require(postalCodeNotPresentForNonGbAddresses,
+    s"""{\"message\": \"Invalid Json\",
        \"code\": 0,
        \"validationErrors\": [
        {
@@ -55,12 +57,12 @@ case class Address (
 object Address {
   implicit val addressReads: Reads[Address] = (
     (JsPath \\ "line1").read[String] and
-    (JsPath \\ "line2").readNullable[String] and
-    (JsPath \\ "line3").readNullable[String] and
-    (JsPath \\ "line4").readNullable[String] and
-    (JsPath \\ "postalCode").readNullable[String] and
-    (JsPath \\ "countryCode").read[String]
-  )(Address.apply _)
+      (JsPath \\ "line2").readNullable[String] and
+      (JsPath \\ "line3").readNullable[String] and
+      (JsPath \\ "line4").readNullable[String] and
+      (JsPath \\ "postalCode").readNullable[String] and
+      (JsPath \\ "countryCode").read[String]
+    ) (Address.apply _)
 
   implicit val addressWrites = Json.writes[Address]
 }

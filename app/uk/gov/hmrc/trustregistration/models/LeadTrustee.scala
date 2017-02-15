@@ -26,6 +26,7 @@ case class LeadTrustee(individual: Option[Individual] = None, company: Option[Co
   require(atleastOneTypeOfTrustee, "Must have either an individual or company lead trustee")
   require(onlyOneTypeOfTrustee, "Must have only an individual or company lead trustee")
 }
-object LeadTrustee{
+
+object LeadTrustee {
   implicit val leadTrusteeFormats = Json.format[LeadTrustee]
 }

@@ -24,6 +24,7 @@ import uk.gov.hmrc.trustregistration.audit.TrustsAudit
 import uk.gov.hmrc.trustregistration.config.WSHttp
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
+import uk.gov.hmrc.trustregistration.models.beneficiaries.Beneficiaries
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

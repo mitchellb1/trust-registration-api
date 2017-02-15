@@ -14,22 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.models
+package uk.gov.hmrc.trustregistration.models.assets
 
 import org.joda.time.DateTime
 import play.api.libs.json.{JsString, Json, Reads, Writes}
+import uk.gov.hmrc.trustregistration.models.Address
 
-case class Individual(givenName: String,
-                      familyName: String,
-                      dateOfBirth: DateTime,
-                      otherName: Option[String] = None,
-                      nino: Option[String] = None,
-                      telephoneNumber: Option[String] = None,
-                      passport: Option[Passport] = None,
-                      correspondenceAddress: Option[Address] = None)
+case class PropertyAsset(correspondenceAddress: Address,
+                         propertyLandValue: Long,
+                         buildingLandName: Option[String] = None,
+                         propertyLandEvalDate: Option[DateTime] = None)
 
-object Individual {
+object PropertyAsset {
   implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
   implicit val dateWrites: Writes[DateTime] = Writes { (dt: DateTime) => JsString(dt.toString("yyyy-MM-dd")) }
-  implicit val formats = Json.format[Individual]
+  implicit val formats = Json.format[PropertyAsset]
 }

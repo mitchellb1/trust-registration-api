@@ -20,6 +20,7 @@ import play.api.libs.json.Json
 
 
 case class PersonalRepresentative(val individual: Individual, val isExecutor: Boolean)
-object PersonalRepresentative{
+
+object PersonalRepresentative {
   implicit val personalRepresentativeFormats = Json.format[PersonalRepresentative]
 }

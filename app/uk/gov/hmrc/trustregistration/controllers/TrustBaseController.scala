@@ -22,6 +22,7 @@ import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.microservice.controller.BaseController
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
+import uk.gov.hmrc.trustregistration.models.beneficiaries.Beneficiaries
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -31,7 +32,7 @@ import scala.concurrent.Future
 trait ApplicationBaseController extends BaseController {
   val metrics: ApplicationMetrics
   val registerTrustService: RegisterTrustService
-  
+
   val className: String = getClass.getSimpleName
 
   protected def authorised(apiName: String, identifier: String)(f: => Future[Result])(implicit hc : HeaderCarrier): Future[Result] = {

@@ -19,8 +19,8 @@ package uk.gov.hmrc.trustregistration.models
 import play.api.libs.json.Json
 
 
-case class Company (name: String, correspondenceAddress: Address, referenceNumber: Option[String] = None)
+case class Company(name: String, correspondenceAddress: Address, referenceNumber: Option[String] = None)
 
-object Company{
+object Company {
   implicit val formats = Json.format[Company]
 }

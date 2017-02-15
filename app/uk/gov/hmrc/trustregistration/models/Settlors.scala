@@ -33,9 +33,10 @@ case class Settlors(individuals: Option[List[Individual]] = None, companies: Opt
          }
          ]
        }""".stripMargin
-                                )
+  )
 
 }
-object Settlors{
+
+object Settlors {
   implicit val settlorsFormats = Json.format[Settlors]
 }

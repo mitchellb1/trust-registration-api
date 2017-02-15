@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.models
+package uk.gov.hmrc.trustregistration.models.trusttypes
+
 import play.api.libs.json.Json
 
-case class TrustType (
-  willIntestacyTrust: Option[WillIntestacyTrust] = None,
-  interVivoTrust: Option[InterVivoTrust] = None,
-  heritageMaintenanceFundTrust: Option[HeritageMaintenanceFundTrust] = None,
-  flatManagementSinkingFundTrust: Option[FlatManagementSinkingFundTrust] = None,
-  employmentTrust: Option[EmploymentTrust] = None
-) {
-  val numberOfSubmittedTrustTypes = List(willIntestacyTrust.isDefined, interVivoTrust.isDefined, heritageMaintenanceFundTrust.isDefined,
-    flatManagementSinkingFundTrust.isDefined, employmentTrust.isDefined).filter(i => i).size
-
+case class TrustType(willIntestacyTrust: Option[WillIntestacyTrust] = None,
+                     interVivoTrust: Option[InterVivoTrust] = None,
+                     heritageMaintenanceFundTrust: Option[HeritageMaintenanceFundTrust] = None,
+                     flatManagementSinkingFundTrust: Option[FlatManagementSinkingFundTrust] = None,
+                     employmentTrust: Option[EmploymentTrust] = None
+                    ) {
+  val numberOfSubmittedTrustTypes = List(willIntestacyTrust.isDefined,
+    interVivoTrust.isDefined,
+    heritageMaintenanceFundTrust.isDefined,
+    flatManagementSinkingFundTrust.isDefined,
+    employmentTrust.isDefined).filter(i => i).size
 
   require(numberOfSubmittedTrustTypes > 0, "Must have a Trust type")
   require(numberOfSubmittedTrustTypes == 1, "Must have only one Trust type")

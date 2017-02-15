@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.models
+package uk.gov.hmrc.trustregistration.models.trusttypes
 
 import org.joda.time.DateTime
 import play.api.libs.json.{Json, Reads}
+import uk.gov.hmrc.trustregistration.models.assets.Assets
+import uk.gov.hmrc.trustregistration.models.beneficiaries.Beneficiaries
 
 case class EmploymentTrust(assets: Assets,
                            beneficiaries: Beneficiaries,
@@ -31,7 +33,7 @@ case class EmploymentTrust(assets: Assets,
     (assets.otherAssets.isDefined && assets.otherAssets.get.size > 0))
   require(atleastOneTypeOfRequiredAsset, "Must have at least one type of required Asset")
 
-  private val noOtherTypesOfAsset: Boolean = ((assets.partnershipAssets.isDefined ) )
+  private val noOtherTypesOfAsset: Boolean = ((assets.partnershipAssets.isDefined))
   require(!noOtherTypesOfAsset, "Must have no other types of Asset")
 
 
@@ -41,16 +43,14 @@ case class EmploymentTrust(assets: Assets,
     (beneficiaries.trustBeneficiaries.isDefined && beneficiaries.trustBeneficiaries.get.size > 0) ||
     (beneficiaries.unidentifiedBeneficiaries.isDefined && beneficiaries.unidentifiedBeneficiaries.get.size > 0) ||
     (beneficiaries.employeeBeneficiaries.isDefined && beneficiaries.employeeBeneficiaries.get.size > 0) ||
-    (beneficiaries.companyBeneficiaries.isDefined && beneficiaries.companyBeneficiaries.get.size > 0) )
+    (beneficiaries.companyBeneficiaries.isDefined && beneficiaries.companyBeneficiaries.get.size > 0))
   require(atleastOneTypeOfRequiredBeneficiaries, "Must have at least one type of required Beneficiary")
 
   private val noOtherTypesOfBeneficiaries: Boolean = beneficiaries.charityBeneficiaries.isDefined
   require(!noOtherTypesOfBeneficiaries, "Must have no other types of Beneficiary")
-
-
 }
 
-object EmploymentTrust{
+object EmploymentTrust {
   implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
   implicit val assetsFormats = Json.format[EmploymentTrust]
 }
