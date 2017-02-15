@@ -921,7 +921,8 @@
           ]
         }
       },
-      "type": "object"
+      "type": "object",
+      "required": ["assets", "beneficiaries", "isHoldOverClaimed"]
     },
     "leadTrusteeType": {
       "description": "Lead Trustee Type",
@@ -1355,7 +1356,8 @@
             {"required": ["flatManagementSinkingFundTrust"]},
             {"required": ["heritageMaintenanceFundTrust"]},
             {"required": ["employmentTrust"]},
-            {"required": ["willIntestacyTrust"]}
+            {"required": ["willIntestacyTrust"]},
+            {"required": ["interVivoTrust"]}
           ],
           "type": "object"
         }

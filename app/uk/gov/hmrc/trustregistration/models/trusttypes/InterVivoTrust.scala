@@ -22,7 +22,7 @@ import uk.gov.hmrc.trustregistration.models.beneficiaries.Beneficiaries
 
 case class InterVivoTrust(assets: Assets,
                           beneficiaries: Beneficiaries,
-                          isHoldOverClaim: Boolean,
+                          isHoldOverClaimed: Boolean,
                           dovType: Option[String] = None) {
 
   private val atleastOneTypeOfRequiredAsset: Boolean = (assets.monetaryAssets.isDefined && assets.monetaryAssets.get.size > 0) ||

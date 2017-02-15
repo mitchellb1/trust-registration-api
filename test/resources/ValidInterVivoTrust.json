@@ -12,6 +12,6 @@
       "{INDIVIDUALBENEFICIARY}"
     ]
   },
-  "isHoldOverClaim" : true,
+  "isHoldOverClaimed" : true,
   "dovType" : "Dovtypeabsolute"
 }
