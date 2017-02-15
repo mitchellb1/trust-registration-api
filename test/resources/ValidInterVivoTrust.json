@@ -12,6 +12,6 @@
       "{INDIVIDUALBENEFICIARY}"
     ]
   },
-  "deceased" : "{INDIVIDUAL}",
-  "isHoldOverClaim" : true
+  "isHoldOverClaimed" : true,
+  "dovType" : "Dovtypeabsolute"
 }

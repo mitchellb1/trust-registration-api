@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.models
+package uk.gov.hmrc.trustregistration.models.beneficiaries
 
 import play.api.libs.json.Json
+import uk.gov.hmrc.trustregistration.models.Individual
 
-case class Assets(monetaryAssets: Option[List[Float]] = None,
-                  propertyAssets: Option[List[PropertyAsset]] = None,
-                  shareAssets : Option[List[ShareAsset]] = None,
-                  partnershipAssets : Option[List[PartnershipAsset]] = None,
-                  businessAssets: Option[List[BusinessAsset]] = None,
-                  otherAssets: Option[List[OtherAsset]] = None) {
-}
+case class EmployeeBeneficiary(individual: Individual)
 
-object Assets {
-  implicit val formats = Json.format[Assets]
+object EmployeeBeneficiary {
+  implicit val employeeBeneficiaryFormats = Json.format[EmployeeBeneficiary]
 }

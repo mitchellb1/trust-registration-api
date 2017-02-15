@@ -17,11 +17,12 @@
 package uk.gov.hmrc.trustregistration.models
 
 import play.api.libs.json.Json
-case class Legality(governingCountryCode: String,
-               administrationCountryCode: Option[String]=None,
-               isEstablishedUnderScottishLaw: Boolean,
-               previousOffshoreCountryCode: Option[String]=None)
 
-object Legality{
+case class Legality(governingCountryCode: String,
+                    administrationCountryCode: Option[String] = None,
+                    isEstablishedUnderScottishLaw: Boolean,
+                    previousOffshoreCountryCode: Option[String] = None)
+
+object Legality {
   implicit val formats = Json.format[Legality]
 }

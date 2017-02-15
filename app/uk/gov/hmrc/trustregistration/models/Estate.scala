@@ -26,12 +26,12 @@ case class Estate(val isCreatedByWill: Boolean,
                   val deceased: Option[Individual] = None,
                   val saleOfEstateAssetsMoreThan250000: Option[Boolean] = None,
                   val saleOfEstateAssetsMoreThan500000: Option[Boolean] = None,
-                  val worthMoreThanTwoAndHalfMillionAtTimeOfDeath: Option[Boolean] = None){
+                  val worthMoreThanTwoAndHalfMillionAtTimeOfDeath: Option[Boolean] = None) {
   private val atleastAdeceasedOrPersonalRepresentative: Boolean = personalRepresentative.isDefined || deceased.isDefined
 
   require(atleastAdeceasedOrPersonalRepresentative, "Must have either a personal representative or a deceased")
 }
 
-object Estate{
+object Estate {
   implicit val estateFormat = Json.format[Estate]
 }

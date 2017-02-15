@@ -18,6 +18,9 @@ package uk.gov.hmrc.trustregistration.models
 
 import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
+import uk.gov.hmrc.trustregistration.models.assets.Assets
+import uk.gov.hmrc.trustregistration.models.beneficiaries.Beneficiaries
+import uk.gov.hmrc.trustregistration.models.trusttypes.HeritageMaintenanceFundTrust
 
 
 class HeritageMaintenanceFundTrustSpec extends PlaySpec with ScalaDataExamples {
@@ -31,21 +34,21 @@ class HeritageMaintenanceFundTrustSpec extends PlaySpec with ScalaDataExamples {
       }
 
       "a partnership asset is defined" in {
-        val assets =    Assets(Some(List(2.0f,2.5f)), None, None, Some(List(partnershipAsset)), None, None)
+        val assets =    Assets(Some(List(2,2)), None, None, Some(List(partnershipAsset)), None, None)
         val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None)
         val ex = the[IllegalArgumentException] thrownBy (HeritageMaintenanceFundTrust(assets,beneficiaries,true))
         ex.getMessage() mustEqual ("requirement failed: Must have no other types of Asset")
       }
 
       "a business asset is defined" in {
-        val assets = Assets(Some(List(2.0f,2.5f)), None, None, None, Some(List(businessAsset)), None)
+        val assets = Assets(Some(List(2,2)), None, None, None, Some(List(businessAsset)), None)
         val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None)
         val ex = the[IllegalArgumentException] thrownBy (HeritageMaintenanceFundTrust(assets,beneficiaries,true))
         ex.getMessage() mustEqual ("requirement failed: Must have no other types of Asset")
       }
 
       "the required beneficiaries are not there" in {
-        val assets = Assets(Some(List(2.0f,2.5f)))
+        val assets = Assets(Some(List(2,2)))
         val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None)
         val ex = the[IllegalArgumentException] thrownBy (HeritageMaintenanceFundTrust(assets,beneficiaries,true))
         ex.getMessage() mustEqual  ("requirement failed: Must have at least one type of required Beneficiary")
@@ -60,19 +63,19 @@ class HeritageMaintenanceFundTrustSpec extends PlaySpec with ScalaDataExamples {
 
     "not throw an exception" when {
       "there is one asset" in {
-        val assets = Assets(Some(List(2.0f,2.5f)))
+        val assets = Assets(Some(List(2,2)))
         val beneficiaries = Beneficiaries(None,None,None,None,otherBeneficiaries,None,None,None)
         noException should be thrownBy (HeritageMaintenanceFundTrust(assets,beneficiaries,true))
       }
 
       "there is more than one type of asset" in {
-        val assets = Assets(Some(List(2.0f,2.5f)),None,None,None,None,Some(List(otherAsset)))
+        val assets = Assets(Some(List(2,2)),None,None,None,None,Some(List(otherAsset)))
         val beneficiaries = Beneficiaries(None,None,None,None,otherBeneficiaries,None,None,None)
         noException should be thrownBy (HeritageMaintenanceFundTrust(assets,beneficiaries,true))
       }
 
       "there is other asset defined" in {
-        val assets = Assets(Some(List(2.0f,2.5f)),None,None,None,None,Some(List(otherAsset)))
+        val assets = Assets(Some(List(2,2)),None,None,None,None,Some(List(otherAsset)))
         val beneficiaries = Beneficiaries(None,None,None,None,otherBeneficiaries,None,None,None)
         noException should be thrownBy (HeritageMaintenanceFundTrust(assets,beneficiaries,true))
       }

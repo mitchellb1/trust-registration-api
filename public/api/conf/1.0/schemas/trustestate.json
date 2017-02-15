@@ -857,47 +857,79 @@
         "assets": {
           "additionalProperties": false,
           "properties": {
-            "businessAssets": {
-              "$ref": "#/definitions/businessAssetsType"
-            },
             "monetaryAssets": {
               "$ref": "#/definitions/monetaryAssetsType"
-            },
-            "otherAssets": {
-              "$ref": "#/definitions/otherAssetsType"
-            },
-            "partnershipAssets": {
-              "$ref": "#/definitions/partnershipAssetsType"
             },
             "propertyAssets": {
               "$ref": "#/definitions/propertyAssetsType"
             },
             "shareAssets": {
               "$ref": "#/definitions/shareAssetsType"
+            },
+            "businessAssets": {
+              "$ref": "#/definitions/businessAssetsType"
+            },
+            "partnershipAssets": {
+              "$ref": "#/definitions/partnershipAssetsType"
+            },
+            "otherAssets": {
+              "$ref": "#/definitions/otherAssetsType"
             }
           },
-          "type": "object"
+          "type": "object",
+          "anyOf": [
+            {"required": ["monetaryAssets"]},
+            {"required": ["propertyAssets"]},
+            {"required": ["shareAssets"]},
+            {"required": ["businessAssets"]},
+            {"required": ["partnershipAssets"]},
+            {"required": ["otherAssets"]}
+          ]
         },
         "beneficiaries": {
           "additionalProperties": false,
           "properties": {
-            "charityBeneficiaries": {
-              "$ref": "#/definitions/charityBeneficiariesType"
-            },
             "individualBeneficiaries": {
               "$ref": "#/definitions/individualBeneficiariesType"
             },
+            "charityBeneficiaries": {
+              "$ref": "#/definitions/charityBeneficiariesType"
+            },
+            "trustBeneficiaries": {
+              "$ref": "#/definitions/trustBeneficiariesType"
+            },
+            "unidentifiedBeneficiaries": {
+              "$ref": "#/definitions/unidentifiedBeneficiariesType"
+            },
             "otherBeneficiaries": {
               "$ref": "#/definitions/otherBeneficiariesType"
+            },
+            "companyBeneficiaries": {
+              "$ref": "#/definitions/companyBeneficiariesType"
             }
           },
-          "type": "object"
+          "type": "object",
+          "anyOf": [
+            {"required": ["individualBeneficiaries"]},
+            {"required": ["charityBeneficiaries"]},
+            {"required": ["trustBeneficiaries"]},
+            {"required": ["unidentifiedBeneficiaries"]},
+            {"required": ["otherBeneficiaries"]},
+            {"required": ["companyBeneficiaries"]}
+          ]
         },
         "isHoldOverClaimed": {
           "type": "boolean"
+        },
+        "dovType" : {
+          "enum": [
+            "Dovtypeabsolute",
+            "Dovtypereplace"
+          ]
         }
       },
-      "type": "object"
+      "type": "object",
+      "required": ["assets", "beneficiaries", "isHoldOverClaimed"]
     },
     "leadTrusteeType": {
       "description": "Lead Trustee Type",
@@ -1013,31 +1045,25 @@
     },
     "partnershipAssetsType": {
       "description": "Partnership Assets Type",
-      "additionalProperties": false,
-      "properties": {
-        "partnershipAsset": {
-          "type": "array",
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "startOfPartnership": {
-                "type": "string"
-              },
-              "tradeOrProfession": {
-                "type": "string"
-              },
-              "utr": {
-                "type": "string"
-              },
-              "value": {
-                "type": "number"
-              }
-            },
-            "type": "object"
+      "type" : "array",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "partnershipName": {
+            "type": "string"
+          },
+          "partnershipUTR": {
+            "pattern": "^[0-9]{10}$",
+            "type": "string"
+          },
+          "startOfPartnership": {
+            "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+            "type": "string"
           }
-        }
-      },
-      "type": "object"
+        },
+        "required": ["partnershipName", "partnershipUTR","startOfPartnership"],
+        "type": "object"
+      }
     },
     "personalRepresentativeType": {
       "description": "Personal Representative Type",
@@ -1359,7 +1385,8 @@
             {"required": ["flatManagementSinkingFundTrust"]},
             {"required": ["heritageMaintenanceFundTrust"]},
             {"required": ["employmentTrust"]},
-            {"required": ["willIntestacyTrust"]}
+            {"required": ["willIntestacyTrust"]},
+            {"required": ["interVivoTrust"]}
           ],
           "type": "object"
         }

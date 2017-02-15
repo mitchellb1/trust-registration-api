@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.models
+package uk.gov.hmrc.trustregistration.models.beneficiaries
 
 import play.api.libs.json.Json
+import uk.gov.hmrc.trustregistration.models.Address
 
-case class BusinessAsset(businessDescription: String,
-                         businessValue: Int,
-                         company: Company)
+case class CharityBeneficiary(charityName: String,
+                              charityNumber: String,
+                              correspondenceAddress: Address)
 
-object BusinessAsset{
-  implicit val formats = Json.format[BusinessAsset]
+object CharityBeneficiary {
+  implicit val charityBeneficiaryFormats = Json.format[CharityBeneficiary]
 }

@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.models
+package uk.gov.hmrc.trustregistration.models.assets
 
 import play.api.libs.json.Json
+import uk.gov.hmrc.trustregistration.models.Company
 
+case class BusinessAsset(businessDescription: String,
+                         businessValue: Long,
+                         company: Company)
 
-case class LeadTrustee(individual: Option[Individual] = None, company: Option[Company] = None, telephoneNumber: String, email: String) {
-  private val atleastOneTypeOfTrustee: Boolean = individual.isDefined || company.isDefined
-  private val onlyOneTypeOfTrustee: Boolean = !(individual.isDefined && company.isDefined)
-
-  require(atleastOneTypeOfTrustee, "Must have either an individual or company lead trustee")
-  require(onlyOneTypeOfTrustee, "Must have only an individual or company lead trustee")
-}
-
-object LeadTrustee {
-  implicit val leadTrusteeFormats = Json.format[LeadTrustee]
+object BusinessAsset {
+  implicit val formats = Json.format[BusinessAsset]
 }

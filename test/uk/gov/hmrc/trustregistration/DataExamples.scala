@@ -18,6 +18,9 @@ package uk.gov.hmrc.trustregistration
 
 import org.joda.time.DateTime
 import uk.gov.hmrc.trustregistration.models._
+import uk.gov.hmrc.trustregistration.models.assets._
+import uk.gov.hmrc.trustregistration.models.beneficiaries._
+import uk.gov.hmrc.trustregistration.models.trusttypes._
 
 import scala.io.Source
 
@@ -268,13 +271,13 @@ trait ScalaDataExamples {
 
   val legality = Legality("ES",Some("ES"),true,None)
 
-  val businessAsset = BusinessAsset("This is a description",1234, company)
+  val businessAsset = BusinessAsset("This is a description",1234L, company)
 
-  val shareAsset = ShareAsset(1234,"shareCompanyName","shareCompanyRegistrationNumber","shareClass","shareType",123400.50f)
+  val shareAsset = ShareAsset(1234L,"shareCompanyName","shareCompanyRegistrationNumber","shareClass","shareType",123400L)
 
   val assets = Assets(None,None,Some(List(shareAsset,shareAsset)),None,Some(List(businessAsset,businessAsset)))
 
-  val monetaryAssets = Assets(monetaryAssets = Some(List(100f, 2.50f, 75f)))
+  val monetaryAssets = Assets(monetaryAssets = Some(List(100L, 2L, 75L)))
 
   val deceased = Deceased(individual, new DateTime(2000, 1, 1, 0, 0))
 
@@ -302,7 +305,7 @@ trait ScalaDataExamples {
   val trustWithFlatManagementFund = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),Some(List(2015,2016)),legality,true,leadTrusteeIndividual, Trustees(None, None),
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(Some(List(individual,individual)))), TrustType(flatManagementSinkingFundTrust = flatManagementFund))
 
-  val interVivoTrust = Some(InterVivoTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false)))),true,Some(individual)))
+  val interVivoTrust = Some(InterVivoTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false)))),true, Some("Dovtypeabsolute")))
   val trustWithInterVivoTrust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),Some(List(2015,2016)),legality,true,leadTrusteeIndividual, Trustees(None, None),
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(Some(List(individual,individual)))), TrustType(interVivoTrust = interVivoTrust))
 }

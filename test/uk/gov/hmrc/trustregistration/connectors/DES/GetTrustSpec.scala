@@ -96,6 +96,7 @@ class GetTrustSpec extends PlaySpec
       }
     }
 
+
     "return an InternalServerErrorResponse" when {
       "DES returns a 404 response" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, None)))

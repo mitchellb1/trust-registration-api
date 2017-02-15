@@ -18,6 +18,7 @@ package uk.gov.hmrc.trustregistration.models
 
 import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
+import uk.gov.hmrc.trustregistration.models.trusttypes.TrustType
 
 class TrustTypeSpec extends PlaySpec with ScalaDataExamples {
   "TrustType" must {
