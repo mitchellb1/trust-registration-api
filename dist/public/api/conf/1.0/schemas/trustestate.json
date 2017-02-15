@@ -146,7 +146,8 @@
           "businessValue",
           "company"
         ]
-      }
+      },
+      "minItems": 1
     },
     "charityBeneficiariesType": {
       "description": "Charity Beneficiaries Type",
@@ -1021,13 +1022,13 @@
         },
         "required": ["otherAssetDescription", "lastValuationDate","value"],
         "type": "object"
-      }
+      },
+      "minItems" : 1
     },
     "otherBeneficiariesType": {
       "description": "Other Beneficiaries Type",
       "additionalProperties": false,
       "type": "array",
-      "minItems": 1,
       "items": {
         "additionalProperties": false,
         "properties": {
@@ -1041,7 +1042,8 @@
         },
         "type": "object",
         "required": ["beneficiaryDescription", "correspondenceAddress"]
-      }
+      },
+      "minItems": 1
     },
     "partnershipAssetsType": {
       "description": "Partnership Assets Type",
@@ -1063,7 +1065,8 @@
         },
         "required": ["partnershipName", "partnershipUTR","startOfPartnership"],
         "type": "object"
-      }
+      },
+      "minItems": 1
     },
     "personalRepresentativeType": {
       "description": "Personal Representative Type",
@@ -1113,7 +1116,8 @@
         },
         "type": "object",
         "required": ["correspondenceAddress", "propertyLandValue"]
-      }
+      },
+      "minItems": 1
     },
     "protectorsType": {
       "description": "protectors Type",
