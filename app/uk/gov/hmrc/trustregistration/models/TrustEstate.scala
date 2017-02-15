@@ -19,7 +19,7 @@ package uk.gov.hmrc.trustregistration.models
 import play.api.libs.json.Json
 
 
-case class TrustEstate (trust: Option[Trust] = None)
+case class TrustEstate(trust: Option[Trust] = None)
 
 object TrustEstate {
   implicit val format = Json.format[TrustEstate]

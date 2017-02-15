@@ -33,6 +33,6 @@ case class Protectors(individuals: Option[List[Individual]] = None, companies: O
        }""".stripMargin)
 }
 
-object Protectors{
+object Protectors {
   implicit val protectorsFormats = Json.format[Protectors]
 }

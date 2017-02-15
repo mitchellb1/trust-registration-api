@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.models
+package uk.gov.hmrc.trustregistration.models.assets
 
 import play.api.libs.json.Json
 
-case class BusinessAsset(businessDescription: String,
-                         businessValue: Long,
-                         company: Company)
+case class Assets(monetaryAssets: Option[List[Long]] = None,
+                  propertyAssets: Option[List[PropertyAsset]] = None,
+                  shareAssets: Option[List[ShareAsset]] = None,
+                  partnershipAssets: Option[List[PartnershipAsset]] = None,
+                  businessAssets: Option[List[BusinessAsset]] = None,
+                  otherAssets: Option[List[OtherAsset]] = None)
 
-object BusinessAsset{
-  implicit val formats = Json.format[BusinessAsset]
+object Assets {
+  implicit val formats = Json.format[Assets]
 }

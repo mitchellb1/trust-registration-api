@@ -16,19 +16,19 @@
 
 package uk.gov.hmrc.trustregistration.models
 
-import play.api.libs.json.{Json, Reads}
 import org.joda.time.DateTime
+import play.api.libs.json.{Json, Reads}
 
 
-case class Declaration (correspondenceAddress: Address,
-                        confirmation: Boolean,
-                        givenName: String,
-                        familyName: String,
-                        date: DateTime,
-                        otherName: Option[String] = None)
+case class Declaration(correspondenceAddress: Address,
+                       confirmation: Boolean,
+                       givenName: String,
+                       familyName: String,
+                       date: DateTime,
+                       otherName: Option[String] = None)
 
 
-object Declaration{
+object Declaration {
   implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
   implicit val formats = Json.format[Declaration]
 }

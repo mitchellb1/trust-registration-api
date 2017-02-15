@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.models
+package uk.gov.hmrc.trustregistration.models.beneficiaries
 
 import play.api.libs.json.Json
+import uk.gov.hmrc.trustregistration.models.Individual
 
-case class InterVivoTrust(assets: Assets,
-                          beneficiaries: Beneficiaries,
-                          isHoldOverClaim: Boolean,
-                          deceased: Option[Individual] = None){
-}
+case class DirectorBeneficiary(individual: Individual)
 
-
-object InterVivoTrust{
-  implicit val formats = Json.format[InterVivoTrust]
+object DirectorBeneficiary {
+  implicit val directorBeneficiaryFormats = Json.format[DirectorBeneficiary]
 }

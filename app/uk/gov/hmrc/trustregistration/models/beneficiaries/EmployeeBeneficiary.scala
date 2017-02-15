@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.models
+package uk.gov.hmrc.trustregistration.models.beneficiaries
 
 import play.api.libs.json.Json
+import uk.gov.hmrc.trustregistration.models.Individual
 
+case class EmployeeBeneficiary(individual: Individual)
 
-case class ShareAsset(numberShares: Long, shareCompanyName: String, shareCompanyRegistrationNumber: String, shareClass: String, shareType: String, currentShareValue: Long)
-
-object ShareAsset{
-  implicit val formats = Json.format[ShareAsset]
+object EmployeeBeneficiary {
+  implicit val employeeBeneficiaryFormats = Json.format[EmployeeBeneficiary]
 }

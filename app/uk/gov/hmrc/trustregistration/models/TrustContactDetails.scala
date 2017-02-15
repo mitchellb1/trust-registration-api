@@ -18,10 +18,10 @@ package uk.gov.hmrc.trustregistration.models
 
 import play.api.libs.json.Json
 
-case class TrustContactDetails (
-     correspondenceAddress: Address,
-     telephoneNumber: String
-)
+case class TrustContactDetails(
+                                correspondenceAddress: Address,
+                                telephoneNumber: String
+                              )
 
 object TrustContactDetails {
   implicit val formats = Json.format[TrustContactDetails]

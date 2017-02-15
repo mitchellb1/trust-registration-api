@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.models
+package uk.gov.hmrc.trustregistration.models.trusttypes
 
 import play.api.libs.json.Json
+import uk.gov.hmrc.trustregistration.models.Individual
+import uk.gov.hmrc.trustregistration.models.assets.Assets
+import uk.gov.hmrc.trustregistration.models.beneficiaries.Beneficiaries
 
 case class HeritageMaintenanceFundTrust(assets: Assets,
                                         beneficiaries: Beneficiaries,
@@ -35,19 +38,19 @@ case class HeritageMaintenanceFundTrust(assets: Assets,
 
 
   private val atleastOneTypeOfRequiredBeneficiaries: Boolean = (
-    (beneficiaries.otherBeneficiaries.isDefined && beneficiaries.otherBeneficiaries.get.size > 0)  )
+    (beneficiaries.otherBeneficiaries.isDefined && beneficiaries.otherBeneficiaries.get.size > 0))
   require(atleastOneTypeOfRequiredBeneficiaries, "Must have at least one type of required Beneficiary")
 
-  private val noOtherTypesOfBeneficiaries: Boolean = ((beneficiaries.employeeBeneficiaries.isDefined ) ||
-                                                      (beneficiaries.directorBeneficiaries.isDefined )||
-                                                      (beneficiaries.trustBeneficiaries.isDefined) ||
-                                                      (beneficiaries.unidentifiedBeneficiaries.isDefined) ||
-                                                      (beneficiaries.companyBeneficiaries.isDefined)||
-                                                      (beneficiaries.individualBeneficiaries.isDefined) ||
-                                                      (beneficiaries.charityBeneficiaries.isDefined) )
+  private val noOtherTypesOfBeneficiaries: Boolean = ((beneficiaries.employeeBeneficiaries.isDefined) ||
+    (beneficiaries.directorBeneficiaries.isDefined) ||
+    (beneficiaries.trustBeneficiaries.isDefined) ||
+    (beneficiaries.unidentifiedBeneficiaries.isDefined) ||
+    (beneficiaries.companyBeneficiaries.isDefined) ||
+    (beneficiaries.individualBeneficiaries.isDefined) ||
+    (beneficiaries.charityBeneficiaries.isDefined))
   require(!noOtherTypesOfBeneficiaries, "Must have no other types of Beneficiary")
 }
 
-object HeritageMaintenanceFundTrust{
+object HeritageMaintenanceFundTrust {
   implicit val formats = Json.format[HeritageMaintenanceFundTrust]
 }

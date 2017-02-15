@@ -18,7 +18,9 @@ package uk.gov.hmrc.trustregistration.models
 
 import play.api.libs.json.Json
 
-case class NaturalPeople(individuals: Option[List[Individual]]){
+case class NaturalPeople(individuals: Option[List[Individual]]) {
+
+  //is this check needed - it's covered in the schema
   val noMoreThanTwoNaturalPeople = (individuals.getOrElse(Nil).size <= 2)
 
   require(noMoreThanTwoNaturalPeople,

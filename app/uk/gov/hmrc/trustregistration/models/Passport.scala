@@ -19,10 +19,11 @@ package uk.gov.hmrc.trustregistration.models
 import org.joda.time.DateTime
 import play.api.libs.json._
 
-case class Passport(identifier: String, expiryDate: DateTime, countryOfIssue: String)
+case class Passport(identifier: String,
+                    expiryDate: DateTime,
+                    countryOfIssue: String)
 
 object Passport {
-
   implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
   implicit val dateWrites: Writes[DateTime] = Writes { (dt: DateTime) => JsString(dt.toString("yyyy-MM-dd")) }
   implicit val passportFormat = Json.format[Passport]
