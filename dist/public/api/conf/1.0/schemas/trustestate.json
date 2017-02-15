@@ -929,7 +929,8 @@
           ]
         }
       },
-      "type": "object"
+      "type": "object",
+      "required": ["assets", "beneficiaries", "isHoldOverClaimed"]
     },
     "leadTrusteeType": {
       "description": "Lead Trustee Type",
@@ -1022,7 +1023,7 @@
         "required": ["otherAssetDescription", "lastValuationDate","value"],
         "type": "object"
       },
-      "minItems": 1
+      "minItems" : 1
     },
     "otherBeneficiariesType": {
       "description": "Other Beneficiaries Type",
@@ -1388,7 +1389,8 @@
             {"required": ["flatManagementSinkingFundTrust"]},
             {"required": ["heritageMaintenanceFundTrust"]},
             {"required": ["employmentTrust"]},
-            {"required": ["willIntestacyTrust"]}
+            {"required": ["willIntestacyTrust"]},
+            {"required": ["interVivoTrust"]}
           ],
           "type": "object"
         }
