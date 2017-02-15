@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.models
+package uk.gov.hmrc.trustregistration.models.trusttypes
 
 import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
@@ -91,6 +91,12 @@ class EmploymentTrustSpec extends PlaySpec with ScalaDataExamples {
         val propertyAssets = PropertyAsset(address,2L)
         val assets = Assets(Some(List(2,2)),Some(List(propertyAssets)))
         val beneficiaries = Beneficiaries(None,Some(List(employeeBeneficiary)),None,None,None,None,None)
+        noException should be thrownBy (EmploymentTrust(assets,beneficiaries,Some(true)))
+      }
+
+      "there is a large numbers company beneficiary" in {
+        val assets = Assets(Some(List(2,2)),None,None,None,None,Some(List(otherAsset)))
+        val beneficiaries = Beneficiaries(largeNumbersCompanyBeneficiaries = Some(List(largeNumbersCompanyBeneficiary)))
         noException should be thrownBy (EmploymentTrust(assets,beneficiaries,Some(true)))
       }
     }

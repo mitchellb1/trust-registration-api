@@ -85,6 +85,9 @@
         },
         "unidentifiedBeneficiaries" : {
           "$ref": "#/definitions/unidentifiedBeneficiariesType"
+        },
+        "largeNumbersCompanyBeneficiaries" : {
+          "$ref": "#/definitions/largeNumbersCompanyBeneficiariesType"
         }
       },
       "anyOf" : [
@@ -627,6 +630,9 @@
             },
             "unidentifiedBeneficiaries": {
               "$ref": "#/definitions/unidentifiedBeneficiariesType"
+            },
+            "largeNumbersCompanyBeneficiaries" : {
+              "$ref": "#/definitions/largeNumbersCompanyBeneficiariesType"
             }
           },
           "type": "object",
@@ -637,7 +643,8 @@
             {"required": ["trustBeneficiaries"]},
             {"required": ["companyBeneficiaries"]},
             {"required": ["unidentifiedBeneficiaries"]},
-            {"required": ["employeeBeneficiaries"]}
+            {"required": ["employeeBeneficiaries"]},
+            {"required": ["largeNumbersCompanyBeneficiaries"]}
           ]
         },
         "employerFinancedRetirementBenefitSchemeStartDate": {
@@ -1246,6 +1253,28 @@
       },
       "minItems": 1
     },
+    "largeNumbersCompanyBeneficiariesType": {
+      "description": "Large Numbers Company Class of Beneficiaries Type",
+      "additionalProperties": false,
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "type" : "string"
+          },
+          "numberOfBeneficiaries" : {
+            "type" : "number"
+          },
+          "company" : {
+            "$ref": "#/definitions/companyType"
+          }
+        },
+        "type": "object",
+        "required": ["description", "numberOfBeneficiaries", "company"]
+      },
+      "minItems": 1
+    },
     "trustBeneficiariesType": {
       "description": "Trust Beneficiaries Type",
       "additionalProperties": false,
@@ -1444,6 +1473,9 @@
             },
             "companyBeneficiaries": {
               "$ref": "#/definitions/companyBeneficiariesType"
+            },
+            "largeNumbersCompanyBeneficiaries" : {
+              "$ref": "#/definitions/largeNumbersCompanyBeneficiariesType"
             }
           },
           "type": "object",
@@ -1453,7 +1485,8 @@
             {"required": ["trustBeneficiaries"]},
             {"required": ["unidentifiedBeneficiaries"]},
             {"required": ["otherBeneficiaries"]},
-            {"required": ["companyBeneficiaries"]}
+            {"required": ["companyBeneficiaries"]},
+            {"required": ["largeNumbersCompanyBeneficiaries"]}
           ]
         },
         "deceased": {

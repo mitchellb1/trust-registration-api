@@ -25,7 +25,8 @@ case class Beneficiaries(individualBeneficiaries: Option[List[IndividualBenefici
                          otherBeneficiaries: Option[List[OtherBeneficiary]] = None,
                          trustBeneficiaries: Option[List[TrustBeneficiary]] = None,
                          companyBeneficiaries: Option[List[CompanyBeneficiary]] = None,
-                         unidentifiedBeneficiaries: Option[List[UnidentifiedBeneficiary]] = None)
+                         unidentifiedBeneficiaries: Option[List[UnidentifiedBeneficiary]] = None,
+                         largeNumbersCompanyBeneficiaries : Option[List[LargeNumbersCompanyBeneficiaries]] = None)
 
 object Beneficiaries {
   implicit val beneficiariesFormat = Json.format[Beneficiaries]

@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.models
+package uk.gov.hmrc.trustregistration.models.trusttypes
 
 import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
 import uk.gov.hmrc.trustregistration.models.assets.Assets
 import uk.gov.hmrc.trustregistration.models.beneficiaries.Beneficiaries
-import uk.gov.hmrc.trustregistration.models.trusttypes.WillIntestacyTrust
 
 class WillIntestacyTrustSpec extends PlaySpec with ScalaDataExamples {
 
@@ -64,7 +63,13 @@ class WillIntestacyTrustSpec extends PlaySpec with ScalaDataExamples {
 
       "there is more than one type of asset" in {
         val assets = Assets(Some(List(2,2)),None,None,None,None,Some(List(otherAsset)))
-        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None)
+        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None,Some(List(largeNumbersCompanyBeneficiary)))
+        noException should be thrownBy (WillIntestacyTrust(assets, beneficiaries, deceased, true))
+      }
+
+      "only a large numbers company beneficiary is supplied" in {
+        val assets = Assets(Some(List(2,2)),None,None,None,None,Some(List(otherAsset)))
+        val beneficiaries = Beneficiaries(largeNumbersCompanyBeneficiaries = Some(List(largeNumbersCompanyBeneficiary)))
         noException should be thrownBy (WillIntestacyTrust(assets, beneficiaries, deceased, true))
       }
     }
