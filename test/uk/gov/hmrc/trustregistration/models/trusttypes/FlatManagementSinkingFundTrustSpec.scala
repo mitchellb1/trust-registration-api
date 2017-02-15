@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.models
+package uk.gov.hmrc.trustregistration.models.trusttypes
 
 import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
 import uk.gov.hmrc.trustregistration.models.assets.{Assets, PropertyAsset, ShareAsset}
 import uk.gov.hmrc.trustregistration.models.beneficiaries.Beneficiaries
 import uk.gov.hmrc.trustregistration.models.trusttypes.FlatManagementSinkingFundTrust
-
 
 class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples {
 
@@ -106,6 +105,13 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
         val assets = Assets(monetaryAssets = Some(List(2, 2)))
 
         val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries, individualBeneficiaries = Some(List(individualBeneficiary))))
+        ex.getMessage mustEqual  "requirement failed: Must have no other types of Beneficiary"
+      }
+
+      "a large number company beneficiary is defined" in {
+        val assets = Assets(monetaryAssets = Some(List(2, 2)))
+
+        val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets , Beneficiaries(otherBeneficiaries = otherBeneficiaries, largeNumbersCompanyBeneficiaries = Some(List(largeNumbersCompanyBeneficiary))))
         ex.getMessage mustEqual  "requirement failed: Must have no other types of Beneficiary"
       }
 

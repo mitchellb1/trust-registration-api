@@ -44,7 +44,8 @@ case class FlatManagementSinkingFundTrust(assets: Assets, beneficiaries: Benefic
     (beneficiaries.unidentifiedBeneficiaries.isDefined) ||
     (beneficiaries.companyBeneficiaries.isDefined) ||
     (beneficiaries.individualBeneficiaries.isDefined) ||
-    (beneficiaries.charityBeneficiaries.isDefined))
+    (beneficiaries.charityBeneficiaries.isDefined) ||
+    (beneficiaries.largeNumbersCompanyBeneficiaries.isDefined))
   require(!noOtherTypesOfBeneficiaries, "Must have no other types of Beneficiary")
 }
 

@@ -232,6 +232,12 @@ trait ScalaDataExamples {
     isVulnerable = false
   )
 
+  val largeNumbersCompanyBeneficiary = LargeNumbersCompanyBeneficiaries(
+    description = "test",
+    numberOfBeneficiaries = 123456,
+    company = company
+  )
+
   val trustBeneficiary = TrustBeneficiary(
     trustBeneficiaryName = "trust beneficiary Name",
     trustBeneficiaryUTR = Some("2134567"),
