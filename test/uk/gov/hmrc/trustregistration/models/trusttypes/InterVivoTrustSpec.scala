@@ -25,43 +25,81 @@ class InterVivoTrustSpec extends PlaySpec with ScalaDataExamples with JsonExampl
   "InterVivoTrust" must{
     "throw an exception" when{
       "there are no assets" in {
-        val assets = Assets(None,None,None,None,None,None)
-        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None)
-        val ex = the[IllegalArgumentException] thrownBy (InterVivoTrust(assets,beneficiaries, true, Some("Dovtypeabsolute")))
+        val assets = Assets()
+        val beneficiaries = Beneficiaries(individualBeneficiaries = Some(List(individualBeneficiary)))
+        val ex = the[IllegalArgumentException] thrownBy (InterVivoTrust(assets, beneficiaries, true, Some("Dovtypeabsolute")))
         ex.getMessage() mustEqual  "requirement failed: Must have at least one type of required Asset"
       }
 
       "there are no beneficiaries" in {
-        val assets = Assets(None,None,None,None,None,Some(List(otherAsset)))
-        val beneficiaries = Beneficiaries(None,None,None,None,None,None,None,None)
-        val ex = the[IllegalArgumentException] thrownBy (InterVivoTrust(assets,beneficiaries, true, Some("Dovtypeabsolute")))
+        val assets = Assets(otherAssets = Some(List(otherAsset)))
+        val beneficiaries = Beneficiaries()
+        val ex = the[IllegalArgumentException] thrownBy (InterVivoTrust(assets, beneficiaries, true, Some("Dovtypeabsolute")))
         ex.getMessage() mustEqual  "requirement failed: Must have at least one type of required Beneficiary"
       }
 
-      "the wrong Beneficiaries are defined" in {
-        val assets = Assets(Some(List(2,2)),None,None,None,None,None)
-        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)), Some(List(employeeBeneficiary)), Some(List(directorBeneficiary)), None, None, None, None, None)
-        val ex = the[IllegalArgumentException] thrownBy (InterVivoTrust(assets,beneficiaries, true, Some("Dovtypeabsolute")))
+      "the correct beneficiaries are defined but they are all empty" in {
+        val assets = Assets(otherAssets = Some(List(otherAsset)))
+        val beneficiaries = Beneficiaries(
+          individualBeneficiaries = Some(Nil),
+          charityBeneficiaries = Some(Nil),
+          trustBeneficiaries = Some(Nil),
+          unidentifiedBeneficiaries = Some(Nil),
+          otherBeneficiaries = Some(Nil),
+          companyBeneficiaries = Some(Nil),
+          largeNumbersCompanyBeneficiaries = Some(Nil)
+        )
+        val ex = the[IllegalArgumentException] thrownBy (InterVivoTrust(assets, beneficiaries, true, Some("Dovtypeabsolute")))
+        ex.getMessage() mustEqual  "requirement failed: Must have at least one type of required Beneficiary"
+      }
+
+      "an employee beneficiary is defined" in {
+        val assets = Assets(monetaryAssets = Some(List(2,2)))
+        val beneficiaries = Beneficiaries(
+          individualBeneficiaries = Some(List(individualBeneficiary)),
+          employeeBeneficiaries = Some(List(employeeBeneficiary))
+        )
+        val ex = the[IllegalArgumentException] thrownBy (InterVivoTrust(assets, beneficiaries, true, Some("Dovtypeabsolute")))
+        ex.getMessage() mustEqual  "requirement failed: Must have no other types of Beneficiary"
+      }
+
+      "a director beneficiary is defined" in {
+        val assets = Assets(monetaryAssets = Some(List(2,2)))
+        val beneficiaries = Beneficiaries(
+          individualBeneficiaries = Some(List(individualBeneficiary)),
+          directorBeneficiaries = Some(List(directorBeneficiary))
+        )
+        val ex = the[IllegalArgumentException] thrownBy (InterVivoTrust(assets, beneficiaries, true, Some("Dovtypeabsolute")))
         ex.getMessage() mustEqual  "requirement failed: Must have no other types of Beneficiary"
       }
     }
 
     "not throw an exception" when {
       "there is one asset" in {
-        val assets = Assets(Some(List(2,2)))
-        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None)
+        val assets = Assets(monetaryAssets = Some(List(2,2)))
+        val beneficiaries = Beneficiaries(individualBeneficiaries = Some(List(individualBeneficiary)))
         noException should be thrownBy (InterVivoTrust(assets, beneficiaries, true, Some("Dovtypeabsolute")))
       }
 
       "there is more than one type of asset" in {
-        val assets = Assets(Some(List(2,2)),None,None,None,None,Some(List(otherAsset)))
-        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None)
+        val assets = Assets(monetaryAssets = Some(List(2,2)), otherAssets = Some(List(otherAsset)))
+        val beneficiaries = Beneficiaries(individualBeneficiaries = Some(List(individualBeneficiary)))
         noException should be thrownBy (InterVivoTrust(assets, beneficiaries, true, Some("Dovtypeabsolute")))
       }
 
-      "has a partnership Asset" in {
-        val assets = Assets(Some(List(2,2)),None,Some(List(shareAsset)),Some(List(partnershipAsset)),None,None)
-        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None)
+      "there is a partnership asset" in {
+        val assets = Assets(
+          partnershipAssets = Some(List(partnershipAsset))
+        )
+        val beneficiaries = Beneficiaries(individualBeneficiaries = Some(List(individualBeneficiary)))
+        noException should be thrownBy (InterVivoTrust(assets, beneficiaries, true, Some("Dovtypeabsolute")))
+      }
+
+      "there is a large number companies beneficiary" in {
+        val assets = Assets(
+          monetaryAssets = Some(List(2,2))
+        )
+        val beneficiaries = Beneficiaries(largeNumbersCompanyBeneficiaries = Some(List(largeNumbersCompanyBeneficiary)))
         noException should be thrownBy (InterVivoTrust(assets, beneficiaries, true, Some("Dovtypeabsolute")))
       }
     }

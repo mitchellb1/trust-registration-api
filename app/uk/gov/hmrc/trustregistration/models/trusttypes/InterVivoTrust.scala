@@ -33,16 +33,13 @@ case class InterVivoTrust(assets: Assets,
     (assets.partnershipAssets.isDefined && assets.partnershipAssets.get.size > 0)
   require(atleastOneTypeOfRequiredAsset, "Must have at least one type of required Asset")
 
-  //  private val noOtherTypesOfAsset: Boolean = ( )
-  //  require(!noOtherTypesOfAsset, "Must have no other types of Asset")
-
-
   private val atleastOneTypeOfRequiredBeneficiaries: Boolean = (beneficiaries.individualBeneficiaries.isDefined && beneficiaries.individualBeneficiaries.get.size > 0) ||
     (beneficiaries.charityBeneficiaries.isDefined && beneficiaries.charityBeneficiaries.get.size > 0) ||
     (beneficiaries.otherBeneficiaries.isDefined && beneficiaries.otherBeneficiaries.get.size > 0) ||
     (beneficiaries.trustBeneficiaries.isDefined && beneficiaries.trustBeneficiaries.get.size > 0) ||
     (beneficiaries.unidentifiedBeneficiaries.isDefined && beneficiaries.unidentifiedBeneficiaries.get.size > 0) ||
-    (beneficiaries.companyBeneficiaries.isDefined && beneficiaries.companyBeneficiaries.get.size > 0)
+    (beneficiaries.companyBeneficiaries.isDefined && beneficiaries.companyBeneficiaries.get.size > 0) ||
+    (beneficiaries.largeNumbersCompanyBeneficiaries.isDefined && beneficiaries.largeNumbersCompanyBeneficiaries.get.size > 0)
   require(atleastOneTypeOfRequiredBeneficiaries, "Must have at least one type of required Beneficiary")
 
   private val noOtherTypesOfBeneficiaries: Boolean = (beneficiaries.employeeBeneficiaries.isDefined ||
