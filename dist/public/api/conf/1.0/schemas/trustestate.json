@@ -98,7 +98,8 @@
         {"required": ["individualBeneficiaries"]},
         {"required": ["trustBeneficiaries"]},
         {"required": ["companyBeneficiaries"]},
-        {"required": ["unidentifiedBeneficiaries"]}
+        {"required": ["unidentifiedBeneficiaries"]},
+        {"required": ["largeNumbersCompanyBeneficiaries"]}
       ],
       "type": "object"
     },
@@ -907,6 +908,9 @@
             },
             "companyBeneficiaries": {
               "$ref": "#/definitions/companyBeneficiariesType"
+            },
+            "largeNumbersCompanyBeneficiaries": {
+              "$ref": "#/definitions/largeNumbersCompanyBeneficiariesType"
             }
           },
           "type": "object",
@@ -916,7 +920,8 @@
             {"required": ["trustBeneficiaries"]},
             {"required": ["unidentifiedBeneficiaries"]},
             {"required": ["otherBeneficiaries"]},
-            {"required": ["companyBeneficiaries"]}
+            {"required": ["companyBeneficiaries"]},
+            {"required": ["largeNumbersCompanyBeneficiaries"]}
           ]
         },
         "isHoldOverClaimed": {
