@@ -71,6 +71,13 @@ trait JsonExamples {
     .mkString
     .replace(""""{ADDRESS}"""", validAddressJson)
 
+  lazy val matchedValidBeneficiariesJson =
+    s"""{"individualBeneficiaries":[$validIndividualBeneficiary],
+       |"employeeBeneficiaries":[$validEmployeeBeneficiary],
+       |"charityBeneficiaries":[$validCharityBeneficiary],
+       |"otherBeneficiaries":[$validOtherBeneficiary]
+       |}""".stripMargin
+
   lazy val validBeneficiariesJson = s"""{"individualBeneficiaries":[$validIndividualBeneficiary],"charityBeneficiaries":[$validCharityBeneficiary],"otherBeneficiaries":[$validOtherBeneficiary],"employeeBeneficiaries":[$validEmployeeBeneficiary]}"""
 
   lazy val invalidBeneficiariesJson = s"""{"charityBeneficiaries": [$invalidCharityBeneficiary]}"""
@@ -223,44 +230,57 @@ trait ScalaDataExamples {
   val validEstateWithPersonalRepresentative = Estate(true,true,true,false,Some(personalRepresentative))
   val validEstateWithDeceased = Estate(true,true,true,false,None,Some(individual),Some(false),Some(false),Some(false))
 
-
+ val incomeDistribution = IncomeDistribution(
+   isIncomeAtTrusteeDiscretion = false,
+     shareOfIncome = Some(50)
+ )
   val employeeBeneficiary = EmployeeBeneficiary(
-    individual = individual)
+    individual = individual,
+    incomeDistribution = incomeDistribution
+  )
 
   val individualBeneficiary = IndividualBeneficiary(
     individual = individual,
-    isVulnerable = false
+    isVulnerable = false,
+    incomeDistribution = incomeDistribution
   )
 
   val largeNumbersCompanyBeneficiary = LargeNumbersCompanyBeneficiaries(
     description = "test",
     numberOfBeneficiaries = 123456,
-    company = company
+    company = company,
+    incomeDistribution = incomeDistribution
   )
 
   val trustBeneficiary = TrustBeneficiary(
     trustBeneficiaryName = "trust beneficiary Name",
     trustBeneficiaryUTR = Some("2134567"),
-    correspondenceAddress = address
+    correspondenceAddress = address,
+    incomeDistribution = incomeDistribution
   )
 
   val companyBeneficiary = CompanyBeneficiary(
-    company = company
+    company = company,
+    incomeDistribution = incomeDistribution
   )
 
   val directorBeneficiary = DirectorBeneficiary(
-    individual = individual)
+    individual = individual,
+    incomeDistribution = incomeDistribution
+  )
 
 
   val charityBeneficiary = CharityBeneficiary(
     charityName = "Charity Name",
     charityNumber = "123456789087654",
-    correspondenceAddress = address
+    correspondenceAddress = address,
+    incomeDistribution = incomeDistribution
   )
 
   val otherBeneficiary = OtherBeneficiary(
     beneficiaryDescription = "Beneficiary Description",
-    correspondenceAddress = address
+    correspondenceAddress = address,
+    incomeDistribution = incomeDistribution
   )
 
   val beneficiaries = Beneficiaries(
@@ -287,7 +307,7 @@ trait ScalaDataExamples {
 
   val deceased = Deceased(individual, new DateTime(2000, 1, 1, 0, 0))
 
-  val willIntestacyTrust = WillIntestacyTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false)))), deceased, true)
+  val willIntestacyTrust = WillIntestacyTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false, incomeDistribution)))), deceased, true)
 
   val trust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),Some(List(2015,2016)),legality,true,leadTrusteeIndividual,Trustees(None, None),
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(Some(List(individual,individual)))), TrustType(willIntestacyTrust = Some(willIntestacyTrust)))
@@ -303,7 +323,7 @@ trait ScalaDataExamples {
   val trustWithHeritageMaintenance = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),Some(List(2015,2016)),legality,true,leadTrusteeIndividual, Trustees(None, None),
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(Some(List(individual,individual)))), TrustType(heritageMaintenanceFundTrust = heritageFund))
 
-  val employmentTrust = Some(EmploymentTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false)))),Some(true),Some(new DateTime("1940-01-01"))))
+  val employmentTrust = Some(EmploymentTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false, incomeDistribution)))),Some(true),Some(new DateTime("1940-01-01"))))
   val trustWithEmploymentTrust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),Some(List(2015,2016)),legality,true,leadTrusteeIndividual, Trustees(None, None),
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(Some(List(individual,individual)))), TrustType(employmentTrust = employmentTrust))
 
@@ -311,7 +331,7 @@ trait ScalaDataExamples {
   val trustWithFlatManagementFund = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),Some(List(2015,2016)),legality,true,leadTrusteeIndividual, Trustees(None, None),
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(Some(List(individual,individual)))), TrustType(flatManagementSinkingFundTrust = flatManagementFund))
 
-  val interVivoTrust = Some(InterVivoTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false)))),true, Some("Dovtypeabsolute")))
+  val interVivoTrust = Some(InterVivoTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false, incomeDistribution)))),true, Some("Dovtypeabsolute")))
   val trustWithInterVivoTrust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1940-01-01"),Some(List(2015,2016)),legality,true,leadTrusteeIndividual, Trustees(None, None),
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(Some(List(individual,individual)))), TrustType(interVivoTrust = interVivoTrust))
 }

@@ -165,10 +165,13 @@
           },
           "correspondenceAddress": {
             "$ref": "#/definitions/correspondenceAddressType"
+          },
+          "incomeDistribution": {
+            "$ref": "#/definitions/incomeType"
           }
         },
         "type": "object",
-        "required": ["charityName","charityNumber","correspondenceAddress"]
+        "required": ["charityName","charityNumber","correspondenceAddress","incomeDistribution"]
       },
       "minItems": 1
     },
@@ -181,10 +184,13 @@
         "properties": {
           "company": {
             "$ref": "#/definitions/companyType"
+          },
+          "incomeDistribution": {
+            "$ref": "#/definitions/incomeType"
           }
         },
         "type": "object",
-        "required": ["company"]
+        "required": ["company", "incomeDistribution"]
       },
       "minItems": 1
     },
@@ -558,9 +564,12 @@
         "properties": {
           "individual": {
             "$ref": "#/definitions/individualType"
+          },
+          "incomeDistribution": {
+            "$ref": "#/definitions/incomeType"
           }
         },
-        "required": ["individual"],
+        "required": ["individual", "incomeDistribution"],
         "type": "object"
       },
       "minItems": 1
@@ -574,9 +583,12 @@
         "properties": {
           "individual": {
             "$ref": "#/definitions/individualType"
+          },
+          "incomeDistribution": {
+            "$ref": "#/definitions/incomeType"
           }
         },
-        "required": ["individual"],
+        "required": ["individual", "incomeDistribution"],
         "type": "object"
       },
       "minItems": 1
@@ -775,10 +787,15 @@
           "type": "boolean"
         },
         "shareOfIncome": {
-          "type": "number"
+          "type": "number",
+          "pattern":
         }
       },
-      "type": "object"
+      "type": "object",
+      "oneOf": [
+        {"required": ["isIncomeAtTrusteeDiscretion"]},
+        {"required": ["shareOfIncome"]}
+      ]
     },
     "individualBeneficiariesType": {
       "description": "Individual Beneficiaries Type",
@@ -792,10 +809,13 @@
           },
           "isVulnerable": {
             "type": "boolean"
+          },
+          "incomeDistribution": {
+            "$ref": "#/definitions/incomeType"
           }
         },
         "type": "object",
-        "required": ["individual", "isVulnerable"]
+        "required": ["individual", "isVulnerable", "incomeDistribution"]
       },
       "minItems": 1
     },
@@ -1043,10 +1063,13 @@
           },
           "correspondenceAddress": {
             "$ref": "#/definitions/correspondenceAddressType"
+          },
+          "incomeDistribution": {
+            "$ref": "#/definitions/incomeType"
           }
         },
         "type": "object",
-        "required": ["beneficiaryDescription", "correspondenceAddress"]
+        "required": ["beneficiaryDescription", "correspondenceAddress", "incomeDistribution"]
       },
       "minItems": 1
     },
@@ -1277,10 +1300,13 @@
           },
           "company" : {
             "$ref": "#/definitions/companyType"
+          },
+          "incomeDistribution": {
+            "$ref": "#/definitions/incomeType"
           }
         },
         "type": "object",
-        "required": ["description", "numberOfBeneficiaries", "company"]
+        "required": ["description", "numberOfBeneficiaries", "company", "incomeDistribution"]
       },
       "minItems": 1
     },
@@ -1300,10 +1326,13 @@
           },
           "correspondenceAddress": {
             "$ref": "#/definitions/correspondenceAddressType"
+          },
+          "incomeDistribution": {
+            "$ref": "#/definitions/incomeType"
           }
         },
         "type": "object",
-        "required": ["trustBeneficiaryName", "correspondenceAddress"]
+        "required": ["trustBeneficiaryName", "correspondenceAddress", "incomeDistribution"]
       },
       "minItems": 1
     },
