@@ -33,6 +33,7 @@ case class InterVivoTrust(assets: Assets,
     (assets.partnershipAssets.isDefined && assets.partnershipAssets.get.size > 0)
   require(atleastOneTypeOfRequiredAsset, "Must have at least one type of required Asset")
 
+  private val noPartnershipAssetsIfDeedOfVaration: Boolean = !(dovType.isDefined && (assets.partnershipAssets.isDefined && assets.partnershipAssets.get.size > 0))
   private val atleastOneTypeOfRequiredBeneficiaries: Boolean = (beneficiaries.individualBeneficiaries.isDefined && beneficiaries.individualBeneficiaries.get.size > 0) ||
     (beneficiaries.charityBeneficiaries.isDefined && beneficiaries.charityBeneficiaries.get.size > 0) ||
     (beneficiaries.otherBeneficiaries.isDefined && beneficiaries.otherBeneficiaries.get.size > 0) ||
@@ -45,6 +46,8 @@ case class InterVivoTrust(assets: Assets,
   private val noOtherTypesOfBeneficiaries: Boolean = (beneficiaries.employeeBeneficiaries.isDefined ||
     beneficiaries.directorBeneficiaries.isDefined)
   require(!noOtherTypesOfBeneficiaries, "Must have no other types of Beneficiary")
+  require(isHoldOverClaimed,"isHoldOverClaimed must be true")
+  require(noPartnershipAssetsIfDeedOfVaration,"partnership assets not allowed when Inter Vivo Trust is created by a deed of variation")
 }
 
 
