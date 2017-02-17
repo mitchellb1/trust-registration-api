@@ -50,8 +50,27 @@ case class InterVivoTrust(assets: Assets,
   require(atLeastOneTypeOfRequiredBeneficiaries, "Must have at least one type of required Beneficiary")
   require(atLeastOneTypeOfRequiredAsset, "Must have at least one type of required Asset")
   require(noEmployeeOrDirectorBeneficiaries, "Must have no other types of Beneficiary")
-  require(isHoldOverClaimedIsTrue, "isHoldOverClaimed must be true")
-  require(noPartnershipAssetsIfDeedOfVariation, "partnership assets not allowed when Inter Vivo Trust is created by a deed of variation")
+  require(isHoldOverClaimedIsTrue,
+  s"""{\"message\": \"Invalid Json\",
+         \"code\": 0,
+         \"validationErrors\": [
+         {
+           \"message\": \"isHoldOverClaimed must be true",
+           \"location\": \"/"
+         }
+         ]
+       }""".stripMargin)
+
+  require(noPartnershipAssetsIfDeedOfVariation,s"""{\"message\": \"Invalid Json\",
+         \"code\": 0,
+         \"validationErrors\": [
+         {
+           \"message\": \"partnership assets not allowed when Inter Vivo Trust is created by a deed of variation",
+           \"location\": \"/"
+         }
+         ]
+       }""".stripMargin)
+
 }
 
 

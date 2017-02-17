@@ -77,14 +77,14 @@ class InterVivoTrustSpec extends PlaySpec with ScalaDataExamples with JsonExampl
         val assets = Assets(monetaryAssets = Some(List(2,2)))
         val beneficiaries = Beneficiaries(individualBeneficiaries = Some(List(individualBeneficiary)))
         val ex = the[IllegalArgumentException] thrownBy (InterVivoTrust(assets, beneficiaries, false, Some("dovTypeAbsolute")))
-        ex.getMessage() mustEqual  "requirement failed: isHoldOverClaimed must be true"
+        ex.getMessage() must include("isHoldOverClaimed must be true")
       }
 
       "when Inter Vivo Trust is created by a deed of variation and it has got a Partnership asset" in {
         val assets = Assets(partnershipAssets = Some(List(partnershipAsset)))
         val beneficiaries = Beneficiaries(individualBeneficiaries = Some(List(individualBeneficiary)))
         val ex = the[IllegalArgumentException] thrownBy (InterVivoTrust(assets, beneficiaries, true, Some("dovTypeAbsolute")))
-        ex.getMessage() mustEqual  "requirement failed: partnership assets not allowed when Inter Vivo Trust is created by a deed of variation"
+        ex.getMessage() must include("partnership assets not allowed when Inter Vivo Trust is created by a deed of variation")
       }
     }
 
