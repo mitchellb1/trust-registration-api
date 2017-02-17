@@ -929,8 +929,8 @@
         },
         "dovType" : {
           "enum": [
-            "Dovtypeabsolute",
-            "Dovtypereplace"
+            "dovTypeAbsolute",
+            "dovTypeReplace"
           ]
         }
       },
