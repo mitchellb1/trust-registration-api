@@ -1,5 +1,9 @@
 {
   "charityName": "Charity Name",
   "charityNumber": "123456789087654",
-  "correspondenceAddress": "{ADDRESS}"
+  "correspondenceAddress": "{ADDRESS}",
+  "incomeDistribution" : {
+  "isIncomeAtTrusteeDiscretion" : false,
+  "shareOfIncome" : 50
+}
 }

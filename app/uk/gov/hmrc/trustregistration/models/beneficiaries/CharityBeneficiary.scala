@@ -21,7 +21,8 @@ import uk.gov.hmrc.trustregistration.models.Address
 
 case class CharityBeneficiary(charityName: String,
                               charityNumber: String,
-                              correspondenceAddress: Address)
+                              correspondenceAddress: Address,
+                              incomeDistribution: IncomeDistribution)
 
 object CharityBeneficiary {
   implicit val charityBeneficiaryFormats = Json.format[CharityBeneficiary]

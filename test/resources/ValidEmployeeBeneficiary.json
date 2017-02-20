@@ -1,3 +1,7 @@
 {
-  "individual": "{INDIVIDUAL}"
+  "individual": "{INDIVIDUAL}",
+  "incomeDistribution" : {
+    "isIncomeAtTrusteeDiscretion" : false,
+    "shareOfIncome" : 50
+  }
 }

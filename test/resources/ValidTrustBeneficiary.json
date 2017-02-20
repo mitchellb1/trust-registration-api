@@ -1,5 +1,9 @@
 {
   "trustBeneficiaryName": "Beneficiary trust name",
   "trustBeneficiaryUTR": "1234567890",
-  "correspondenceAddress": "{ADDRESS}"
+  "correspondenceAddress": "{ADDRESS}",
+  "incomeDistribution" : {
+    "isIncomeAtTrusteeDiscretion" : false,
+    "shareOfIncome" : 50
+  }
 }

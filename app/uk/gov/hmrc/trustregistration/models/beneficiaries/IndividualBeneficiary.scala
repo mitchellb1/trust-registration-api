@@ -20,7 +20,8 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.trustregistration.models.Individual
 
 case class IndividualBeneficiary(individual: Individual,
-                                 isVulnerable: Boolean)
+                                 isVulnerable: Boolean,
+                                 incomeDistribution: IncomeDistribution)
 
 object IndividualBeneficiary {
   implicit val individualBeneficiaryFormats = Json.format[IndividualBeneficiary]
