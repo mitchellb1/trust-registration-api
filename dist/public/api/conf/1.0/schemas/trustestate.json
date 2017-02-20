@@ -817,35 +817,8 @@
       "description": "Estate Type",
       "additionalProperties": false,
       "properties": {
-        "estateName": {
-          "type": "string"
-        },
-        "adminPeriodFinishedDate": {
-          "type": "boolean"
-        },
-        "deceased": {
-          "$ref": "#/definitions/deceasedType"
-        },
-        "estateCriteriaMet": {
-          "type": "boolean"
-        },
-        "incomeTaxDueMoreThan10000": {
-          "type": "boolean"
-        },
-        "isCreatedByWill": {
-          "type": "boolean"
-        },
         "personalRepresentative": {
           "$ref": "#/definitions/personalRepresentativeType"
-        },
-        "saleOfEstateAssetsMoreThan250000": {
-          "type": "boolean"
-        },
-        "saleOfEstateAssetsMoreThan500000": {
-          "type": "boolean"
-        },
-        "worthMoreThanTwoAndHalfMillionAtTimeOfDeath": {
-          "type": "boolean"
         }
       },
       "required": [

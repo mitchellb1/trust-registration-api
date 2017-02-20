@@ -28,6 +28,7 @@ import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
+import uk.gov.hmrc.trustregistration.models.estates.{Estate, EstateRegistrationDocument}
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
 
 import scala.concurrent.Future
@@ -45,12 +46,12 @@ class RegisterEstateControllerSpec extends PlaySpec with OneAppPerSuite with Jso
     "return 200 ok" when {
       "the endpoint is called with a valid identifier" in {
         when(mockRegisterTrustService.getEstate(any[String])(any[HeaderCarrier]))
-          .thenReturn(Future.successful(new GetSuccessResponse[Estate](validEstateWithDeceased)))
+          .thenReturn(Future.successful(new GetSuccessResponse[Estate](validEstateWithPersonalRepresentative)))
 
         val result = SUT.getEstate("1234").apply(FakeRequest("GET",""))
 
         status(result) mustBe OK
-        contentAsString(result) contains (validEstateWithDeceased)
+        contentAsString(result) contains (validEstateWithPersonalRepresentative)
       }
     }
 
