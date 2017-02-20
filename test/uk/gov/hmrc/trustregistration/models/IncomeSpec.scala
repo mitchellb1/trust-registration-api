@@ -45,13 +45,11 @@ class  IncomeSpec extends PlaySpec with JsonExamples with ScalaDataExamples {
     "throw an exception" when {
       "an inValid Income At Discretion is sent" in {
         val ex = the [IllegalArgumentException] thrownBy IncomeDistribution(true, Some(50))
-        println(ex.getMessage)
         ex.getMessage must include("field not required")
       }
 
       "an inValid Not Income At Discretion is sent" in {
         val ex = the [IllegalArgumentException] thrownBy IncomeDistribution(false, None)
-        println(ex.getMessage)
         ex.getMessage must include("missing field")
       }
 
