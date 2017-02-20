@@ -233,13 +233,17 @@
           },
           "correspondenceAddress": {
             "$ref": "#/definitions/correspondenceAddressType"
+          },
+          "incomeDistribution": {
+            "$ref": "#/definitions/incomeType"
           }
         },
         "type": "object",
         "required": [
           "charityName",
           "charityNumber",
-          "correspondenceAddress"
+          "correspondenceAddress",
+          "incomeDistribution"
         ]
       },
       "minItems": 1
@@ -253,11 +257,15 @@
         "properties": {
           "company": {
             "$ref": "#/definitions/companyType"
+          },
+          "incomeDistribution": {
+            "$ref": "#/definitions/incomeType"
           }
         },
         "type": "object",
         "required": [
-          "company"
+          "company",
+          "incomeDistribution"
         ]
       },
       "minItems": 1
@@ -643,10 +651,14 @@
         "properties": {
           "individual": {
             "$ref": "#/definitions/individualType"
+          },
+          "incomeDistribution": {
+            "$ref": "#/definitions/incomeType"
           }
         },
         "required": [
-          "individual"
+          "individual",
+          "incomeDistribution"
         ],
         "type": "object"
       },
@@ -661,10 +673,14 @@
         "properties": {
           "individual": {
             "$ref": "#/definitions/individualType"
+          },
+          "incomeDistribution": {
+            "$ref": "#/definitions/incomeType"
           }
         },
         "required": [
-          "individual"
+          "individual",
+          "incomeDistribution"
         ],
         "type": "object"
       },
@@ -950,6 +966,9 @@
           "type": "number"
         }
       },
+      "required": [
+        "isIncomeAtTrusteeDiscretion"
+      ],
       "type": "object"
     },
     "individualBeneficiariesType": {
@@ -964,12 +983,16 @@
           },
           "isVulnerable": {
             "type": "boolean"
+          },
+          "incomeDistribution": {
+            "$ref": "#/definitions/incomeType"
           }
         },
         "type": "object",
         "required": [
           "individual",
-          "isVulnerable"
+          "isVulnerable",
+          "incomeDistribution"
         ]
       },
       "minItems": 1
@@ -1292,12 +1315,16 @@
           },
           "correspondenceAddress": {
             "$ref": "#/definitions/correspondenceAddressType"
+          },
+          "incomeDistribution": {
+            "$ref": "#/definitions/incomeType"
           }
         },
         "type": "object",
         "required": [
           "beneficiaryDescription",
-          "correspondenceAddress"
+          "correspondenceAddress",
+          "incomeDistribution"
         ]
       },
       "minItems": 1
@@ -1519,11 +1546,15 @@
         "properties": {
           "description": {
             "type": "string"
+          },
+          "incomeDistribution": {
+            "$ref": "#/definitions/incomeType"
           }
         },
         "type": "object",
         "required": [
-          "description"
+          "description",
+          "incomeDistribution"
         ]
       },
       "minItems": 1
@@ -1543,13 +1574,17 @@
           },
           "company": {
             "$ref": "#/definitions/companyType"
+          },
+          "incomeDistribution": {
+            "$ref": "#/definitions/incomeType"
           }
         },
         "type": "object",
         "required": [
           "description",
           "numberOfBeneficiaries",
-          "company"
+          "company",
+          "incomeDistribution"
         ]
       },
       "minItems": 1
@@ -1570,12 +1605,16 @@
           },
           "correspondenceAddress": {
             "$ref": "#/definitions/correspondenceAddressType"
+          },
+          "incomeDistribution": {
+            "$ref": "#/definitions/incomeType"
           }
         },
         "type": "object",
         "required": [
           "trustBeneficiaryName",
-          "correspondenceAddress"
+          "correspondenceAddress",
+          "incomeDistribution"
         ]
       },
       "minItems": 1

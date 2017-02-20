@@ -1,4 +1,8 @@
 {
   "charityName": "Charity Name",
-  "charityNumber": "123456789087654"
+  "charityNumber": "123456789087654",
+  "incomeDistribution" : {
+    "isIncomeAtTrusteeDiscretion" : false,
+    "shareOfIncome" : 50
+  }
 }

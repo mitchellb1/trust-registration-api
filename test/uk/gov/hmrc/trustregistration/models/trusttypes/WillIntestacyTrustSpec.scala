@@ -23,52 +23,52 @@ import uk.gov.hmrc.trustregistration.models.beneficiaries.Beneficiaries
 
 class WillIntestacyTrustSpec extends PlaySpec with ScalaDataExamples {
 
-  "WillIntestacyTrust" must{
-      "throw an exception" when{
-        "there are no assets" in {
-          val assets = Assets(None,None,None,None,None,None)
-          val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None)
-          val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(assets,beneficiaries, deceased, true))
-          ex.getMessage() mustEqual  "requirement failed: Must have at least one type of required Asset"
-        }
-
-        "there are no beneficiaries" in {
-          val assets = Assets(None,None,None,None,None,Some(List(otherAsset)))
-          val beneficiaries = Beneficiaries(None,None,None,None,None,None,None,None)
-          val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(assets,beneficiaries, deceased, true))
-          ex.getMessage() mustEqual  "requirement failed: Must have at least one type of required Beneficiary"
-        }
-
-        "the wrong Beneficiaries are defined" in {
-          val assets = Assets(Some(List(2,2)),None,None,None,None,None)
-          val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)), Some(List(employeeBeneficiary)), Some(List(directorBeneficiary)), None, None, None, None, None)
-          val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(assets,beneficiaries, deceased, true))
-          ex.getMessage() mustEqual  "requirement failed: Must have no other types of Beneficiary"
-        }
-
-        "the wrong assets are defined" in {
-          val assets = Assets(Some(List(2,2)),None,Some(List(shareAsset)),Some(List(partnershipAsset)),None,None)
-          val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None)
-          val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(assets,beneficiaries, deceased, true))
-          ex.getMessage() mustEqual  "requirement failed: Must have no other types of Asset"
-        }
+  "WillIntestacyTrust" must {
+    "throw an exception" when {
+      "there are no assets" in {
+        val assets = Assets(None, None, None, None, None, None)
+        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)), None, None, None, None, None, None, None)
+        val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(assets, beneficiaries, deceased, true))
+        ex.getMessage() mustEqual "requirement failed: Must have at least one type of required Asset"
       }
+
+      "there are no beneficiaries" in {
+        val assets = Assets(None, None, None, None, None, Some(List(otherAsset)))
+        val beneficiaries = Beneficiaries(None, None, None, None, None, None, None, None)
+        val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(assets, beneficiaries, deceased, true))
+        ex.getMessage() mustEqual "requirement failed: Must have at least one type of required Beneficiary"
+      }
+
+      "the wrong Beneficiaries are defined" in {
+        val assets = Assets(Some(List(2, 2)), None, None, None, None, None)
+        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)), Some(List(employeeBeneficiary)), Some(List(directorBeneficiary)), None, None, None, None, None)
+        val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(assets, beneficiaries, deceased, true))
+        ex.getMessage() mustEqual "requirement failed: Must have no other types of Beneficiary"
+      }
+
+      "the wrong assets are defined" in {
+        val assets = Assets(Some(List(2, 2)), None, Some(List(shareAsset)), Some(List(partnershipAsset)), None, None)
+        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)), None, None, None, None, None, None, None)
+        val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(assets, beneficiaries, deceased, true))
+        ex.getMessage() mustEqual "requirement failed: Must have no other types of Asset"
+      }
+    }
 
     "not throw an exception" when {
       "there is one asset" in {
-        val assets = Assets(Some(List(2,2)))
-        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None)
+        val assets = Assets(Some(List(2, 2)))
+        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)), None, None, None, None, None, None, None)
         noException should be thrownBy (WillIntestacyTrust(assets, beneficiaries, deceased, true))
       }
 
       "there is more than one type of asset" in {
-        val assets = Assets(Some(List(2,2)),None,None,None,None,Some(List(otherAsset)))
-        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)),None,None,None,None,None,None,None,Some(List(largeNumbersCompanyBeneficiary)))
+        val assets = Assets(Some(List(2, 2)), None, None, None, None, Some(List(otherAsset)))
+        val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)), None, None, None, None, None, None, None, Some(List(largeNumbersCompanyBeneficiary)))
         noException should be thrownBy (WillIntestacyTrust(assets, beneficiaries, deceased, true))
       }
 
       "only a large numbers company beneficiary is supplied" in {
-        val assets = Assets(Some(List(2,2)),None,None,None,None,Some(List(otherAsset)))
+        val assets = Assets(Some(List(2, 2)), None, None, None, None, Some(List(otherAsset)))
         val beneficiaries = Beneficiaries(largeNumbersCompanyBeneficiaries = Some(List(largeNumbersCompanyBeneficiary)))
         noException should be thrownBy (WillIntestacyTrust(assets, beneficiaries, deceased, true))
       }

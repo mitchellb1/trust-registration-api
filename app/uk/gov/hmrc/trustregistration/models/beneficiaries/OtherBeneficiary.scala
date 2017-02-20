@@ -20,7 +20,8 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.trustregistration.models.Address
 
 case class OtherBeneficiary(beneficiaryDescription: String,
-                            correspondenceAddress: Address)
+                            correspondenceAddress: Address,
+                            incomeDistribution: IncomeDistribution)
 
 object OtherBeneficiary {
   implicit val otherBeneficiaryFormats = Json.format[OtherBeneficiary]

@@ -20,7 +20,10 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.trustregistration.models.Company
 
 
-case class LargeNumbersCompanyBeneficiaries(description : String , numberOfBeneficiaries : Long, company : Company)
+case class LargeNumbersCompanyBeneficiaries(description: String,
+                                            numberOfBeneficiaries: Long,
+                                            company: Company,
+                                            incomeDistribution: IncomeDistribution)
 
 object LargeNumbersCompanyBeneficiaries {
   implicit val largeNumbersCompanyBeneficiaryFormats = Json.format[LargeNumbersCompanyBeneficiaries]

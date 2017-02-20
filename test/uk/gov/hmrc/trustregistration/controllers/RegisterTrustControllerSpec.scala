@@ -585,26 +585,13 @@ class RegisterTrustControllerSpec extends PlaySpec
 
     "return 200 ok with valid json" when {
       "the endpoint is called with a valid identifier" in {
-        when(mockRegisterTrustService.getBeneficiaries(any[String])(any[HeaderCarrier]))
-          .thenReturn(Future.successful(new GetSuccessResponse[Beneficiaries](beneficiaries)))
+
+        when(mockRegisterTrustService.getBeneficiaries(any[String])(any[HeaderCarrier])).thenReturn(Future.successful(new GetSuccessResponse[Beneficiaries](beneficiaries)))
         val result = SUT.getBeneficiaries("sadfg").apply(FakeRequest("GET", ""))
         status(result) mustBe OK
-        println(contentAsString(result))
-        contentAsString(result) mustBe(
-          """{"individualBeneficiaries":[{"individual":{"givenName":"Leo","""+
-            """"familyName":"Spaceman","dateOfBirth":"1800-01-01","passport":{"identifier":"IDENTIFIER","""+
-            """"expiryDate":"2020-01-01","countryOfIssue":"ES"},"""+
-            """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2","line3":"Line 3","line4":"Line 4","countryCode":"ES"}},"""+
-            """"isVulnerable":false}],"employeeBeneficiaries":[{"individual":{"givenName":"Leo","""+
-            """"familyName":"Spaceman","dateOfBirth":"1800-01-01","passport":{"identifier":"IDENTIFIER","""+
-            """"expiryDate":"2020-01-01","countryOfIssue":"ES"},"""+
-            """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2","line3":"Line 3","line4":"Line 4","countryCode":"ES"}}}],"""+
-          """"charityBeneficiaries":[{"charityName":"Charity Name","charityNumber":"123456789087654","""+
-          """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2","line3":"Line 3","line4":"Line 4","countryCode":"ES"}"""+
-          """}],"""+
-          """"otherBeneficiaries":[{"beneficiaryDescription":"Beneficiary Description","""+
-          """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2","line3":"Line 3","line4":"Line 4","countryCode":"ES"}}]}"""
-        )
+        val jsonstring = Json.prettyPrint(Json.parse(contentAsString(result)))
+
+        jsonstring mustBe matchString
       }
     }
 
@@ -787,4 +774,84 @@ class RegisterTrustControllerSpec extends PlaySpec
   private def withCallToPOST(payload: JsValue)(handler: Future[Result] => Any) = {
     handler(SUT.register.apply(registerRequestWithPayload(payload)))
   }
+
+
+  val matchString = s"""{
+  "individualBeneficiaries" : [ {
+    "individual" : {
+      "givenName" : "Leo",
+      "familyName" : "Spaceman",
+      "dateOfBirth" : "1800-01-01",
+      "passport" : {
+        "identifier" : "IDENTIFIER",
+        "expiryDate" : "2020-01-01",
+        "countryOfIssue" : "ES"
+      },
+      "correspondenceAddress" : {
+        "line1" : "Line 1",
+        "line2" : "Line 2",
+        "line3" : "Line 3",
+        "line4" : "Line 4",
+        "countryCode" : "ES"
+      }
+    },
+    "isVulnerable" : false,
+    "incomeDistribution" : {
+      "isIncomeAtTrusteeDiscretion" : false,
+      "shareOfIncome" : 50
+    }
+  } ],
+  "employeeBeneficiaries" : [ {
+    "individual" : {
+      "givenName" : "Leo",
+      "familyName" : "Spaceman",
+      "dateOfBirth" : "1800-01-01",
+      "passport" : {
+        "identifier" : "IDENTIFIER",
+        "expiryDate" : "2020-01-01",
+        "countryOfIssue" : "ES"
+      },
+      "correspondenceAddress" : {
+        "line1" : "Line 1",
+        "line2" : "Line 2",
+        "line3" : "Line 3",
+        "line4" : "Line 4",
+        "countryCode" : "ES"
+      }
+    },
+    "incomeDistribution" : {
+      "isIncomeAtTrusteeDiscretion" : false,
+      "shareOfIncome" : 50
+    }
+  } ],
+  "charityBeneficiaries" : [ {
+    "charityName" : "Charity Name",
+    "charityNumber" : "123456789087654",
+    "correspondenceAddress" : {
+      "line1" : "Line 1",
+      "line2" : "Line 2",
+      "line3" : "Line 3",
+      "line4" : "Line 4",
+      "countryCode" : "ES"
+    },
+    "incomeDistribution" : {
+      "isIncomeAtTrusteeDiscretion" : false,
+      "shareOfIncome" : 50
+    }
+  } ],
+  "otherBeneficiaries" : [ {
+    "beneficiaryDescription" : "Beneficiary Description",
+    "correspondenceAddress" : {
+      "line1" : "Line 1",
+      "line2" : "Line 2",
+      "line3" : "Line 3",
+      "line4" : "Line 4",
+      "countryCode" : "ES"
+    },
+    "incomeDistribution" : {
+      "isIncomeAtTrusteeDiscretion" : false,
+      "shareOfIncome" : 50
+    }
+  } ]
+}"""
 }

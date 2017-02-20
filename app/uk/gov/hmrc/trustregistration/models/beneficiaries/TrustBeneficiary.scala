@@ -21,7 +21,8 @@ import uk.gov.hmrc.trustregistration.models.Address
 
 case class TrustBeneficiary(trustBeneficiaryName: String,
                             trustBeneficiaryUTR: Option[String] = None,
-                            correspondenceAddress: Address)
+                            correspondenceAddress: Address,
+                            incomeDistribution: IncomeDistribution)
 
 object TrustBeneficiary {
   implicit val trustBeneficiaryFormats = Json.format[TrustBeneficiary]

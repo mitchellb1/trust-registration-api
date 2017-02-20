@@ -1,4 +1,8 @@
 {
   "beneficiaryDescription": "Beneficiary Description",
-  "correspondenceAddress": "{ADDRESS}"
+  "correspondenceAddress": "{ADDRESS}",
+  "incomeDistribution" : {
+    "isIncomeAtTrusteeDiscretion" : false,
+    "shareOfIncome" : 50
+  }
 }
