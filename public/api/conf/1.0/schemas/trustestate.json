@@ -787,15 +787,11 @@
           "type": "boolean"
         },
         "shareOfIncome": {
-          "type": "number",
-          "pattern":
+          "type": "number"
         }
       },
-      "type": "object",
-      "oneOf": [
-        {"required": ["isIncomeAtTrusteeDiscretion"]},
-        {"required": ["shareOfIncome"]}
-      ]
+      "required": ["isIncomeAtTrusteeDiscretion"],
+      "type": "object"
     },
     "individualBeneficiariesType": {
       "description": "Individual Beneficiaries Type",
@@ -1278,10 +1274,13 @@
         "properties": {
           "description": {
             "type" : "string"
+          },
+          "incomeDistribution": {
+            "$ref": "#/definitions/incomeType"
           }
         },
         "type": "object",
-        "required": ["description"]
+        "required": ["description","incomeDistribution"]
       },
       "minItems": 1
     },

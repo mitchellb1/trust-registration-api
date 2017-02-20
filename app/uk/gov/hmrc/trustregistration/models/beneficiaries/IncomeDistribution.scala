@@ -22,7 +22,6 @@ import play.api.libs.json.Json
 case class IncomeDistribution(isIncomeAtTrusteeDiscretion: Boolean, shareOfIncome: Option[Int]) {
 
   val shareOfIncomeMissingForTrusteeDiscretionFalse = !isIncomeAtTrusteeDiscretion && !shareOfIncome.isDefined
-
   require(!shareOfIncomeMissingForTrusteeDiscretionFalse,
     s"""{\"message\": \"Invalid Json\",
          \"code\": 0,
@@ -35,7 +34,6 @@ case class IncomeDistribution(isIncomeAtTrusteeDiscretion: Boolean, shareOfIncom
        }""".stripMargin)
 
   val shareOfIncomeThereForTrusteeDiscretionTrue = isIncomeAtTrusteeDiscretion && shareOfIncome.isDefined && shareOfIncome.nonEmpty
-
   require(!shareOfIncomeThereForTrusteeDiscretionTrue,
     s"""{\"message\": \"Invalid Json\",
          \"code\": 0,
