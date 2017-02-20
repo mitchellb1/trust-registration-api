@@ -25,26 +25,52 @@ case class InterVivoTrust(assets: Assets,
                           isHoldOverClaimed: Boolean,
                           dovType: Option[String] = None) {
 
-  private val atleastOneTypeOfRequiredAsset: Boolean = (assets.monetaryAssets.isDefined && assets.monetaryAssets.get.size > 0) ||
+  private val atLeastOneTypeOfRequiredAsset: Boolean = (assets.monetaryAssets.isDefined && assets.monetaryAssets.get.size > 0) ||
     (assets.propertyAssets.isDefined && assets.propertyAssets.get.size > 0) ||
     (assets.shareAssets.isDefined && assets.shareAssets.get.size > 0) ||
     (assets.businessAssets.isDefined && assets.businessAssets.get.size > 0) ||
     (assets.otherAssets.isDefined && assets.otherAssets.get.size > 0) ||
     (assets.partnershipAssets.isDefined && assets.partnershipAssets.get.size > 0)
-  require(atleastOneTypeOfRequiredAsset, "Must have at least one type of required Asset")
 
-  private val atleastOneTypeOfRequiredBeneficiaries: Boolean = (beneficiaries.individualBeneficiaries.isDefined && beneficiaries.individualBeneficiaries.get.size > 0) ||
+  private val noPartnershipAssetsIfDeedOfVariation: Boolean = !(dovType.isDefined && (assets.partnershipAssets.isDefined && assets.partnershipAssets.get.size > 0))
+
+  private val atLeastOneTypeOfRequiredBeneficiaries: Boolean = (beneficiaries.individualBeneficiaries.isDefined && beneficiaries.individualBeneficiaries.get.size > 0) ||
     (beneficiaries.charityBeneficiaries.isDefined && beneficiaries.charityBeneficiaries.get.size > 0) ||
     (beneficiaries.otherBeneficiaries.isDefined && beneficiaries.otherBeneficiaries.get.size > 0) ||
     (beneficiaries.trustBeneficiaries.isDefined && beneficiaries.trustBeneficiaries.get.size > 0) ||
     (beneficiaries.unidentifiedBeneficiaries.isDefined && beneficiaries.unidentifiedBeneficiaries.get.size > 0) ||
     (beneficiaries.companyBeneficiaries.isDefined && beneficiaries.companyBeneficiaries.get.size > 0) ||
     (beneficiaries.largeNumbersCompanyBeneficiaries.isDefined && beneficiaries.largeNumbersCompanyBeneficiaries.get.size > 0)
-  require(atleastOneTypeOfRequiredBeneficiaries, "Must have at least one type of required Beneficiary")
 
-  private val noOtherTypesOfBeneficiaries: Boolean = (beneficiaries.employeeBeneficiaries.isDefined ||
+  private val noEmployeeOrDirectorBeneficiaries: Boolean = !(beneficiaries.employeeBeneficiaries.isDefined ||
     beneficiaries.directorBeneficiaries.isDefined)
-  require(!noOtherTypesOfBeneficiaries, "Must have no other types of Beneficiary")
+
+  private val isHoldOverClaimedIsTrue: Boolean = isHoldOverClaimed
+
+  require(atLeastOneTypeOfRequiredBeneficiaries, "Must have at least one type of required Beneficiary")
+  require(atLeastOneTypeOfRequiredAsset, "Must have at least one type of required Asset")
+  require(noEmployeeOrDirectorBeneficiaries, "Must have no other types of Beneficiary")
+  require(isHoldOverClaimedIsTrue,
+  s"""{\"message\": \"Invalid Json\",
+         \"code\": 0,
+         \"validationErrors\": [
+         {
+           \"message\": \"isHoldOverClaimed must be true",
+           \"location\": \"/"
+         }
+         ]
+       }""".stripMargin)
+
+  require(noPartnershipAssetsIfDeedOfVariation,s"""{\"message\": \"Invalid Json\",
+         \"code\": 0,
+         \"validationErrors\": [
+         {
+           \"message\": \"partnership assets not allowed when Inter Vivo Trust is created by a deed of variation",
+           \"location\": \"/"
+         }
+         ]
+       }""".stripMargin)
+
 }
 
 
