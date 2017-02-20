@@ -21,9 +21,9 @@ import uk.gov.hmrc.trustregistration.models.assets.Assets
 import uk.gov.hmrc.trustregistration.models.beneficiaries.Beneficiaries
 import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 
-class InterVivoTrustSpec extends PlaySpec with ScalaDataExamples with JsonExamples {
-  "InterVivoTrust" must {
-    "throw an exception" when {
+class InterVivoTrustSpec extends PlaySpec with ScalaDataExamples with JsonExamples{
+  "InterVivoTrust" must{
+    "throw an exception" when{
       "there are no assets" in {
         val assets = Assets()
         val beneficiaries = Beneficiaries(individualBeneficiaries = Some(List(individualBeneficiary)))
@@ -54,7 +54,7 @@ class InterVivoTrustSpec extends PlaySpec with ScalaDataExamples with JsonExampl
       }
 
       "an employee beneficiary is defined" in {
-        val assets = Assets(monetaryAssets = Some(List(2, 2)))
+        val assets = Assets(monetaryAssets = Some(List(2,2)))
         val beneficiaries = Beneficiaries(
           individualBeneficiaries = Some(List(individualBeneficiary)),
           employeeBeneficiaries = Some(List(employeeBeneficiary))
@@ -64,7 +64,7 @@ class InterVivoTrustSpec extends PlaySpec with ScalaDataExamples with JsonExampl
       }
 
       "a director beneficiary is defined" in {
-        val assets = Assets(monetaryAssets = Some(List(2, 2)))
+        val assets = Assets(monetaryAssets = Some(List(2,2)))
         val beneficiaries = Beneficiaries(
           individualBeneficiaries = Some(List(individualBeneficiary)),
           directorBeneficiaries = Some(List(directorBeneficiary))
@@ -72,17 +72,31 @@ class InterVivoTrustSpec extends PlaySpec with ScalaDataExamples with JsonExampl
         val ex = the[IllegalArgumentException] thrownBy (InterVivoTrust(assets, beneficiaries, true, Some("Dovtypeabsolute")))
         ex.getMessage() mustEqual "requirement failed: Must have no other types of Beneficiary"
       }
+
+      "when isHoldOverClaimed flag is set to false" in {
+        val assets = Assets(monetaryAssets = Some(List(2,2)))
+        val beneficiaries = Beneficiaries(individualBeneficiaries = Some(List(individualBeneficiary)))
+        val ex = the[IllegalArgumentException] thrownBy (InterVivoTrust(assets, beneficiaries, false, Some("dovTypeAbsolute")))
+        ex.getMessage() must include("isHoldOverClaimed must be true")
+      }
+
+      "when Inter Vivo Trust is created by a deed of variation and it has got a Partnership asset" in {
+        val assets = Assets(partnershipAssets = Some(List(partnershipAsset)))
+        val beneficiaries = Beneficiaries(individualBeneficiaries = Some(List(individualBeneficiary)))
+        val ex = the[IllegalArgumentException] thrownBy (InterVivoTrust(assets, beneficiaries, true, Some("dovTypeAbsolute")))
+        ex.getMessage() must include("partnership assets not allowed when Inter Vivo Trust is created by a deed of variation")
+      }
     }
 
     "not throw an exception" when {
       "there is one asset" in {
-        val assets = Assets(monetaryAssets = Some(List(2, 2)))
+        val assets = Assets(monetaryAssets = Some(List(2,2)))
         val beneficiaries = Beneficiaries(individualBeneficiaries = Some(List(individualBeneficiary)))
         noException should be thrownBy (InterVivoTrust(assets, beneficiaries, true, Some("Dovtypeabsolute")))
       }
 
       "there is more than one type of asset" in {
-        val assets = Assets(monetaryAssets = Some(List(2, 2)), otherAssets = Some(List(otherAsset)))
+        val assets = Assets(monetaryAssets = Some(List(2,2)), otherAssets = Some(List(otherAsset)))
         val beneficiaries = Beneficiaries(individualBeneficiaries = Some(List(individualBeneficiary)))
         noException should be thrownBy (InterVivoTrust(assets, beneficiaries, true, Some("Dovtypeabsolute")))
       }
@@ -97,7 +111,7 @@ class InterVivoTrustSpec extends PlaySpec with ScalaDataExamples with JsonExampl
 
       "there is a large number companies beneficiary" in {
         val assets = Assets(
-          monetaryAssets = Some(List(2, 2))
+          monetaryAssets = Some(List(2,2))
         )
         val beneficiaries = Beneficiaries(largeNumbersCompanyBeneficiaries = Some(List(largeNumbersCompanyBeneficiary)))
         noException should be thrownBy (InterVivoTrust(assets, beneficiaries, true, Some("Dovtypeabsolute")))
