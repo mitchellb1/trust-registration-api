@@ -45,12 +45,16 @@ trait JsonExamples {
     .fromFile(getClass.getResource("/InvalidCompany.json").getPath)
     .mkString
     .replace("\"{ADDRESS}\"", validAddressJson)
+
   lazy val invalidEstateJson = Source.fromFile(getClass.getResource("/InvalidEstate.json").getPath).mkString
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
+
   lazy val validEstateWithPersonalRepresentativeJson = Source.fromFile(getClass.getResource("/ValidEstateWithPersonalRepresentative.json").getPath).mkString
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
+
   lazy val validEstateWithDeceasedJson = Source.fromFile(getClass.getResource("/ValidEstateWithDeceased.json").getPath).mkString
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
+
   lazy val validLeadTrusteeIndividualJson = s"""{"individual":$validIndividualJson,"company":null,"telephoneNumber":"1234567890","email":"test@test.com"}"""
   lazy val validLeadTrusteeCompanyJson = s"""{"individual":null,"company":$validCompanyJson,"telephoneNumber":"1234567890","email":"test@test.com"}"""
 
@@ -226,7 +230,7 @@ trait ScalaDataExamples {
     email = "test@test.com"
   )
 
-  val personalRepresentative = PersonalRepresentative(individual,true)
+  val personalRepresentative = PersonalRepresentative(individual,"01913651234","test@test.com")
 
   val validEstateWithPersonalRepresentative = Estate(estateName = "Test Estate",
                                                      adminPeriodFinishedDate = Some(new DateTime("1800-01-01")),

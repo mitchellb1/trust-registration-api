@@ -705,7 +705,8 @@
           "type": "string"
         },
         "adminPeriodFinishedDate": {
-          "type": "boolean"
+          "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+          "type": "string"
         },
         "deceased": {
           "$ref": "#/definitions/deceasedType"
@@ -727,6 +728,10 @@
         }
       },
       "required": ["reasonEstateSetup"],
+      "oneOf": [
+        "personalRepresentative",
+        "deceased"
+      ],
       "type": "object"
     },
     "flatManagementSinkingFundTrustType": {
@@ -1153,14 +1158,10 @@
         },
         "email": {
           "$ref": "#/definitions/emailType"
-        },
-        "personalRepType": {
-          "type": "string"
         }
       },
       "required": [
         "individual",
-        "personalRepType",
         "telephoneNumber"
       ],
       "type": "object"
@@ -1225,16 +1226,6 @@
         "NonResidentDomiciled",
         "NonResidentNonDomiciled",
         "NonResidentCeaseResident"
-      ],
-      "type": "string"
-    },
-    "roleType": {
-      "description": "Possible Capacities\n\t\t\tCode   Title\n\t\t\t----   -----\n\t\t\t0001   Lead Trustee\n\t\t\t0002   Trustee\n\t\t\t0003   Agent\n\t\t\t0004   Executor\n\t\t",
-      "enum": [
-        "0001",
-        "0002",
-        "0003",
-        "0004"
       ],
       "type": "string"
     },
