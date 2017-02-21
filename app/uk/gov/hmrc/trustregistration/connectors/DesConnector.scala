@@ -142,11 +142,13 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
     val uri: String = s"$trustsServiceUrl/reregister"
     val desRespone = httpPost.POST[ReRegister,HttpResponse](uri,reRegister)(implicitly, httpReads, implicitly)
 
-
     desRespone.map(f => {
       f.status match {
-        case _ => Right("trusts exists")
+        case 201 => Right("trusts exists")
+        case _ => Left("404")
       }
+    }).recover({
+      case _ => Left("400")
     })
   }
 

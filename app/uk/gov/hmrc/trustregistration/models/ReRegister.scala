@@ -19,7 +19,7 @@ package uk.gov.hmrc.trustregistration.models
 import play.api.libs.json.Json
 
 
-case class ReRegister(blah: String)
+case class ReRegister(name: String, utr: String, postalCode: Option[String])
 
 object ReRegister{
   implicit val reRegisterFormats = Json.format[ReRegister]

@@ -19,7 +19,7 @@ package uk.gov.hmrc.trustregistration.connectors.DES
 import org.mockito.Matchers
 import org.mockito.Mockito.when
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
-import uk.gov.hmrc.play.http.HttpResponse
+import uk.gov.hmrc.play.http.{HttpResponse, Upstream4xxResponse}
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
 import uk.gov.hmrc.trustregistration.models.{ReRegister, Trust}
 
@@ -34,11 +34,31 @@ class LookUpExistingTrustSpec extends PlaySpec with OneAppPerSuite with DESConne
         when (mockHttpPost.POST[ReRegister,HttpResponse](Matchers.any(),Matchers.any(),Matchers.any())
           (Matchers.any(),Matchers.any(),Matchers.any())).
           thenReturn(Future.successful(HttpResponse(201)))
-
-        val result = Await.result(SUT.lookUpExistingTrust(ReRegister("blah")),Duration.Inf)
-
+        val result = Await.result(SUT.lookUpExistingTrust(ReRegister("trustName", "123456", None)),Duration.Inf)
         result mustBe Right("trusts exists")
       }
     }
+
+    "return 'no trust'" when {
+      "we submit a re-register object" in {
+        when (mockHttpPost.POST[ReRegister, HttpResponse](Matchers.any(),Matchers.any(),Matchers.any())
+          (Matchers.any(),Matchers.any(),Matchers.any())).
+          thenReturn(Future.successful(HttpResponse(404)))
+        val result = Await.result(SUT.lookUpExistingTrust(ReRegister("trustName", "123456", None)), Duration.Inf)
+        result mustBe Left("404")
+      }
+    }
+
+    "return an exception" when {
+      "Call to DES has failed" in {
+        when (mockHttpPost.POST[ReRegister, HttpResponse](Matchers.any(),Matchers.any(),Matchers.any())
+          (Matchers.any(),Matchers.any(),Matchers.any())).
+          thenReturn(Future.failed(Upstream4xxResponse("Bad request",400,400)))
+        val result = Await.result(SUT.lookUpExistingTrust(ReRegister("trustName", "123456", None)), Duration.Inf)
+        result mustBe Left("400")
+      }
+    }
+
   }
-}
+
+  }
