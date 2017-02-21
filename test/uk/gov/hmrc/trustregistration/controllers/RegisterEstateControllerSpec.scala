@@ -28,6 +28,7 @@ import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
+import uk.gov.hmrc.trustregistration.models.estates.{Estate, EstateRegistrationDocument}
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
 
 import scala.concurrent.Future

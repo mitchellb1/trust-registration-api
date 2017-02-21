@@ -23,6 +23,7 @@ import uk.gov.hmrc.play.microservice.controller.BaseController
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.models.beneficiaries.Beneficiaries
+import uk.gov.hmrc.trustregistration.models.estates.Estate
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
 
 import scala.concurrent.ExecutionContext.Implicits.global

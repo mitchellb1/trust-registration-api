@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.models
+package uk.gov.hmrc.trustregistration.models.estates
 
 import play.api.libs.json.Json
+import uk.gov.hmrc.trustregistration.models.Individual
 
 
 case class PersonalRepresentative(val individual: Individual, val isExecutor: Boolean)

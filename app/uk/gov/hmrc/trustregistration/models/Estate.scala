@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.models
+package uk.gov.hmrc.trustregistration.models.estates
 
 import play.api.libs.json.Json
+import uk.gov.hmrc.trustregistration.models.Deceased
 
-case class Estate(val isCreatedByWill: Boolean,
-                  val estateCriteriaMet: Boolean,
-                  val adminPeriodFinishedDate: Boolean,
-                  val incomeTaxDueMoreThan10000: Boolean,
-                  val personalRepresentative: Option[PersonalRepresentative] = None,
-                  val deceased: Option[Individual] = None,
-                  val saleOfEstateAssetsMoreThan250000: Option[Boolean] = None,
-                  val saleOfEstateAssetsMoreThan500000: Option[Boolean] = None,
-                  val worthMoreThanTwoAndHalfMillionAtTimeOfDeath: Option[Boolean] = None) {
+case class Estate(estateName: String,
+                  adminPeriodFinishedDate: Option[String] = None,
+                  deceased: Option[Deceased] = None,
+                  personalRepresentative: Option[PersonalRepresentative] = None,
+                  reasonEstateSetup: String) {
+
   private val atleastAdeceasedOrPersonalRepresentative: Boolean = personalRepresentative.isDefined || deceased.isDefined
 
   require(atleastAdeceasedOrPersonalRepresentative, "Must have either a personal representative or a deceased")

@@ -20,6 +20,7 @@ import org.joda.time.DateTime
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.models.assets._
 import uk.gov.hmrc.trustregistration.models.beneficiaries._
+import uk.gov.hmrc.trustregistration.models.estates.{Estate, PersonalRepresentative}
 import uk.gov.hmrc.trustregistration.models.trusttypes._
 
 import scala.io.Source
