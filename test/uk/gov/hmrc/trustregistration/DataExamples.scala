@@ -226,7 +226,7 @@ trait ScalaDataExamples {
     email = "test@test.com"
   )
 
-  val personalRepresentative = PersonalRepresentative(individual,"Test","012345","test@test.com")
+  val personalRepresentative = PersonalRepresentative(individual,"012345","test@test.com")
 
   val validEstateWithPersonalRepresentative = Estate(personalRepresentative)
 

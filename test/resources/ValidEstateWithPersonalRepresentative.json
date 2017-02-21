@@ -1,7 +1,6 @@
 {
   "personalRepresentative" : {
     "individual" : "{INDIVIDUAL}",
-    "personalRepType" : "Test",
     "telephoneNumber" : "012345",
     "email" : "test@test.com"
   }
