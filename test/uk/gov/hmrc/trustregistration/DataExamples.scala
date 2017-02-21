@@ -228,8 +228,17 @@ trait ScalaDataExamples {
 
   val personalRepresentative = PersonalRepresentative(individual,true)
 
-  val validEstateWithPersonalRepresentative = Estate(true,true,true,false,Some(personalRepresentative))
-  val validEstateWithDeceased = Estate(true,true,true,false,None,Some(individual),Some(false),Some(false),Some(false))
+  val validEstateWithPersonalRepresentative = Estate(estateName = "Test Estate",
+                                                     adminPeriodFinishedDate = Some(new DateTime("1800-01-01")),
+                                                     deceased = None,
+                                                     personalRepresentative = Some(personalRepresentative),
+                                                     reasonEstateSetup = "incomeTaxDueMoreThan10000")
+
+  val validEstateWithDeceased = Estate(estateName = "Test Estate",
+                                        adminPeriodFinishedDate = Some(new DateTime("1800-01-01")),
+                                        deceased = Some(deceased),
+                                        personalRepresentative = None,
+                                        reasonEstateSetup = "incomeTaxDueMoreThan10000")
 
  val incomeDistribution = IncomeDistribution(
    isIncomeAtTrusteeDiscretion = false,

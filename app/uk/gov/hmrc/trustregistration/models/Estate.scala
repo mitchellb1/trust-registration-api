@@ -16,11 +16,12 @@
 
 package uk.gov.hmrc.trustregistration.models.estates
 
+import org.joda.time.DateTime
 import play.api.libs.json.Json
 import uk.gov.hmrc.trustregistration.models.Deceased
 
 case class Estate(estateName: String,
-                  adminPeriodFinishedDate: Option[String] = None,
+                  adminPeriodFinishedDate: Option[DateTime] = None,
                   deceased: Option[Deceased] = None,
                   personalRepresentative: Option[PersonalRepresentative] = None,
                   reasonEstateSetup: String) {
