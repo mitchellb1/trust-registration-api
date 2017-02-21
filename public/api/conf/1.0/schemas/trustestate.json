@@ -1153,14 +1153,10 @@
         },
         "email": {
           "$ref": "#/definitions/emailType"
-        },
-        "personalRepType": {
-          "type": "string"
         }
       },
       "required": [
         "individual",
-        "personalRepType",
         "telephoneNumber"
       ],
       "type": "object"

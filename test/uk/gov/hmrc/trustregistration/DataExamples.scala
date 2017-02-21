@@ -226,10 +226,9 @@ trait ScalaDataExamples {
     email = "test@test.com"
   )
 
-  val personalRepresentative = PersonalRepresentative(individual,true)
+  val personalRepresentative = PersonalRepresentative(individual,"012345","test@test.com")
 
-  val validEstateWithPersonalRepresentative = Estate(true,true,true,false,Some(personalRepresentative))
-  val validEstateWithDeceased = Estate(true,true,true,false,None,Some(individual),Some(false),Some(false),Some(false))
+  val validEstateWithPersonalRepresentative = Estate(personalRepresentative)
 
  val incomeDistribution = IncomeDistribution(
    isIncomeAtTrusteeDiscretion = false,

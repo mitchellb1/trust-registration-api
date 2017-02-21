@@ -46,12 +46,12 @@ class RegisterEstateControllerSpec extends PlaySpec with OneAppPerSuite with Jso
     "return 200 ok" when {
       "the endpoint is called with a valid identifier" in {
         when(mockRegisterTrustService.getEstate(any[String])(any[HeaderCarrier]))
-          .thenReturn(Future.successful(new GetSuccessResponse[Estate](validEstateWithDeceased)))
+          .thenReturn(Future.successful(new GetSuccessResponse[Estate](validEstateWithPersonalRepresentative)))
 
         val result = SUT.getEstate("1234").apply(FakeRequest("GET",""))
 
         status(result) mustBe OK
-        contentAsString(result) contains (validEstateWithDeceased)
+        contentAsString(result) contains (validEstateWithPersonalRepresentative)
       }
     }
 
