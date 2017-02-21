@@ -137,6 +137,19 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
       timer = metrics.startDesConnectorTimer("getProtectors"))
   }
 
+
+  def lookUpExistingTrust(reRegister: ReRegister)(implicit hc : HeaderCarrier) = {
+    val uri: String = s"$trustsServiceUrl/reregister"
+    val desRespone = httpPost.POST[ReRegister,HttpResponse](uri,reRegister)(implicitly, httpReads, implicitly)
+
+
+    desRespone.map(f => {
+      f.status match {
+        case _ => Right("trusts exists")
+      }
+    })
+  }
+
   def registerTrust(trust: Trust)(implicit hc : HeaderCarrier) = {
     val uri: String = s"$trustsServiceUrl/register"
 
