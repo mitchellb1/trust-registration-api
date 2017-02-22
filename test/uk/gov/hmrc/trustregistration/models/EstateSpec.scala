@@ -33,7 +33,7 @@ class EstateSpec extends PlaySpec with ScalaDataExamples {
                                                                 personalRepresentative = None,
                                                                 adminPeriodFinishedDate = Some(new DateTime("1800-01-01")),
                                                                 reasonEstateSetup = "incomeTaxDueMoreThan10000"))
-        ex.getMessage() mustEqual ("requirement failed: Must have either a personal representative or a deceased")
+        ex.getMessage() must include ("Must have either a personal representative or deceased")
       }
     }
 
