@@ -297,6 +297,8 @@ trait ScalaDataExamples {
 
   val legality = Legality("ES",Some("ES"),true,None)
 
+  val reRegisterExample = ReRegister("asdf", "12341234", Some(""))
+
   val businessAsset = BusinessAsset("This is a description",1234L, company)
 
   val shareAsset = ShareAsset(1234L,"shareCompanyName","shareCompanyRegistrationNumber","shareClass","shareType",123400L)
