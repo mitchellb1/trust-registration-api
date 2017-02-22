@@ -20,7 +20,7 @@ import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
-import play.api.libs.json.JsValue
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{RequestHeader, Result}
 import play.api.test.{FakeHeaders, FakeRequest}
 import play.api.test.Helpers._
@@ -30,16 +30,20 @@ import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.models.estates.{Estate, EstateRegistrationDocument}
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
+import uk.gov.hmrc.trustregistration.utils.{FailedValidation, JsonSchemaValidator, SuccessfulValidation, TrustsValidationError}
 
 import scala.concurrent.Future
 
 class RegisterEstateControllerSpec extends PlaySpec with OneAppPerSuite with JsonExamples with ScalaDataExamples with BeforeAndAfter with RegisterTrustServiceMocks  {
 
   before {
-    when(mockRegisterTrustService.registerEstate(any[EstateRegistrationDocument])(any[HeaderCarrier]))
+    when(mockRegisterTrustService.registerEstate(any[Estate])(any[HeaderCarrier]))
       .thenReturn(Future.successful(Right(TRN("TRN-1234"))))
 
     when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "AUTHORISED"))
+
+    when(mockSchemaValidator.validateAgainstSchema(anyString())).thenReturn(SuccessfulValidation)
+
   }
 
   "Get estate endpoint" must {
@@ -98,23 +102,53 @@ class RegisterEstateControllerSpec extends PlaySpec with OneAppPerSuite with Jso
   }
 
   "Register estate endpoint" must {
-    "return created with a TRN" when {
-      "the register endpoint is called with a valid json payload" in {
-        withCallToPOST(estateRegDocPayload) { result =>
-          status(result) mustBe CREATED
-          contentAsString(result) must include("TRN")
+
+    "return 401" when {
+      "the endpoint is called and authentication credentials are missing or incorrect" in {
+        when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "NOT_AUTHORISED"))
+        withCallToPOST(Json.parse("""{"message":"","code":""}""")) { result =>
+          status(result) mustBe UNAUTHORIZED
         }
       }
     }
 
     "Return a Bad Request" when {
+      "The json fails schema validation with a single error" in {
+        when(mockSchemaValidator.validateAgainstSchema(anyString)).thenReturn(FailedValidation("Invalid Json", 0, Seq(TrustsValidationError("object has missing required properties ([\"location\"])", "/"))))
+        withCallToPOST(Json.parse("""{"message":"","code":""}""")) { result =>
+
+          status(result) mustBe BAD_REQUEST
+          contentAsJson(result) must be (Json.parse("""{"message":"Invalid Json","code":0,"validationErrors":[{"message":"object has missing required properties ([\"location\"])","location":"/"}]}"""))
+        }
+      }
+
+      "The json fails schema validation with two errors" in {
+        when(mockSchemaValidator.validateAgainstSchema(anyString)).thenReturn(FailedValidation("Invalid Json", 0, Seq(TrustsValidationError("object has missing required properties ([\"code\",\"location\"])", "/"),TrustsValidationError("instance type (integer) does not match any allowed primitive type (allowed: [\"string\"])", "/message"))))
+
+        withCallToPOST(Json.parse("""{"message":1}""")) { result =>
+          status(result) mustBe BAD_REQUEST
+          val body = contentAsJson(result)
+
+          contentAsJson(result) must be (Json.parse("""{"message":"Invalid Json","code":0,"validationErrors":[{"message":"object has missing required properties ([\"code\",\"location\"])","location":"/"},{"message":"instance type (integer) does not match any allowed primitive type (allowed: [\"string\"])","location":"/message"}]}"""))
+        }
+      }
+
+      "The json fails schema validation with multiple errors" in {
+        when(mockSchemaValidator.validateAgainstSchema(anyString)).thenReturn(FailedValidation("Invalid Json", 0, Seq(TrustsValidationError("object has missing required properties ([\"code\",\"location\"])", "/"),TrustsValidationError("instance type (integer) does not match any allowed primitive type (allowed: [\"string\"])", "/message"),TrustsValidationError("string \"1111111111\" is too long (length: 10, maximum allowed: 9)", "/numbers"),TrustsValidationError("ECMA 262 regex \"^[A-Za-z0-9]{3,4} [A-Za-z0-9]{3}$\" does not match input string \"1111\"", "/postalCode"))))
+
+        withCallToPOST(Json.parse("""{"message":1,"numbers":"1111111111","postalCode":"1111"}""")) { result =>
+          status(result) mustBe BAD_REQUEST
+          contentAsJson(result) must be (Json.parse("""{"message":"Invalid Json","code":0,"validationErrors":[{"message":"object has missing required properties ([\"code\",\"location\"])","location":"/"},{"message":"instance type (integer) does not match any allowed primitive type (allowed: [\"string\"])","location":"/message"},{"message":"string \"1111111111\" is too long (length: 10, maximum allowed: 9)","location":"/numbers"},{"message":"ECMA 262 regex \"^[A-Za-z0-9]{3,4} [A-Za-z0-9]{3}$\" does not match input string \"1111\"","location":"/postalCode"}]}"""))
+        }
+      }
+
       "The json trust document is invalid" in {
         withCallToPOST(badRegDocPayload) { result =>
           status(result) mustBe BAD_REQUEST
         }
       }
       "The json trust document is missing" in {
-        withCallToPOST() { result =>
+        withCallToPOST(Json.parse("{}")) { result =>
           status(result) mustBe BAD_REQUEST
         }
       }
@@ -176,9 +210,12 @@ class RegisterEstateControllerSpec extends PlaySpec with OneAppPerSuite with Jso
     }
   }
 
+  val mockSchemaValidator = mock[JsonSchemaValidator]
+
+
   object SUT extends RegisterEstateController {
     override implicit def hc(implicit rh: RequestHeader): HeaderCarrier = mockHC
-
+    override val jsonSchemaValidator = mockSchemaValidator
     override val metrics: ApplicationMetrics = mockMetrics
     override val registerTrustService: RegisterTrustService = mockRegisterTrustService
   }

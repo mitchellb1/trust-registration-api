@@ -16,15 +16,11 @@
 
 package uk.gov.hmrc.trustregistration.controllers
 
-import play.api.libs.json.{JsError, JsObject, JsValue, Json}
+import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
-import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
-import uk.gov.hmrc.trustregistration.utils.{FailedValidation, JsonSchemaValidator}
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import uk.gov.hmrc.trustregistration.utils.JsonSchemaValidator
 
 trait RegisterTrustController extends ApplicationBaseController {
 
@@ -32,113 +28,66 @@ trait RegisterTrustController extends ApplicationBaseController {
 
   def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     authorised("register", "") {
-
-          val jsonString = request.body.toString()
-          val validationResult = jsonSchemaValidator.validateAgainstSchema(jsonString)
-
-          validationResult match {
-            case fail: FailedValidation => {
-              Future.successful(BadRequest(Json.toJson(fail)))
-            }
-            case _ => {
-              try {
-                request.body.validate[TrustEstateRequest].map {
-                  trustEstate: TrustEstateRequest => {
-                    val futureEither: Future[Either[String, TRN]] = registerTrustService.registerTrust(trustEstate.trustEstate.trust.get)
-                    futureEither.map {
-                      case Right(identifier) => Created(Json.toJson(identifier))
-                      case Left("503") => InternalServerError
-                      case _ => BadRequest("""{"message": "Failed serialization"}""")
-                    }
-                  }
-                }.recoverTotal {
-                  e => {
-                    val error: JsValue = JsError.toJson(e)
-                    val message = error \\ "msg"
-                    Future.successful(BadRequest(Json.parse(s"""
-                                                  {
-                                                    "message": "Invalid Json",
-                                                    "code": 0,
-                                                    "validationErrors": [
-                                                    {
-                                                      "message": "${message.head.toString().replace("\"","")}",
-                                                      "location":"/${error.as[JsObject].keys.head.replace("obj.","").replace(".","/")}"
-                                                    }
-                                                    ]
-                                                  }
-                                                  """)))
-                  }
-                }
-              }
-              catch {
-                case e: Throwable => {
-                  val error = e.getMessage().substring(20)
-                  Future.successful(BadRequest(error))
-                }
-                //case e => Future.successful(BadRequest(s"""{"message": "Exception: ${e.getMessage()}"}"""))
-              }
-            }
-          }
-      }
+      registerTrustEstate(request, true, jsonSchemaValidator)
     }
+  }
 
-
-  def noChange(identifier: String): Action[AnyContent] = Action.async{ implicit request =>
+  def noChange(identifier: String): Action[AnyContent] = Action.async { implicit request =>
     authorised("noChange", identifier) {
       respond("noChange", registerTrustService.noChange(identifier))
     }
   }
 
-  def closeTrust(identifier: String): Action[AnyContent] = Action.async{ implicit request =>
-    authorised("closeTrust",identifier){
+  def closeTrust(identifier: String): Action[AnyContent] = Action.async { implicit request =>
+    authorised("closeTrust", identifier) {
       respond("closeTrust", registerTrustService.closeTrust(identifier))
     }
   }
 
-  def getTrustees(identifier: String): Action[AnyContent] = Action.async{ implicit request =>
-    authorised("getTrustees",identifier){
+  def getTrustees(identifier: String): Action[AnyContent] = Action.async { implicit request =>
+    authorised("getTrustees", identifier) {
       respond("getTrustees", registerTrustService.getTrustees(identifier))
     }
   }
 
-  def getSettlors(identifier: String): Action[AnyContent] = Action.async{implicit request =>
-    authorised("getSettlors",identifier){
+  def getSettlors(identifier: String): Action[AnyContent] = Action.async { implicit request =>
+    authorised("getSettlors", identifier) {
       respond("getSettlors", registerTrustService.getSettlors(identifier))
     }
   }
 
-  def getNaturalPersons(identifier: String): Action[AnyContent] = Action.async{ implicit request =>
-    authorised("getNaturalPersons",identifier){
+  def getNaturalPersons(identifier: String): Action[AnyContent] = Action.async { implicit request =>
+    authorised("getNaturalPersons", identifier) {
       respond("getNaturalPersons", registerTrustService.getNaturalPersons(identifier))
     }
   }
 
-  def getTrustContactDetails(identifier: String): Action[AnyContent] = Action.async{ implicit request =>
-    authorised("getTrustContactDetails",identifier){
+  def getTrustContactDetails(identifier: String): Action[AnyContent] = Action.async { implicit request =>
+    authorised("getTrustContactDetails", identifier) {
       respond("getTrustContactDetails", registerTrustService.getTrustContactDetails(identifier))
     }
   }
 
   def getLeadTrustee(identifier: String): Action[AnyContent] = Action.async { implicit request =>
-    authorised("getLeadTrustee",identifier){
+    authorised("getLeadTrustee", identifier) {
       respond("getLeadTrustee", registerTrustService.getLeadTrustee(identifier))
     }
   }
 
   def getBeneficiaries(identifier: String): Action[AnyContent] = Action.async { implicit request =>
-    authorised("getBeneficiaries",identifier){
+    authorised("getBeneficiaries", identifier) {
       respond("getBeneficiaries", registerTrustService.getBeneficiaries(identifier))
     }
   }
 
   def getProtectors(identifier: String): Action[AnyContent] = Action.async { implicit request =>
-    authorised("getProtectors",identifier){
+    authorised("getProtectors", identifier) {
       respond("getProtectors", registerTrustService.getProtectors(identifier))
     }
   }
 
-  def getTrust(identifier: String): Action[AnyContent] = Action.async{ implicit request =>
-    authorised("getTrust",identifier){
+  def getTrust(identifier: String): Action[AnyContent] = Action.async { implicit request =>
+    authorised("getTrust", identifier) {
       respond("getTrust", registerTrustService.getTrust(identifier))
     }
   }

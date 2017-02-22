@@ -144,10 +144,10 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
     getRegisterResponse(httpPost.POST[Trust,HttpResponse](uri,trust)(implicitly, httpReads, implicitly))
   }
 
-  def registerEstate(doc: EstateRegistrationDocument)(implicit hc : HeaderCarrier) = {
+  def registerEstate(estate: Estate)(implicit hc : HeaderCarrier) = {
     val uri: String = s"$estatesServiceUrl/register"
 
-    getRegisterResponse(httpPost.POST[EstateRegistrationDocument,HttpResponse](uri,doc)(implicitly, httpReads, implicitly))
+    getRegisterResponse(httpPost.POST[Estate,HttpResponse](uri,estate)(implicitly, httpReads, implicitly))
   }
 
   def closeTrust(identifier: String)(implicit hc : HeaderCarrier): Future[ApplicationResponse] = {

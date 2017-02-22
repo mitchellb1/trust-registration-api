@@ -19,7 +19,7 @@ package uk.gov.hmrc.trustregistration.services
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustregistration.connectors.DesConnector
 import uk.gov.hmrc.trustregistration.models._
-import uk.gov.hmrc.trustregistration.models.estates.EstateRegistrationDocument
+import uk.gov.hmrc.trustregistration.models.estates.Estate
 
 import scala.concurrent.Future
 
@@ -31,8 +31,8 @@ trait RegisterTrustService {
     desConnector.registerTrust(regDoc)(hc)
   }
 
-  def registerEstate(regDoc: EstateRegistrationDocument)(implicit hc : HeaderCarrier) : Future[Either[String,TRN]] = {
-    desConnector.registerEstate(regDoc)(hc)
+  def registerEstate(estate: Estate)(implicit hc : HeaderCarrier) : Future[Either[String,TRN]] = {
+    desConnector.registerEstate(estate)(hc)
   }
 
   def noChange(identifier: String)(implicit hc: HeaderCarrier): Future[ApplicationResponse] = {
