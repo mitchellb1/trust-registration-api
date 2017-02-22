@@ -22,21 +22,21 @@ import org.mockito.Mockito._
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Writes
 import uk.gov.hmrc.play.http.{HeaderCarrier, HttpReads, HttpResponse, Upstream4xxResponse}
+import uk.gov.hmrc.trustregistration.ScalaDataExamples
 import uk.gov.hmrc.trustregistration.models.TRN
 import uk.gov.hmrc.trustregistration.models.estates.EstateRegistrationDocument
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-class RegisterEstateSpec extends PlaySpec with OneAppPerSuite with DESConnectorMocks{
+class RegisterEstateSpec extends PlaySpec with OneAppPerSuite with DESConnectorMocks with ScalaDataExamples{
   "Register Estate endpoint" must {
     "return an identifier" when {
       "given a RegisterDocument" in {
         when (mockHttpPost.POST[EstateRegistrationDocument,HttpResponse](Matchers.any(),Matchers.any(),Matchers.any())
           (Matchers.any(),Matchers.any(),Matchers.any())).
           thenReturn(Future.successful(HttpResponse(201)))
-        val doc = EstateRegistrationDocument("1234")
-        val result = Await.result(SUT.registerEstate(doc),Duration.Inf)
+        val result = Await.result(SUT.registerEstate(validEstateWithPersonalRepresentative),Duration.Inf)
         result mustBe Right(TRN("TRN-1234"))
       }
     }
@@ -45,8 +45,7 @@ class RegisterEstateSpec extends PlaySpec with OneAppPerSuite with DESConnectorM
         when (mockHttpPost.POST[EstateRegistrationDocument,HttpResponse](any[String](),any[EstateRegistrationDocument](),any[Seq[(String,String)]]())
           (any[Writes[EstateRegistrationDocument]](),any[HttpReads[HttpResponse]](),any[HeaderCarrier]())).
           thenReturn(Future.successful(HttpResponse(503)))
-        val doc = EstateRegistrationDocument("1234")
-        val result = Await.result(SUT.registerEstate(doc),Duration.Inf)
+        val result = Await.result(SUT.registerEstate(validEstateWithPersonalRepresentative),Duration.Inf)
         result mustBe Left("503")
       }
     }
@@ -55,8 +54,7 @@ class RegisterEstateSpec extends PlaySpec with OneAppPerSuite with DESConnectorM
         when (mockHttpPost.POST[EstateRegistrationDocument,HttpResponse](any[String](),any[EstateRegistrationDocument](),any[Seq[(String,String)]]())
           (any[Writes[EstateRegistrationDocument]](),any[HttpReads[HttpResponse]](),any[HeaderCarrier]())).
           thenReturn(Future.failed(Upstream4xxResponse("Bad request",400,400)))
-        val doc = EstateRegistrationDocument("")
-        val result = Await.result(SUT.registerEstate(doc),Duration.Inf)
+        val result = Await.result(SUT.registerEstate(validEstateWithPersonalRepresentative),Duration.Inf)
         result mustBe Left("400")
       }
     }

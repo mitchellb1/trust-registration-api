@@ -17,12 +17,12 @@
 package uk.gov.hmrc.trustregistration.controllers
 
 import play.api.Logger
-import play.api.libs.json.{JsError, JsResult, JsValue, Json}
+import play.api.libs.json.{JsError, JsValue, Json}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
-import uk.gov.hmrc.trustregistration.models.TRN
-import uk.gov.hmrc.trustregistration.models.estates.EstateRegistrationDocument
+import uk.gov.hmrc.trustregistration.models.{TRN, TrustEstateRequest}
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
+import uk.gov.hmrc.trustregistration.utils.{FailedValidation, JsonSchemaValidator}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -30,20 +30,42 @@ import scala.concurrent.Future
 
 trait RegisterEstateController extends ApplicationBaseController {
 
-  def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
-    Logger.info("Estate Register API invoked")
+  val jsonSchemaValidator: JsonSchemaValidator
 
-    val jsonBody: JsResult[EstateRegistrationDocument] = request.body.validate[EstateRegistrationDocument]
-    jsonBody.map { regDoc: EstateRegistrationDocument => {
-      val futureEither: Future[Either[String, TRN]] = registerTrustService.registerEstate(regDoc)
-      futureEither.map {
-        case Right(identifier) => Created(Json.toJson(identifier))
-        case _ => BadRequest("Error:")
-      }
-    }
-    }.recoverTotal {
-      e => {
-        Future.successful(BadRequest("Detected error:" + JsError.toFlatJson(e)))
+  def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
+    authorised("register", "") {
+      Logger.info("Estate Register API invoked")
+
+      val jsonString = request.body.toString()
+      val validationResult = jsonSchemaValidator.validateAgainstSchema(jsonString)
+
+      validationResult match {
+        case fail: FailedValidation => {
+          Future.successful(BadRequest(Json.toJson(fail)))
+        }
+        case _ => {
+          try {
+            request.body.validate[TrustEstateRequest].map {
+              trustEstate: TrustEstateRequest => {
+                val futureEither: Future[Either[String, TRN]] = registerTrustService.registerEstate(trustEstate.trustEstate.estate.get)
+                futureEither.map {
+                  case Right(identifier) => Created(Json.toJson(identifier))
+                  case _ => BadRequest("Error:")
+                }
+              }
+            }.recoverTotal {
+              e => {
+                Future.successful(BadRequest("Detected error:" + JsError.toFlatJson(e)))
+              }
+            }
+          }
+          catch {
+            case e: Throwable => {
+              val error = e.getMessage().substring(20)
+              Future.successful(BadRequest(error))
+            }
+          }
+        }
       }
     }
   }
@@ -64,4 +86,5 @@ trait RegisterEstateController extends ApplicationBaseController {
 object RegisterEstateController extends RegisterEstateController {
   override val registerTrustService = RegisterTrustService
   override val metrics = ApplicationMetrics
+  override lazy val jsonSchemaValidator = JsonSchemaValidator
 }

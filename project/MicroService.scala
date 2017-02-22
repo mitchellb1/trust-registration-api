@@ -29,6 +29,8 @@ trait MicroService {
       "live.*",
       "prod.*",
       "testOnlyDoNotUseInAppConf.*",
+      "uk.gov.hmrc.trustregistration.config",
+      "uk.gov.hmrc.trustregistration.metrics",
       "uk.gov.hmrc.BuildInfo")
 
     Seq(
