@@ -19,7 +19,7 @@ package uk.gov.hmrc.trustregistration.services
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustregistration.connectors.DesConnector
 import uk.gov.hmrc.trustregistration.models._
-import uk.gov.hmrc.trustregistration.models.estates.{Estate, EstateRegistrationDocument}
+import uk.gov.hmrc.trustregistration.models.estates.Estate
 
 import scala.concurrent.Future
 

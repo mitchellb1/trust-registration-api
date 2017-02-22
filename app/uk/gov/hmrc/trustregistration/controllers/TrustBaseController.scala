@@ -15,9 +15,10 @@
  */
 
 package uk.gov.hmrc.trustregistration.controllers
+
 import play.api.Logger
-import play.api.libs.json.Json
-import play.api.mvc.Result
+import play.api.libs.json.{JsError, JsObject, JsValue, Json}
+import play.api.mvc.{Request, Result}
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.microservice.controller.BaseController
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
@@ -25,6 +26,7 @@ import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.models.beneficiaries.Beneficiaries
 import uk.gov.hmrc.trustregistration.models.estates.Estate
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
+import uk.gov.hmrc.trustregistration.utils.{FailedValidation, JsonSchemaValidator}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -36,22 +38,76 @@ trait ApplicationBaseController extends BaseController {
 
   val className: String = getClass.getSimpleName
 
-  protected def authorised(apiName: String, identifier: String)(f: => Future[Result])(implicit hc : HeaderCarrier): Future[Result] = {
+
+  def registerTrustEstate(request: Request[JsValue], isTrust: Boolean, jsonSchemaValidator: JsonSchemaValidator)(implicit hc: HeaderCarrier) = {
+    val jsonString = request.body.toString()
+    val validationResult = jsonSchemaValidator.validateAgainstSchema(jsonString)
+
+    validationResult match {
+      case fail: FailedValidation => {
+        Future.successful(BadRequest(Json.toJson(fail)))
+      }
+      case _ => {
+        try {
+          request.body.validate[TrustEstateRequest].map {
+            trustEstate: TrustEstateRequest => {
+              val futureEither: Future[Either[String, TRN]] = RegisterTrustOrEstate(isTrust, trustEstate)
+              futureEither.map {
+                case Right(identifier) => Created(Json.toJson(identifier))
+                case Left("503") => InternalServerError
+                case _ => BadRequest("""{"message": "Failed serialization"}""")
+              }
+            }
+          }.recoverTotal {
+            e => {
+              val error: JsValue = JsError.toJson(e)
+              val message = error \\ "msg"
+              Future.successful(BadRequest(Json.parse(
+                s"""
+                                                  {
+                                                    "message": "Invalid Json",
+                                                    "code": 0,
+                                                    "validationErrors": [
+                                                    {
+                                                      "message": "${message.head.toString().replace("\"", "")}",
+                                                      "location":"/${error.as[JsObject].keys.head.replace("obj.", "").replace(".", "/")}"
+                                                    }
+                                                    ]
+                                                  }
+                                                  """)))
+            }
+          }
+        }
+        catch {
+          case e: Throwable => {
+            val error = e.getMessage().substring(20)
+            Future.successful(BadRequest(error))
+          }
+        }
+      }
+    }
+  }
+
+  private def RegisterTrustOrEstate(isTrust: Boolean, trustEstateRequest: TrustEstateRequest)(implicit hc: HeaderCarrier) = {
+    if (isTrust) registerTrustService.registerTrust(trustEstateRequest.trustEstate.trust.get) else registerTrustService.registerEstate(trustEstateRequest.trustEstate.estate.get)
+  }
+
+  protected def authorised(apiName: String, identifier: String)(f: => Future[Result])(implicit hc: HeaderCarrier): Future[Result] = {
     Logger.info(s"$className:$apiName API invoked")
     Logger.debug(s"$className:$apiName($identifier) API invoked")
 
     val authorised: Option[(String, String)] = hc.headers.find((tup) => tup._1 == AUTHORIZATION)
 
     authorised match {
-      case Some ((key, "AUTHORISED") ) => {
-        Logger.info (s"$className:$apiName API authorised")
-        metrics.incrementAuthorisedRequest (apiName)
+      case Some((key, "AUTHORISED")) => {
+        Logger.info(s"$className:$apiName API authorised")
+        metrics.incrementAuthorisedRequest(apiName)
         f
       }
       case _ => {
-        Logger.info (s"$className:$apiName API returned unauthorised")
-        metrics.incrementUnauthorisedRequest (apiName)
-        Future.successful (Unauthorized)
+        Logger.info(s"$className:$apiName API returned unauthorised")
+        metrics.incrementUnauthorisedRequest(apiName)
+        Future.successful(Unauthorized)
       }
     }
   }
@@ -60,37 +116,37 @@ trait ApplicationBaseController extends BaseController {
     val okMessage = s"$className:$methodName API returned OK"
 
     result map {
-      case GetSuccessResponse(payload:Trust) =>{
+      case GetSuccessResponse(payload: Trust) => {
         Logger.info(okMessage)
         metrics.incrementApiSuccessResponse(methodName)
         Ok(Json.toJson(payload))
       }
-      case GetSuccessResponse(payload:Protectors) =>{
+      case GetSuccessResponse(payload: Protectors) => {
         Logger.info(okMessage)
         metrics.incrementApiSuccessResponse(methodName)
         Ok(Json.toJson(payload))
       }
-      case GetSuccessResponse(payload:Estate) =>{
+      case GetSuccessResponse(payload: Estate) => {
         Logger.info(okMessage)
         metrics.incrementApiSuccessResponse(methodName)
         Ok(Json.toJson(payload))
       }
-      case GetSuccessResponse(payload:Beneficiaries) => {
+      case GetSuccessResponse(payload: Beneficiaries) => {
         Logger.info(okMessage)
         metrics.incrementApiSuccessResponse(methodName)
         Ok(Json.toJson(payload))
       }
-      case GetSuccessResponse(payload:LeadTrustee) => {
+      case GetSuccessResponse(payload: LeadTrustee) => {
         Logger.info(okMessage)
         metrics.incrementApiSuccessResponse(methodName)
         Ok(Json.toJson(payload))
       }
-      case GetSuccessResponse(payload:Settlors) => {
+      case GetSuccessResponse(payload: Settlors) => {
         Logger.info(okMessage)
         metrics.incrementApiSuccessResponse(methodName)
         Ok(Json.toJson(payload))
       }
-      case GetSuccessResponse(payload:List[Individual]) => {
+      case GetSuccessResponse(payload: List[Individual]) => {
         Logger.info(okMessage)
         metrics.incrementApiSuccessResponse(methodName)
         Ok(Json.toJson(payload))
