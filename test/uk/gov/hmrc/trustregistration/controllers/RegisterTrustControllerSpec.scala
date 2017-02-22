@@ -58,7 +58,7 @@ class RegisterTrustControllerSpec extends PlaySpec
         when(mockRegisterTrustService.registerTrust(any[Trust])(any[HeaderCarrier]))
           .thenReturn(Future.successful(Right(TRN("TRN-1234"))))
 
-        withCallToPOST(Json.parse(validTrustJson)) { result =>
+        withCallToPOST(Json.parse(validCompleteTrustJson)) { result =>
           status(result) mustBe CREATED
           contentAsString(result) must include("TRN")
         }

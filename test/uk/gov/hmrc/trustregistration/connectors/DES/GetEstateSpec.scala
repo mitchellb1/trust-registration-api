@@ -28,7 +28,6 @@ import uk.gov.hmrc.trustregistration.models._
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-
 class GetEstateSpec extends PlaySpec with OneAppPerSuite with DESConnectorMocks with BeforeAndAfter with ScalaDataExamples with JsonExamples{
   "Get Estate endpoint" must {
     "return a GetSuccessResponse with a populated Estate with a personal Representative" when {

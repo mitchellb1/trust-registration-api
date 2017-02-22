@@ -18,17 +18,29 @@ package uk.gov.hmrc.trustregistration.models.estates
 
 import org.joda.time.DateTime
 import play.api.libs.json.Json
-import uk.gov.hmrc.trustregistration.models.Deceased
+import uk.gov.hmrc.trustregistration.models.{Address, Deceased}
 
 case class Estate(estateName: String,
-                  adminPeriodFinishedDate: Option[DateTime] = None,
+                  correspondenceAddress: Address,
                   deceased: Option[Deceased] = None,
                   personalRepresentative: Option[PersonalRepresentative] = None,
+                  adminPeriodFinishedDate: Option[DateTime] = None,
                   reasonEstateSetup: String) {
 
   private val atleastAdeceasedOrPersonalRepresentative: Boolean = personalRepresentative.isDefined || deceased.isDefined
 
-  require(atleastAdeceasedOrPersonalRepresentative, "Must have either a personal representative or a deceased")
+  require(atleastAdeceasedOrPersonalRepresentative,
+    s"""{\"message\": \"Invalid Json\",
+         \"code\": 0,
+         \"validationErrors\": [
+         {
+           \"message\": \"Must have either a personal representative or deceased\",
+           \"location\": \"/trustEstate/estate/\"
+         }
+         ]
+       }""".stripMargin
+  )
+
 }
 
 object Estate {

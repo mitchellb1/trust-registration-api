@@ -53,7 +53,7 @@ trait JsonExamples {
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
 
   lazy val validEstateWithDeceasedJson = Source.fromFile(getClass.getResource("/ValidEstateWithDeceased.json").getPath).mkString
-    .replace("\"{INDIVIDUAL}\"", validIndividualJson)
+    .replace("\"{DECEASED}\"", validDeceasedJson)
 
   lazy val validLeadTrusteeIndividualJson = s"""{"individual":$validIndividualJson,"company":null,"telephoneNumber":"1234567890","email":"test@test.com"}"""
   lazy val validLeadTrusteeCompanyJson = s"""{"individual":null,"company":$validCompanyJson,"telephoneNumber":"1234567890","email":"test@test.com"}"""
@@ -130,6 +130,12 @@ trait JsonExamples {
   lazy val validLegalityJson = Source.fromFile(getClass.getResource("/ValidLegality.json").getPath).mkString
 
   lazy val validTrustJson = Source.fromFile(getClass.getResource("/ValidTrust.json").getPath).mkString
+    .replace("\"{WILLINTESTACYTRUST}\"", validWillIntestacyTrustJson)
+    .replace("\"{INDIVIDUAL}\"", validIndividualJson)
+    .replace("\"{ADDRESS}\"", validAddressJson)
+    .replace("\"{LEGALITY}\"", validLegalityJson)
+
+  lazy val validCompleteTrustJson = Source.fromFile(getClass.getResource("/ValidCompleteTrust.json").getPath).mkString
     .replace("\"{WILLINTESTACYTRUST}\"", validWillIntestacyTrustJson)
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
     .replace("\"{ADDRESS}\"", validAddressJson)
@@ -233,15 +239,17 @@ trait ScalaDataExamples {
   val personalRepresentative = PersonalRepresentative(individual,"01913651234","test@test.com")
 
   val validEstateWithPersonalRepresentative = Estate(estateName = "Test Estate",
-                                                     adminPeriodFinishedDate = Some(new DateTime("1800-01-01")),
-                                                     deceased = None,
-                                                     personalRepresentative = Some(personalRepresentative),
+                                                      correspondenceAddress = address,
+                                                      deceased = None,
+                                                      personalRepresentative = Some(personalRepresentative),
+    adminPeriodFinishedDate = Some(new DateTime("1800-01-01")),
                                                      reasonEstateSetup = "incomeTaxDueMoreThan10000")
 
   val validEstateWithDeceased = Estate(estateName = "Test Estate",
-                                        adminPeriodFinishedDate = Some(new DateTime("1800-01-01")),
+                                        correspondenceAddress = address,
                                         deceased = Some(deceased),
                                         personalRepresentative = None,
+                                        adminPeriodFinishedDate = Some(new DateTime("1800-01-01")),
                                         reasonEstateSetup = "incomeTaxDueMoreThan10000")
 
  val incomeDistribution = IncomeDistribution(

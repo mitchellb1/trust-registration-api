@@ -1,10 +1,11 @@
 {
   "estateName" : "Test Estate",
-  "adminPeriodFinishedDate" : "1800-01-01",
+  "correspondenceAddress" : "{ADDRESS}",
   "personalRepresentative" : {
     "individual" : "{INDIVIDUAL}",
     "telephoneNumber" : "01913651234",
     "email" : "test@test.com"
   },
+  "adminPeriodFinishedDate" : "1800-01-01",
   "reasonEstateSetup" : "incomeTaxDueMoreThan10000"
 }

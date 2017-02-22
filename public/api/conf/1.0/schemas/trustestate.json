@@ -704,6 +704,9 @@
         "estateName": {
           "type": "string"
         },
+        "correspondenceAddress": {
+          "$ref": "#/definitions/correspondenceAddressType"
+        },
         "adminPeriodFinishedDate": {
           "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
           "type": "string"
@@ -720,18 +723,11 @@
             "worthMoreThanTwoAndHalfMillionAtTimeOfDeath"
           ]
         },
-        "isCreatedByWill": {
-          "type": "boolean"
-        },
         "personalRepresentative": {
           "$ref": "#/definitions/personalRepresentativeType"
         }
       },
-      "required": ["reasonEstateSetup"],
-      "oneOf": [
-        "personalRepresentative",
-        "deceased"
-      ],
+      "required": ["estateName","correspondenceAddress","reasonEstateSetup"],
       "type": "object"
     },
     "flatManagementSinkingFundTrustType": {
