@@ -19,9 +19,17 @@
           "$ref": "#/definitions/estateType"
         }
       },
-      "oneOf" : [
-        {"required": ["trust"]},
-        {"required": ["estate"]}
+      "oneOf": [
+        {
+          "required": [
+            "trust"
+          ]
+        },
+        {
+          "required": [
+            "estate"
+          ]
+        }
       ],
       "type": "object"
     },
@@ -48,13 +56,37 @@
           "$ref": "#/definitions/shareAssetsType"
         }
       },
-      "anyOf" : [
-        {"required": ["monetaryAssets"]},
-        {"required": ["otherAssets"]},
-        {"required": ["partnershipAssets"]},
-        {"required": ["propertyAssets"]},
-        {"required": ["shareAssets"]},
-        {"required": ["businessAssets"]}
+      "anyOf": [
+        {
+          "required": [
+            "monetaryAssets"
+          ]
+        },
+        {
+          "required": [
+            "otherAssets"
+          ]
+        },
+        {
+          "required": [
+            "partnershipAssets"
+          ]
+        },
+        {
+          "required": [
+            "propertyAssets"
+          ]
+        },
+        {
+          "required": [
+            "shareAssets"
+          ]
+        },
+        {
+          "required": [
+            "businessAssets"
+          ]
+        }
       ],
       "type": "object"
     },
@@ -80,26 +112,62 @@
         "trustBeneficiaries": {
           "$ref": "#/definitions/trustBeneficiariesType"
         },
-        "companyBeneficiaries" : {
+        "companyBeneficiaries": {
           "$ref": "#/definitions/companyBeneficiariesType"
         },
-        "unidentifiedBeneficiaries" : {
+        "unidentifiedBeneficiaries": {
           "$ref": "#/definitions/unidentifiedBeneficiariesType"
         },
-        "largeNumbersCompanyBeneficiaries" : {
+        "largeNumbersCompanyBeneficiaries": {
           "$ref": "#/definitions/largeNumbersCompanyBeneficiariesType"
         }
       },
-      "anyOf" : [
-        {"required": ["charityBeneficiaries"]},
-        {"required": ["directorBeneficiaries"]},
-        {"required": ["employeeBeneficiaries"]},
-        {"required": ["charityBeneficiaries"]},
-        {"required": ["individualBeneficiaries"]},
-        {"required": ["trustBeneficiaries"]},
-        {"required": ["companyBeneficiaries"]},
-        {"required": ["unidentifiedBeneficiaries"]},
-        {"required": ["largeNumbersCompanyBeneficiaries"]}
+      "anyOf": [
+        {
+          "required": [
+            "charityBeneficiaries"
+          ]
+        },
+        {
+          "required": [
+            "directorBeneficiaries"
+          ]
+        },
+        {
+          "required": [
+            "employeeBeneficiaries"
+          ]
+        },
+        {
+          "required": [
+            "charityBeneficiaries"
+          ]
+        },
+        {
+          "required": [
+            "individualBeneficiaries"
+          ]
+        },
+        {
+          "required": [
+            "trustBeneficiaries"
+          ]
+        },
+        {
+          "required": [
+            "companyBeneficiaries"
+          ]
+        },
+        {
+          "required": [
+            "unidentifiedBeneficiaries"
+          ]
+        },
+        {
+          "required": [
+            "largeNumbersCompanyBeneficiaries"
+          ]
+        }
       ],
       "type": "object"
     },
@@ -127,7 +195,7 @@
     },
     "businessAssetsType": {
       "description": "Business Assets Type",
-      "type" : "array",
+      "type": "array",
       "items": {
         "additionalProperties": false,
         "properties": {
@@ -142,7 +210,7 @@
           }
         },
         "type": "object",
-        "required" : [
+        "required": [
           "businessDescription",
           "businessValue",
           "company"
@@ -171,7 +239,12 @@
           }
         },
         "type": "object",
-        "required": ["charityName","charityNumber","correspondenceAddress","incomeDistribution"]
+        "required": [
+          "charityName",
+          "charityNumber",
+          "correspondenceAddress",
+          "incomeDistribution"
+        ]
       },
       "minItems": 1
     },
@@ -190,7 +263,10 @@
           }
         },
         "type": "object",
-        "required": ["company", "incomeDistribution"]
+        "required": [
+          "company",
+          "incomeDistribution"
+        ]
       },
       "minItems": 1
     },
@@ -214,7 +290,11 @@
         }
       },
       "type": "object",
-      "required": ["name", "correspondenceAddress", "referenceNumber"]
+      "required": [
+        "name",
+        "correspondenceAddress",
+        "referenceNumber"
+      ]
     },
     "correspondenceAddressType": {
       "description": "Correspondence Address Type",
@@ -244,7 +324,7 @@
         }
       },
       "type": "object",
-      "required" : [
+      "required": [
         "line1",
         "countryCode"
       ]
@@ -521,7 +601,10 @@
         }
       },
       "type": "object",
-      "required": ["dateOfDeath", "individual"]
+      "required": [
+        "dateOfDeath",
+        "individual"
+      ]
     },
     "declarationType": {
       "description": "Declaration Type",
@@ -550,8 +633,12 @@
           "type": "string"
         }
       },
-      "required" : [
-        "givenName", "familyName", "correspondenceAddress", "date", "confirmation"
+      "required": [
+        "givenName",
+        "familyName",
+        "correspondenceAddress",
+        "date",
+        "confirmation"
       ],
       "type": "object"
     },
@@ -569,7 +656,10 @@
             "$ref": "#/definitions/incomeType"
           }
         },
-        "required": ["individual", "incomeDistribution"],
+        "required": [
+          "individual",
+          "incomeDistribution"
+        ],
         "type": "object"
       },
       "minItems": 1
@@ -588,7 +678,10 @@
             "$ref": "#/definitions/incomeType"
           }
         },
-        "required": ["individual", "incomeDistribution"],
+        "required": [
+          "individual",
+          "incomeDistribution"
+        ],
         "type": "object"
       },
       "minItems": 1
@@ -615,10 +708,26 @@
           },
           "type": "object",
           "anyOf": [
-            {"required": ["monetaryAssets"]},
-            {"required": ["propertyAssets"]},
-            {"required": ["shareAssets"]},
-            {"required": ["businessAssets"]}
+            {
+              "required": [
+                "monetaryAssets"
+              ]
+            },
+            {
+              "required": [
+                "propertyAssets"
+              ]
+            },
+            {
+              "required": [
+                "shareAssets"
+              ]
+            },
+            {
+              "required": [
+                "businessAssets"
+              ]
+            }
           ]
         },
         "beneficiaries": {
@@ -633,7 +742,7 @@
             "individualBeneficiaries": {
               "$ref": "#/definitions/individualBeneficiariesType"
             },
-            "companyBeneficiaries" : {
+            "companyBeneficiaries": {
               "$ref": "#/definitions/companyBeneficiariesType"
             },
             "otherBeneficiaries": {
@@ -645,20 +754,52 @@
             "unidentifiedBeneficiaries": {
               "$ref": "#/definitions/unidentifiedBeneficiariesType"
             },
-            "largeNumbersCompanyBeneficiaries" : {
+            "largeNumbersCompanyBeneficiaries": {
               "$ref": "#/definitions/largeNumbersCompanyBeneficiariesType"
             }
           },
           "type": "object",
           "anyOf": [
-            {"required": ["individualBeneficiaries"]},
-            {"required": ["directorBeneficiaries"]},
-            {"required": ["otherBeneficiaries"]},
-            {"required": ["trustBeneficiaries"]},
-            {"required": ["companyBeneficiaries"]},
-            {"required": ["unidentifiedBeneficiaries"]},
-            {"required": ["employeeBeneficiaries"]},
-            {"required": ["largeNumbersCompanyBeneficiaries"]}
+            {
+              "required": [
+                "individualBeneficiaries"
+              ]
+            },
+            {
+              "required": [
+                "directorBeneficiaries"
+              ]
+            },
+            {
+              "required": [
+                "otherBeneficiaries"
+              ]
+            },
+            {
+              "required": [
+                "trustBeneficiaries"
+              ]
+            },
+            {
+              "required": [
+                "companyBeneficiaries"
+              ]
+            },
+            {
+              "required": [
+                "unidentifiedBeneficiaries"
+              ]
+            },
+            {
+              "required": [
+                "employeeBeneficiaries"
+              ]
+            },
+            {
+              "required": [
+                "largeNumbersCompanyBeneficiaries"
+              ]
+            }
           ]
         },
         "employerFinancedRetirementBenefitSchemeStartDate": {
@@ -666,44 +807,23 @@
           "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$"
         }
       },
-      "required": ["assets", "beneficiaries"],
+      "required": [
+        "assets",
+        "beneficiaries"
+      ],
       "type": "object"
     },
     "estateType": {
       "description": "Estate Type",
       "additionalProperties": false,
       "properties": {
-        "estateName": {
-          "type": "string"
-        },
-        "adminPeriodFinishedDate": {
-          "type": "boolean"
-        },
-        "deceased": {
-          "$ref": "#/definitions/deceasedType"
-        },
-        "estateCriteriaMet": {
-          "type": "boolean"
-        },
-        "incomeTaxDueMoreThan10000": {
-          "type": "boolean"
-        },
-        "isCreatedByWill": {
-          "type": "boolean"
-        },
         "personalRepresentative": {
           "$ref": "#/definitions/personalRepresentativeType"
-        },
-        "saleOfEstateAssetsMoreThan250000": {
-          "type": "boolean"
-        },
-        "saleOfEstateAssetsMoreThan500000": {
-          "type": "boolean"
-        },
-        "worthMoreThanTwoAndHalfMillionAtTimeOfDeath": {
-          "type": "boolean"
         }
       },
+      "required": [
+        "personalRepresentative"
+      ],
       "type": "object"
     },
     "flatManagementSinkingFundTrustType": {
@@ -717,7 +837,9 @@
               "$ref": "#/definitions/monetaryAssetsType"
             }
           },
-          "required": ["monetaryAssets"],
+          "required": [
+            "monetaryAssets"
+          ],
           "type": "object"
         },
         "beneficiaries": {
@@ -727,11 +849,16 @@
               "$ref": "#/definitions/otherBeneficiariesType"
             }
           },
-          "required": ["otherBeneficiaries"],
+          "required": [
+            "otherBeneficiaries"
+          ],
           "type": "object"
         }
       },
-      "required": ["assets", "beneficiaries"],
+      "required": [
+        "assets",
+        "beneficiaries"
+      ],
       "type": "object"
     },
     "heritageMaintenanceFundTrustType": {
@@ -754,11 +881,27 @@
               "$ref": "#/definitions/shareAssetsType"
             }
           },
-          "anyOf" : [
-            {"required": ["monetaryAssets"]},
-            {"required": ["shareAssets"]},
-            {"required": ["otherAssets"]},
-            {"required": ["propertyAssets"]}
+          "anyOf": [
+            {
+              "required": [
+                "monetaryAssets"
+              ]
+            },
+            {
+              "required": [
+                "shareAssets"
+              ]
+            },
+            {
+              "required": [
+                "otherAssets"
+              ]
+            },
+            {
+              "required": [
+                "propertyAssets"
+              ]
+            }
           ],
           "type": "object"
         },
@@ -769,7 +912,9 @@
               "$ref": "#/definitions/otherBeneficiariesType"
             }
           },
-          "required": ["otherBeneficiaries"],
+          "required": [
+            "otherBeneficiaries"
+          ],
           "type": "object"
         },
         "isMultiPurposeIncome": {
@@ -777,7 +922,11 @@
         }
       },
       "type": "object",
-      "required": ["assets", "beneficiaries", "isMultiPurposeIncome"]
+      "required": [
+        "assets",
+        "beneficiaries",
+        "isMultiPurposeIncome"
+      ]
     },
     "incomeType": {
       "description": "Income Type",
@@ -790,7 +939,9 @@
           "type": "number"
         }
       },
-      "required": ["isIncomeAtTrusteeDiscretion"],
+      "required": [
+        "isIncomeAtTrusteeDiscretion"
+      ],
       "type": "object"
     },
     "individualBeneficiariesType": {
@@ -811,7 +962,11 @@
           }
         },
         "type": "object",
-        "required": ["individual", "isVulnerable", "incomeDistribution"]
+        "required": [
+          "individual",
+          "isVulnerable",
+          "incomeDistribution"
+        ]
       },
       "minItems": 1
     },
@@ -838,11 +993,11 @@
           "type": "boolean"
         },
         "nino": {
-          "pattern" : "^(?!BG)(?!GB)(?!NK)(?!KN)(?!TN)(?!NT)(?!ZZ)(?:[A-CEGHJ-PR-TW-Z][A-CEGHJ-NPR-TW-Z])(?:\\d){6}([A-D]|\\s)?$",
+          "pattern": "^(?!BG)(?!GB)(?!NK)(?!KN)(?!TN)(?!NT)(?!ZZ)(?:[A-CEGHJ-PR-TW-Z][A-CEGHJ-NPR-TW-Z])(?:\\d){6}([A-D]|\\s)?$",
           "type": "string"
         },
         "otherName": {
-          "maxLength" : 25,
+          "maxLength": 25,
           "type": "string"
         },
         "passportOrIdCard": {
@@ -856,15 +1011,17 @@
               "type": "string"
             },
             "referenceNumber": {
-              "maxLength" : 30,
+              "maxLength": 30,
               "type": "string"
             }
           },
           "type": "object"
         }
       },
-      "required" : [
-        "givenName", "familyName", "dateOfBirth"
+      "required": [
+        "givenName",
+        "familyName",
+        "dateOfBirth"
       ],
       "type": "object"
     },
@@ -896,12 +1053,36 @@
           },
           "type": "object",
           "anyOf": [
-            {"required": ["monetaryAssets"]},
-            {"required": ["propertyAssets"]},
-            {"required": ["shareAssets"]},
-            {"required": ["businessAssets"]},
-            {"required": ["partnershipAssets"]},
-            {"required": ["otherAssets"]}
+            {
+              "required": [
+                "monetaryAssets"
+              ]
+            },
+            {
+              "required": [
+                "propertyAssets"
+              ]
+            },
+            {
+              "required": [
+                "shareAssets"
+              ]
+            },
+            {
+              "required": [
+                "businessAssets"
+              ]
+            },
+            {
+              "required": [
+                "partnershipAssets"
+              ]
+            },
+            {
+              "required": [
+                "otherAssets"
+              ]
+            }
           ]
         },
         "beneficiaries": {
@@ -931,19 +1112,47 @@
           },
           "type": "object",
           "anyOf": [
-            {"required": ["individualBeneficiaries"]},
-            {"required": ["charityBeneficiaries"]},
-            {"required": ["trustBeneficiaries"]},
-            {"required": ["unidentifiedBeneficiaries"]},
-            {"required": ["otherBeneficiaries"]},
-            {"required": ["companyBeneficiaries"]},
-            {"required": ["largeNumbersCompanyBeneficiaries"]}
+            {
+              "required": [
+                "individualBeneficiaries"
+              ]
+            },
+            {
+              "required": [
+                "charityBeneficiaries"
+              ]
+            },
+            {
+              "required": [
+                "trustBeneficiaries"
+              ]
+            },
+            {
+              "required": [
+                "unidentifiedBeneficiaries"
+              ]
+            },
+            {
+              "required": [
+                "otherBeneficiaries"
+              ]
+            },
+            {
+              "required": [
+                "companyBeneficiaries"
+              ]
+            },
+            {
+              "required": [
+                "largeNumbersCompanyBeneficiaries"
+              ]
+            }
           ]
         },
         "isHoldOverClaimed": {
           "type": "boolean"
         },
-        "dovType" : {
+        "dovType": {
           "enum": [
             "dovTypeAbsolute",
             "dovTypeReplace"
@@ -951,7 +1160,11 @@
         }
       },
       "type": "object",
-      "required": ["assets", "beneficiaries", "isHoldOverClaimed"]
+      "required": [
+        "assets",
+        "beneficiaries",
+        "isHoldOverClaimed"
+      ]
     },
     "leadTrusteeType": {
       "description": "Lead Trustee Type",
@@ -966,14 +1179,26 @@
         "telephoneNumber": {
           "$ref": "#/definitions/telephoneNumberType"
         },
-        "email" : {
+        "email": {
           "$ref": "#/definitions/emailType"
         }
       },
       "type": "object",
       "oneOf": [
-        {"required": ["individual", "telephoneNumber", "email"]},
-        {"required": ["company", "telephoneNumber", "email"]}
+        {
+          "required": [
+            "individual",
+            "telephoneNumber",
+            "email"
+          ]
+        },
+        {
+          "required": [
+            "company",
+            "telephoneNumber",
+            "email"
+          ]
+        }
       ]
     },
     "legalityType": {
@@ -993,7 +1218,7 @@
           "$ref": "#/definitions/countryCodeType"
         }
       },
-      "required" : [
+      "required": [
         "governingCountryCode",
         "isEstablishedUnderScottishLaw"
       ],
@@ -1025,7 +1250,7 @@
     },
     "otherAssetsType": {
       "description": "Other Assets Type",
-      "type" : "array",
+      "type": "array",
       "items": {
         "additionalProperties": false,
         "properties": {
@@ -1041,10 +1266,14 @@
             "type": "number"
           }
         },
-        "required": ["otherAssetDescription", "lastValuationDate","value"],
+        "required": [
+          "otherAssetDescription",
+          "lastValuationDate",
+          "value"
+        ],
         "type": "object"
       },
-      "minItems" : 1
+      "minItems": 1
     },
     "otherBeneficiariesType": {
       "description": "Other Beneficiaries Type",
@@ -1065,13 +1294,17 @@
           }
         },
         "type": "object",
-        "required": ["beneficiaryDescription", "correspondenceAddress", "incomeDistribution"]
+        "required": [
+          "beneficiaryDescription",
+          "correspondenceAddress",
+          "incomeDistribution"
+        ]
       },
       "minItems": 1
     },
     "partnershipAssetsType": {
       "description": "Partnership Assets Type",
-      "type" : "array",
+      "type": "array",
       "items": {
         "additionalProperties": false,
         "properties": {
@@ -1087,7 +1320,11 @@
             "type": "string"
           }
         },
-        "required": ["partnershipName", "partnershipUTR","startOfPartnership"],
+        "required": [
+          "partnershipName",
+          "partnershipUTR",
+          "startOfPartnership"
+        ],
         "type": "object"
       },
       "minItems": 1
@@ -1096,24 +1333,25 @@
       "description": "Personal Representative Type",
       "additionalProperties": false,
       "properties": {
-        "correspondenceAddress": {
-          "$ref": "#/definitions/correspondenceAddressType"
-        },
         "individual": {
           "$ref": "#/definitions/individualType"
         },
-        "isExecutor": {
-          "type": "boolean"
-        },
         "telephoneNumber": {
           "$ref": "#/definitions/telephoneNumberType"
+        },
+        "email": {
+          "$ref": "#/definitions/emailType"
         }
       },
+      "required": [
+        "individual",
+        "telephoneNumber"
+      ],
       "type": "object"
     },
     "postalCodeType": {
       "description": "Postal Code Type",
-      "pattern" : "^([Gg][Ii][Rr]( )?0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([AZa-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))( )?[0-9][A-Za-z]{2})$",
+      "pattern": "^([Gg][Ii][Rr]( )?0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([AZa-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))( )?[0-9][A-Za-z]{2})$",
       "type": "string"
     },
     "propertyAssetsType": {
@@ -1139,7 +1377,10 @@
           }
         },
         "type": "object",
-        "required": ["correspondenceAddress", "propertyLandValue"]
+        "required": [
+          "correspondenceAddress",
+          "propertyLandValue"
+        ]
       },
       "minItems": 1
     },
@@ -1243,7 +1484,7 @@
             "type": "number"
           }
         },
-        "required" :  [
+        "required": [
           "numberShares",
           "shareCompanyName",
           "shareCompanyRegistrationNumber",
@@ -1253,7 +1494,7 @@
         ],
         "type": "object"
       },
-      "minItems" : 1
+      "minItems": 1
     },
     "telephoneNumberType": {
       "description": "telephone Number Type",
@@ -1261,9 +1502,9 @@
       "pattern": "^(\\+\\d\\d)?\\s?[\\d\\(]?\\d{0,5}[\\d\\)][\\s\\d]{0,15}$",
       "type": "string"
     },
-    "emailType":{
-      "type" : "string",
-      "pattern" : "^[-aA-zZ0-9._%+']+@[-aA-zZ0-9.']+\\.[aA-zZ]{2,4}$"
+    "emailType": {
+      "type": "string",
+      "pattern": "^[-aA-zZ0-9._%+']+@[-aA-zZ0-9.']+\\.[aA-zZ]{2,4}$"
     },
     "unidentifiedBeneficiariesType": {
       "description": "Unidentified Beneficiaries Type",
@@ -1273,14 +1514,17 @@
         "additionalProperties": false,
         "properties": {
           "description": {
-            "type" : "string"
+            "type": "string"
           },
           "incomeDistribution": {
             "$ref": "#/definitions/incomeType"
           }
         },
         "type": "object",
-        "required": ["description","incomeDistribution"]
+        "required": [
+          "description",
+          "incomeDistribution"
+        ]
       },
       "minItems": 1
     },
@@ -1292,12 +1536,12 @@
         "additionalProperties": false,
         "properties": {
           "description": {
-            "type" : "string"
+            "type": "string"
           },
-          "numberOfBeneficiaries" : {
-            "type" : "number"
+          "numberOfBeneficiaries": {
+            "type": "number"
           },
-          "company" : {
+          "company": {
             "$ref": "#/definitions/companyType"
           },
           "incomeDistribution": {
@@ -1305,7 +1549,12 @@
           }
         },
         "type": "object",
-        "required": ["description", "numberOfBeneficiaries", "company", "incomeDistribution"]
+        "required": [
+          "description",
+          "numberOfBeneficiaries",
+          "company",
+          "incomeDistribution"
+        ]
       },
       "minItems": 1
     },
@@ -1317,11 +1566,11 @@
         "additionalProperties": false,
         "properties": {
           "trustBeneficiaryName": {
-            "type" : "string"
+            "type": "string"
           },
           "trustBeneficiaryUTR": {
             "pattern": "^[0-9]{10}$",
-            "type" : "string"
+            "type": "string"
           },
           "correspondenceAddress": {
             "$ref": "#/definitions/correspondenceAddressType"
@@ -1331,7 +1580,11 @@
           }
         },
         "type": "object",
-        "required": ["trustBeneficiaryName", "correspondenceAddress", "incomeDistribution"]
+        "required": [
+          "trustBeneficiaryName",
+          "correspondenceAddress",
+          "incomeDistribution"
+        ]
       },
       "minItems": 1
     },
@@ -1388,7 +1641,7 @@
           "type": "string",
           "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$"
         },
-        "yearsOfTaxConsequence" :{
+        "yearsOfTaxConsequence": {
           "type": "array",
           "items": {
             "value": {
@@ -1419,17 +1672,37 @@
             }
           },
           "oneOf": [
-            {"required": ["flatManagementSinkingFundTrust"]},
-            {"required": ["heritageMaintenanceFundTrust"]},
-            {"required": ["employmentTrust"]},
-            {"required": ["willIntestacyTrust"]},
-            {"required": ["interVivoTrust"]}
+            {
+              "required": [
+                "flatManagementSinkingFundTrust"
+              ]
+            },
+            {
+              "required": [
+                "heritageMaintenanceFundTrust"
+              ]
+            },
+            {
+              "required": [
+                "employmentTrust"
+              ]
+            },
+            {
+              "required": [
+                "willIntestacyTrust"
+              ]
+            },
+            {
+              "required": [
+                "interVivoTrust"
+              ]
+            }
           ],
           "type": "object"
         }
       },
       "type": "object",
-      "required" : [
+      "required": [
         "name",
         "telephoneNumber",
         "leadTrustee",
@@ -1483,11 +1756,31 @@
           },
           "type": "object",
           "anyOf": [
-            {"required": ["monetaryAssets"]},
-            {"required": ["propertyAssets"]},
-            {"required": ["shareAssets"]},
-            {"required": ["businessAssets"]},
-            {"required": ["otherAssets"]}
+            {
+              "required": [
+                "monetaryAssets"
+              ]
+            },
+            {
+              "required": [
+                "propertyAssets"
+              ]
+            },
+            {
+              "required": [
+                "shareAssets"
+              ]
+            },
+            {
+              "required": [
+                "businessAssets"
+              ]
+            },
+            {
+              "required": [
+                "otherAssets"
+              ]
+            }
           ]
         },
         "beneficiaries": {
@@ -1511,19 +1804,47 @@
             "companyBeneficiaries": {
               "$ref": "#/definitions/companyBeneficiariesType"
             },
-            "largeNumbersCompanyBeneficiaries" : {
+            "largeNumbersCompanyBeneficiaries": {
               "$ref": "#/definitions/largeNumbersCompanyBeneficiariesType"
             }
           },
           "type": "object",
           "anyOf": [
-            {"required": ["individualBeneficiaries"]},
-            {"required": ["charityBeneficiaries"]},
-            {"required": ["trustBeneficiaries"]},
-            {"required": ["unidentifiedBeneficiaries"]},
-            {"required": ["otherBeneficiaries"]},
-            {"required": ["companyBeneficiaries"]},
-            {"required": ["largeNumbersCompanyBeneficiaries"]}
+            {
+              "required": [
+                "individualBeneficiaries"
+              ]
+            },
+            {
+              "required": [
+                "charityBeneficiaries"
+              ]
+            },
+            {
+              "required": [
+                "trustBeneficiaries"
+              ]
+            },
+            {
+              "required": [
+                "unidentifiedBeneficiaries"
+              ]
+            },
+            {
+              "required": [
+                "otherBeneficiaries"
+              ]
+            },
+            {
+              "required": [
+                "companyBeneficiaries"
+              ]
+            },
+            {
+              "required": [
+                "largeNumbersCompanyBeneficiaries"
+              ]
+            }
           ]
         },
         "deceased": {
@@ -1534,7 +1855,12 @@
         }
       },
       "type": "object",
-      "required": ["assets", "beneficiaries", "deceased", "isDovTypeAddition"]
+      "required": [
+        "assets",
+        "beneficiaries",
+        "deceased",
+        "isDovTypeAddition"
+      ]
     }
   }
 }

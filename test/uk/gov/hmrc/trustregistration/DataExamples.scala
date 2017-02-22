@@ -20,6 +20,7 @@ import org.joda.time.DateTime
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.models.assets._
 import uk.gov.hmrc.trustregistration.models.beneficiaries._
+import uk.gov.hmrc.trustregistration.models.estates.{Estate, PersonalRepresentative}
 import uk.gov.hmrc.trustregistration.models.trusttypes._
 
 import scala.io.Source
@@ -225,10 +226,9 @@ trait ScalaDataExamples {
     email = "test@test.com"
   )
 
-  val personalRepresentative = PersonalRepresentative(individual,true)
+  val personalRepresentative = PersonalRepresentative(individual,"012345","test@test.com")
 
-  val validEstateWithPersonalRepresentative = Estate(true,true,true,false,Some(personalRepresentative))
-  val validEstateWithDeceased = Estate(true,true,true,false,None,Some(individual),Some(false),Some(false),Some(false))
+  val validEstateWithPersonalRepresentative = Estate(personalRepresentative)
 
  val incomeDistribution = IncomeDistribution(
    isIncomeAtTrusteeDiscretion = false,

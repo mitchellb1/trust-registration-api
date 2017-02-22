@@ -14,19 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.models
+package uk.gov.hmrc.trustregistration.models.estates
 
-import org.scalatestplus.play.PlaySpec
-import uk.gov.hmrc.trustregistration.ScalaDataExamples
-import uk.gov.hmrc.trustregistration.models.estates.Estate
+import play.api.libs.json.Json
 
+case class EstateRegistrationDocument(value: String)
 
-class EstateSpec extends PlaySpec with ScalaDataExamples {
-  "Estate" must {
-    "not throw an exception" when {
-      "there is personal representatives or deceased" in {
-        noException should be thrownBy (Estate(personalRepresentative))
-      }
-    }
-  }
+object EstateRegistrationDocument {
+  implicit val formats = Json.format[EstateRegistrationDocument]
 }

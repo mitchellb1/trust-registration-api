@@ -1,10 +1,7 @@
 {
   "personalRepresentative" : {
     "individual" : "{INDIVIDUAL}",
-    "isExecutor" : true
-  },
-  "isCreatedByWill" : true,
-  "estateCriteriaMet" : true,
-  "adminPeriodFinishedDate" : true,
-  "incomeTaxDueMoreThan10000" : false
+    "telephoneNumber" : "012345",
+    "email" : "test@test.com"
+  }
 }

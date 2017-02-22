@@ -39,14 +39,6 @@ class GetEstateSpec extends PlaySpec with OneAppPerSuite with DESConnectorMocks 
       }
     }
 
-    "return a GetSuccessResponse with a populated Estate with a deceased" when {
-      "DES returns a 200 response with a valid JSON Estate" in {
-        when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(validEstateWithDeceasedJson)))))
-        val result = Await.result(SUT.getEstate("1234"),Duration.Inf)
-        result mustBe GetSuccessResponse(validEstateWithDeceased)
-      }
-    }
-
     "return a BadRequestResponse" when {
       "DES returns a 400 response" in {
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(400)))
