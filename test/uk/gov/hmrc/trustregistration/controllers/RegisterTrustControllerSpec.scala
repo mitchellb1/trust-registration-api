@@ -53,6 +53,19 @@ class RegisterTrustControllerSpec extends PlaySpec
   }
 
   "RegisterTrustController" must {
+
+    "return created with a TRN" when {
+      "the register endpoint is called with a valid json payload" ignore {
+        when(mockRegisterTrustService.registerTrust(any[Trust])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(Right(TRN("TRN-1234"))))
+
+        withCallToPOST(Json.parse(validCompleteTrustJson)) { result =>
+          status(result) mustBe CREATED
+          contentAsString(result) must include("TRN")
+        }
+      }
+    }
+
     "Return a Bad Request" when {
       "The json trust document is missing" in {
         withCallToPOST(Json.parse("{}")) { result =>

@@ -1,10 +1,7 @@
 {
-  "deceased" : "{INDIVIDUAL}",
-  "isCreatedByWill" : true,
-  "estateCriteriaMet" : true,
-  "adminPeriodFinishedDate" : true,
-  "incomeTaxDueMoreThan10000" : false,
-  "saleOfEstateAssetsMoreThan250000" : false,
-  "saleOfEstateAssetsMoreThan500000" : false,
-  "worthMoreThanTwoAndHalfMillionAtTimeOfDeath" : false
+  "estateName" : "Test Estate",
+  "correspondenceAddress" : "{ADDRESS}",
+  "deceased" : "{DECEASED}",
+  "adminPeriodFinishedDate" : "1800-01-01",
+  "reasonEstateSetup" : "incomeTaxDueMoreThan10000"
 }
