@@ -17,15 +17,17 @@
 package uk.gov.hmrc.trustregistration.models
 
 import org.scalatestplus.play.PlaySpec
+import uk.gov.hmrc.trustregistration.ScalaDataExamples
 
 
-class EstateSpec extends PlaySpec {
+
+class EstateSpec extends PlaySpec with ScalaDataExamples {
   "Estate" must {
-    "throw an exception" when {
-      "there are no personal representatives or deceased" in {
-        val ex = the [IllegalArgumentException] thrownBy (Estate(true,true,true,true,None,None))
-        ex.getMessage() mustEqual   ("requirement failed: Must have either a personal representative or a deceased")
+      "not throw an exception" when {
+        "there is a personal representatives" in {
+          noException should be thrownBy (validEstateWithPersonalRepresentative)
+        }
       }
     }
   }
-}
+

@@ -1,10 +1,12 @@
 {
+  "estateName" : "Test Estate",
+  "correspondenceAddress" : "{ADDRESS}",
   "personalRepresentative" : {
     "individual" : "{INDIVIDUAL}",
-    "isExecutor" : true
+    "telephoneNumber" : "01913651234",
+    "email" : "test@test.com"
   },
-  "isCreatedByWill" : true,
-  "estateCriteriaMet" : true,
-  "adminPeriodFinishedDate" : true,
-  "incomeTaxDueMoreThan10000" : false
+  "adminPeriodFinishedDate" : "1800-01-01",
+  "reasonEstateSetup" : "incomeTaxDueMoreThan10000",
+  "declaration" : "{DECLARATION}"
 }

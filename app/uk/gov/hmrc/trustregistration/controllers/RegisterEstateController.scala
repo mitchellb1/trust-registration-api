@@ -16,34 +16,20 @@
 
 package uk.gov.hmrc.trustregistration.controllers
 
-import play.api.Logger
-import play.api.libs.json.{JsError, JsResult, JsValue, Json}
+import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
-import uk.gov.hmrc.trustregistration.models.{TRN, EstateRegistrationDocument}
 import uk.gov.hmrc.trustregistration.services.RegisterTrustService
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import uk.gov.hmrc.trustregistration.utils.JsonSchemaValidator
 
 
 trait RegisterEstateController extends ApplicationBaseController {
 
-  def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
-    Logger.info("Estate Register API invoked")
+  val jsonSchemaValidator: JsonSchemaValidator
 
-    val jsonBody: JsResult[EstateRegistrationDocument] = request.body.validate[EstateRegistrationDocument]
-    jsonBody.map { regDoc: EstateRegistrationDocument => {
-      val futureEither: Future[Either[String, TRN]] = registerTrustService.registerEstate(regDoc)
-      futureEither.map {
-        case Right(identifier) => Created(Json.toJson(identifier))
-        case _ => BadRequest("Error:")
-      }
-    }
-    }.recoverTotal {
-      e => {
-        Future.successful(BadRequest("Detected error:" + JsError.toFlatJson(e)))
-      }
+  def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
+    authorised("register", "") {
+      registerTrustEstate(request, false, jsonSchemaValidator)
     }
   }
 
@@ -63,4 +49,5 @@ trait RegisterEstateController extends ApplicationBaseController {
 object RegisterEstateController extends RegisterEstateController {
   override val registerTrustService = RegisterTrustService
   override val metrics = ApplicationMetrics
+  override lazy val jsonSchemaValidator = JsonSchemaValidator
 }

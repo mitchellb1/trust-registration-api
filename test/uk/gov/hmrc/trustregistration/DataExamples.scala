@@ -20,6 +20,7 @@ import org.joda.time.DateTime
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.models.assets._
 import uk.gov.hmrc.trustregistration.models.beneficiaries._
+import uk.gov.hmrc.trustregistration.models.estates.{Estate, PersonalRepresentative}
 import uk.gov.hmrc.trustregistration.models.trusttypes._
 
 import scala.io.Source
@@ -34,6 +35,8 @@ trait JsonExamples {
     .replace("\"{ADDRESS}\"", validAddressJson)
   lazy val invalidIndividualJson = Source.fromFile(getClass.getResource("/InvalidIndividual.json").getPath).mkString
 
+  lazy val validDeclarationJson = Source.fromFile(getClass.getResource("/ValidDeclaration.json").getPath).mkString
+
   lazy val validDeceasedJson = s"""{"individual":${validIndividualJson},"dateOfDeath":"2000-01-01"}"""
 
   lazy val validCompanyJson = Source
@@ -44,12 +47,15 @@ trait JsonExamples {
     .fromFile(getClass.getResource("/InvalidCompany.json").getPath)
     .mkString
     .replace("\"{ADDRESS}\"", validAddressJson)
+
   lazy val invalidEstateJson = Source.fromFile(getClass.getResource("/InvalidEstate.json").getPath).mkString
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
+
   lazy val validEstateWithPersonalRepresentativeJson = Source.fromFile(getClass.getResource("/ValidEstateWithPersonalRepresentative.json").getPath).mkString
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
-  lazy val validEstateWithDeceasedJson = Source.fromFile(getClass.getResource("/ValidEstateWithDeceased.json").getPath).mkString
-    .replace("\"{INDIVIDUAL}\"", validIndividualJson)
+    .replace("\"{DECLARATION}\"", validDeclarationJson)
+
+
   lazy val validLeadTrusteeIndividualJson = s"""{"individual":$validIndividualJson,"company":null,"telephoneNumber":"1234567890","email":"test@test.com"}"""
   lazy val validLeadTrusteeCompanyJson = s"""{"individual":null,"company":$validCompanyJson,"telephoneNumber":"1234567890","email":"test@test.com"}"""
 
@@ -125,6 +131,12 @@ trait JsonExamples {
   lazy val validLegalityJson = Source.fromFile(getClass.getResource("/ValidLegality.json").getPath).mkString
 
   lazy val validTrustJson = Source.fromFile(getClass.getResource("/ValidTrust.json").getPath).mkString
+    .replace("\"{WILLINTESTACYTRUST}\"", validWillIntestacyTrustJson)
+    .replace("\"{INDIVIDUAL}\"", validIndividualJson)
+    .replace("\"{ADDRESS}\"", validAddressJson)
+    .replace("\"{LEGALITY}\"", validLegalityJson)
+
+  lazy val validCompleteTrustJson = Source.fromFile(getClass.getResource("/ValidCompleteTrust.json").getPath).mkString
     .replace("\"{WILLINTESTACYTRUST}\"", validWillIntestacyTrustJson)
     .replace("\"{INDIVIDUAL}\"", validIndividualJson)
     .replace("\"{ADDRESS}\"", validAddressJson)
@@ -225,10 +237,21 @@ trait ScalaDataExamples {
     email = "test@test.com"
   )
 
-  val personalRepresentative = PersonalRepresentative(individual,true)
+  val personalRepresentative = PersonalRepresentative(individual,"01913651234","test@test.com")
 
-  val validEstateWithPersonalRepresentative = Estate(true,true,true,false,Some(personalRepresentative))
-  val validEstateWithDeceased = Estate(true,true,true,false,None,Some(individual),Some(false),Some(false),Some(false))
+  val declaration = Declaration(correspondenceAddress = address,
+  confirmation = true,
+  givenName = "george",
+  familyName = "Spaceman",
+  date = new DateTime(2000, 1, 1, 0, 0),
+  otherName = Some("fred"))
+
+  val validEstateWithPersonalRepresentative = Estate(estateName = "Test Estate",
+                                                      correspondenceAddress = address,
+                                                      personalRepresentative = personalRepresentative,
+                                                      adminPeriodFinishedDate = Some(new DateTime("1800-01-01")),
+                                                      reasonEstateSetup = "incomeTaxDueMoreThan10000",
+                                                      declaration = declaration)
 
  val incomeDistribution = IncomeDistribution(
    isIncomeAtTrusteeDiscretion = false,

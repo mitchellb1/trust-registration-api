@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.models
+package uk.gov.hmrc.trustregistration.models.estates
 
 import play.api.libs.json.Json
+import uk.gov.hmrc.trustregistration.models.Individual
 
-case class EstateRegistrationDocument(value: String)
 
-object EstateRegistrationDocument {
-  implicit val formats = Json.format[EstateRegistrationDocument]
+case class PersonalRepresentative(individual: Individual,telephoneNumber: String,email: String)
+
+object PersonalRepresentative {
+  implicit val personalRepresentativeFormats = Json.format[PersonalRepresentative]
 }
