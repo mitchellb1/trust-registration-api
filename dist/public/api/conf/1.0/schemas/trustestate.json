@@ -707,12 +707,12 @@
         "correspondenceAddress": {
           "$ref": "#/definitions/correspondenceAddressType"
         },
+        "personalRepresentative": {
+          "$ref": "#/definitions/personalRepresentativeType"
+        },
         "adminPeriodFinishedDate": {
           "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
           "type": "string"
-        },
-        "deceased": {
-          "$ref": "#/definitions/deceasedType"
         },
         "reasonEstateSetup": {
           "description" : " A reason the Estate is being set up\na) Is the total Income Tax and Capital Gains Tax due for the administration period more than £10,000? ????\nb) If the date of death was before 5 April 2016, did more than £250,000 come from the sale of the estate's assets by administrators or executors, in any one tax year? ????\nc) If the date of death is on or after 6 April 2016, did more than £500,000 come from the sale of the estate's assets by administrators or executors in any one tax year? ???\nd) Was the estate worth more than £2.5 million at the date of death? ????",
@@ -723,11 +723,11 @@
             "worthMoreThanTwoAndHalfMillionAtTimeOfDeath"
           ]
         },
-        "personalRepresentative": {
-          "$ref": "#/definitions/personalRepresentativeType"
+        "declaration": {
+          "$ref": "#/definitions/declarationType"
         }
       },
-      "required": ["estateName","correspondenceAddress","reasonEstateSetup"],
+      "required": ["estateName","correspondenceAddress","personalRepresentative","reasonEstateSetup","declaration"],
       "type": "object"
     },
     "flatManagementSinkingFundTrustType": {

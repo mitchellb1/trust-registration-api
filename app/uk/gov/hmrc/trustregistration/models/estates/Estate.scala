@@ -18,28 +18,28 @@ package uk.gov.hmrc.trustregistration.models.estates
 
 import org.joda.time.DateTime
 import play.api.libs.json.Json
-import uk.gov.hmrc.trustregistration.models.{Address, Deceased}
+import uk.gov.hmrc.trustregistration.models.{Address, Declaration}
 
 case class Estate(estateName: String,
                   correspondenceAddress: Address,
-                  deceased: Option[Deceased] = None,
-                  personalRepresentative: Option[PersonalRepresentative] = None,
+                  personalRepresentative: PersonalRepresentative,
                   adminPeriodFinishedDate: Option[DateTime] = None,
-                  reasonEstateSetup: String) {
+                  reasonEstateSetup: String,
+                  declaration: Declaration) {
 
-  private val atleastAdeceasedOrPersonalRepresentative: Boolean = personalRepresentative.isDefined || deceased.isDefined
-
-  require(atleastAdeceasedOrPersonalRepresentative,
-    s"""{\"message\": \"Invalid Json\",
-         \"code\": 0,
-         \"validationErrors\": [
-         {
-           \"message\": \"Must have either a personal representative or deceased\",
-           \"location\": \"/trustEstate/estate/\"
-         }
-         ]
-       }""".stripMargin
-  )
+//  private val atleastAdeceasedOrPersonalRepresentative: Boolean = personalRepresentative.isDefined || deceased.isDefined
+//
+//  require(atleastAdeceasedOrPersonalRepresentative,
+//    s"""{\"message\": \"Invalid Json\",
+//         \"code\": 0,
+//         \"validationErrors\": [
+//         {
+//           \"message\": \"Must have either a personal representative or deceased\",
+//           \"location\": \"/trustEstate/estate/\"
+//         }
+//         ]
+//       }""".stripMargin
+//  )
 
 }
 

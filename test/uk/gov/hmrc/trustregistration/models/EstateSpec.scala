@@ -16,35 +16,18 @@
 
 package uk.gov.hmrc.trustregistration.models
 
-import org.joda.time.DateTime
 import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
-import uk.gov.hmrc.trustregistration.models.estates.Estate
 
 
 
 class EstateSpec extends PlaySpec with ScalaDataExamples {
   "Estate" must {
-    "throw an exception" when {
-      "there are no personal representatives or deceased" in {
-        val ex = the[IllegalArgumentException] thrownBy (Estate(estateName = "Test Estate",
-                                                                correspondenceAddress = address,
-                                                                deceased = None,
-                                                                personalRepresentative = None,
-                                                                adminPeriodFinishedDate = Some(new DateTime("1800-01-01")),
-                                                                reasonEstateSetup = "incomeTaxDueMoreThan10000"))
-        ex.getMessage() must include ("Must have either a personal representative or deceased")
-      }
-    }
-
-    "not throw an exception" when {
-      "there is a personal representatives" in {
-        noException should be thrownBy (validEstateWithPersonalRepresentative)
-      }
-
-      "there is a deceased" in {
-        noException should be thrownBy (validEstateWithDeceased)
+      "not throw an exception" when {
+        "there is a personal representatives" in {
+          noException should be thrownBy (validEstateWithPersonalRepresentative)
+        }
       }
     }
   }
-}
+

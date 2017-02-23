@@ -1,7 +1,7 @@
 {
   "estateName" : "Test Estate",
   "correspondenceAddress" : "{ADDRESS}",
-  "deceased" : "{DECEASED}",
   "adminPeriodFinishedDate" : "1800-01-01",
-  "reasonEstateSetup" : "incomeTaxDueMoreThan10000"
+  "reasonEstateSetup" : "incomeTaxDueMoreThan10000",
+  "declaration" : "{DECLARATION}"
 }
