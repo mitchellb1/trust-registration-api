@@ -19,17 +19,9 @@
           "$ref": "#/definitions/estateType"
         }
       },
-      "oneOf": [
-        {
-          "required": [
-            "trust"
-          ]
-        },
-        {
-          "required": [
-            "estate"
-          ]
-        }
+      "oneOf" : [
+        {"required": ["trust"]},
+        {"required": ["estate"]}
       ],
       "type": "object"
     },
@@ -56,37 +48,13 @@
           "$ref": "#/definitions/shareAssetsType"
         }
       },
-      "anyOf": [
-        {
-          "required": [
-            "monetaryAssets"
-          ]
-        },
-        {
-          "required": [
-            "otherAssets"
-          ]
-        },
-        {
-          "required": [
-            "partnershipAssets"
-          ]
-        },
-        {
-          "required": [
-            "propertyAssets"
-          ]
-        },
-        {
-          "required": [
-            "shareAssets"
-          ]
-        },
-        {
-          "required": [
-            "businessAssets"
-          ]
-        }
+      "anyOf" : [
+        {"required": ["monetaryAssets"]},
+        {"required": ["otherAssets"]},
+        {"required": ["partnershipAssets"]},
+        {"required": ["propertyAssets"]},
+        {"required": ["shareAssets"]},
+        {"required": ["businessAssets"]}
       ],
       "type": "object"
     },
@@ -122,52 +90,16 @@
           "$ref": "#/definitions/largeNumbersCompanyBeneficiariesType"
         }
       },
-      "anyOf": [
-        {
-          "required": [
-            "charityBeneficiaries"
-          ]
-        },
-        {
-          "required": [
-            "directorBeneficiaries"
-          ]
-        },
-        {
-          "required": [
-            "employeeBeneficiaries"
-          ]
-        },
-        {
-          "required": [
-            "charityBeneficiaries"
-          ]
-        },
-        {
-          "required": [
-            "individualBeneficiaries"
-          ]
-        },
-        {
-          "required": [
-            "trustBeneficiaries"
-          ]
-        },
-        {
-          "required": [
-            "companyBeneficiaries"
-          ]
-        },
-        {
-          "required": [
-            "unidentifiedBeneficiaries"
-          ]
-        },
-        {
-          "required": [
-            "largeNumbersCompanyBeneficiaries"
-          ]
-        }
+      "anyOf" : [
+        {"required": ["charityBeneficiaries"]},
+        {"required": ["directorBeneficiaries"]},
+        {"required": ["employeeBeneficiaries"]},
+        {"required": ["charityBeneficiaries"]},
+        {"required": ["individualBeneficiaries"]},
+        {"required": ["trustBeneficiaries"]},
+        {"required": ["companyBeneficiaries"]},
+        {"required": ["unidentifiedBeneficiaries"]},
+        {"required": ["largeNumbersCompanyBeneficiaries"]}
       ],
       "type": "object"
     },
@@ -708,26 +640,10 @@
           },
           "type": "object",
           "anyOf": [
-            {
-              "required": [
-                "monetaryAssets"
-              ]
-            },
-            {
-              "required": [
-                "propertyAssets"
-              ]
-            },
-            {
-              "required": [
-                "shareAssets"
-              ]
-            },
-            {
-              "required": [
-                "businessAssets"
-              ]
-            }
+            {"required": ["monetaryAssets"]},
+            {"required": ["propertyAssets"]},
+            {"required": ["shareAssets"]},
+            {"required": ["businessAssets"]}
           ]
         },
         "beneficiaries": {
@@ -760,46 +676,14 @@
           },
           "type": "object",
           "anyOf": [
-            {
-              "required": [
-                "individualBeneficiaries"
-              ]
-            },
-            {
-              "required": [
-                "directorBeneficiaries"
-              ]
-            },
-            {
-              "required": [
-                "otherBeneficiaries"
-              ]
-            },
-            {
-              "required": [
-                "trustBeneficiaries"
-              ]
-            },
-            {
-              "required": [
-                "companyBeneficiaries"
-              ]
-            },
-            {
-              "required": [
-                "unidentifiedBeneficiaries"
-              ]
-            },
-            {
-              "required": [
-                "employeeBeneficiaries"
-              ]
-            },
-            {
-              "required": [
-                "largeNumbersCompanyBeneficiaries"
-              ]
-            }
+            {"required": ["individualBeneficiaries"]},
+            {"required": ["directorBeneficiaries"]},
+            {"required": ["otherBeneficiaries"]},
+            {"required": ["trustBeneficiaries"]},
+            {"required": ["companyBeneficiaries"]},
+            {"required": ["unidentifiedBeneficiaries"]},
+            {"required": ["employeeBeneficiaries"]},
+            {"required": ["largeNumbersCompanyBeneficiaries"]}
           ]
         },
         "employerFinancedRetirementBenefitSchemeStartDate": {
@@ -817,13 +701,33 @@
       "description": "Estate Type",
       "additionalProperties": false,
       "properties": {
+        "estateName": {
+          "type": "string"
+        },
+        "correspondenceAddress": {
+          "$ref": "#/definitions/correspondenceAddressType"
+        },
+        "adminPeriodFinishedDate": {
+          "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+          "type": "string"
+        },
+        "deceased": {
+          "$ref": "#/definitions/deceasedType"
+        },
+        "reasonEstateSetup": {
+          "description" : " A reason the Estate is being set up\na) Is the total Income Tax and Capital Gains Tax due for the administration period more than £10,000? ????\nb) If the date of death was before 5 April 2016, did more than £250,000 come from the sale of the estate's assets by administrators or executors, in any one tax year? ????\nc) If the date of death is on or after 6 April 2016, did more than £500,000 come from the sale of the estate's assets by administrators or executors in any one tax year? ???\nd) Was the estate worth more than £2.5 million at the date of death? ????",
+          "enum": [
+            "incomeTaxDueMoreThan10000",
+            "saleOfEstateAssetsMoreThan250000",
+            "saleOfEstateAssetsMoreThan500000",
+            "worthMoreThanTwoAndHalfMillionAtTimeOfDeath"
+          ]
+        },
         "personalRepresentative": {
           "$ref": "#/definitions/personalRepresentativeType"
         }
       },
-      "required": [
-        "personalRepresentative"
-      ],
+      "required": ["estateName","correspondenceAddress","reasonEstateSetup"],
       "type": "object"
     },
     "flatManagementSinkingFundTrustType": {
@@ -837,9 +741,7 @@
               "$ref": "#/definitions/monetaryAssetsType"
             }
           },
-          "required": [
-            "monetaryAssets"
-          ],
+          "required": ["monetaryAssets"],
           "type": "object"
         },
         "beneficiaries": {
@@ -849,16 +751,11 @@
               "$ref": "#/definitions/otherBeneficiariesType"
             }
           },
-          "required": [
-            "otherBeneficiaries"
-          ],
+          "required": ["otherBeneficiaries"],
           "type": "object"
         }
       },
-      "required": [
-        "assets",
-        "beneficiaries"
-      ],
+      "required": ["assets", "beneficiaries"],
       "type": "object"
     },
     "heritageMaintenanceFundTrustType": {
@@ -881,27 +778,11 @@
               "$ref": "#/definitions/shareAssetsType"
             }
           },
-          "anyOf": [
-            {
-              "required": [
-                "monetaryAssets"
-              ]
-            },
-            {
-              "required": [
-                "shareAssets"
-              ]
-            },
-            {
-              "required": [
-                "otherAssets"
-              ]
-            },
-            {
-              "required": [
-                "propertyAssets"
-              ]
-            }
+          "anyOf" : [
+            {"required": ["monetaryAssets"]},
+            {"required": ["shareAssets"]},
+            {"required": ["otherAssets"]},
+            {"required": ["propertyAssets"]}
           ],
           "type": "object"
         },
@@ -912,9 +793,7 @@
               "$ref": "#/definitions/otherBeneficiariesType"
             }
           },
-          "required": [
-            "otherBeneficiaries"
-          ],
+          "required": ["otherBeneficiaries"],
           "type": "object"
         },
         "isMultiPurposeIncome": {
@@ -939,9 +818,7 @@
           "type": "number"
         }
       },
-      "required": [
-        "isIncomeAtTrusteeDiscretion"
-      ],
+      "required": ["isIncomeAtTrusteeDiscretion"],
       "type": "object"
     },
     "individualBeneficiariesType": {
@@ -1053,36 +930,12 @@
           },
           "type": "object",
           "anyOf": [
-            {
-              "required": [
-                "monetaryAssets"
-              ]
-            },
-            {
-              "required": [
-                "propertyAssets"
-              ]
-            },
-            {
-              "required": [
-                "shareAssets"
-              ]
-            },
-            {
-              "required": [
-                "businessAssets"
-              ]
-            },
-            {
-              "required": [
-                "partnershipAssets"
-              ]
-            },
-            {
-              "required": [
-                "otherAssets"
-              ]
-            }
+            {"required": ["monetaryAssets"]},
+            {"required": ["propertyAssets"]},
+            {"required": ["shareAssets"]},
+            {"required": ["businessAssets"]},
+            {"required": ["partnershipAssets"]},
+            {"required": ["otherAssets"]}
           ]
         },
         "beneficiaries": {
@@ -1112,41 +965,13 @@
           },
           "type": "object",
           "anyOf": [
-            {
-              "required": [
-                "individualBeneficiaries"
-              ]
-            },
-            {
-              "required": [
-                "charityBeneficiaries"
-              ]
-            },
-            {
-              "required": [
-                "trustBeneficiaries"
-              ]
-            },
-            {
-              "required": [
-                "unidentifiedBeneficiaries"
-              ]
-            },
-            {
-              "required": [
-                "otherBeneficiaries"
-              ]
-            },
-            {
-              "required": [
-                "companyBeneficiaries"
-              ]
-            },
-            {
-              "required": [
-                "largeNumbersCompanyBeneficiaries"
-              ]
-            }
+            {"required": ["individualBeneficiaries"]},
+            {"required": ["charityBeneficiaries"]},
+            {"required": ["trustBeneficiaries"]},
+            {"required": ["unidentifiedBeneficiaries"]},
+            {"required": ["otherBeneficiaries"]},
+            {"required": ["companyBeneficiaries"]},
+            {"required": ["largeNumbersCompanyBeneficiaries"]}
           ]
         },
         "isHoldOverClaimed": {
@@ -1185,20 +1010,8 @@
       },
       "type": "object",
       "oneOf": [
-        {
-          "required": [
-            "individual",
-            "telephoneNumber",
-            "email"
-          ]
-        },
-        {
-          "required": [
-            "company",
-            "telephoneNumber",
-            "email"
-          ]
-        }
+        {"required": ["individual", "telephoneNumber", "email"]},
+        {"required": ["company", "telephoneNumber", "email"]}
       ]
     },
     "legalityType": {
@@ -1409,16 +1222,6 @@
         "NonResidentDomiciled",
         "NonResidentNonDomiciled",
         "NonResidentCeaseResident"
-      ],
-      "type": "string"
-    },
-    "roleType": {
-      "description": "Possible Capacities\n\t\t\tCode   Title\n\t\t\t----   -----\n\t\t\t0001   Lead Trustee\n\t\t\t0002   Trustee\n\t\t\t0003   Agent\n\t\t\t0004   Executor\n\t\t",
-      "enum": [
-        "0001",
-        "0002",
-        "0003",
-        "0004"
       ],
       "type": "string"
     },
@@ -1672,31 +1475,11 @@
             }
           },
           "oneOf": [
-            {
-              "required": [
-                "flatManagementSinkingFundTrust"
-              ]
-            },
-            {
-              "required": [
-                "heritageMaintenanceFundTrust"
-              ]
-            },
-            {
-              "required": [
-                "employmentTrust"
-              ]
-            },
-            {
-              "required": [
-                "willIntestacyTrust"
-              ]
-            },
-            {
-              "required": [
-                "interVivoTrust"
-              ]
-            }
+            {"required": ["flatManagementSinkingFundTrust"]},
+            {"required": ["heritageMaintenanceFundTrust"]},
+            {"required": ["employmentTrust"]},
+            {"required": ["willIntestacyTrust"]},
+            {"required": ["interVivoTrust"]}
           ],
           "type": "object"
         }
@@ -1756,31 +1539,11 @@
           },
           "type": "object",
           "anyOf": [
-            {
-              "required": [
-                "monetaryAssets"
-              ]
-            },
-            {
-              "required": [
-                "propertyAssets"
-              ]
-            },
-            {
-              "required": [
-                "shareAssets"
-              ]
-            },
-            {
-              "required": [
-                "businessAssets"
-              ]
-            },
-            {
-              "required": [
-                "otherAssets"
-              ]
-            }
+            {"required": ["monetaryAssets"]},
+            {"required": ["propertyAssets"]},
+            {"required": ["shareAssets"]},
+            {"required": ["businessAssets"]},
+            {"required": ["otherAssets"]}
           ]
         },
         "beneficiaries": {
@@ -1810,41 +1573,13 @@
           },
           "type": "object",
           "anyOf": [
-            {
-              "required": [
-                "individualBeneficiaries"
-              ]
-            },
-            {
-              "required": [
-                "charityBeneficiaries"
-              ]
-            },
-            {
-              "required": [
-                "trustBeneficiaries"
-              ]
-            },
-            {
-              "required": [
-                "unidentifiedBeneficiaries"
-              ]
-            },
-            {
-              "required": [
-                "otherBeneficiaries"
-              ]
-            },
-            {
-              "required": [
-                "companyBeneficiaries"
-              ]
-            },
-            {
-              "required": [
-                "largeNumbersCompanyBeneficiaries"
-              ]
-            }
+            {"required": ["individualBeneficiaries"]},
+            {"required": ["charityBeneficiaries"]},
+            {"required": ["trustBeneficiaries"]},
+            {"required": ["unidentifiedBeneficiaries"]},
+            {"required": ["otherBeneficiaries"]},
+            {"required": ["companyBeneficiaries"]},
+            {"required": ["largeNumbersCompanyBeneficiaries"]}
           ]
         },
         "deceased": {
