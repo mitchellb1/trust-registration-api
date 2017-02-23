@@ -702,6 +702,7 @@
       "additionalProperties": false,
       "properties": {
         "estateName": {
+          "maxLength": 56,
           "type": "string"
         },
         "correspondenceAddress": {
