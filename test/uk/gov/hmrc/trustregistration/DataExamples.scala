@@ -25,6 +25,8 @@ import uk.gov.hmrc.trustregistration.models.trusttypes._
 import scala.io.Source
 
 trait JsonExamples {
+
+  lazy val validReRegisterJson = Source.fromFile(getClass.getResource("/ValidTrustExistence.json").getPath).mkString
   lazy val validPassportJson = Source.fromFile(getClass.getResource("/ValidPassport.json").getPath).mkString
   lazy val validAddressJson = Source.fromFile(getClass.getResource("/ValidAddress.json").getPath).mkString
   lazy val validIndividualJson = Source
@@ -297,7 +299,7 @@ trait ScalaDataExamples {
 
   val legality = Legality("ES",Some("ES"),true,None)
 
-  val reRegisterExample = ReRegister("asdf", "12341234", Some(""))
+  val trustExistenceExample = TrustExistence("asdf", "12341234", Some(""))
 
   val businessAsset = BusinessAsset("This is a description",1234L, company)
 

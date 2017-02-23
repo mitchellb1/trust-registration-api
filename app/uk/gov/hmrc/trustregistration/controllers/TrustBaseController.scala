@@ -33,6 +33,7 @@ trait ApplicationBaseController extends BaseController {
   val metrics: ApplicationMetrics
   val registerTrustService: RegisterTrustService
 
+
   val className: String = getClass.getSimpleName
 
   protected def authorised(apiName: String, identifier: String)(f: => Future[Result])(implicit hc : HeaderCarrier): Future[Result] = {

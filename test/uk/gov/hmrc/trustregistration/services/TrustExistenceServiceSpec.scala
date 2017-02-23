@@ -31,7 +31,7 @@ import scala.concurrent.{Await, Future}
 /**
   * Created by matthew on 22/02/17.
   */
-class ReRegisterTrustServiceSpec extends PlaySpec
+class TrustExistenceServiceSpec extends PlaySpec
   with MockitoSugar
   with OneAppPerSuite
   with ScalaDataExamples {
@@ -40,9 +40,9 @@ class ReRegisterTrustServiceSpec extends PlaySpec
     "Return 'trust exisits" when {
       "Given a valid existing trust" in {
 
-        when(mockDesConnector.lookUpExistingTrust(any())(any())).thenReturn(Future.successful(Right(testReRegister)))
+        when(mockDesConnector.trustExistenceLookUp(any())(any())).thenReturn(Future.successful(Right(testReRegister)))
 
-        val result = Await.result(SUT.reRegisterTrust(reRegisterExample)(HeaderCarrier()), Duration.Inf)
+        val result = Await.result(SUT.trustExistence(trustExistenceExample)(HeaderCarrier()), Duration.Inf)
 
         result mustBe Right(testReRegister)
       }
@@ -50,9 +50,9 @@ class ReRegisterTrustServiceSpec extends PlaySpec
 
     "Return a NotFoundResponse" when {
       "a NotFoundResponse is returned from DES for the call to lookUpExistingTrust when name missing" in {
-        when(mockDesConnector.lookUpExistingTrust(any())(any())).thenReturn((Future.successful(Left(testNotFound))))
+        when(mockDesConnector.trustExistenceLookUp(any())(any())).thenReturn((Future.successful(Left(testNotFound))))
 
-        val result = Await.result(SUT.reRegisterTrust(reRegisterExample)(HeaderCarrier()), Duration.Inf)
+        val result = Await.result(SUT.trustExistence(trustExistenceExample)(HeaderCarrier()), Duration.Inf)
 
           result mustBe Left(testNotFound)
       }
@@ -60,12 +60,12 @@ class ReRegisterTrustServiceSpec extends PlaySpec
   }
 
   val mockDesConnector = mock[DesConnector]
-  object TestReRegisterTrustService extends ReRegisterTrustService {
+  object TestTrustExistenceService extends TrustExistenceService {
     override val desConnector: DesConnector = mockDesConnector
   }
 
   val testReRegister: String = "trusts exists"
   val testNotFound: String = "404"
-  val SUT = TestReRegisterTrustService
+  val SUT = TestTrustExistenceService
 
 }

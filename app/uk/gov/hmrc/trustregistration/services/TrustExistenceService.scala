@@ -18,23 +18,23 @@ package uk.gov.hmrc.trustregistration.services
 
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustregistration.connectors.DesConnector
-import uk.gov.hmrc.trustregistration.models.ReRegister
+import uk.gov.hmrc.trustregistration.models.TrustExistence
 
 import scala.concurrent.Future
 
 /**
   * Created by matthew on 22/02/17.
   */
-trait ReRegisterTrustService {
+trait TrustExistenceService {
 
   val desConnector: DesConnector
 
-  def reRegisterTrust(regDoc: ReRegister)(implicit hc: HeaderCarrier): Future[Either[String, String]] = {
-    desConnector.lookUpExistingTrust(regDoc)(hc)
+  def trustExistence(regDoc: TrustExistence)(implicit hc: HeaderCarrier): Future[Either[String, String]] = {
+    desConnector.trustExistenceLookUp(regDoc)(hc)
   }
 
-  object RegisterTrustService extends RegisterTrustService {
-    override val desConnector: DesConnector = DesConnector
-  }
+}
 
+object TrustExistenceService extends TrustExistenceService {
+  override val desConnector: DesConnector = DesConnector
 }

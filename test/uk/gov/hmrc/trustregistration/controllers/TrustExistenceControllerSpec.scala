@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.models
+package uk.gov.hmrc.trustregistration.controllers
 
-import play.api.libs.json.Json
+/**
+  * Created by sara on 23/02/17.
+  */
+class TrustExistenceControllerSpec {
 
-
-case class ReRegister(name: String, utr: String, postalCode: Option[String])
-
-object ReRegister{
-  implicit val reRegisterFormats = Json.format[ReRegister]
 }

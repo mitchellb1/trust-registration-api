@@ -36,7 +36,7 @@ class RegisterTrustServiceSpec extends PlaySpec
 
   "RegisterTrustService" must {
     "Return a TRN" when {
-      "Given a valid trust registration" in {
+      "Given a valid trust registration" ignore {
         when(mockDesConnector.registerTrust(any())(any())).thenReturn(Future.successful(Right(TRN(testTRN))))
 
         val result = Await.result(SUT.registerTrust(trustWithFlatManagementFund)(HeaderCarrier()), Duration.Inf)
