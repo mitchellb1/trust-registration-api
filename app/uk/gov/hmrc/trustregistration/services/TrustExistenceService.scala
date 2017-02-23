@@ -22,9 +22,7 @@ import uk.gov.hmrc.trustregistration.models.TrustExistence
 
 import scala.concurrent.Future
 
-/**
-  * Created by matthew on 22/02/17.
-  */
+
 trait TrustExistenceService {
 
   val desConnector: DesConnector

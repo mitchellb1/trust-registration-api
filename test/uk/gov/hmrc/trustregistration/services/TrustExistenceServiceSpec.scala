@@ -28,9 +28,7 @@ import uk.gov.hmrc.trustregistration.models.NotFoundResponse
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-/**
-  * Created by matthew on 22/02/17.
-  */
+
 class TrustExistenceServiceSpec extends PlaySpec
   with MockitoSugar
   with OneAppPerSuite
@@ -48,13 +46,23 @@ class TrustExistenceServiceSpec extends PlaySpec
       }
     }
 
-    "Return a NotFoundResponse" when {
-      "a NotFoundResponse is returned from DES for the call to lookUpExistingTrust when name missing" in {
+    "Return 'trust not found" when {
+      "a trust is not found from DES for the call to trustExistenceLookUp  when name missing" in {
         when(mockDesConnector.trustExistenceLookUp(any())(any())).thenReturn((Future.successful(Left(testNotFound))))
 
         val result = Await.result(SUT.trustExistence(trustExistenceExample)(HeaderCarrier()), Duration.Inf)
 
           result mustBe Left(testNotFound)
+      }
+    }
+
+    "Return an Internal server error" when {
+      "500 error return from DES" in {
+        when(mockDesConnector.trustExistenceLookUp(any())(any())).thenReturn((Future.successful(Left("500"))))
+
+        val result = Await.result(SUT.trustExistence(trustExistenceExample)(HeaderCarrier()), Duration.Inf)
+
+        result mustBe Left(testInternalServerError)
       }
     }
   }
@@ -65,7 +73,8 @@ class TrustExistenceServiceSpec extends PlaySpec
   }
 
   val testReRegister: String = "trusts exists"
-  val testNotFound: String = "404"
+  val testNotFound: String = "trust not found"
+  val testInternalServerError: String = "500"
   val SUT = TestTrustExistenceService
 
 }

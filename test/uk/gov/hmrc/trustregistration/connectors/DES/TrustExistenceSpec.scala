@@ -19,7 +19,7 @@ package uk.gov.hmrc.trustregistration.connectors.DES
 import org.mockito.Matchers
 import org.mockito.Mockito.when
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
-import uk.gov.hmrc.play.http.{HttpResponse, Upstream4xxResponse}
+import uk.gov.hmrc.play.http.{HttpResponse, Upstream4xxResponse, Upstream5xxResponse}
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
 import uk.gov.hmrc.trustregistration.models.TrustExistence
 
@@ -28,9 +28,9 @@ import scala.concurrent.{Await, Future}
 
 class TrustExistenceSpec extends PlaySpec with OneAppPerSuite with DESConnectorMocks with ScalaDataExamples{
 
-  "Look Up existing trust endpoint" must {
+  "TrustExistence" must {
     "return 'trust exists'" when {
-      "when we submit a re-register object" in {
+      "when we submit a trustExistence object" in {
         when (mockHttpPost.POST[TrustExistence,HttpResponse](Matchers.any(),Matchers.any(),Matchers.any())
           (Matchers.any(),Matchers.any(),Matchers.any())).
           thenReturn(Future.successful(HttpResponse(201)))
@@ -39,13 +39,13 @@ class TrustExistenceSpec extends PlaySpec with OneAppPerSuite with DESConnectorM
       }
     }
 
-    "return 'no trust'" when {
-      "we submit a re-register object" in {
+    "return 'trust not found'" when {
+      "we submit a trustExistence object" in {
         when (mockHttpPost.POST[TrustExistence, HttpResponse](Matchers.any(),Matchers.any(),Matchers.any())
           (Matchers.any(),Matchers.any(),Matchers.any())).
           thenReturn(Future.successful(HttpResponse(404)))
         val result = Await.result(SUT.trustExistenceLookUp(TrustExistence("trustName", "123456", None)), Duration.Inf)
-        result mustBe Left("404")
+        result mustBe Left("trust not found")
       }
     }
 
@@ -53,12 +53,13 @@ class TrustExistenceSpec extends PlaySpec with OneAppPerSuite with DESConnectorM
       "Call to DES has failed" in {
         when (mockHttpPost.POST[TrustExistence, HttpResponse](Matchers.any(),Matchers.any(),Matchers.any())
           (Matchers.any(),Matchers.any(),Matchers.any())).
-          thenReturn(Future.failed(Upstream4xxResponse("Bad request",400,400)))
+          thenReturn(Future.failed(Upstream5xxResponse("Internal Server Error",500,500)))
         val result = Await.result(SUT.trustExistenceLookUp(TrustExistence("trustName", "123456", None)), Duration.Inf)
-        result mustBe Left("400")
+        result mustBe Left("500")
       }
     }
 
   }
+
 
   }
