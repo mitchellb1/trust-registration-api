@@ -14,13 +14,25 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.models
+package uk.gov.hmrc.trustregistration.services
 
-import play.api.libs.json.Json
+import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.trustregistration.connectors.DesConnector
+import uk.gov.hmrc.trustregistration.models.TrustExistence
+
+import scala.concurrent.Future
 
 
-case class ReRegister(blah: String)
+trait TrustExistenceService {
 
-object ReRegister{
-  implicit val reRegisterFormats = Json.format[ReRegister]
+  val desConnector: DesConnector
+
+  def trustExistence(regDoc: TrustExistence)(implicit hc: HeaderCarrier): Future[Either[String, String]] = {
+    desConnector.trustExistenceLookUp(regDoc)(hc)
+  }
+
+}
+
+object TrustExistenceService extends TrustExistenceService {
+  override val desConnector: DesConnector = DesConnector
 }

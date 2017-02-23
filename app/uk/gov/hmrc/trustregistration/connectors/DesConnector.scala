@@ -139,15 +139,18 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
   }
 
 
-  def lookUpExistingTrust(reRegister: ReRegister)(implicit hc : HeaderCarrier) = {
-    val uri: String = s"$trustsServiceUrl/reregister"
-    val desRespone = httpPost.POST[ReRegister,HttpResponse](uri,reRegister)(implicitly, httpReads, implicitly)
-
+  def trustExistenceLookUp(trustExistence: TrustExistence)(implicit hc : HeaderCarrier) = {
+    val uri: String = s"$trustsServiceUrl/trustExistence"
+    val desRespone = httpPost.POST[TrustExistence,HttpResponse](uri,trustExistence)(implicitly, httpReads, implicitly)
 
     desRespone.map(f => {
       f.status match {
-        case _ => Right("trusts exists")
+        case 201 => Right("trusts exists")
+        case 404 => Left("trust not found")
+        case _ => Left("503")
       }
+    }).recover({
+      case _ => Left("400")
     })
   }
 

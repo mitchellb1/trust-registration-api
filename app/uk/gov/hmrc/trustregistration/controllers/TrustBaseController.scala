@@ -36,6 +36,7 @@ trait ApplicationBaseController extends BaseController {
   val metrics: ApplicationMetrics
   val registerTrustService: RegisterTrustService
 
+
   val className: String = getClass.getSimpleName
 
 
