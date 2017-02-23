@@ -146,9 +146,10 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
       f.status match {
         case 201 => Right("trusts exists")
         case 404 => Left("trust not found")
+        case _ => Left("503")
       }
     }).recover({
-      case _ => Left("500")
+      case _ => Left("400")
     })
   }
 

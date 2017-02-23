@@ -22,7 +22,7 @@ import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
 import uk.gov.hmrc.trustregistration.connectors.DesConnector
 import org.mockito.Mockito.when
-import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.play.http.{HeaderCarrier, Upstream4xxResponse}
 import uk.gov.hmrc.trustregistration.models.NotFoundResponse
 
 import scala.concurrent.duration.Duration
@@ -38,43 +38,39 @@ class TrustExistenceServiceSpec extends PlaySpec
     "Return 'trust exisits" when {
       "Given a valid existing trust" in {
 
-        when(mockDesConnector.trustExistenceLookUp(any())(any())).thenReturn(Future.successful(Right(testReRegister)))
-
+        when(mockDesConnector.trustExistenceLookUp(any())(any())).thenReturn(Future.successful(Right(testExistingTrust)))
         val result = Await.result(SUT.trustExistence(trustExistenceExample)(HeaderCarrier()), Duration.Inf)
-
-        result mustBe Right(testReRegister)
+        result mustBe Right(testExistingTrust)
       }
     }
 
     "Return 'trust not found" when {
       "a trust is not found from DES for the call to trustExistenceLookUp  when name missing" in {
         when(mockDesConnector.trustExistenceLookUp(any())(any())).thenReturn((Future.successful(Left(testNotFound))))
-
         val result = Await.result(SUT.trustExistence(trustExistenceExample)(HeaderCarrier()), Duration.Inf)
-
           result mustBe Left(testNotFound)
       }
     }
 
     "Return an Internal server error" when {
       "500 error return from DES" in {
-        when(mockDesConnector.trustExistenceLookUp(any())(any())).thenReturn((Future.successful(Left("500"))))
-
+        when(mockDesConnector.trustExistenceLookUp(any())(any())).thenReturn((Future.successful(Left("503"))))
         val result = Await.result(SUT.trustExistence(trustExistenceExample)(HeaderCarrier()), Duration.Inf)
-
         result mustBe Left(testInternalServerError)
       }
     }
-  }
+
+    }
 
   val mockDesConnector = mock[DesConnector]
   object TestTrustExistenceService extends TrustExistenceService {
     override val desConnector: DesConnector = mockDesConnector
   }
 
-  val testReRegister: String = "trusts exists"
+  val testExistingTrust: String = "trusts exists"
   val testNotFound: String = "trust not found"
-  val testInternalServerError: String = "500"
+  val testInternalServerError: String = "503"
+  val testInternalFailedError: String = "400"
   val SUT = TestTrustExistenceService
 
 }

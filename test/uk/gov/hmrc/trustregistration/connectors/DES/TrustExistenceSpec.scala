@@ -34,7 +34,7 @@ class TrustExistenceSpec extends PlaySpec with OneAppPerSuite with DESConnectorM
         when (mockHttpPost.POST[TrustExistence,HttpResponse](Matchers.any(),Matchers.any(),Matchers.any())
           (Matchers.any(),Matchers.any(),Matchers.any())).
           thenReturn(Future.successful(HttpResponse(201)))
-        val result = Await.result(SUT.trustExistenceLookUp(TrustExistence("trustName", "123456", None)),Duration.Inf)
+        val result = Await.result(SUT.trustExistenceLookUp(trustExistenceExample),Duration.Inf)
         result mustBe Right("trusts exists")
       }
     }
@@ -44,22 +44,30 @@ class TrustExistenceSpec extends PlaySpec with OneAppPerSuite with DESConnectorM
         when (mockHttpPost.POST[TrustExistence, HttpResponse](Matchers.any(),Matchers.any(),Matchers.any())
           (Matchers.any(),Matchers.any(),Matchers.any())).
           thenReturn(Future.successful(HttpResponse(404)))
-        val result = Await.result(SUT.trustExistenceLookUp(TrustExistence("trustName", "123456", None)), Duration.Inf)
+        val result = Await.result(SUT.trustExistenceLookUp(trustExistenceExample), Duration.Inf)
         result mustBe Left("trust not found")
       }
     }
 
-    "return an exception" when {
-      "Call to DES has failed" in {
+    "return an internal server error" when {
+      "we submit a trusExistence object and something goes wrong" in {
         when (mockHttpPost.POST[TrustExistence, HttpResponse](Matchers.any(),Matchers.any(),Matchers.any())
           (Matchers.any(),Matchers.any(),Matchers.any())).
-          thenReturn(Future.failed(Upstream5xxResponse("Internal Server Error",500,500)))
-        val result = Await.result(SUT.trustExistenceLookUp(TrustExistence("trustName", "123456", None)), Duration.Inf)
-        result mustBe Left("500")
+          thenReturn(Future.successful(HttpResponse(503)))
+        val result = Await.result(SUT.trustExistenceLookUp(trustExistenceExample), Duration.Inf)
+        result mustBe Left("503")
       }
     }
 
-  }
 
-
+  "return an exception" when {
+      "Call to DES has failed" in {
+        when (mockHttpPost.POST[TrustExistence, HttpResponse](Matchers.any(),Matchers.any(),Matchers.any())
+          (Matchers.any(),Matchers.any(),Matchers.any())).
+          thenReturn(Future.failed(Upstream4xxResponse("Internal Server Error",400,400)))
+        val result = Await.result(SUT.trustExistenceLookUp(trustExistenceExample), Duration.Inf)
+        result mustBe Left("400")
+      }
+    }
   }
+}
