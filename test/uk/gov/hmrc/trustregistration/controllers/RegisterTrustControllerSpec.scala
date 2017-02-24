@@ -31,7 +31,7 @@ import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.models.beneficiaries.Beneficiaries
-import uk.gov.hmrc.trustregistration.services.RegisterTrustService
+import uk.gov.hmrc.trustregistration.services.{RegisterTrustService, TrustExistenceService}
 import uk.gov.hmrc.trustregistration.utils.{TrustsValidationError, _}
 import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 
@@ -52,10 +52,61 @@ class RegisterTrustControllerSpec extends PlaySpec
     when(mockSchemaValidator.validateAgainstSchema(anyString())).thenReturn(SuccessfulValidation)
   }
 
+  "ReRegisterTrust controller endpoint" must {
+    "return 404" when {
+      "the reregister endpoint is called with a valid json payload containing a valid UTR but the trust does not exist" in {
+        when(mockExistenceService.trustExistence(any[TrustExistence])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(Left("404")))
+
+        withCallToReRegister(Json.parse(validCompleteTrustWithUTRJson)) { result =>
+          status(result) mustBe NOT_FOUND
+        }
+      }
+    }
+
+    "return an internal server error" when {
+      "the reregister endpoint is called with a valid json payload containing a valid UTR but something goes wrong" in {
+        when(mockExistenceService.trustExistence(any[TrustExistence])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(Left("503")))
+
+        withCallToReRegister(Json.parse(validCompleteTrustWithUTRJson)) { result =>
+          status(result) mustBe INTERNAL_SERVER_ERROR
+        }
+      }
+    }
+
+    "return a bad request error" when {
+      "the reregister endpoint is called with an invalid json payload" in {
+        when(mockExistenceService.trustExistence(any[TrustExistence])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(Left("400")))
+
+        withCallToReRegister(Json.parse(validCompleteTrustWithUTRJson)) { result =>
+          status(result) mustBe BAD_REQUEST
+        }
+      }
+    }
+
+    "return a created with a TRN" when {
+      "the reregister endpoint is called with a valid json payload containing a valid UTR" in {
+        when(mockExistenceService.trustExistence(any[TrustExistence])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(Right("204")))
+
+        when(mockRegisterTrustService.registerTrust(any[Trust])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(Right(TRN("TRN-1234"))))
+
+        withCallToReRegister(Json.parse(validCompleteTrustWithUTRJson)) { result =>
+          status(result) mustBe CREATED
+          contentAsString(result) must include("TRN")
+        }
+      }
+    }
+  }
+
+
   "RegisterTrustController" must {
 
     "return created with a TRN" when {
-      "the register endpoint is called with a valid json payload" ignore {
+      "the register endpoint is called with a valid json payload" in {
         when(mockRegisterTrustService.registerTrust(any[Trust])(any[HeaderCarrier]))
           .thenReturn(Future.successful(Right(TRN("TRN-1234"))))
 
@@ -760,12 +811,13 @@ class RegisterTrustControllerSpec extends PlaySpec
   }
 
   val mockSchemaValidator = mock[JsonSchemaValidator]
+  val mockExistenceService = mock[TrustExistenceService]
 
   object SUT extends RegisterTrustController {
     override implicit def hc(implicit rh: RequestHeader): HeaderCarrier = mockHC
-
     override val metrics: ApplicationMetrics = mockMetrics
     override val registerTrustService: RegisterTrustService = mockRegisterTrustService
+    override val trustExistenceService: TrustExistenceService = mockExistenceService
     override val jsonSchemaValidator = mockSchemaValidator
   }
 
@@ -776,6 +828,11 @@ class RegisterTrustControllerSpec extends PlaySpec
   private def withCallToPOST(payload: JsValue)(handler: Future[Result] => Any) = {
     handler(SUT.register.apply(registerRequestWithPayload(payload)))
   }
+
+  private def withCallToReRegister(payload: JsValue)(handler: Future[Result] => Any) = {
+    handler(SUT.reRegister.apply(registerRequestWithPayload(payload)))
+  }
+
 
 
   val matchString = s"""{

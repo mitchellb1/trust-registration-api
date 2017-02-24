@@ -1,0 +1,41 @@
+{
+    "trustEstate":{
+      "trust":{
+        "name" : "Test Trust",
+        "correspondenceAddress" : "{ADDRESS}",
+        "telephoneNumber" : "0044 1234 1234",
+        "currentYear" : "1970",
+        "commencementDate" : "1940-01-01",
+        "yearsOfTaxConsequence" : [2015,2016],
+        "legality" : "{LEGALITY}",
+        "isTrustUkResident" : true,
+        "leadTrustee" : {
+          "individual" : "{INDIVIDUAL}",
+          "telephoneNumber": "1234567890",
+          "email": "test@test.com"
+        },
+        "trustees" : [
+          "{INDIVIDUAL}","{INDIVIDUAL}","{INDIVIDUAL}","{INDIVIDUAL}"
+        ],
+        "protectors" : {
+          "individuals" :[
+            "{INDIVIDUAL}","{INDIVIDUAL}"
+          ]
+        },
+        "settlors" : {
+          "individuals" :[
+            "{INDIVIDUAL}","{INDIVIDUAL}"
+          ]
+        },
+        "naturalPeople" : {
+          "individuals" :[
+            "{INDIVIDUAL}","{INDIVIDUAL}"
+          ]
+        },
+        "trustType": {
+          "willIntestacyTrust" : "{WILLINTESTACYTRUST}"
+        },
+        "utr": "2222222222"
+      }
+    }
+}

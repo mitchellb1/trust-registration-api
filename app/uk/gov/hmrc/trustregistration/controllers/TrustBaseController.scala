@@ -25,7 +25,7 @@ import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.models.beneficiaries.Beneficiaries
 import uk.gov.hmrc.trustregistration.models.estates.Estate
-import uk.gov.hmrc.trustregistration.services.RegisterTrustService
+import uk.gov.hmrc.trustregistration.services.{RegisterTrustService, TrustExistenceService}
 import uk.gov.hmrc.trustregistration.utils.{FailedValidation, JsonSchemaValidator}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -35,12 +35,13 @@ import scala.concurrent.Future
 trait ApplicationBaseController extends BaseController {
   val metrics: ApplicationMetrics
   val registerTrustService: RegisterTrustService
+  val trustExistenceService: TrustExistenceService
 
 
   val className: String = getClass.getSimpleName
 
 
-  def registerTrustEstate(request: Request[JsValue], isTrust: Boolean, jsonSchemaValidator: JsonSchemaValidator)(implicit hc: HeaderCarrier) = {
+  def registerTrustEstate(request: Request[JsValue], isTrust: Boolean, jsonSchemaValidator: JsonSchemaValidator, isReRegister: Boolean = false)(implicit hc: HeaderCarrier) = {
     val jsonString = request.body.toString()
     val validationResult = jsonSchemaValidator.validateAgainstSchema(jsonString)
 
@@ -52,11 +53,30 @@ trait ApplicationBaseController extends BaseController {
         try {
           request.body.validate[TrustEstateRequest].map {
             trustEstate: TrustEstateRequest => {
-              val futureEither: Future[Either[String, TRN]] = RegisterTrustOrEstate(isTrust, trustEstate)
-              futureEither.map {
-                case Right(identifier) => Created(Json.toJson(identifier))
-                case Left("503") => InternalServerError
-                case _ => BadRequest("""{"message": "Failed serialization"}""")
+              if (isReRegister) {
+                val trust = trustEstate.trustEstate.trust.get
+                val response = trustExistenceService.trustExistence(TrustExistence(trust.name, trust.utr.get, trust.correspondenceAddress.postalCode))
+                response.flatMap {
+                  case Right("204") => {
+                    val futureEither: Future[Either[String, TRN]] = RegisterTrustOrEstate(isTrust, trustEstate)
+                    futureEither.map {
+                      case Right(identifier) => Created(Json.toJson(identifier))
+                      case Left("503") => InternalServerError
+                      case _ => BadRequest("""{"message": "Failed serialization"}""")
+                    }
+                  }
+                  case Left("404") => Future.successful(NotFound)
+                  case Left("400") => Future.successful(BadRequest)
+                  case _ => Future.successful(InternalServerError)
+                }
+              }
+              else {
+                val futureEither: Future[Either[String, TRN]] = RegisterTrustOrEstate(isTrust, trustEstate)
+                futureEither.map {
+                  case Right(identifier) => Created(Json.toJson(identifier))
+                  case Left("503") => InternalServerError
+                  case _ => BadRequest("""{"message": "Failed serialization"}""")
+                }
               }
             }
           }.recoverTotal {

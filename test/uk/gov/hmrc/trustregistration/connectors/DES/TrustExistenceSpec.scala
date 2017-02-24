@@ -33,9 +33,9 @@ class TrustExistenceSpec extends PlaySpec with OneAppPerSuite with DESConnectorM
       "when we submit a trustExistence object" in {
         when (mockHttpPost.POST[TrustExistence,HttpResponse](Matchers.any(),Matchers.any(),Matchers.any())
           (Matchers.any(),Matchers.any(),Matchers.any())).
-          thenReturn(Future.successful(HttpResponse(201)))
+          thenReturn(Future.successful(HttpResponse(204)))
         val result = Await.result(SUT.trustExistenceLookUp(trustExistenceExample),Duration.Inf)
-        result mustBe Right("trusts exists")
+        result mustBe Right("204")
       }
     }
 
@@ -45,7 +45,7 @@ class TrustExistenceSpec extends PlaySpec with OneAppPerSuite with DESConnectorM
           (Matchers.any(),Matchers.any(),Matchers.any())).
           thenReturn(Future.successful(HttpResponse(404)))
         val result = Await.result(SUT.trustExistenceLookUp(trustExistenceExample), Duration.Inf)
-        result mustBe Left("trust not found")
+        result mustBe Left("404")
       }
     }
 
