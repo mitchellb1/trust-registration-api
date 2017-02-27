@@ -41,7 +41,7 @@ trait ApplicationBaseController extends BaseController {
   val className: String = getClass.getSimpleName
 
 
-  def validateTrustEstate(request: Request[JsValue], jsonSchemaValidator: JsonSchemaValidator, isTrust: Boolean = true, isTrustReRegister: Boolean = false)(implicit hc: HeaderCarrier) = {
+  def validateTrustEstate(request: Request[JsValue], jsonSchemaValidator: JsonSchemaValidator, isTrust: Boolean = true)(implicit hc: HeaderCarrier) = {
     val jsonString = request.body.toString()
     val validationResult = jsonSchemaValidator.validateAgainstSchema(jsonString)
 
@@ -52,13 +52,13 @@ trait ApplicationBaseController extends BaseController {
       case _ => {
         try {
           request.body.validate[TrustEstateRequest].map {
-            trustEstate: TrustEstateRequest => {
-              if (isTrustReRegister) {
-                val trust = trustEstate.trustEstate.trust.get
+            request: TrustEstateRequest => {
+              if (isTrustReRegister(request)) {
+                val trust = request.trustEstate.trust.get
                 val response = trustExistenceService.trustExistence(TrustExistence(trust.name, trust.utr, trust.correspondenceAddress.postalCode))
                 response.flatMap {
                   case Right("204") => {
-                    GetRegisterTrustEstateResponse(isTrust, trustEstate)
+                    GetRegisterTrustEstateResponse(isTrust, request)
                   }
                   case Left("404") => Future.successful(NotFound)
                   case Left("400") => Future.successful(BadRequest)
@@ -67,7 +67,7 @@ trait ApplicationBaseController extends BaseController {
                 }
               }
               else {
-                GetRegisterTrustEstateResponse(isTrust, trustEstate)
+                GetRegisterTrustEstateResponse(isTrust, request)
               }
             }
           }.recoverTotal {
@@ -98,6 +98,10 @@ trait ApplicationBaseController extends BaseController {
         }
       }
     }
+  }
+
+  private def isTrustReRegister(request: TrustEstateRequest) = {
+    request.trustEstate.trust.get.utr.exists(_.nonEmpty)
   }
 
   private def GetRegisterTrustEstateResponse(isTrust: Boolean, trustEstate: TrustEstateRequest)(implicit hc: HeaderCarrier) = {

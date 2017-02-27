@@ -52,13 +52,14 @@ class RegisterTrustControllerSpec extends PlaySpec
     when(mockSchemaValidator.validateAgainstSchema(anyString())).thenReturn(SuccessfulValidation)
   }
 
-  "ReRegisterTrust controller endpoint" must {
+
+  "RegisterTrustController" must {
     "return 404" when {
       "the reregister endpoint is called with a valid json payload containing a valid UTR but the trust does not exist" in {
         when(mockExistenceService.trustExistence(any[TrustExistence])(any[HeaderCarrier]))
           .thenReturn(Future.successful(Left("404")))
 
-        withCallToReRegister(Json.parse(validCompleteTrustWithUTRJson)) { result =>
+        withCallToPOST(Json.parse(validCompleteTrustWithUTRJson)) { result =>
           status(result) mustBe NOT_FOUND
         }
       }
@@ -69,7 +70,7 @@ class RegisterTrustControllerSpec extends PlaySpec
         when(mockExistenceService.trustExistence(any[TrustExistence])(any[HeaderCarrier]))
           .thenReturn(Future.successful(Left("409")))
 
-        withCallToReRegister(Json.parse(validCompleteTrustWithUTRJson)) { result =>
+        withCallToPOST(Json.parse(validCompleteTrustWithUTRJson)) { result =>
           status(result) mustBe CONFLICT
         }
       }
@@ -80,7 +81,7 @@ class RegisterTrustControllerSpec extends PlaySpec
         when(mockExistenceService.trustExistence(any[TrustExistence])(any[HeaderCarrier]))
           .thenReturn(Future.successful(Left("503")))
 
-        withCallToReRegister(Json.parse(validCompleteTrustWithUTRJson)) { result =>
+        withCallToPOST(Json.parse(validCompleteTrustWithUTRJson)) { result =>
           status(result) mustBe INTERNAL_SERVER_ERROR
         }
       }
@@ -91,7 +92,7 @@ class RegisterTrustControllerSpec extends PlaySpec
         when(mockExistenceService.trustExistence(any[TrustExistence])(any[HeaderCarrier]))
           .thenReturn(Future.successful(Left("400")))
 
-        withCallToReRegister(Json.parse(validCompleteTrustWithUTRJson)) { result =>
+        withCallToPOST(Json.parse(validCompleteTrustWithUTRJson)) { result =>
           status(result) mustBe BAD_REQUEST
         }
       }
@@ -105,16 +106,12 @@ class RegisterTrustControllerSpec extends PlaySpec
         when(mockRegisterTrustService.registerTrust(any[Trust])(any[HeaderCarrier]))
           .thenReturn(Future.successful(Right(TRN("TRN-1234"))))
 
-        withCallToReRegister(Json.parse(validCompleteTrustWithUTRJson)) { result =>
+        withCallToPOST(Json.parse(validCompleteTrustWithUTRJson)) { result =>
           status(result) mustBe CREATED
           contentAsString(result) must include("TRN")
         }
       }
     }
-  }
-
-
-  "RegisterTrustController" must {
 
     "return created with a TRN" when {
       "the register endpoint is called with a valid json payload" in {
@@ -839,13 +836,7 @@ class RegisterTrustControllerSpec extends PlaySpec
   private def withCallToPOST(payload: JsValue)(handler: Future[Result] => Any) = {
     handler(SUT.register.apply(registerRequestWithPayload(payload)))
   }
-
-  private def withCallToReRegister(payload: JsValue)(handler: Future[Result] => Any) = {
-    handler(SUT.reRegister.apply(registerRequestWithPayload(payload)))
-  }
-
-
-
+  
   val matchString = s"""{
   "individualBeneficiaries" : [ {
     "individual" : {
