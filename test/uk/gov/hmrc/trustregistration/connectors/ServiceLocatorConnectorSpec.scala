@@ -33,7 +33,7 @@ class ServiceLocatorConnectorSpec extends UnitSpec with MockitoSugar with ScalaF
 
     val connector = new ServiceLocatorConnector {
       override val http = mock[HttpPost]
-      override val appUrl: String = "http://trust-registration-api.service"
+      override val appUrl: String = "http://trust-registration-api.public.mdtp"
       override val appName: String = "trust-registration-api"
       override val serviceUrl: String = "https://SERVICE_LOCATOR"
       override val handlerOK: () => Unit = mock[Function0[Unit]]
@@ -45,7 +45,7 @@ class ServiceLocatorConnectorSpec extends UnitSpec with MockitoSugar with ScalaF
   "register" should {
     "register the JSON API Definition into the Service Locator" in new Setup {
 
-      val registration = TrustApiServiceRegistration(serviceName = "trust-registration-api", serviceUrl = "http://trust-registration-api.service", metadata = Some(Map("third-party-api" -> "true")))
+      val registration = TrustApiServiceRegistration(serviceName = "trust-registration-api", serviceUrl = "http://trust-registration-api.public.mdtp", metadata = Some(Map("third-party-api" -> "true")))
 
       when(connector.http.POST(s"${connector.serviceUrl}/registration", registration, Seq("Content-Type"-> "application/json"))).thenReturn(Future.successful(HttpResponse(200)))
 
@@ -58,7 +58,7 @@ class ServiceLocatorConnectorSpec extends UnitSpec with MockitoSugar with ScalaF
 
     "fail registering in service locator" in new Setup {
 
-      val registration = TrustApiServiceRegistration(serviceName = "trust-registration-api", serviceUrl = "http://trust-registration-api.service", metadata = Some(Map("third-party-api" -> "true")))
+      val registration = TrustApiServiceRegistration(serviceName = "trust-registration-api", serviceUrl = "http://trust-registration-api.public.mdtp", metadata = Some(Map("third-party-api" -> "true")))
       when(connector.http.POST(s"${connector.serviceUrl}/registration", registration, Seq("Content-Type"-> "application/json"))).thenReturn(Future.failed(serviceLocatorException))
 
       connector.register.futureValue shouldBe false
