@@ -25,23 +25,7 @@ case class Estate(estateName: String,
                   personalRepresentative: PersonalRepresentative,
                   adminPeriodFinishedDate: Option[DateTime] = None,
                   reasonEstateSetup: String,
-                  declaration: Declaration) {
-
-//  private val atleastAdeceasedOrPersonalRepresentative: Boolean = personalRepresentative.isDefined || deceased.isDefined
-//
-//  require(atleastAdeceasedOrPersonalRepresentative,
-//    s"""{\"message\": \"Invalid Json\",
-//         \"code\": 0,
-//         \"validationErrors\": [
-//         {
-//           \"message\": \"Must have either a personal representative or deceased\",
-//           \"location\": \"/trustEstate/estate/\"
-//         }
-//         ]
-//       }""".stripMargin
-//  )
-
-}
+                  declaration: Declaration)
 
 object Estate {
   implicit val estateFormat = Json.format[Estate]

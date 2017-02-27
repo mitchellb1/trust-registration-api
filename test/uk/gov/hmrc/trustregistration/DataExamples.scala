@@ -328,7 +328,7 @@ trait ScalaDataExamples {
 
   val legality = Legality("ES",Some("ES"),true,None)
 
-  val trustExistenceExample = TrustExistence("asdf", "12341234", Some(""))
+  val trustExistenceExample = TrustExistence("asdf", Some("12341234"), Some(""))
 
   val businessAsset = BusinessAsset("This is a description",1234L, company)
 

@@ -16,22 +16,20 @@
 
 package uk.gov.hmrc.trustregistration.models
 
-import play.api.libs.json.Json
+import org.scalatestplus.play.PlaySpec
+import play.api.libs.json.{JsResultException, Json}
+import uk.gov.hmrc.trustregistration.JsonExamples
 
 
-case class TrustExistence(name: String, utr: Option[String], postalCode: Option[String]){
-  private val utrDefined: Boolean = utr.isDefined
-  require(utrDefined,    s"""{\"message\": \"Invalid Json\",
-           \"code\": 0,
-           \"validationErrors\": [
-           {
-             \"message\": \"Missing required property utr\",
-             \"location\": \"/\"
-           }
-           ]
-         }""".stripMargin)
-}
+class TrustExistenceSpec extends PlaySpec with JsonExamples{
+  "Trust Existence" must {
+    "throw an exception" when {
+      "there is no utr" in {
+        val ex = the [IllegalArgumentException] thrownBy TrustExistence("test",None,None)
+        ex.getMessage must include("Missing required property utr")
+      }
+    }
+  }
 
-object TrustExistence{
-  implicit val trustExistenceFormats = Json.format[TrustExistence]
+
 }
