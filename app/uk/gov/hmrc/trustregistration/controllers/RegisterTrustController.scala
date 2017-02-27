@@ -28,13 +28,13 @@ trait RegisterTrustController extends ApplicationBaseController {
 
   def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     authorised("register", "") {
-      registerTrustEstate(request, true, jsonSchemaValidator)
+      validateTrustEstate(request, jsonSchemaValidator)
     }
   }
 
   def reRegister(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     authorised("register", "") {
-      registerTrustEstate(request, true, jsonSchemaValidator, true)
+      validateTrustEstate(request, jsonSchemaValidator,isTrustReRegister =  true)
     }
   }
 

@@ -29,7 +29,7 @@ trait RegisterEstateController extends ApplicationBaseController {
 
   def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     authorised("register", "") {
-      registerTrustEstate(request, false, jsonSchemaValidator)
+      validateTrustEstate(request, jsonSchemaValidator, false)
     }
   }
 

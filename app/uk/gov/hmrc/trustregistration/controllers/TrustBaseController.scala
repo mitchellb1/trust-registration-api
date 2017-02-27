@@ -41,7 +41,7 @@ trait ApplicationBaseController extends BaseController {
   val className: String = getClass.getSimpleName
 
 
-  def registerTrustEstate(request: Request[JsValue], isTrust: Boolean, jsonSchemaValidator: JsonSchemaValidator, isReRegister: Boolean = false)(implicit hc: HeaderCarrier) = {
+  def validateTrustEstate(request: Request[JsValue], jsonSchemaValidator: JsonSchemaValidator, isTrust: Boolean = true, isTrustReRegister: Boolean = false)(implicit hc: HeaderCarrier) = {
     val jsonString = request.body.toString()
     val validationResult = jsonSchemaValidator.validateAgainstSchema(jsonString)
 
@@ -53,17 +53,12 @@ trait ApplicationBaseController extends BaseController {
         try {
           request.body.validate[TrustEstateRequest].map {
             trustEstate: TrustEstateRequest => {
-              if (isReRegister) {
+              if (isTrustReRegister) {
                 val trust = trustEstate.trustEstate.trust.get
                 val response = trustExistenceService.trustExistence(TrustExistence(trust.name, trust.utr.get, trust.correspondenceAddress.postalCode))
                 response.flatMap {
                   case Right("204") => {
-                    val futureEither: Future[Either[String, TRN]] = RegisterTrustOrEstate(isTrust, trustEstate)
-                    futureEither.map {
-                      case Right(identifier) => Created(Json.toJson(identifier))
-                      case Left("503") => InternalServerError
-                      case _ => BadRequest("""{"message": "Failed serialization"}""")
-                    }
+                    GetRegisterTrustEstateResponse(isTrust, trustEstate)
                   }
                   case Left("404") => Future.successful(NotFound)
                   case Left("400") => Future.successful(BadRequest)
@@ -71,12 +66,7 @@ trait ApplicationBaseController extends BaseController {
                 }
               }
               else {
-                val futureEither: Future[Either[String, TRN]] = RegisterTrustOrEstate(isTrust, trustEstate)
-                futureEither.map {
-                  case Right(identifier) => Created(Json.toJson(identifier))
-                  case Left("503") => InternalServerError
-                  case _ => BadRequest("""{"message": "Failed serialization"}""")
-                }
+                GetRegisterTrustEstateResponse(isTrust, trustEstate)
               }
             }
           }.recoverTotal {
@@ -106,6 +96,14 @@ trait ApplicationBaseController extends BaseController {
           }
         }
       }
+    }
+  }
+
+  private def GetRegisterTrustEstateResponse(isTrust: Boolean, trustEstate: TrustEstateRequest)(implicit hc: HeaderCarrier) = {
+    RegisterTrustOrEstate(isTrust, trustEstate).map {
+      case Right(identifier) => Created(Json.toJson(identifier))
+      case Left("503") => InternalServerError
+      case _ => BadRequest("""{"message": "Failed serialization"}""")
     }
   }
 
