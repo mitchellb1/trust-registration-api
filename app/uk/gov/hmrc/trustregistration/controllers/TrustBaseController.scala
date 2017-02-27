@@ -62,6 +62,7 @@ trait ApplicationBaseController extends BaseController {
                   }
                   case Left("404") => Future.successful(NotFound)
                   case Left("400") => Future.successful(BadRequest)
+                  case Left("409") => Future.successful(Conflict)
                   case _ => Future.successful(InternalServerError)
                 }
               }

@@ -147,6 +147,7 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
       f.status match {
         case 204 => Right("204")
         case 404 => Left("404")
+        case 409 => Left("409")
         case _ => Left("503")
       }
     }).recover({

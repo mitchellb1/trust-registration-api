@@ -39,7 +39,7 @@ class TrustExistenceSpec extends PlaySpec with OneAppPerSuite with DESConnectorM
       }
     }
 
-    "return 'trust not found'" when {
+    "return not found" when {
       "we submit a trustExistence object" in {
         when (mockHttpPost.POST[TrustExistence, HttpResponse](Matchers.any(),Matchers.any(),Matchers.any())
           (Matchers.any(),Matchers.any(),Matchers.any())).
@@ -56,6 +56,16 @@ class TrustExistenceSpec extends PlaySpec with OneAppPerSuite with DESConnectorM
           thenReturn(Future.successful(HttpResponse(503)))
         val result = Await.result(SUT.trustExistenceLookUp(trustExistenceExample), Duration.Inf)
         result mustBe Left("503")
+      }
+    }
+
+    "return a conflict error" when {
+      "we submit a trusExistence object that we have already submitted for re register" in {
+        when (mockHttpPost.POST[TrustExistence, HttpResponse](Matchers.any(),Matchers.any(),Matchers.any())
+          (Matchers.any(),Matchers.any(),Matchers.any())).
+          thenReturn(Future.successful(HttpResponse(409)))
+        val result = Await.result(SUT.trustExistenceLookUp(trustExistenceExample), Duration.Inf)
+        result mustBe Left("409")
       }
     }
 

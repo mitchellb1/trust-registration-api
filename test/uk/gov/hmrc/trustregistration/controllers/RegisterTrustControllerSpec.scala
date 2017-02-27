@@ -64,6 +64,17 @@ class RegisterTrustControllerSpec extends PlaySpec
       }
     }
 
+    "return 409" when {
+      "the reregister endpoint is called with a valid json payload containing a valid UTR but the trust has already been re-egisted" in {
+        when(mockExistenceService.trustExistence(any[TrustExistence])(any[HeaderCarrier]))
+          .thenReturn(Future.successful(Left("409")))
+
+        withCallToReRegister(Json.parse(validCompleteTrustWithUTRJson)) { result =>
+          status(result) mustBe CONFLICT
+        }
+      }
+    }
+
     "return an internal server error" when {
       "the reregister endpoint is called with a valid json payload containing a valid UTR but something goes wrong" in {
         when(mockExistenceService.trustExistence(any[TrustExistence])(any[HeaderCarrier]))
