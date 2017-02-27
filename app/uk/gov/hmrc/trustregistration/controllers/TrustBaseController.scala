@@ -55,7 +55,7 @@ trait ApplicationBaseController extends BaseController {
             trustEstate: TrustEstateRequest => {
               if (isTrustReRegister) {
                 val trust = trustEstate.trustEstate.trust.get
-                val response = trustExistenceService.trustExistence(TrustExistence(trust.name, Some(trust.utr.get), trust.correspondenceAddress.postalCode))
+                val response = trustExistenceService.trustExistence(TrustExistence(trust.name, trust.utr, trust.correspondenceAddress.postalCode))
                 response.flatMap {
                   case Right("204") => {
                     GetRegisterTrustEstateResponse(isTrust, trustEstate)
