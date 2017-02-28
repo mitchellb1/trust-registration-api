@@ -17,6 +17,7 @@
 package uk.gov.hmrc.trustregistration.models.trusttypes
 
 import play.api.libs.json.Json
+import uk.gov.hmrc.trustregistration.models.exceptions.{NoTrustTypeException, OnlyOneTrustTypeAllowedException}
 
 case class TrustType(willIntestacyTrust: Option[WillIntestacyTrust] = None,
                      interVivoTrust: Option[InterVivoTrust] = None,
@@ -30,8 +31,8 @@ case class TrustType(willIntestacyTrust: Option[WillIntestacyTrust] = None,
     flatManagementSinkingFundTrust.isDefined,
     employmentTrust.isDefined).filter(i => i).size
 
-  require(numberOfSubmittedTrustTypes > 0, "Must have a Trust type")
-  require(numberOfSubmittedTrustTypes == 1, "Must have only one Trust type")
+  require(numberOfSubmittedTrustTypes > 0, NoTrustTypeException())
+  require(numberOfSubmittedTrustTypes == 1, OnlyOneTrustTypeAllowedException())
 }
 
 object TrustType {

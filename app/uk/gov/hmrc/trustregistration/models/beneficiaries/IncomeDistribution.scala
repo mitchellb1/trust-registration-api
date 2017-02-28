@@ -17,33 +17,16 @@
 package uk.gov.hmrc.trustregistration.models.beneficiaries
 
 import play.api.libs.json.Json
+import uk.gov.hmrc.trustregistration.models.exceptions.{ShareOfIncomeMissingException, ShareOfIncomeNotRequiredException}
 
 
 case class IncomeDistribution(isIncomeAtTrusteeDiscretion: Boolean, shareOfIncome: Option[Int]) {
 
   val shareOfIncomeMissingForTrusteeDiscretionFalse = !isIncomeAtTrusteeDiscretion && !shareOfIncome.isDefined
-  require(!shareOfIncomeMissingForTrusteeDiscretionFalse,
-    s"""{\"message\": \"Invalid Json\",
-         \"code\": 0,
-         \"validationErrors\": [
-         {
-           \"message\": \"missing field ([\\\"shareOfIncome\\\"])\",
-           \"location\": \"/trustEstate/trust/\"
-         }
-         ]
-       }""".stripMargin)
+  require(!shareOfIncomeMissingForTrusteeDiscretionFalse,ShareOfIncomeMissingException())
 
   val shareOfIncomeThereForTrusteeDiscretionTrue = isIncomeAtTrusteeDiscretion && shareOfIncome.isDefined && shareOfIncome.nonEmpty
-  require(!shareOfIncomeThereForTrusteeDiscretionTrue,
-    s"""{\"message\": \"Invalid Json\",
-         \"code\": 0,
-         \"validationErrors\": [
-         {
-           \"message\": \"shareOfIncome field not required\",
-           \"location\": \"/trustEstate/trust/\"
-         }
-         ]
-       }""".stripMargin)
+  require(!shareOfIncomeThereForTrusteeDiscretionTrue,ShareOfIncomeNotRequiredException())
 }
 
 object IncomeDistribution {

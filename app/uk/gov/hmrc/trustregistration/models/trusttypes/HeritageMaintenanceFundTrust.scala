@@ -20,6 +20,7 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.trustregistration.models.Individual
 import uk.gov.hmrc.trustregistration.models.assets.Assets
 import uk.gov.hmrc.trustregistration.models.beneficiaries.Beneficiaries
+import uk.gov.hmrc.trustregistration.models.exceptions.{NoAssetsException, NoBeneficiariesException, NoOtherTypeOfAssetsException, NoOtherTypeOfBeneficiariesException}
 
 case class HeritageMaintenanceFundTrust(assets: Assets,
                                         beneficiaries: Beneficiaries,
@@ -31,14 +32,14 @@ case class HeritageMaintenanceFundTrust(assets: Assets,
     (assets.shareAssets.isDefined && assets.shareAssets.get.size > 0) ||
 
     (assets.otherAssets.isDefined && assets.otherAssets.get.size > 0))
-  require(atleastOneTypeOfRequiredAsset, "Must have at least one type of required Asset")
+  require(atleastOneTypeOfRequiredAsset, NoAssetsException())
 
   private val noOtherTypesOfAsset: Boolean = (assets.partnershipAssets.isDefined || assets.businessAssets.isDefined)
-  require(!noOtherTypesOfAsset, "Must have no other types of Asset")
+  require(!noOtherTypesOfAsset, NoOtherTypeOfAssetsException())
 
   private val atleastOneTypeOfRequiredBeneficiaries: Boolean = (
     (beneficiaries.otherBeneficiaries.isDefined && beneficiaries.otherBeneficiaries.get.size > 0))
-  require(atleastOneTypeOfRequiredBeneficiaries, "Must have at least one type of required Beneficiary")
+  require(atleastOneTypeOfRequiredBeneficiaries, NoBeneficiariesException())
 
 
   private val noOtherTypesOfBeneficiaries: Boolean = ((beneficiaries.employeeBeneficiaries.isDefined) ||
@@ -49,7 +50,7 @@ case class HeritageMaintenanceFundTrust(assets: Assets,
     (beneficiaries.individualBeneficiaries.isDefined) ||
     (beneficiaries.charityBeneficiaries.isDefined) ||
     (beneficiaries.largeNumbersCompanyBeneficiaries.isDefined))
-  require(!noOtherTypesOfBeneficiaries, "Must have no other types of Beneficiary")
+  require(!noOtherTypesOfBeneficiaries, NoOtherTypeOfBeneficiariesException())
 
 }
 

@@ -29,28 +29,28 @@ class WillIntestacyTrustSpec extends PlaySpec with ScalaDataExamples {
         val assets = Assets(None, None, None, None, None, None)
         val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)), None, None, None, None, None, None, None)
         val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(assets, beneficiaries, deceased, true))
-        ex.getMessage() mustEqual "requirement failed: Must have at least one type of required Asset"
+        ex.getMessage() must include("Must have at least one type of required Asset")
       }
 
       "there are no beneficiaries" in {
         val assets = Assets(None, None, None, None, None, Some(List(otherAsset)))
         val beneficiaries = Beneficiaries(None, None, None, None, None, None, None, None)
         val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(assets, beneficiaries, deceased, true))
-        ex.getMessage() mustEqual "requirement failed: Must have at least one type of required Beneficiary"
+        ex.getMessage() must include("Must have at least one type of required Beneficiary")
       }
 
       "the wrong Beneficiaries are defined" in {
         val assets = Assets(Some(List(2, 2)), None, None, None, None, None)
         val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)), Some(List(employeeBeneficiary)), Some(List(directorBeneficiary)), None, None, None, None, None)
         val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(assets, beneficiaries, deceased, true))
-        ex.getMessage() mustEqual "requirement failed: Must have no other types of Beneficiary"
+        ex.getMessage() must include("Must have no other types of Beneficiary")
       }
 
       "the wrong assets are defined" in {
         val assets = Assets(Some(List(2, 2)), None, Some(List(shareAsset)), Some(List(partnershipAsset)), None, None)
         val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)), None, None, None, None, None, None, None)
         val ex = the[IllegalArgumentException] thrownBy (WillIntestacyTrust(assets, beneficiaries, deceased, true))
-        ex.getMessage() mustEqual "requirement failed: Must have no other types of Asset"
+        ex.getMessage() must include("Must have no other types of Asset")
       }
     }
 

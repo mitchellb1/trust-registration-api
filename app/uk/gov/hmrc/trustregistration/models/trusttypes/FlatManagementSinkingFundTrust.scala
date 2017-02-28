@@ -19,24 +19,25 @@ package uk.gov.hmrc.trustregistration.models.trusttypes
 import play.api.libs.json.Json
 import uk.gov.hmrc.trustregistration.models.assets.Assets
 import uk.gov.hmrc.trustregistration.models.beneficiaries.Beneficiaries
+import uk.gov.hmrc.trustregistration.models.exceptions.{NoAssetsException, NoBeneficiariesException, NoOtherTypeOfAssetsException, NoOtherTypeOfBeneficiariesException}
 
 
 case class FlatManagementSinkingFundTrust(assets: Assets, beneficiaries: Beneficiaries) {
 
   private val atleastOneTypeOfRequiredAsset: Boolean = (assets.monetaryAssets.isDefined && assets.monetaryAssets.get.size > 0)
-  require(atleastOneTypeOfRequiredAsset, "Must have at least one type of required Asset")
+  require(atleastOneTypeOfRequiredAsset, NoAssetsException())
 
   private val noOtherTypesOfAsset: Boolean = (assets.partnershipAssets.isDefined ||
     assets.businessAssets.isDefined ||
     assets.propertyAssets.isDefined ||
     assets.shareAssets.isDefined ||
     assets.otherAssets.isDefined)
-  require(!noOtherTypesOfAsset, "Must have no other types of Asset")
+  require(!noOtherTypesOfAsset, NoOtherTypeOfAssetsException())
 
 
   private val atleastOneTypeOfRequiredBeneficiaries: Boolean = (
     (beneficiaries.otherBeneficiaries.isDefined && beneficiaries.otherBeneficiaries.get.size > 0))
-  require(atleastOneTypeOfRequiredBeneficiaries, "Must have at least one type of required Beneficiary")
+  require(atleastOneTypeOfRequiredBeneficiaries, NoBeneficiariesException())
 
   private val noOtherTypesOfBeneficiaries: Boolean = ((beneficiaries.employeeBeneficiaries.isDefined) ||
     (beneficiaries.directorBeneficiaries.isDefined) ||
@@ -46,7 +47,7 @@ case class FlatManagementSinkingFundTrust(assets: Assets, beneficiaries: Benefic
     (beneficiaries.individualBeneficiaries.isDefined) ||
     (beneficiaries.charityBeneficiaries.isDefined) ||
     (beneficiaries.largeNumbersCompanyBeneficiaries.isDefined))
-  require(!noOtherTypesOfBeneficiaries, "Must have no other types of Beneficiary")
+  require(!noOtherTypesOfBeneficiaries, NoOtherTypeOfBeneficiariesException())
 }
 
 object FlatManagementSinkingFundTrust {

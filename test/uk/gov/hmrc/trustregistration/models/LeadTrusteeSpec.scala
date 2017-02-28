@@ -25,11 +25,11 @@ class LeadTrusteeSpec extends PlaySpec with ScalaDataExamples {
     "throw an exception" when {
       "no individual or company have been specified" in {
         val ex = the [IllegalArgumentException] thrownBy LeadTrustee(None, None, "12345", "test@test.com")
-        ex.getMessage mustEqual  "requirement failed: Must have either an individual or company lead trustee"
+        ex.getMessage must include("Must have either an individual or company lead trustee")
       }
       "both individual and company have been specified" in {
         val ex = the [IllegalArgumentException] thrownBy LeadTrustee(Some(individual), Some(company), "12345", "test@test.com")
-        ex.getMessage mustEqual  "requirement failed: Must have only an individual or company lead trustee"
+        ex.getMessage  must include("Must have only an individual or company lead trustee")
       }
     }
   }

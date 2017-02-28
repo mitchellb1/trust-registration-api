@@ -19,6 +19,7 @@ package uk.gov.hmrc.trustregistration.models.trusttypes
 import play.api.libs.json.Json
 import uk.gov.hmrc.trustregistration.models.assets.Assets
 import uk.gov.hmrc.trustregistration.models.beneficiaries.Beneficiaries
+import uk.gov.hmrc.trustregistration.models.exceptions._
 
 case class InterVivoTrust(assets: Assets,
                           beneficiaries: Beneficiaries,
@@ -47,29 +48,11 @@ case class InterVivoTrust(assets: Assets,
 
   private val isHoldOverClaimedIsTrue: Boolean = isHoldOverClaimed
 
-  require(atLeastOneTypeOfRequiredBeneficiaries, "Must have at least one type of required Beneficiary")
-  require(atLeastOneTypeOfRequiredAsset, "Must have at least one type of required Asset")
-  require(noEmployeeOrDirectorBeneficiaries, "Must have no other types of Beneficiary")
-  require(isHoldOverClaimedIsTrue,
-  s"""{\"message\": \"Invalid Json\",
-         \"code\": 0,
-         \"validationErrors\": [
-         {
-           \"message\": \"isHoldOverClaimed must be true",
-           \"location\": \"/"
-         }
-         ]
-       }""".stripMargin)
-
-  require(noPartnershipAssetsIfDeedOfVariation,s"""{\"message\": \"Invalid Json\",
-         \"code\": 0,
-         \"validationErrors\": [
-         {
-           \"message\": \"partnership assets not allowed when Inter Vivo Trust is created by a deed of variation",
-           \"location\": \"/"
-         }
-         ]
-       }""".stripMargin)
+  require(atLeastOneTypeOfRequiredBeneficiaries, NoBeneficiariesException())
+  require(atLeastOneTypeOfRequiredAsset, NoAssetsException())
+  require(noEmployeeOrDirectorBeneficiaries, NoOtherTypeOfBeneficiariesException())
+  require(isHoldOverClaimedIsTrue,IsHoldOverClaimedException())
+  require(noPartnershipAssetsIfDeedOfVariation,PartnershipAssetsNotAllowedException())
 
 }
 

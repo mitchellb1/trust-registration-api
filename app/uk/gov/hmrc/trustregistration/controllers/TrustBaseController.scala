@@ -53,7 +53,7 @@ trait ApplicationBaseController extends BaseController {
         try {
           request.body.validate[TrustEstateRequest].map {
             request: TrustEstateRequest => {
-              if (isTrustReRegister(request,isTrust)) {
+              if (isTrustReRegister(request, isTrust)) {
                 val trust = request.trustEstate.trust.get
                 val response = trustExistenceService.trustExistence(TrustExistence(trust.name, trust.utr, trust.correspondenceAddress.postalCode))
                 response.flatMap {
@@ -73,47 +73,17 @@ trait ApplicationBaseController extends BaseController {
           }.recoverTotal {
             e => {
               val error: JsValue = JsError.toJson(e)
-              val message = error \\ "msg"
-              Future.successful(BadRequest(Json.parse(
-                s"""
-                                                  {
-                                                    "message": "Invalid Json",
-                                                    "code": 0,
-                                                    "validationErrors": [
-                                                    {
-                                                      "message": "${message.head.toString().replace("\"", "")}",
-                                                      "location":"/${error.as[JsObject].keys.head.replace("obj.", "").replace(".", "/")}"
-                                                    }
-                                                    ]
-                                                  }
-                                                  """)))
+              Future.successful(BadRequest(GenerateInvalidJsonResponse((error \\ "msg").head.toString().replace("\"", ""), s"/${error.as[JsObject].keys.head.replace("obj.", "").replace(".", "/")}")))
             }
           }
         }
         catch {
           case e: Throwable => {
-            val error = e.getMessage().substring(20)
-            Future.successful(BadRequest(error))
+            Future.successful(BadRequest(GenerateInvalidJsonResponse(e.getMessage().substring(20).split(':')(1).trim, "/")))
           }
         }
       }
     }
-  }
-
-  private def isTrustReRegister(request: TrustEstateRequest, isTrust: Boolean) = {
-    if (isTrust) request.trustEstate.trust.get.utr.exists(_.nonEmpty) else false
-  }
-
-  private def GetRegisterTrustEstateResponse(isTrust: Boolean, trustEstate: TrustEstateRequest)(implicit hc: HeaderCarrier) = {
-    RegisterTrustOrEstate(isTrust, trustEstate).map {
-      case Right(identifier) => Created(Json.toJson(identifier))
-      case Left("503") => InternalServerError
-      case _ => BadRequest("""{"message": "Failed serialization"}""")
-    }
-  }
-
-  private def RegisterTrustOrEstate(isTrust: Boolean, trustEstateRequest: TrustEstateRequest)(implicit hc: HeaderCarrier) = {
-    if (isTrust) registerTrustService.registerTrust(trustEstateRequest.trustEstate.trust.get) else registerTrustService.registerEstate(trustEstateRequest.trustEstate.estate.get)
   }
 
   protected def authorised(apiName: String, identifier: String)(f: => Future[Result])(implicit hc: HeaderCarrier): Future[Result] = {
@@ -201,5 +171,37 @@ trait ApplicationBaseController extends BaseController {
         InternalServerError
       }
     }
+  }
+
+  private def isTrustReRegister(request: TrustEstateRequest, isTrust: Boolean) = {
+    if (isTrust) request.trustEstate.trust.get.utr.exists(_.nonEmpty) else false
+  }
+
+  private def GetRegisterTrustEstateResponse(isTrust: Boolean, trustEstate: TrustEstateRequest)(implicit hc: HeaderCarrier) = {
+    RegisterTrustOrEstate(isTrust, trustEstate).map {
+      case Right(identifier) => Created(Json.toJson(identifier))
+      case Left("503") => InternalServerError
+      case _ => BadRequest("""{"message": "Failed serialization"}""")
+    }
+  }
+
+  private def RegisterTrustOrEstate(isTrust: Boolean, trustEstateRequest: TrustEstateRequest)(implicit hc: HeaderCarrier) = {
+    if (isTrust) registerTrustService.registerTrust(trustEstateRequest.trustEstate.trust.get) else registerTrustService.registerEstate(trustEstateRequest.trustEstate.estate.get)
+  }
+
+  private def GenerateInvalidJsonResponse(errorMessage: String, location: String) = {
+    Json.parse(
+      s"""
+                                                  {
+                                                    "message": "Invalid Json",
+                                                    "code": 0,
+                                                    "validationErrors": [
+                                                    {
+                                                      "message": "${errorMessage}",
+                                                      "location":"${location}"
+                                                    }
+                                                    ]
+                                                  }
+                                                  """)
   }
 }
