@@ -190,18 +190,14 @@ trait ApplicationBaseController extends BaseController {
   }
 
   private def GenerateInvalidJsonResponse(errorMessage: String, location: String) = {
-    Json.parse(
-      s"""
-                                                  {
-                                                    "message": "Invalid Json",
-                                                    "code": 0,
-                                                    "validationErrors": [
-                                                    {
-                                                      "message": "${errorMessage}",
-                                                      "location":"${location}"
-                                                    }
-                                                    ]
-                                                  }
-                                                  """)
+    Json.parse(s"""{
+        "message": "Invalid Json",
+        "code": 0,
+        "validationErrors": [
+        {
+          "message": "${errorMessage}",
+          "location":"${location}"
+        }]
+       }""")
   }
 }
