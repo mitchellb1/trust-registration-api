@@ -53,7 +53,7 @@ trait ApplicationBaseController extends BaseController {
         try {
           request.body.validate[TrustEstateRequest].map {
             request: TrustEstateRequest => {
-              if (isTrustReRegister(request)) {
+              if (isTrustReRegister(request,isTrust)) {
                 val trust = request.trustEstate.trust.get
                 val response = trustExistenceService.trustExistence(TrustExistence(trust.name, trust.utr, trust.correspondenceAddress.postalCode))
                 response.flatMap {
@@ -100,8 +100,8 @@ trait ApplicationBaseController extends BaseController {
     }
   }
 
-  private def isTrustReRegister(request: TrustEstateRequest) = {
-    request.trustEstate.trust.get.utr.exists(_.nonEmpty)
+  private def isTrustReRegister(request: TrustEstateRequest, isTrust: Boolean) = {
+    if (isTrust) request.trustEstate.trust.get.utr.exists(_.nonEmpty) else false
   }
 
   private def GetRegisterTrustEstateResponse(isTrust: Boolean, trustEstate: TrustEstateRequest)(implicit hc: HeaderCarrier) = {
