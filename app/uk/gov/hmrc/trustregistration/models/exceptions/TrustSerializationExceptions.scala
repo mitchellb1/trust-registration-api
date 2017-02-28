@@ -19,7 +19,7 @@ package uk.gov.hmrc.trustregistration.models.exceptions
 case class NoUtrException(message: String = "Missing required property utr") extends Exception(message)
 case class PostCodeMissingForGBAddressException(message: String = "missing field ([\\\"postalCode\\\"])") extends Exception(message)
 case class PostalCodeNotPresentForNonGbAddressException(message: String = "not required field ([\\\\\\\"postalCode\\\\\\\"])") extends Exception(message)
-case class AtLestOneTypeOfTrusteeException(message: String = "Must have either an individual or company lead trustee") extends Exception(message)
+case class AtLeastOneTypeOfTrusteeException(message: String = "Must have either an individual or company lead trustee") extends Exception(message)
 case class OnlyOneTypeOfTrusteeException(message: String = "Must have only an individual or company lead trustee") extends Exception(message)
 case class NoMoreThanTwoNaturalPeopleException(message: String = "object has too many elements ([\\\"naturalPeople\\\"])") extends Exception(message)
 case class NoMoreThanTwoProtectorsException(message: String = "object has too many elements ([\\\"protectors\\\"])") extends Exception(message)
