@@ -1456,6 +1456,10 @@
         "currentYear": {
           "type": "string"
         },
+        "utr" : {
+          "pattern": "^[0-9]{10}$",
+          "type": "string"
+        },
         "trustType": {
           "additionalProperties": false,
           "properties": {

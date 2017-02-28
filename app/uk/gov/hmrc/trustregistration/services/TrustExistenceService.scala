@@ -14,19 +14,25 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.models.estates
+package uk.gov.hmrc.trustregistration.services
 
-import org.joda.time.DateTime
-import play.api.libs.json.Json
-import uk.gov.hmrc.trustregistration.models.{Address, Declaration}
+import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.trustregistration.connectors.DesConnector
+import uk.gov.hmrc.trustregistration.models.TrustExistence
 
-case class Estate(estateName: String,
-                  correspondenceAddress: Address,
-                  personalRepresentative: PersonalRepresentative,
-                  adminPeriodFinishedDate: Option[DateTime] = None,
-                  reasonEstateSetup: String,
-                  declaration: Declaration)
+import scala.concurrent.Future
 
-object Estate {
-  implicit val estateFormat = Json.format[Estate]
+
+trait TrustExistenceService {
+
+  val desConnector: DesConnector
+
+  def trustExistence(regDoc: TrustExistence)(implicit hc: HeaderCarrier): Future[Either[String, String]] = {
+    desConnector.trustExistenceLookUp(regDoc)(hc)
+  }
+
+}
+
+object TrustExistenceService extends TrustExistenceService {
+  override val desConnector: DesConnector = DesConnector
 }

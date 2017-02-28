@@ -29,7 +29,7 @@ import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.models.estates.{Estate, EstateRegistrationDocument}
-import uk.gov.hmrc.trustregistration.services.RegisterTrustService
+import uk.gov.hmrc.trustregistration.services.{RegisterTrustService, TrustExistenceService}
 import uk.gov.hmrc.trustregistration.utils.{FailedValidation, JsonSchemaValidator, SuccessfulValidation, TrustsValidationError}
 
 import scala.concurrent.Future
@@ -218,6 +218,7 @@ class RegisterEstateControllerSpec extends PlaySpec with OneAppPerSuite with Jso
     override val jsonSchemaValidator = mockSchemaValidator
     override val metrics: ApplicationMetrics = mockMetrics
     override val registerTrustService: RegisterTrustService = mockRegisterTrustService
+    override val trustExistenceService: TrustExistenceService = mockTrustExistenceService
   }
 
   private def withCallToPOST(payload: JsValue)(handler: Future[Result] => Any) = {

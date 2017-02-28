@@ -14,19 +14,24 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.models.estates
+package uk.gov.hmrc.trustregistration.models
 
-import org.joda.time.DateTime
 import play.api.libs.json.Json
-import uk.gov.hmrc.trustregistration.models.{Address, Declaration}
 
-case class Estate(estateName: String,
-                  correspondenceAddress: Address,
-                  personalRepresentative: PersonalRepresentative,
-                  adminPeriodFinishedDate: Option[DateTime] = None,
-                  reasonEstateSetup: String,
-                  declaration: Declaration)
 
-object Estate {
-  implicit val estateFormat = Json.format[Estate]
+case class TrustExistence(name: String, utr: Option[String], postalCode: Option[String]){
+  private val utrDefined: Boolean = utr.isDefined
+  require(utrDefined,    s"""{\"message\": \"Invalid Json\",
+           \"code\": 0,
+           \"validationErrors\": [
+           {
+             \"message\": \"Missing required property utr\",
+             \"location\": \"/\"
+           }
+           ]
+         }""".stripMargin)
+}
+
+object TrustExistence{
+  implicit val trustExistenceFormats = Json.format[TrustExistence]
 }

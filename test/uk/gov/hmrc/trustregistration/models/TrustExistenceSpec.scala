@@ -14,19 +14,22 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.models.estates
+package uk.gov.hmrc.trustregistration.models
 
-import org.joda.time.DateTime
-import play.api.libs.json.Json
-import uk.gov.hmrc.trustregistration.models.{Address, Declaration}
+import org.scalatestplus.play.PlaySpec
+import play.api.libs.json.{JsResultException, Json}
+import uk.gov.hmrc.trustregistration.JsonExamples
 
-case class Estate(estateName: String,
-                  correspondenceAddress: Address,
-                  personalRepresentative: PersonalRepresentative,
-                  adminPeriodFinishedDate: Option[DateTime] = None,
-                  reasonEstateSetup: String,
-                  declaration: Declaration)
 
-object Estate {
-  implicit val estateFormat = Json.format[Estate]
+class TrustExistenceSpec extends PlaySpec with JsonExamples{
+  "Trust Existence" must {
+    "throw an exception" when {
+      "there is no utr" in {
+        val ex = the [IllegalArgumentException] thrownBy TrustExistence("test",None,None)
+        ex.getMessage must include("Missing required property utr")
+      }
+    }
+  }
+
+
 }

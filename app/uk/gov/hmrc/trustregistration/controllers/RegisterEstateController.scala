@@ -19,7 +19,7 @@ package uk.gov.hmrc.trustregistration.controllers
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
-import uk.gov.hmrc.trustregistration.services.RegisterTrustService
+import uk.gov.hmrc.trustregistration.services.{RegisterTrustService, TrustExistenceService}
 import uk.gov.hmrc.trustregistration.utils.JsonSchemaValidator
 
 
@@ -29,7 +29,7 @@ trait RegisterEstateController extends ApplicationBaseController {
 
   def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     authorised("register", "") {
-      registerTrustEstate(request, false, jsonSchemaValidator)
+      validateTrustEstate(request, jsonSchemaValidator, false)
     }
   }
 
@@ -48,6 +48,7 @@ trait RegisterEstateController extends ApplicationBaseController {
 
 object RegisterEstateController extends RegisterEstateController {
   override val registerTrustService = RegisterTrustService
+  override val trustExistenceService = TrustExistenceService
   override val metrics = ApplicationMetrics
   override lazy val jsonSchemaValidator = JsonSchemaValidator
 }

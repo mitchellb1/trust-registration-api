@@ -25,7 +25,7 @@ import play.api.test.{FakeHeaders, FakeRequest}
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
-import uk.gov.hmrc.trustregistration.services.RegisterTrustService
+import uk.gov.hmrc.trustregistration.services.{RegisterTrustService, TrustExistenceService}
 
 import scala.concurrent.Future
 
@@ -40,6 +40,7 @@ trait RegisterTrustServiceMocks extends MockitoSugar {
   )
 
    val mockRegisterTrustService = mock[RegisterTrustService]
+   val mockTrustExistenceService = mock[TrustExistenceService]
    val mockHC = mock[HeaderCarrier]
    val mockMetrics = mock[ApplicationMetrics]
    val mockContext = new com.codahale.metrics.Timer().time()

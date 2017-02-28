@@ -36,7 +36,8 @@ case class Trust(name: String,
                  trustType: TrustType,
                  declaration: Option[Declaration] = None,
                  isSchedule5A: Option[Boolean] = None,
-                 nonResidentType: Option[String] = None
+                 nonResidentType: Option[String] = None,
+                 utr: Option[String] = None
                 )
 
 
