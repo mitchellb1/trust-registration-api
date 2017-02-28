@@ -17,19 +17,12 @@
 package uk.gov.hmrc.trustregistration.models
 
 import play.api.libs.json.Json
+import uk.gov.hmrc.trustregistration.models.exceptions.NoUtrException
 
 
 case class TrustExistence(name: String, utr: Option[String], postalCode: Option[String]){
   private val utrDefined: Boolean = utr.isDefined
-  require(utrDefined,    s"""{\"message\": \"Invalid Json\",
-           \"code\": 0,
-           \"validationErrors\": [
-           {
-             \"message\": \"Missing required property utr\",
-             \"location\": \"/\"
-           }
-           ]
-         }""".stripMargin)
+  require(utrDefined,  NoUtrException())
 }
 
 object TrustExistence{

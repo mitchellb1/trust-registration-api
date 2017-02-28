@@ -17,22 +17,12 @@
 package uk.gov.hmrc.trustregistration.models
 
 import play.api.libs.json.Json
+import uk.gov.hmrc.trustregistration.models.exceptions.NoMoreThanTwoNaturalPeopleException
 
 case class NaturalPeople(individuals: Option[List[Individual]]) {
-
-  //is this check needed - it's covered in the schema
   val noMoreThanTwoNaturalPeople = (individuals.getOrElse(Nil).size <= 2)
 
-  require(noMoreThanTwoNaturalPeople,
-    s"""{\"message\": \"Invalid Json\",
-         \"code\": 0,
-         \"validationErrors\": [
-         {
-           \"message\": \"object has too many elements ([\\\"naturalPeople\\\"])\",
-           \"location\": \"/trustEstate/trust/naturalPeople\"
-         }
-         ]
-       }""".stripMargin)
+  require(noMoreThanTwoNaturalPeople,NoMoreThanTwoNaturalPeopleException())
 }
 
 object NaturalPeople {

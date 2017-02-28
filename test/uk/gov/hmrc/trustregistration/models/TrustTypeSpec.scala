@@ -26,7 +26,7 @@ class TrustTypeSpec extends PlaySpec with ScalaDataExamples {
       "no trust type is defined" in {
         val ex = the[IllegalArgumentException] thrownBy TrustType()
 
-        ex.getMessage mustEqual  "requirement failed: Must have a Trust type"
+        ex.getMessage must include("Must have a Trust type")
       }
 
       "more than one trust type is defined" in {
@@ -35,7 +35,7 @@ class TrustTypeSpec extends PlaySpec with ScalaDataExamples {
           heritageMaintenanceFundTrust = heritageFund
         )
 
-        ex.getMessage mustEqual  "requirement failed: Must have only one Trust type"
+        ex.getMessage must include("Must have only one Trust type")
       }
     }
   }

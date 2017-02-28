@@ -29,7 +29,7 @@ class EmploymentTrustSpec extends PlaySpec with ScalaDataExamples {
         val assets = Assets(None)
         val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)), None, None, None, None, None)
         val ex = the[IllegalArgumentException] thrownBy (EmploymentTrust(assets, beneficiaries, Some(true)))
-        ex.getMessage() mustEqual ("requirement failed: Must have at least one type of required Asset")
+        ex.getMessage() must include("Must have at least one type of required Asset")
       }
 
       "the wrong Beneficiaries are defined" in {
@@ -38,12 +38,12 @@ class EmploymentTrustSpec extends PlaySpec with ScalaDataExamples {
         val beneficiaries = Beneficiaries(None, None, None, Some(List(charityBeneficiary)), None, None)
 
         val ex = the[IllegalArgumentException] thrownBy EmploymentTrust(assets, beneficiaries, Some(true))
-        ex.getMessage() mustEqual ("requirement failed: Must have at least one type of required Beneficiary")
+        ex.getMessage() must include("Must have at least one type of required Beneficiary")
       }
 
       "no assets are defined" in {
         val ex = the[IllegalArgumentException] thrownBy (EmploymentTrust(Assets(), beneficiaries, Some(true)))
-        ex.getMessage() mustEqual "requirement failed: Must have at least one type of required Asset"
+        ex.getMessage() must include("Must have at least one type of required Asset")
       }
     }
 

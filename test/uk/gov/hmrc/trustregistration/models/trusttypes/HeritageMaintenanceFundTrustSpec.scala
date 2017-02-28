@@ -31,42 +31,42 @@ class HeritageMaintenanceFundTrustSpec extends PlaySpec with ScalaDataExamples {
         val assets = Assets()
         val beneficiaries = Beneficiaries(individualBeneficiaries = Some(List(individualBeneficiary)))
         val ex = the[IllegalArgumentException] thrownBy (HeritageMaintenanceFundTrust(assets, beneficiaries, true))
-        ex.getMessage() mustEqual ("requirement failed: Must have at least one type of required Asset")
+        ex.getMessage() must include("Must have at least one type of required Asset")
       }
 
       "assets are defined but contain no data" in {
         val assets = Assets(monetaryAssets = Some(Nil), propertyAssets = Some(Nil), shareAssets = Some(Nil), otherAssets = Some(Nil))
         val beneficiaries = Beneficiaries(individualBeneficiaries = Some(List(individualBeneficiary)))
         val ex = the[IllegalArgumentException] thrownBy (HeritageMaintenanceFundTrust(assets, beneficiaries, true))
-        ex.getMessage() mustEqual ("requirement failed: Must have at least one type of required Asset")
+        ex.getMessage() must include("Must have at least one type of required Asset")
       }
 
       "a partnership asset is defined" in {
         val assets = Assets(Some(List(2, 2)), None, None, Some(List(partnershipAsset)), None, None)
         val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)), None, None, None, None, None, None, None)
         val ex = the[IllegalArgumentException] thrownBy (HeritageMaintenanceFundTrust(assets, beneficiaries, true))
-        ex.getMessage() mustEqual ("requirement failed: Must have no other types of Asset")
+        ex.getMessage() must include("Must have no other types of Asset")
       }
 
       "a business asset is defined" in {
         val assets = Assets(Some(List(2, 2)), None, None, None, Some(List(businessAsset)), None)
         val beneficiaries = Beneficiaries(Some(List(individualBeneficiary)), None, None, None, None, None, None, None)
         val ex = the[IllegalArgumentException] thrownBy (HeritageMaintenanceFundTrust(assets, beneficiaries, true))
-        ex.getMessage() mustEqual ("requirement failed: Must have no other types of Asset")
+        ex.getMessage() must include("Must have no other types of Asset")
       }
 
       "a large number company beneficiary is defined" in {
         val assets = Assets(Some(List(2, 2)))
         val beneficiaries = Beneficiaries(otherBeneficiaries = otherBeneficiaries, largeNumbersCompanyBeneficiaries = Some(List(largeNumbersCompanyBeneficiary)))
         val ex = the[IllegalArgumentException] thrownBy (HeritageMaintenanceFundTrust(assets, beneficiaries, true))
-        ex.getMessage() mustEqual ("requirement failed: Must have no other types of Beneficiary")
+        ex.getMessage() must include("Must have no other types of Beneficiary")
       }
 
       "the required beneficiaries are not there" in {
         val assets = Assets(Some(List(2, 2)))
         val beneficiaries = Beneficiaries(individualBeneficiaries = Some(List(individualBeneficiary)))
         val ex = the[IllegalArgumentException] thrownBy (HeritageMaintenanceFundTrust(assets, beneficiaries, true))
-        ex.getMessage() mustEqual ("requirement failed: Must have at least one type of required Beneficiary")
+        ex.getMessage() must include("Must have at least one type of required Beneficiary")
       }
 
     }

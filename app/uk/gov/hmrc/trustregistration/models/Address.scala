@@ -18,6 +18,7 @@ package uk.gov.hmrc.trustregistration.models
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads}
+import uk.gov.hmrc.trustregistration.models.exceptions.{PostCodeMissingForGBAddressException, PostalCodeNotPresentForNonGbAddressException}
 
 case class Address(
                     line1: String,
@@ -30,28 +31,8 @@ case class Address(
   val postalCodeNotPresentForNonGbAddresses = if (countryCode != "GB") !postalCode.isDefined else true
 
 
-  require(!postCodeMissingForGbAddress,
-    s"""{\"message\": \"Invalid Json\",
-         \"code\": 0,
-         \"validationErrors\": [
-         {
-           \"message\": \"missing field ([\\\"postalCode\\\"])\",
-           \"location\": \"/trustEstate/trust/\"
-         }
-         ]
-       }""".stripMargin)
-
-
-  require(postalCodeNotPresentForNonGbAddresses,
-    s"""{\"message\": \"Invalid Json\",
-       \"code\": 0,
-       \"validationErrors\": [
-       {
-         \"message\": \"not required field ([\\\"postalCode\\\"])\",
-         \"location\": \"/trustEstate/trust/\"
-       }
-       ]
-     }""".stripMargin)
+  require(!postCodeMissingForGbAddress,PostCodeMissingForGBAddressException())
+  require(postalCodeNotPresentForNonGbAddresses,PostalCodeNotPresentForNonGbAddressException())
 }
 
 object Address {

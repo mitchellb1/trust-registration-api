@@ -17,20 +17,12 @@
 package uk.gov.hmrc.trustregistration.models
 
 import play.api.libs.json.Json
+import uk.gov.hmrc.trustregistration.models.exceptions.NoMoreThanTwoProtectorsException
 
 case class Protectors(individuals: Option[List[Individual]] = None, companies: Option[List[Company]] = None) {
   val noMoreThanTwoProtectors = (individuals.getOrElse(Nil).size + companies.getOrElse(Nil).size <= 2)
 
-  require(noMoreThanTwoProtectors,
-    s"""{\"message\": \"Invalid Json\",
-         \"code\": 0,
-         \"validationErrors\": [
-         {
-           \"message\": \"object has too many elements ([\\\"protectors\\\"])\",
-           \"location\": \"/trustEstate/trust/protectors\"
-         }
-         ]
-       }""".stripMargin)
+  require(noMoreThanTwoProtectors,NoMoreThanTwoProtectorsException())
 }
 
 object Protectors {
