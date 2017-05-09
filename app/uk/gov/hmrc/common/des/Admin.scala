@@ -28,7 +28,7 @@ case class Will(name: Name, dateOfBirth: String, dateOfDeath: String,  identific
 case class WillIdentification(nino: Option[Nino]=None, address: Option[Address] = None)
 case class TrustType(trust: Trust)
 case class Trust(details: TrustDetails, entities: TrustEntities)
-case class TrustDetails()
+case class TrustDetails(startDate: String, lawCountry: String, administrationCountry: Option[String] = None, residentialStatus: Option[ResidentialStatus] = None, typeOfTrust: String, deedOfVariation: Option[String] = None, interVivos: Option[Boolean] = None, efrbsStartDate: Option[String] = None)
 case class TrustEntities(naturalPerson: Option[List[NaturalPerson]]=None, beneficiary: Beneficiary, deceased: Option[Will]=None, leadTrustees: LeadTrustee, trustees: Option[List[Trustee]]=None, protectors: Option[ProtectorType]=None, settlors: SettlorType)
 case class NaturalPerson(name: Name, dateOfBirth: String, identification: Identification)
 case class Beneficiary(individualDetails: List[IndividualDetails], company: List[Company], trust: List[BeneficiaryTrust], charity: List[Charity], unidentified: List[Unidentified], large: List[Large], other: List[Other])
@@ -50,6 +50,11 @@ case class Charity(organisationName: String, beneficiaryDiscretion: Option[Boole
 case class Unidentified(description: String, beneficiaryDiscretion: Option[Boolean] = None, beneficiaryShareOfIncome: Option[String] = None)
 case class Large(organisationName: String, description: Option[String] = None, numberOfBeneficiary: String, identification: OrgIdentification)
 case class Other(description: String, address: Address, numberOfBeneficiary: Option[String] = None, beneficiaryDiscretion: Option[Boolean] = None, beneficiaryShareOfIncome: Option[String] = None)
+case class ResidentialStatus(uk: Option[UkResidentialStatus] = None, nonUk: Option[NonUkResidentialStatus] = None)
+case class UkResidentialStatus(scottishLaw: Boolean, preOffShore: Option[String] = None)
+case class NonUkResidentialStatus(sch5atcgga92: Boolean, s218ihta84: Option[Boolean] = None, agentS218IHTA84: Option[Boolean] = None, trusteeStatus: Option[String] = None)
+
+
 
 
 
