@@ -18,7 +18,6 @@ package uk.gov.hmrc.trustregistration.controllers
 
 import com.google.inject.{Inject, Singleton}
 import controllers.AssetsBuilder
-import play.api.Play
 import play.api.http.HttpErrorHandler
 import uk.gov.hmrc.play.microservice.controller.BaseController
 

@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.services
+package uk.gov.hmrc.estateapi.rest.controllers.services
 
 import org.mockito.Matchers._
 import org.mockito.Mockito.when
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.trustapi.rest.services.RegisterTrustService
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
 import uk.gov.hmrc.trustregistration.connectors.DesConnector
 import uk.gov.hmrc.trustregistration.models._
@@ -36,16 +37,6 @@ class RegisterTrustServiceSpec extends PlaySpec
   with ScalaDataExamples {
 
   "RegisterTrustService" must {
-    "Return a TRN" when {
-
-      "Given a valid estate registration" in {
-        when(mockDesConnector.registerEstate(any())(any())).thenReturn(Future.successful(Right(TRN(testTRN))))
-
-        val result = Await.result(SUT.registerEstate(validEstateWithPersonalRepresentative)(HeaderCarrier()), Duration.Inf)
-        result mustBe Right(TRN(testTRN))
-      }
-    }
-
     "Return a SuccessResponse" when {
       "a SuccessResponse is returned from DES for the call to noChange" in {
         when(mockDesConnector.noChange(any())(any())).thenReturn(Future.successful(SuccessResponse))
@@ -108,20 +99,6 @@ class RegisterTrustServiceSpec extends PlaySpec
 
         val result = Await.result(SUT.getProtectors("1234567890")(HeaderCarrier()), Duration.Inf)
         result mustBe GetSuccessResponse(protectors)
-      }
-
-      "a SuccessResponse is returned from DES for the call to getEstate" in {
-        when(mockDesConnector.getEstate(any())(any())).thenReturn(Future.successful(GetSuccessResponse(validEstateWithPersonalRepresentative)))
-
-        val result = Await.result(SUT.getEstate("1234567890")(HeaderCarrier()), Duration.Inf)
-        result mustBe GetSuccessResponse(validEstateWithPersonalRepresentative)
-      }
-
-      "a SuccessResponse is returned from DES for the call to closeEstate" in {
-        when(mockDesConnector.closeEstate(any())(any())).thenReturn(Future.successful(SuccessResponse))
-
-        val result = Await.result(SUT.closeEstate("1234567890")(HeaderCarrier()), Duration.Inf)
-        result mustBe SuccessResponse
       }
 
       "a SuccessResponse is returned from DES for the call to getTrust" in {
@@ -193,20 +170,6 @@ class RegisterTrustServiceSpec extends PlaySpec
         when(mockDesConnector.getProtectors(any())(any())).thenReturn(Future.successful(BadRequestResponse))
 
         val result = Await.result(SUT.getProtectors("1234567890")(HeaderCarrier()), Duration.Inf)
-        result mustBe BadRequestResponse
-      }
-
-      "a BadRequestResponse is returned from DES for the call to getEstate" in {
-        when(mockDesConnector.getEstate(any())(any())).thenReturn(Future.successful(BadRequestResponse))
-
-        val result = Await.result(SUT.getEstate("1234567890")(HeaderCarrier()), Duration.Inf)
-        result mustBe BadRequestResponse
-      }
-
-      "a BadRequestResponse is returned from DES for the call to closeEstate" in {
-        when(mockDesConnector.closeEstate(any())(any())).thenReturn(Future.successful(BadRequestResponse))
-
-        val result = Await.result(SUT.closeEstate("400BadRequest")(HeaderCarrier()), Duration.Inf)
         result mustBe BadRequestResponse
       }
 
@@ -282,20 +245,6 @@ class RegisterTrustServiceSpec extends PlaySpec
         result mustBe InternalServerErrorResponse
       }
 
-      "a InternalServerErrorResponse is returned from DES for the call to getEstate" in {
-        when(mockDesConnector.getEstate(any())(any())).thenReturn(Future.successful(InternalServerErrorResponse))
-
-        val result = Await.result(SUT.getEstate("1234567890")(HeaderCarrier()), Duration.Inf)
-        result mustBe InternalServerErrorResponse
-      }
-
-      "a InternalServerErrorResponse is returned from DES for the call to closeEstate" in {
-        when(mockDesConnector.closeEstate(any())(any())).thenReturn(Future.successful(InternalServerErrorResponse))
-
-        val result = Await.result(SUT.closeEstate("400BadRequest")(HeaderCarrier()), Duration.Inf)
-        result mustBe InternalServerErrorResponse
-      }
-
       "a InternalServerErrorResponse is returned from DES for the call to getTrust" in {
         when(mockDesConnector.getTrust(any())(any())).thenReturn(Future.successful(InternalServerErrorResponse))
 
@@ -365,20 +314,6 @@ class RegisterTrustServiceSpec extends PlaySpec
         when(mockDesConnector.getProtectors(any())(any())).thenReturn(Future.successful(NotFoundResponse))
 
         val result = Await.result(SUT.getProtectors("1234567890")(HeaderCarrier()), Duration.Inf)
-        result mustBe NotFoundResponse
-      }
-
-      "a NotFoundResponse is returned from DES for the call to getEstate" in {
-        when(mockDesConnector.getEstate(any())(any())).thenReturn(Future.successful(NotFoundResponse))
-
-        val result = Await.result(SUT.getEstate("1234567890")(HeaderCarrier()), Duration.Inf)
-        result mustBe NotFoundResponse
-      }
-
-      "a NotFoundResponse is returned from DES for the call to closeEstate" in {
-        when(mockDesConnector.closeEstate(any())(any())).thenReturn(Future.successful(NotFoundResponse))
-
-        val result = Await.result(SUT.closeEstate("404NotFound")(HeaderCarrier()), Duration.Inf)
         result mustBe NotFoundResponse
       }
 

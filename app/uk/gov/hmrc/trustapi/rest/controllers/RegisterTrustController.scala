@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.controllers
+package uk.gov.hmrc.trustapi.rest.controllers
 
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.trustapi.rest.services.{RegisterTrustService, TrustExistenceService}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
-import uk.gov.hmrc.trustregistration.services.{RegisterTrustService, TrustExistenceService}
 import uk.gov.hmrc.trustregistration.utils.JsonSchemaValidator
 
-trait RegisterTrustController extends ApplicationBaseController {
+trait RegisterTrustController extends TrustBaseController {
 
   val jsonSchemaValidator: JsonSchemaValidator
 
   def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     authorised("register", "") {
-      validateTrustEstate(request, jsonSchemaValidator)
+      validateTrust(request, jsonSchemaValidator)
     }
   }
 

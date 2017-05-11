@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.services
+package uk.gov.hmrc.trustapi.rest.services
 
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustregistration.connectors.DesConnector
 import uk.gov.hmrc.trustregistration.models._
-import uk.gov.hmrc.trustregistration.models.estates.Estate
 
 import scala.concurrent.Future
 
@@ -29,10 +28,6 @@ trait RegisterTrustService {
 
   def registerTrust(regDoc: Trust)(implicit hc : HeaderCarrier) : Future[Either[String,TRN]] = {
     desConnector.registerTrust(regDoc)(hc)
-  }
-
-  def registerEstate(estate: Estate)(implicit hc : HeaderCarrier) : Future[Either[String,TRN]] = {
-    desConnector.registerEstate(estate)(hc)
   }
 
   def noChange(identifier: String)(implicit hc: HeaderCarrier): Future[ApplicationResponse] = {
@@ -69,14 +64,6 @@ trait RegisterTrustService {
 
   def getProtectors(identifier: String)(implicit hc: HeaderCarrier): Future[ApplicationResponse] = {
     desConnector.getProtectors(identifier)
-  }
-
-  def getEstate(identifier: String)(implicit hc: HeaderCarrier): Future[ApplicationResponse] = {
-    desConnector.getEstate(identifier)
-  }
-
-  def closeEstate(identifier: String)(implicit hc: HeaderCarrier): Future[ApplicationResponse] = {
-    desConnector.closeEstate(identifier)
   }
 
   def getTrust(identifier: String)(implicit hc: HeaderCarrier): Future[ApplicationResponse] = {

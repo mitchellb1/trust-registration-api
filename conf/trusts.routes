@@ -1,0 +1,12 @@
+
+POST       /                              uk.gov.hmrc.trustapi.rest.controllers.RegisterTrustController.register()
+PUT        /:identifier/no-change        uk.gov.hmrc.trustapi.rest.controllers.RegisterTrustController.noChange(identifier: String)
+PUT        /:identifier/close            uk.gov.hmrc.trustapi.rest.controllers.RegisterTrustController.closeTrust(identifier: String)
+GET        /:identifier/trustees         uk.gov.hmrc.trustapi.rest.controllers.RegisterTrustController.getTrustees(identifier: String)
+GET        /:identifier/settlors         uk.gov.hmrc.trustapi.rest.controllers.RegisterTrustController.getSettlors(identifier: String)
+GET        /:identifier/natural-persons  uk.gov.hmrc.trustapi.rest.controllers.RegisterTrustController.getNaturalPersons(identifier: String)
+GET        /:identifier/contact-details  uk.gov.hmrc.trustapi.rest.controllers.RegisterTrustController.getTrustContactDetails(identifier: String)
+GET        /:identifier/lead-trustee     uk.gov.hmrc.trustapi.rest.controllers.RegisterTrustController.getLeadTrustee(identifier: String)
+GET        /:identifier/beneficiaries    uk.gov.hmrc.trustapi.rest.controllers.RegisterTrustController.getBeneficiaries(identifier: String)
+GET        /:identifier/protectors       uk.gov.hmrc.trustapi.rest.controllers.RegisterTrustController.getProtectors(identifier: String)
+GET        /:identifier                  uk.gov.hmrc.trustapi.rest.controllers.RegisterTrustController.getTrust(identifier: String)
