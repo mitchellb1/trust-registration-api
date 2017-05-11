@@ -50,8 +50,8 @@ trait EstateBaseController extends BaseController {
       }
       case _ => {
         try {
-          request.body.validate[EstateRequest].map {
-            request: EstateRequest => {
+          request.body.validate[TrustEstateRequest].map {
+            request: TrustEstateRequest => {
                 GetRegisterEstateResponse(request)
             }
           }.recoverTotal {
@@ -161,8 +161,8 @@ trait EstateBaseController extends BaseController {
     if (isTrust) request.trustEstate.trust.get.utr.exists(_.nonEmpty) else false
   }
 
-  private def GetRegisterEstateResponse(estateRequest: EstateRequest)(implicit hc: HeaderCarrier) = {
-    registerEstateService.registerEstate(estateRequest.estate).map {
+  private def GetRegisterEstateResponse(trustEstateRequest: TrustEstateRequest)(implicit hc: HeaderCarrier) = {
+    registerEstateService.registerEstate(trustEstateRequest.trustEstate.estate.get).map {
       case Right(identifier) => Created(Json.toJson(identifier))
       case Left("503") => InternalServerError
       case _ => BadRequest("""{"message": "Failed serialization"}""")
