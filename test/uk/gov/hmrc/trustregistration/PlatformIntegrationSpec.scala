@@ -27,8 +27,8 @@ import play.api.Play
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.common.connectors.ServiceLocatorConnector
+import uk.gov.hmrc.common.rest.controllers.DocumentationController
 import uk.gov.hmrc.play.http.{HeaderCarrier, HttpPost}
-import uk.gov.hmrc.trustregistration.controllers.DocumentationController
 
 import scala.concurrent.Future
 

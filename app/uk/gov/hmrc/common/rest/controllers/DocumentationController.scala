@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.controllers
+package uk.gov.hmrc.common.rest.controllers
 
 import com.google.inject.{Inject, Singleton}
 import controllers.AssetsBuilder
