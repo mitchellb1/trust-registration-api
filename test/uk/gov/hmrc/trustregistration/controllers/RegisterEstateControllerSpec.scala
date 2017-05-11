@@ -22,22 +22,22 @@ import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{RequestHeader, Result}
-import play.api.test.{FakeHeaders, FakeRequest}
 import play.api.test.Helpers._
+import play.api.test.{FakeHeaders, FakeRequest}
 import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
-import uk.gov.hmrc.trustregistration.models.estates.{Estate, EstateRegistrationDocument}
-import uk.gov.hmrc.trustregistration.services.{RegisterTrustService, TrustExistenceService}
+import uk.gov.hmrc.trustregistration.models.estates.Estate
+import uk.gov.hmrc.trustregistration.services.RegisterEstateService
 import uk.gov.hmrc.trustregistration.utils.{FailedValidation, JsonSchemaValidator, SuccessfulValidation, TrustsValidationError}
+import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 
 import scala.concurrent.Future
 
 class RegisterEstateControllerSpec extends PlaySpec with OneAppPerSuite with JsonExamples with ScalaDataExamples with BeforeAndAfter with RegisterTrustServiceMocks  {
 
   before {
-    when(mockRegisterTrustService.registerEstate(any[Estate])(any[HeaderCarrier]))
+    when(mockRegisterEstateService.registerEstate(any[Estate])(any[HeaderCarrier]))
       .thenReturn(Future.successful(Right(TRN("TRN-1234"))))
 
     when(mockHC.headers).thenReturn(List(AUTHORIZATION -> "AUTHORISED"))
@@ -49,7 +49,7 @@ class RegisterEstateControllerSpec extends PlaySpec with OneAppPerSuite with Jso
   "Get estate endpoint" must {
     "return 200 ok" when {
       "the endpoint is called with a valid identifier" in {
-        when(mockRegisterTrustService.getEstate(any[String])(any[HeaderCarrier]))
+        when(mockRegisterEstateService.getEstate(any[String])(any[HeaderCarrier]))
           .thenReturn(Future.successful(new GetSuccessResponse[Estate](validEstateWithPersonalRepresentative)))
 
         val result = SUT.getEstate("1234").apply(FakeRequest("GET",""))
@@ -61,7 +61,7 @@ class RegisterEstateControllerSpec extends PlaySpec with OneAppPerSuite with Jso
 
     "return 404 not found" when {
       "the endpoint is called with an identifier that can't be found" in {
-        when(mockRegisterTrustService.getEstate(any[String])(any[HeaderCarrier]))
+        when(mockRegisterEstateService.getEstate(any[String])(any[HeaderCarrier]))
           .thenReturn(Future.successful(NotFoundResponse))
 
         val result = SUT.getEstate("404NotFound").apply(FakeRequest("GET", ""))
@@ -72,7 +72,7 @@ class RegisterEstateControllerSpec extends PlaySpec with OneAppPerSuite with Jso
 
     "return 400" when {
       "the  endpoint is called with an invalid identifier" in {
-        when(mockRegisterTrustService.getEstate(any[String])(any[HeaderCarrier]))
+        when(mockRegisterEstateService.getEstate(any[String])(any[HeaderCarrier]))
           .thenReturn(Future.successful(BadRequestResponse))
 
         val result = SUT.getEstate("sadfg").apply(FakeRequest("GET", ""))
@@ -83,7 +83,7 @@ class RegisterEstateControllerSpec extends PlaySpec with OneAppPerSuite with Jso
 
     "return 500" when {
       "something is broken" in {
-        when(mockRegisterTrustService.getEstate(any[String])(any[HeaderCarrier]))
+        when(mockRegisterEstateService.getEstate(any[String])(any[HeaderCarrier]))
           .thenReturn(Future.successful(InternalServerErrorResponse))
 
         val result = SUT.getEstate("sadfg").apply(FakeRequest("GET", ""))
@@ -158,7 +158,7 @@ class RegisterEstateControllerSpec extends PlaySpec with OneAppPerSuite with Jso
   "Close estate endpoint" must {
     "return 200 ok" when {
       "the endpoint is valled with a valid identifier" in {
-        when(mockRegisterTrustService.closeEstate(any[String])(any[HeaderCarrier]))
+        when(mockRegisterEstateService.closeEstate(any[String])(any[HeaderCarrier]))
           .thenReturn(Future.successful(SuccessResponse))
 
         val result = SUT.closeEstate("sadfg").apply(FakeRequest("PUT", ""))
@@ -169,7 +169,7 @@ class RegisterEstateControllerSpec extends PlaySpec with OneAppPerSuite with Jso
 
     "return 400" when {
       "the endpoint is called with an invalid identifier" in {
-        when(mockRegisterTrustService.closeEstate(any[String])(any[HeaderCarrier]))
+        when(mockRegisterEstateService.closeEstate(any[String])(any[HeaderCarrier]))
           .thenReturn(Future.successful(BadRequestResponse))
 
         val result = SUT.closeEstate("sadfg").apply(FakeRequest("PUT", ""))
@@ -190,7 +190,7 @@ class RegisterEstateControllerSpec extends PlaySpec with OneAppPerSuite with Jso
 
     "return 404" when {
       "the endpoint is called and we pass an identifier that does not return a trust" in {
-        when(mockRegisterTrustService.closeEstate(any[String])(any[HeaderCarrier]))
+        when(mockRegisterEstateService.closeEstate(any[String])(any[HeaderCarrier]))
           .thenReturn(Future.successful(NotFoundResponse))
 
         val result = SUT.closeEstate("sadfg").apply(FakeRequest("PUT", ""))
@@ -201,7 +201,7 @@ class RegisterEstateControllerSpec extends PlaySpec with OneAppPerSuite with Jso
 
     "return 500" when {
       "something is broken" in {
-        when(mockRegisterTrustService.closeEstate(any[String])(any[HeaderCarrier]))
+        when(mockRegisterEstateService.closeEstate(any[String])(any[HeaderCarrier]))
           .thenReturn(Future.successful(InternalServerErrorResponse))
 
         val result = SUT.closeEstate("sadfg").apply(FakeRequest("PUT", ""))
@@ -217,8 +217,7 @@ class RegisterEstateControllerSpec extends PlaySpec with OneAppPerSuite with Jso
     override implicit def hc(implicit rh: RequestHeader): HeaderCarrier = mockHC
     override val jsonSchemaValidator = mockSchemaValidator
     override val metrics: ApplicationMetrics = mockMetrics
-    override val registerTrustService: RegisterTrustService = mockRegisterTrustService
-    override val trustExistenceService: TrustExistenceService = mockTrustExistenceService
+    override val registerEstateService: RegisterEstateService = mockRegisterEstateService
   }
 
   private def withCallToPOST(payload: JsValue)(handler: Future[Result] => Any) = {
