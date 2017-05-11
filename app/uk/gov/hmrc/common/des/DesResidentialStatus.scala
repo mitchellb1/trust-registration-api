@@ -17,10 +17,8 @@
 package uk.gov.hmrc.common.des
 
 import play.api.libs.json.Json
+case class DesResidentialStatus(uk: Option[DesUkResidentialStatus] = None, nonUk: Option[DesNonUkResidentialStatus] = None)
 
-
-case class DesAdmin(utr: String)
-
-object DesAdmin {
-  implicit val formats = Json.format[DesAdmin]
+object DesResidentialStatus {
+  implicit val formats = Json.format[DesResidentialStatus]
 }

@@ -17,10 +17,8 @@
 package uk.gov.hmrc.common.des
 
 import play.api.libs.json.Json
+case class DesEstate(entities: DesEntities, administrationEndDate: Option[String] = None, periodTaxDues: String)
 
-
-case class DesAdmin(utr: String)
-
-object DesAdmin {
-  implicit val formats = Json.format[DesAdmin]
+object DesEstate {
+  implicit val formats = Json.format[DesEstate]
 }

@@ -17,10 +17,8 @@
 package uk.gov.hmrc.common.des
 
 import play.api.libs.json.Json
+case class DesIndividualDetails(name: DesName, dateOfBirth: String, vulnerableBeneficiary: Option[Boolean] = None, beneficiaryType: Option[String] = None, beneficiaryDiscretion: Option[Boolean] = None, beneficiaryShareOfIncome: Option[String] = None, identification: DesIdentification)
 
-
-case class DesAdmin(utr: String)
-
-object DesAdmin {
-  implicit val formats = Json.format[DesAdmin]
+object DesIndividualDetails {
+  implicit val formats = Json.format[DesIndividualDetails]
 }

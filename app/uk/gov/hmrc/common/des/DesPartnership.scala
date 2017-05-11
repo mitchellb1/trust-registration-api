@@ -16,11 +16,16 @@
 
 package uk.gov.hmrc.common.des
 
-import play.api.libs.json.Json
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Reads}
+case class DesPartnership(utr: Option[String] = None, partnershipType: String, partnershipStart: Option[String] = None)
 
+object DesPartnership {
+  implicit val formats = Json.format[DesPartnership]
 
-case class DesAdmin(utr: String)
-
-object DesAdmin {
-  implicit val formats = Json.format[DesAdmin]
+  implicit val reads: Reads[DesPartnership] = (
+    (JsPath \ "utr").readNullable[String] and
+      (JsPath \ "type").read[String] and
+      (JsPath \ "partnershipStart").readNullable[String]
+    ) (DesPartnership.apply _)
 }
