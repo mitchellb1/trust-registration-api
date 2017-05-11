@@ -29,7 +29,7 @@ trait RegisterEstateController extends EstateBaseController {
 
   def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     authorised("register", "") {
-      validateEstate(request, jsonSchemaValidator, false)
+      validateEstate(request, jsonSchemaValidator)
     }
   }
 

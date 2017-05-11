@@ -40,7 +40,7 @@ trait EstateBaseController extends BaseController {
   val className: String = getClass.getSimpleName
 
 
-  def validateEstate(request: Request[JsValue], jsonSchemaValidator: JsonSchemaValidator, isTrust: Boolean = true)(implicit hc: HeaderCarrier) = {
+  def validateEstate(request: Request[JsValue], jsonSchemaValidator: JsonSchemaValidator)(implicit hc: HeaderCarrier) = {
     val jsonString = request.body.toString()
     val validationResult = jsonSchemaValidator.validateAgainstSchema(jsonString)
 
