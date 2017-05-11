@@ -15,8 +15,8 @@ object ApiServiceBuild extends Build with MicroService {
 }
 
 private object AppDependencies {
-  import play.sbt.PlayImport._
   import play.core.PlayVersion
+  import play.sbt.PlayImport._
 
   private val microserviceBootstrapVersion = "5.5.0"
   private val playHealthVersion = "2.0.0"

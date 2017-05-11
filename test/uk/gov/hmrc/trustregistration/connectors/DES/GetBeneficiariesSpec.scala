@@ -21,8 +21,8 @@ import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
+import uk.gov.hmrc.common.rest.resources.core.{BadRequestResponse, GetSuccessResponse, InternalServerErrorResponse, NotFoundResponse}
 import uk.gov.hmrc.play.http.HttpResponse
-import uk.gov.hmrc.trustregistration.models.{BadRequestResponse, GetSuccessResponse, InternalServerErrorResponse, NotFoundResponse}
 import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 
 import scala.concurrent.ExecutionContext.Implicits.global

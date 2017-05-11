@@ -18,6 +18,7 @@ package uk.gov.hmrc.trustregistration.models
 
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
+import uk.gov.hmrc.trustapi.rest.resources.core.Protectors
 import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 
 class ProtectorsSpec extends PlaySpec with JsonExamples with ScalaDataExamples {

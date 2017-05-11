@@ -18,10 +18,10 @@ package uk.gov.hmrc.estateapi.rest.controllers
 
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.common.metrics.ApplicationMetrics
+import uk.gov.hmrc.common.rest.resources.core.TRN
+import uk.gov.hmrc.common.utils.JsonSchemaValidator
 import uk.gov.hmrc.estateapi.rest.services.RegisterEstateService
-import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
-import uk.gov.hmrc.trustregistration.models.TRN
-import uk.gov.hmrc.trustregistration.utils.JsonSchemaValidator
 
 import scala.concurrent.Future
 

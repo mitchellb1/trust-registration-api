@@ -17,11 +17,12 @@
 package uk.gov.hmrc.trustregistration
 
 import org.joda.time.DateTime
-import uk.gov.hmrc.trustregistration.models._
-import uk.gov.hmrc.trustregistration.models.assets._
-import uk.gov.hmrc.trustregistration.models.beneficiaries._
-import uk.gov.hmrc.trustregistration.models.estates.{Estate, PersonalRepresentative}
-import uk.gov.hmrc.trustregistration.models.trusttypes._
+import uk.gov.hmrc.common.rest.resources.core._
+import uk.gov.hmrc.estateapi.rest.resources.core.{Estate, PersonalRepresentative}
+import uk.gov.hmrc.trustapi.rest.resources.core._
+import uk.gov.hmrc.trustapi.rest.resources.core.assets._
+import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries._
+import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes._
 
 import scala.io.Source
 

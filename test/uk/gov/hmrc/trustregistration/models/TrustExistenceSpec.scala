@@ -17,7 +17,7 @@
 package uk.gov.hmrc.trustregistration.models
 
 import org.scalatestplus.play.PlaySpec
-import play.api.libs.json.{JsResultException, Json}
+import uk.gov.hmrc.trustapi.rest.resources.core.TrustExistence
 import uk.gov.hmrc.trustregistration.JsonExamples
 
 

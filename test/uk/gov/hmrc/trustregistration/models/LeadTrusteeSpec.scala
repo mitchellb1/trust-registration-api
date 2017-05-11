@@ -17,6 +17,7 @@
 package uk.gov.hmrc.trustregistration.models
 
 import org.scalatestplus.play.PlaySpec
+import uk.gov.hmrc.trustapi.rest.resources.core.LeadTrustee
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
 
 class LeadTrusteeSpec extends PlaySpec with ScalaDataExamples {

@@ -24,13 +24,13 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{RequestHeader, Result}
 import play.api.test.Helpers._
 import play.api.test.{FakeHeaders, FakeRequest}
+import uk.gov.hmrc.common.metrics.ApplicationMetrics
+import uk.gov.hmrc.common.rest.resources.core._
+import uk.gov.hmrc.common.utils.{FailedValidation, JsonSchemaValidator, SuccessfulValidation, TrustsValidationError}
 import uk.gov.hmrc.estateapi.rest.controllers.RegisterEstateController
+import uk.gov.hmrc.estateapi.rest.resources.core.Estate
 import uk.gov.hmrc.estateapi.rest.services.RegisterEstateService
 import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
-import uk.gov.hmrc.trustregistration.models._
-import uk.gov.hmrc.trustregistration.models.estates.Estate
-import uk.gov.hmrc.trustregistration.utils.{FailedValidation, JsonSchemaValidator, SuccessfulValidation, TrustsValidationError}
 import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 
 import scala.concurrent.Future

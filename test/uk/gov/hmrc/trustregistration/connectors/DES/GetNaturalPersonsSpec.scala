@@ -16,19 +16,17 @@
 
 package uk.gov.hmrc.trustregistration.connectors.DES
 
-import org.joda.time.DateTime
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
+import uk.gov.hmrc.common.rest.resources.core.{BadRequestResponse, GetSuccessResponse, InternalServerErrorResponse, NotFoundResponse}
 import uk.gov.hmrc.play.http._
 import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
-import uk.gov.hmrc.trustregistration.models._
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
-import scala.io.Source
 
 
 class GetNaturalPersonsSpec extends PlaySpec with OneAppPerSuite with DESConnectorMocks with BeforeAndAfter with JsonExamples with ScalaDataExamples {

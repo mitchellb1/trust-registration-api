@@ -21,7 +21,7 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration._
 import play.api.libs.json.Json
-import uk.gov.hmrc.trustregistration.models.TrustApiServiceRegistration
+import uk.gov.hmrc.common.rest.resources.core.TrustApiServiceRegistration
 
 
 trait WiremockServiceLocatorSugar {

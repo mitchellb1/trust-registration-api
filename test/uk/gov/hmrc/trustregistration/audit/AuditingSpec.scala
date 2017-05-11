@@ -20,6 +20,7 @@ import org.mockito.Mockito._
 import org.mockito.{ArgumentCaptor, Matchers}
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.{OneAppPerTest, PlaySpec}
+import uk.gov.hmrc.common.audit.Auditor
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.DataEvent
 import uk.gov.hmrc.play.http._
@@ -39,7 +40,7 @@ class AuditingSpec extends PlaySpec
   "doAudit" must {
     "generate a data event" when {
       val mockAuditConnector = mock[AuditConnector]
-      object TestAudit extends TrustsAudit {
+      object TestAudit extends Auditor {
         override val auditConnector = mockAuditConnector
       }
 

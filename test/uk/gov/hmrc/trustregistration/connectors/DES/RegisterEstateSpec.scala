@@ -21,10 +21,10 @@ import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Writes
+import uk.gov.hmrc.common.rest.resources.core.TRN
+import uk.gov.hmrc.estateapi.rest.resources.core.EstateRegistrationDocument
 import uk.gov.hmrc.play.http.{HeaderCarrier, HttpReads, HttpResponse, Upstream4xxResponse}
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
-import uk.gov.hmrc.trustregistration.models.TRN
-import uk.gov.hmrc.trustregistration.models.estates.EstateRegistrationDocument
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}

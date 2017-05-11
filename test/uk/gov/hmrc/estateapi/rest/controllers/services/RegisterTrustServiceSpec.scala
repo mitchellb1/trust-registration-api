@@ -20,16 +20,14 @@ import org.mockito.Matchers._
 import org.mockito.Mockito.when
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
+import uk.gov.hmrc.common.connectors.DesConnector
+import uk.gov.hmrc.common.rest.resources.core._
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustapi.rest.services.RegisterTrustService
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
-import uk.gov.hmrc.trustregistration.connectors.DesConnector
-import uk.gov.hmrc.trustregistration.models._
-import uk.gov.hmrc.trustregistration.models.estates.EstateRegistrationDocument
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
-import scala.util.Right
 
 class RegisterTrustServiceSpec extends PlaySpec
   with MockitoSugar

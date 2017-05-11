@@ -17,6 +17,7 @@
 package uk.gov.hmrc.trustregistration.models
 
 import org.scalatestplus.play.PlaySpec
+import uk.gov.hmrc.trustapi.rest.resources.core.NaturalPeople
 import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 
 class NaturalPeopleSpec extends PlaySpec with JsonExamples with ScalaDataExamples {

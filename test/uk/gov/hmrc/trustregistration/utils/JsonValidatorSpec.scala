@@ -18,6 +18,7 @@ package uk.gov.hmrc.trustregistration.utils
 
 import com.fasterxml.jackson.databind.JsonNode
 import org.scalatestplus.play.PlaySpec
+import uk.gov.hmrc.common.utils.{FailedValidation, JsonSchemaValidator, SuccessfulValidation, TrustsValidationError}
 import uk.gov.hmrc.trustregistration.SchemaValidationExamples
 
 

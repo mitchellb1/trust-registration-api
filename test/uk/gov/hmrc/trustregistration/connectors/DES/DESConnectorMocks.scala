@@ -20,12 +20,12 @@ import org.mockito.Matchers
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
+import uk.gov.hmrc.common.audit.Auditor
+import uk.gov.hmrc.common.connectors.DesConnector
+import uk.gov.hmrc.common.metrics.ApplicationMetrics
 import uk.gov.hmrc.play.http._
-import uk.gov.hmrc.trustregistration.audit.TrustsAudit
-import uk.gov.hmrc.trustregistration.connectors.DesConnector
-import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 trait DESConnectorMocks extends MockitoSugar {
   implicit val hc = HeaderCarrier()
@@ -34,7 +34,7 @@ trait DESConnectorMocks extends MockitoSugar {
   val mockHttpPut = mock[HttpPut]
   val mockHttpGet = mock[HttpGet]
   val mockTrustMetrics = mock[ApplicationMetrics]
-  val mockAudit = mock[TrustsAudit]
+  val mockAudit = mock[Auditor]
 
   private val mockContext = new com.codahale.metrics.Timer().time()
 
@@ -46,7 +46,7 @@ trait DESConnectorMocks extends MockitoSugar {
     override val httpGet: HttpGet = mockHttpGet
 
     override val metrics: ApplicationMetrics = mockTrustMetrics
-    override val audit: TrustsAudit = mockAudit
+    override val audit: Auditor = mockAudit
   }
 
   def setHttpPutResponse(response: Future[HttpResponse]): Unit = {

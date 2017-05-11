@@ -20,12 +20,10 @@ import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.OneAppPerSuite
+import uk.gov.hmrc.common.config.ServiceLocatorRegistration
+import uk.gov.hmrc.common.connectors.ServiceLocatorConnector
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
-import uk.gov.hmrc.trustregistration.ServiceLocatorRegistration
-import uk.gov.hmrc.trustregistration.connectors.ServiceLocatorConnector
-
-import scala.concurrent.Future
 
 class RegisterInServiceLocatorSpec extends UnitSpec with MockitoSugar with OneAppPerSuite {
 
