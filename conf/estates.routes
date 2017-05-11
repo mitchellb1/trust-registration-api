@@ -1,0 +1,4 @@
+
+POST       /                             uk.gov.hmrc.estateapi.rest.controllers.RegisterEstateController.register()
+PUT        /:identifier/close           uk.gov.hmrc.estateapi.rest.controllers.RegisterEstateController.closeEstate(identifier: String)
+GET        /:identifier                 uk.gov.hmrc.estateapi.rest.controllers.RegisterEstateController.getEstate(identifier: String)

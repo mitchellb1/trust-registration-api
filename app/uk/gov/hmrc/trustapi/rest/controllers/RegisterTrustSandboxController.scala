@@ -14,26 +14,35 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.controllers
+package uk.gov.hmrc.trustapi.rest.controllers
 
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.trustapi.rest.services.{RegisterTrustService, TrustExistenceService}
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models.TRN
-import uk.gov.hmrc.trustregistration.services.{RegisterEstateService, RegisterTrustService, TrustExistenceService}
 import uk.gov.hmrc.trustregistration.utils.JsonSchemaValidator
 
 import scala.concurrent.Future
 
-trait RegisterEstateSandboxController extends RegisterEstateController {
+trait RegisterTrustSandboxController extends RegisterTrustController {
     override def register(): Action[JsValue] = Action.async(parse.json) { implicit request =>
       Future.successful(Created(Json.toJson(TRN("TRN-1234"))))
+    }
+
+    override def noChange(identifier: String): Action[AnyContent] = Action.async { implicit request =>
+      Future.successful(Ok)
+    }
+
+    override def closeTrust(identifier: String): Action[AnyContent] = Action.async { implicit request =>
+      Future.successful(Ok)
     }
 }
 
 
-object RegisterEstateSandboxController extends RegisterEstateSandboxController {
-  override val registerEstateService = RegisterEstateService
-    override val metrics = ApplicationMetrics
+object RegisterTrustSandboxController extends RegisterTrustSandboxController {
+  override val registerTrustService = RegisterTrustService
+  override val trustExistenceService = TrustExistenceService
+  override val metrics = ApplicationMetrics
   override val jsonSchemaValidator = JsonSchemaValidator
 }

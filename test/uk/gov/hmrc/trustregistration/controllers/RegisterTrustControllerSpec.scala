@@ -31,7 +31,8 @@ import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.models.beneficiaries.Beneficiaries
-import uk.gov.hmrc.trustregistration.services.{RegisterTrustService, TrustExistenceService}
+import uk.gov.hmrc.trustapi.rest.controllers.RegisterTrustController
+import uk.gov.hmrc.trustapi.rest.services.{RegisterTrustService, TrustExistenceService}
 import uk.gov.hmrc.trustregistration.utils.{TrustsValidationError, _}
 import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 

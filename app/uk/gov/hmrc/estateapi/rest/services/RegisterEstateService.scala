@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.services
+package uk.gov.hmrc.estateapi.rest.services
 
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustregistration.connectors.DesConnector

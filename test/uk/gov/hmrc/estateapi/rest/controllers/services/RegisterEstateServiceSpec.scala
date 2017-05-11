@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.services
+package uk.gov.hmrc.estateapi.rest.controllers.services
 
 import org.mockito.Matchers._
 import org.mockito.Mockito.when
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
+import uk.gov.hmrc.estateapi.rest.services.RegisterEstateService
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
 import uk.gov.hmrc.trustregistration.connectors.DesConnector

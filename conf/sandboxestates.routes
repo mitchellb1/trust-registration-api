@@ -1,0 +1,2 @@
+POST       /                             uk.gov.hmrc.estateapi.rest.controllers.RegisterEstateSandboxController.register()
+PUT        /:identifier/close            uk.gov.hmrc.estateapi.rest.controllers.RegisterEstateSandboxController.closeEstate(identifier: String)
