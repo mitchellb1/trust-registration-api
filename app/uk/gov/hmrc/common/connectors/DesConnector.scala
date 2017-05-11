@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.connectors
+package uk.gov.hmrc.common.connectors
 
 import com.codahale.metrics.Timer
 import play.api.libs.json.Reads
+import uk.gov.hmrc.common.audit.Auditor
+import uk.gov.hmrc.common.config.WSHttp
+import uk.gov.hmrc.common.metrics.ApplicationMetrics
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http._
-import uk.gov.hmrc.trustregistration.audit.TrustsAudit
-import uk.gov.hmrc.trustregistration.config.WSHttp
-import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.models.beneficiaries.Beneficiaries
 import uk.gov.hmrc.trustregistration.models.estates.Estate
@@ -35,7 +35,7 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
   val httpPut: HttpPut = WSHttp
   val httpGet: HttpGet = WSHttp
 
-  val audit: TrustsAudit
+  val audit: Auditor
   val metrics: ApplicationMetrics
 
   val AuditNoChangeIdentifier: String = "trustRegistration_noAnnualChangeTrust"
@@ -267,6 +267,6 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
 }
 
 object DesConnector extends DesConnector {
-  override val audit: TrustsAudit = TrustsAudit
+  override val audit: Auditor = Auditor
   override val metrics: ApplicationMetrics = ApplicationMetrics
 }

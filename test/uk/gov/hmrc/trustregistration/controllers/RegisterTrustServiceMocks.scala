@@ -23,8 +23,8 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Request, RequestHeader, Result}
 import play.api.test.{FakeHeaders, FakeRequest}
 import play.api.test.Helpers._
+import uk.gov.hmrc.common.metrics.ApplicationMetrics
 import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.estateapi.rest.services.RegisterEstateService
 import uk.gov.hmrc.trustapi.rest.services.{RegisterTrustService, TrustExistenceService}
 

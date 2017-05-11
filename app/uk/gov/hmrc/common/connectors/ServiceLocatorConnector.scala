@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.connectors
+package uk.gov.hmrc.common.connectors
 
 import play.api.Logger
+import uk.gov.hmrc.common.config.{AppContext, WSHttp}
 import uk.gov.hmrc.play.http.{HeaderCarrier, HttpPost}
-import uk.gov.hmrc.trustregistration.AppContext
-import uk.gov.hmrc.trustregistration.config.WSHttp
 import uk.gov.hmrc.trustregistration.models.TrustApiServiceRegistration
 
 import scala.concurrent.ExecutionContext.Implicits.global

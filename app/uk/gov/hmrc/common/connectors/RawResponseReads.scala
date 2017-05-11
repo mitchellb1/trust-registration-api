@@ -14,22 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.utils
+package uk.gov.hmrc.common.connectors
 
-import play.api.libs.json.Json
+import uk.gov.hmrc.play.http.{HttpReads, HttpResponse}
 
-trait ValidationResult
-
-case class TrustsValidationError(message: String, location: String)
-
-object TrustsValidationError {
-  implicit val formats = Json.format[TrustsValidationError]
+trait RawResponseReads {
+    val httpReads: HttpReads[HttpResponse] = new HttpReads[HttpResponse] {
+      override def read(method: String, url: String, response: HttpResponse) = response
+    }
 }
-
-case class FailedValidation(message: String, code: Int, validationErrors: Seq[TrustsValidationError]) extends ValidationResult
-
-object FailedValidation {
-  implicit val formats = Json.format[FailedValidation]
-}
-
-case object SuccessfulValidation extends ValidationResult

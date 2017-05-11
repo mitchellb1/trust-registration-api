@@ -19,16 +19,16 @@ package uk.gov.hmrc.estateapi.rest.controllers
 import play.api.Logger
 import play.api.libs.json.{JsError, JsObject, JsValue, Json}
 import play.api.mvc.{Request, Result}
+import uk.gov.hmrc.common.metrics.ApplicationMetrics
+import uk.gov.hmrc.common.utils.{FailedValidation, JsonSchemaValidator}
 import uk.gov.hmrc.estateapi.rest.services.RegisterEstateService
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.microservice.controller.BaseController
-import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.models.beneficiaries.Beneficiaries
 import uk.gov.hmrc.trustregistration.models.estates.Estate
-import uk.gov.hmrc.trustregistration.utils.{FailedValidation, JsonSchemaValidator}
-import scala.concurrent.ExecutionContext.Implicits.global
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.utils
+package uk.gov.hmrc.common.utils
 
 import java.io.{PrintWriter, StringWriter}
 

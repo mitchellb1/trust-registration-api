@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.metrics
+package uk.gov.hmrc.common.metrics
 
 import com.codahale.metrics.Timer
 import com.codahale.metrics.Timer.Context

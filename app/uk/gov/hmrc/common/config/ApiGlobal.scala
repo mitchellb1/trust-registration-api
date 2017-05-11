@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration
+package uk.gov.hmrc.common.config
 
 import com.typesafe.config.Config
 import net.ceedubs.ficus.Ficus._
 import play.api.Play._
 import play.api._
+import uk.gov.hmrc.common.connectors.ServiceLocatorConnector
 import uk.gov.hmrc.play.audit.filters.AuditFilter
 import uk.gov.hmrc.play.auth.controllers.AuthParamsControllerConfig
 import uk.gov.hmrc.play.auth.microservice.filters.AuthorisationFilter
@@ -28,8 +29,6 @@ import uk.gov.hmrc.play.filters.MicroserviceFilterSupport
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.http.logging.filters.LoggingFilter
 import uk.gov.hmrc.play.microservice.bootstrap.DefaultMicroserviceGlobal
-import uk.gov.hmrc.trustregistration.config.{MicroserviceAuditConnector, MicroserviceAuthConnector}
-import uk.gov.hmrc.trustregistration.connectors.ServiceLocatorConnector
 
 
 trait ServiceLocatorRegistration extends GlobalSettings with RunMode {
@@ -98,5 +97,5 @@ object AppContext extends ServicesConfig {
   lazy val appName = current.configuration.getString("appName").getOrElse(throw new RuntimeException("appName is not configured"))
   lazy val appUrl = current.configuration.getString("appUrl").getOrElse(throw new RuntimeException("appUrl is not configured"))
   lazy val serviceLocatorUrl: String = baseUrl("service-locator")
-  lazy val registrationEnabled: Boolean = current.configuration.getBoolean(s"${env}.microservice.services.service-locator.enabled").getOrElse(true)
+  lazy val registrationEnabled: Boolean = current.configuration.getBoolean(s"${env}.microservice.protected.mdtp.service-locator.enabled").getOrElse(true)
 }

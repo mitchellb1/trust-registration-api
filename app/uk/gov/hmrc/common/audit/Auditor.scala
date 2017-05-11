@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.audit
+package uk.gov.hmrc.common.audit
 
 import play.api.Logger
+import uk.gov.hmrc.common.config.ApiGlobal
 import uk.gov.hmrc.play.audit.AuditExtensions._
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.DataEvent
 import uk.gov.hmrc.play.config.AppName
 import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.trustregistration.ApiGlobal
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-trait TrustsAudit {
+trait Auditor {
 
   val auditConnector: AuditConnector = ApiGlobal.auditConnector
   val appName: String = AppName.appName
@@ -60,4 +60,4 @@ trait TrustsAudit {
   }
 }
 
-object TrustsAudit extends TrustsAudit
+object Auditor extends Auditor

@@ -29,9 +29,10 @@ import play.api.Play
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.common.connectors.ServiceLocatorConnector
+
 import scala.concurrent.Future
 import uk.gov.hmrc.play.http.HttpPost
-import uk.gov.hmrc.trustregistration.connectors.ServiceLocatorConnector
 import uk.gov.hmrc.trustregistration.controllers.DocumentationController
 import uk.gov.hmrc.play.http.HeaderCarrier
 
