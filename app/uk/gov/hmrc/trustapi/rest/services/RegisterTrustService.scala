@@ -17,8 +17,9 @@
 package uk.gov.hmrc.trustapi.rest.services
 
 import uk.gov.hmrc.common.connectors.DesConnector
+import uk.gov.hmrc.common.rest.resources.core.{ApplicationResponse, TRN}
 import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.trustregistration.models._
+import uk.gov.hmrc.trustapi.rest.resources.core.Trust
 
 import scala.concurrent.Future
 

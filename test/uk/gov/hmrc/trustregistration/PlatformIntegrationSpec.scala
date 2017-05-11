@@ -19,22 +19,18 @@ package uk.gov.hmrc.trustregistration
 import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
 import org.mockito.ArgumentCaptor
-import org.scalatest.BeforeAndAfter
-import org.scalatest.concurrent.ScalaFutures
+import org.mockito.Matchers.any
+import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
-import org.mockito.Mockito._
-import org.mockito.Matchers.any
 import play.api.Play
-import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.common.connectors.ServiceLocatorConnector
+import uk.gov.hmrc.play.http.{HeaderCarrier, HttpPost}
+import uk.gov.hmrc.trustregistration.controllers.DocumentationController
 
 import scala.concurrent.Future
-import uk.gov.hmrc.play.http.HttpPost
-import uk.gov.hmrc.trustregistration.controllers.DocumentationController
-import uk.gov.hmrc.play.http.HeaderCarrier
 
 
 class PlatformIntegrationSpec extends PlaySpec

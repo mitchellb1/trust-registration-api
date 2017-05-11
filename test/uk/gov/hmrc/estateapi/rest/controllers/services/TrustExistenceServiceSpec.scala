@@ -17,14 +17,13 @@
 package uk.gov.hmrc.estateapi.rest.controllers.services
 
 import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
-import uk.gov.hmrc.trustregistration.ScalaDataExamples
-import org.mockito.Mockito.when
 import uk.gov.hmrc.common.connectors.DesConnector
-import uk.gov.hmrc.play.http.{HeaderCarrier, Upstream4xxResponse}
+import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustapi.rest.services.TrustExistenceService
-import uk.gov.hmrc.trustregistration.models.NotFoundResponse
+import uk.gov.hmrc.trustregistration.ScalaDataExamples
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}

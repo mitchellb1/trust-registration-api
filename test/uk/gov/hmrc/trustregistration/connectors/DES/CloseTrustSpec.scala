@@ -16,11 +16,9 @@
 
 package uk.gov.hmrc.trustregistration.connectors.DES
 
-import org.mockito.Matchers
-import org.mockito.Mockito._
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
+import uk.gov.hmrc.common.rest.resources.core.{BadRequestResponse, InternalServerErrorResponse, NotFoundResponse, SuccessResponse}
 import uk.gov.hmrc.play.http._
-import uk.gov.hmrc.trustregistration.models.{BadRequestResponse, InternalServerErrorResponse, NotFoundResponse, SuccessResponse}
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}

@@ -22,8 +22,8 @@ import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
+import uk.gov.hmrc.common.rest.resources.core._
 import uk.gov.hmrc.play.http._
-import uk.gov.hmrc.trustregistration.models._
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}

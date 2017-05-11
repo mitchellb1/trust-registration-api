@@ -21,11 +21,12 @@ import play.api.libs.json.Reads
 import uk.gov.hmrc.common.audit.Auditor
 import uk.gov.hmrc.common.config.WSHttp
 import uk.gov.hmrc.common.metrics.ApplicationMetrics
+import uk.gov.hmrc.common.rest.resources.core._
+import uk.gov.hmrc.estateapi.rest.resources.core.Estate
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http._
-import uk.gov.hmrc.trustregistration.models._
-import uk.gov.hmrc.trustregistration.models.beneficiaries.Beneficiaries
-import uk.gov.hmrc.trustregistration.models.estates.Estate
+import uk.gov.hmrc.trustapi.rest.resources.core._
+import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.Beneficiaries
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

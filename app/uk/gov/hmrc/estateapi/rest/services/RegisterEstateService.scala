@@ -17,9 +17,9 @@
 package uk.gov.hmrc.estateapi.rest.services
 
 import uk.gov.hmrc.common.connectors.DesConnector
+import uk.gov.hmrc.common.rest.resources.core.{ApplicationResponse, TRN}
+import uk.gov.hmrc.estateapi.rest.resources.core.Estate
 import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.trustregistration.models._
-import uk.gov.hmrc.trustregistration.models.estates.Estate
 
 import scala.concurrent.Future
 

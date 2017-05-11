@@ -17,8 +17,8 @@
 package uk.gov.hmrc.trustregistration.connectors.DES
 
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
+import uk.gov.hmrc.common.rest.resources.core.{BadRequestResponse, InternalServerErrorResponse, NotFoundResponse, SuccessResponse}
 import uk.gov.hmrc.play.http.{HttpResponse, Upstream4xxResponse}
-import uk.gov.hmrc.trustregistration.models.{BadRequestResponse, InternalServerErrorResponse, NotFoundResponse, SuccessResponse}
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}

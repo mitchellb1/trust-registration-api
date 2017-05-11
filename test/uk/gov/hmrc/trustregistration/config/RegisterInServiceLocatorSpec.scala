@@ -25,8 +25,6 @@ import uk.gov.hmrc.common.connectors.ServiceLocatorConnector
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 
-import scala.concurrent.Future
-
 class RegisterInServiceLocatorSpec extends UnitSpec with MockitoSugar with OneAppPerSuite {
 
   trait Setup extends ServiceLocatorRegistration {

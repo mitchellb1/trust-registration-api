@@ -25,7 +25,7 @@ import uk.gov.hmrc.common.connectors.DesConnector
 import uk.gov.hmrc.common.metrics.ApplicationMetrics
 import uk.gov.hmrc.play.http._
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 trait DESConnectorMocks extends MockitoSugar {
   implicit val hc = HeaderCarrier()

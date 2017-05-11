@@ -20,15 +20,13 @@ import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Request, RequestHeader, Result}
-import play.api.test.{FakeHeaders, FakeRequest}
+import play.api.mvc.Request
 import play.api.test.Helpers._
+import play.api.test.{FakeHeaders, FakeRequest}
 import uk.gov.hmrc.common.metrics.ApplicationMetrics
-import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.estateapi.rest.services.RegisterEstateService
+import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustapi.rest.services.{RegisterTrustService, TrustExistenceService}
-
-import scala.concurrent.Future
 
 
 trait RegisterTrustServiceMocks extends MockitoSugar {

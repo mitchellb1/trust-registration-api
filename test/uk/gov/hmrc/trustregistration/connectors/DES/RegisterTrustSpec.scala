@@ -21,9 +21,10 @@ import org.mockito.Matchers.any
 import org.mockito.Mockito._
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Writes
+import uk.gov.hmrc.common.rest.resources.core.TRN
 import uk.gov.hmrc.play.http._
+import uk.gov.hmrc.trustapi.rest.resources.core.Trust
 import uk.gov.hmrc.trustregistration.ScalaDataExamples
-import uk.gov.hmrc.trustregistration.models._
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}

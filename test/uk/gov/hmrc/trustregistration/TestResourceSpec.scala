@@ -16,10 +16,9 @@
 
 package uk.gov.hmrc.trustregistration
 
-import org.joda.time.DateTime
 import play.api.libs.json.Json
+import uk.gov.hmrc.common.rest.resources.core.{Individual, Passport}
 import uk.gov.hmrc.play.test.UnitSpec
-import uk.gov.hmrc.trustregistration.models.{Passport, Individual}
 
 import scala.io.Source
 

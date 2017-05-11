@@ -26,10 +26,11 @@ import play.api.mvc.{RequestHeader, Result}
 import play.api.test.Helpers._
 import play.api.test.{FakeHeaders, FakeRequest}
 import uk.gov.hmrc.common.metrics.ApplicationMetrics
+import uk.gov.hmrc.common.rest.resources.core.{SuccessResponse, TRN}
 import uk.gov.hmrc.common.utils.JsonSchemaValidator
 import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustapi.rest.controllers.RegisterTrustSandboxController
+import uk.gov.hmrc.trustapi.rest.resources.core.Trust
 import uk.gov.hmrc.trustapi.rest.services.{RegisterTrustService, TrustExistenceService}
 import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
 
