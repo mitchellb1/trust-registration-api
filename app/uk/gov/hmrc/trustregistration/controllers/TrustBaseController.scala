@@ -25,7 +25,7 @@ import uk.gov.hmrc.trustregistration.metrics.ApplicationMetrics
 import uk.gov.hmrc.trustregistration.models._
 import uk.gov.hmrc.trustregistration.models.beneficiaries.Beneficiaries
 import uk.gov.hmrc.trustregistration.models.estates.Estate
-import uk.gov.hmrc.trustregistration.services.{RegisterEstateService, RegisterTrustService, TrustExistenceService}
+import uk.gov.hmrc.trustregistration.services.{RegisterTrustService, TrustExistenceService}
 import uk.gov.hmrc.trustregistration.utils.{FailedValidation, JsonSchemaValidator}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -41,7 +41,7 @@ trait TrustBaseController extends BaseController {
   val className: String = getClass.getSimpleName
 
 
-  def validateTrustEstate(request: Request[JsValue], jsonSchemaValidator: JsonSchemaValidator, isTrust: Boolean = true)(implicit hc: HeaderCarrier) = {
+  def validateTrust(request: Request[JsValue], jsonSchemaValidator: JsonSchemaValidator)(implicit hc: HeaderCarrier) = {
     val jsonString = request.body.toString()
     val validationResult = jsonSchemaValidator.validateAgainstSchema(jsonString)
 
@@ -53,12 +53,12 @@ trait TrustBaseController extends BaseController {
         try {
           request.body.validate[TrustEstateRequest].map {
             request: TrustEstateRequest => {
-              if (isTrustReRegister(request, isTrust)) {
+              if (isTrustReRegister(request)) {
                 val trust = request.trustEstate.trust.get
                 val response = trustExistenceService.trustExistence(TrustExistence(trust.name, trust.utr, trust.correspondenceAddress.postalCode))
                 response.flatMap {
                   case Right("204") => {
-                    GetRegisterTrustEstateResponse(isTrust, request)
+                    GetRegisterTrustResponse(request)
                   }
                   case Left("404") => Future.successful(NotFound)
                   case Left("400") => Future.successful(BadRequest)
@@ -67,7 +67,7 @@ trait TrustBaseController extends BaseController {
                 }
               }
               else {
-                GetRegisterTrustEstateResponse(isTrust, request)
+                GetRegisterTrustResponse(request)
               }
             }
           }.recoverTotal {
@@ -173,20 +173,16 @@ trait TrustBaseController extends BaseController {
     }
   }
 
-  private def isTrustReRegister(request: TrustEstateRequest, isTrust: Boolean) = {
-    if (isTrust) request.trustEstate.trust.get.utr.exists(_.nonEmpty) else false
+  private def isTrustReRegister(request: TrustEstateRequest) = {
+    request.trustEstate.trust.get.utr.exists(_.nonEmpty)
   }
 
-  private def GetRegisterTrustEstateResponse(isTrust: Boolean, trustEstate: TrustEstateRequest)(implicit hc: HeaderCarrier) = {
-    RegisterTrustOrEstate(isTrust, trustEstate).map {
+  private def GetRegisterTrustResponse(trustEstate: TrustEstateRequest)(implicit hc: HeaderCarrier) = {
+    registerTrustService.registerTrust(trustEstate.trustEstate.trust.get).map {
       case Right(identifier) => Created(Json.toJson(identifier))
       case Left("503") => InternalServerError
       case _ => BadRequest("""{"message": "Failed serialization"}""")
     }
-  }
-
-  private def RegisterTrustOrEstate(isTrust: Boolean, trustEstateRequest: TrustEstateRequest)(implicit hc: HeaderCarrier) = {
-    if (isTrust) registerTrustService.registerTrust(trustEstateRequest.trustEstate.trust.get) else registerTrustService.registerEstate(trustEstateRequest.trustEstate.estate.get)
   }
 
   private def GenerateInvalidJsonResponse(errorMessage: String, location: String) = {
