@@ -20,7 +20,7 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.common.metrics.ApplicationMetrics
 import uk.gov.hmrc.common.rest.resources.core.TRN
-import uk.gov.hmrc.common.utils.JsonSchemaValidator
+import uk.gov.hmrc.common.utils.EstateSchemaValidator
 import uk.gov.hmrc.estateapi.rest.services.RegisterEstateService
 
 import scala.concurrent.Future
@@ -39,5 +39,5 @@ trait RegisterEstateSandboxController extends RegisterEstateController {
 object RegisterEstateSandboxController extends RegisterEstateSandboxController {
   override val registerEstateService = RegisterEstateService
     override val metrics = ApplicationMetrics
-  override val jsonSchemaValidator = JsonSchemaValidator
+  override val jsonSchemaValidator = EstateSchemaValidator
 }

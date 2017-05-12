@@ -111,3 +111,9 @@ object JsonSchemaValidator extends JsonSchemaValidator {
 
   lazy val schema: JsonNode = JsonLoader.fromPath(s"${Play.application.path}/public/api/trusts/conf/1.0/schemas/trustestate.json")
 }
+
+object EstateSchemaValidator extends JsonSchemaValidator {
+  import play.api.Play.current
+
+  lazy val schema: JsonNode = JsonLoader.fromPath(s"${Play.application.path}/public/api/trusts/conf/1.0/schemas/estatesSchema.json")
+}

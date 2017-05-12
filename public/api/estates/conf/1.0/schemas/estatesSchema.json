@@ -1,0 +1,447 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Register Estate",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "estate": {
+      "$ref": "#/definitions/estateType"
+    }
+  },
+  "definitions": {
+    "correspondenceAddressType": {
+      "description": "Correspondence Address Type",
+      "additionalProperties": false,
+      "properties": {
+        "countryCode": {
+          "$ref": "#/definitions/countryCodeType"
+        },
+        "line1": {
+          "maxLength": 28,
+          "type": "string"
+        },
+        "line2": {
+          "maxLength": 28,
+          "type": "string"
+        },
+        "line3": {
+          "maxLength": 28,
+          "type": "string"
+        },
+        "line4": {
+          "maxLength": 17,
+          "type": "string"
+        },
+        "postalCode": {
+          "$ref": "#/definitions/postalCodeType"
+        }
+      },
+      "type": "object",
+      "required": [
+        "line1",
+        "countryCode"
+      ]
+    },
+    "countryCodeType": {
+      "description": "List of ISO Country Codes",
+      "enum": [
+        "AD",
+        "AE",
+        "AF",
+        "AG",
+        "AI",
+        "AL",
+        "AM",
+        "AN",
+        "AO",
+        "AQ",
+        "AR",
+        "AS",
+        "AT",
+        "AU",
+        "AW",
+        "AX",
+        "AZ",
+        "BA",
+        "BB",
+        "BD",
+        "BE",
+        "BF",
+        "BG",
+        "BH",
+        "BI",
+        "BJ",
+        "BL",
+        "BM",
+        "BN",
+        "BO",
+        "BQ",
+        "BR",
+        "BS",
+        "BT",
+        "BV",
+        "BW",
+        "BY",
+        "BZ",
+        "CA",
+        "CC",
+        "CD",
+        "CF",
+        "CG",
+        "CH",
+        "CI",
+        "CK",
+        "CL",
+        "CM",
+        "CN",
+        "CO",
+        "CR",
+        "CS",
+        "CU",
+        "CV",
+        "CW",
+        "CX",
+        "CY",
+        "CZ",
+        "DE",
+        "DJ",
+        "DK",
+        "DM",
+        "DO",
+        "DZ",
+        "EC",
+        "EE",
+        "EG",
+        "EH",
+        "ER",
+        "ES",
+        "ET",
+        "FI",
+        "FJ",
+        "FK",
+        "FM",
+        "FO",
+        "FR",
+        "GA",
+        "GB",
+        "GD",
+        "GE",
+        "GF",
+        "GG",
+        "GH",
+        "GI",
+        "GL",
+        "GM",
+        "GN",
+        "GP",
+        "GQ",
+        "GR",
+        "GS",
+        "GT",
+        "GU",
+        "GW",
+        "GY",
+        "HK",
+        "HM",
+        "HN",
+        "HR",
+        "HT",
+        "HU",
+        "ID",
+        "IE",
+        "IL",
+        "IM",
+        "IN",
+        "IO",
+        "IQ",
+        "IR",
+        "IS",
+        "IT",
+        "JE",
+        "JM",
+        "JO",
+        "JP",
+        "KE",
+        "KG",
+        "KH",
+        "KI",
+        "KM",
+        "KN",
+        "KP",
+        "KR",
+        "KW",
+        "KY",
+        "KZ",
+        "LA",
+        "LB",
+        "LC",
+        "LI",
+        "LK",
+        "LR",
+        "LS",
+        "LT",
+        "LU",
+        "LV",
+        "LY",
+        "MA",
+        "MC",
+        "MD",
+        "ME",
+        "MF",
+        "MG",
+        "MH",
+        "MK",
+        "ML",
+        "MM",
+        "MN",
+        "MO",
+        "MP",
+        "MQ",
+        "MR",
+        "MS",
+        "MT",
+        "MU",
+        "MV",
+        "MW",
+        "MX",
+        "MY",
+        "MZ",
+        "NA",
+        "NC",
+        "NE",
+        "NF",
+        "NG",
+        "NI",
+        "NL",
+        "NO",
+        "NP",
+        "NR",
+        "NT",
+        "NU",
+        "NZ",
+        "OM",
+        "PA",
+        "PE",
+        "PF",
+        "PG",
+        "PH",
+        "PK",
+        "PL",
+        "PM",
+        "PN",
+        "PR",
+        "PS",
+        "PT",
+        "PW",
+        "PY",
+        "QA",
+        "RE",
+        "RO",
+        "RS",
+        "RU",
+        "RW",
+        "SA",
+        "SB",
+        "SC",
+        "SD",
+        "SE",
+        "SG",
+        "SH",
+        "SI",
+        "SJ",
+        "SK",
+        "SL",
+        "SM",
+        "SN",
+        "SO",
+        "SR",
+        "SS",
+        "ST",
+        "SV",
+        "SX",
+        "SY",
+        "SZ",
+        "TC",
+        "TD",
+        "TF",
+        "TG",
+        "TH",
+        "TJ",
+        "TK",
+        "TL",
+        "TM",
+        "TN",
+        "TO",
+        "TP",
+        "TR",
+        "TT",
+        "TV",
+        "TW",
+        "TZ",
+        "UA",
+        "UG",
+        "UM",
+        "UN",
+        "US",
+        "UY",
+        "UZ",
+        "VA",
+        "VC",
+        "VE",
+        "VG",
+        "VI",
+        "VN",
+        "VU",
+        "WF",
+        "WS",
+        "YE",
+        "YT",
+        "ZA",
+        "ZM",
+        "ZW"
+      ]
+    },
+    "deceasedType": {
+      "description": "Deceased Individual Type",
+      "additionalProperties": false,
+      "properties": {
+        "dateOfDeath": {
+          "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+          "type": "string"
+        },
+        "individual": {
+          "$ref": "#/definitions/individualType"
+        }
+      },
+      "type": "object",
+      "required": [
+        "dateOfDeath",
+        "individual"
+      ]
+    },
+    "estateType": {
+      "description": "Estate Type",
+      "additionalProperties": false,
+      "properties": {
+        "estateName": {
+          "maxLength": 56,
+          "type": "string"
+        },
+        "correspondenceAddress": {
+          "$ref": "#/definitions/correspondenceAddressType"
+        },
+        "personalRepresentative": {
+          "$ref": "#/definitions/personalRepresentativeType"
+        },
+        "adminPeriodFinishedDate": {
+          "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+          "type": "string"
+        },
+        "reasonEstateSetup": {
+          "description" : " A reason the Estate is being set up\na) Is the total Income Tax and Capital Gains Tax due for the administration period more than £10,000? ????\nb) If the date of death was before 5 April 2016, did more than £250,000 come from the sale of the estate's assets by administrators or executors, in any one tax year? ????\nc) If the date of death is on or after 6 April 2016, did more than £500,000 come from the sale of the estate's assets by administrators or executors in any one tax year? ???\nd) Was the estate worth more than £2.5 million at the date of death? ????",
+          "enum": [
+            "incomeTaxDueMoreThan10000",
+            "saleOfEstateAssetsMoreThan250000",
+            "saleOfEstateAssetsMoreThan500000",
+            "worthMoreThanTwoAndHalfMillionAtTimeOfDeath"
+          ]
+        },
+        "declaration": {
+          "$ref": "#/definitions/declarationType"
+        }
+      },
+      "required": ["estateName","correspondenceAddress","personalRepresentative","reasonEstateSetup","declaration"],
+      "type": "object"
+    },
+    "individualType": {
+      "description": "Individual Type",
+      "additionalProperties": false,
+      "properties": {
+        "correspondenceAddress": {
+          "$ref": "#/definitions/correspondenceAddressType"
+        },
+        "dateOfBirth": {
+          "type": "string",
+          "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$"
+        },
+        "familyName": {
+          "maxLength": 47,
+          "type": "string"
+        },
+        "givenName": {
+          "maxLength": 25,
+          "type": "string"
+        },
+        "isUkNationalOrNonUkWithANino": {
+          "type": "boolean"
+        },
+        "nino": {
+          "pattern": "^(?!BG)(?!GB)(?!NK)(?!KN)(?!TN)(?!NT)(?!ZZ)(?:[A-CEGHJ-PR-TW-Z][A-CEGHJ-NPR-TW-Z])(?:\\d){6}([A-D]|\\s)?$",
+          "type": "string"
+        },
+        "otherName": {
+          "maxLength": 25,
+          "type": "string"
+        },
+        "passportOrIdCard": {
+          "additionalProperties": false,
+          "properties": {
+            "countryOfIssue": {
+              "$ref": "#/definitions/countryCodeType"
+            },
+            "expiryDate": {
+              "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+              "type": "string"
+            },
+            "referenceNumber": {
+              "maxLength": 30,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "required": [
+        "givenName",
+        "familyName",
+        "dateOfBirth"
+      ],
+      "type": "object"
+    },
+    "personalRepresentativeType": {
+      "description": "Personal Representative Type",
+      "additionalProperties": false,
+      "properties": {
+        "individual": {
+          "$ref": "#/definitions/individualType"
+        },
+        "telephoneNumber": {
+          "$ref": "#/definitions/telephoneNumberType"
+        },
+        "email": {
+          "$ref": "#/definitions/emailType"
+        }
+      },
+      "required": [
+        "individual",
+        "telephoneNumber"
+      ],
+      "type": "object"
+    },
+    "postalCodeType": {
+      "description": "Postal Code Type",
+      "pattern": "^([Gg][Ii][Rr]( )?0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([AZa-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))( )?[0-9][A-Za-z]{2})$",
+      "type": "string"
+    },
+    "telephoneNumberType": {
+      "description": "telephone Number Type",
+      "maxLength": 19,
+      "pattern": "^(\\+\\d\\d)?\\s?[\\d\\(]?\\d{0,5}[\\d\\)][\\s\\d]{0,15}$",
+      "type": "string"
+    },
+    "emailType": {
+      "type": "string",
+      "pattern": "^[-aA-zZ0-9._%+']+@[-aA-zZ0-9.']+\\.[aA-zZ]{2,4}$"
+    }
+  }
+}

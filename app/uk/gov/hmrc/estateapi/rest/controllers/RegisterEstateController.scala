@@ -19,7 +19,7 @@ package uk.gov.hmrc.estateapi.rest.controllers
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.common.metrics.ApplicationMetrics
-import uk.gov.hmrc.common.utils.JsonSchemaValidator
+import uk.gov.hmrc.common.utils.{EstateSchemaValidator, JsonSchemaValidator}
 import uk.gov.hmrc.estateapi.rest.services.RegisterEstateService
 
 
@@ -49,5 +49,5 @@ trait RegisterEstateController extends EstateBaseController {
 object RegisterEstateController extends RegisterEstateController {
   override val registerEstateService = RegisterEstateService
   override val metrics = ApplicationMetrics
-  override lazy val jsonSchemaValidator = JsonSchemaValidator
+  override lazy val jsonSchemaValidator = EstateSchemaValidator
 }
