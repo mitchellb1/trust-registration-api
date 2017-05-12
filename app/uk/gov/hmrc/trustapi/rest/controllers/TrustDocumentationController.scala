@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.rest.controllers
+package uk.gov.hmrc.trustapi.rest.controllers
 
 import com.google.inject.{Inject, Singleton}
 import controllers.AssetsBuilder
@@ -22,19 +22,19 @@ import play.api.http.HttpErrorHandler
 import uk.gov.hmrc.play.microservice.controller.BaseController
 
 @Singleton
-class DocumentationController @Inject() (errorHandler: HttpErrorHandler)
+class TrustDocumentationController @Inject()(errorHandler: HttpErrorHandler)
     extends AssetsBuilder(errorHandler)
     with BaseController {
 
   def documentation(version: String, endpointName: String) = {
-    super.at(s"/public/api/documentation/$version", "Sample-Trusts.xml")
+    super.at(s"/public/api/trusts/documentation/$version", "Sample-Trusts.xml")
   }
 
   def definition() = {
-    super.at(s"/public/api", "definition.json")
+    super.at(s"/public/api/trusts", "definition.json")
   }
 
   def raml(version: String, file: String) = {
-    super.at(s"/public/api/conf/$version", file)
+    super.at(s"/public/api/trusts/conf/$version", file)
   }
 }
