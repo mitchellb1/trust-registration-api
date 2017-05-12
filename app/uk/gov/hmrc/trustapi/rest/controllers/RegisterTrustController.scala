@@ -19,7 +19,7 @@ package uk.gov.hmrc.trustapi.rest.controllers
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.common.metrics.ApplicationMetrics
-import uk.gov.hmrc.common.utils.JsonSchemaValidator
+import uk.gov.hmrc.common.utils.{JsonSchemaValidator, TrustSchemaValidator}
 import uk.gov.hmrc.trustapi.rest.services.{RegisterTrustService, TrustExistenceService}
 
 trait RegisterTrustController extends TrustBaseController {
@@ -96,6 +96,6 @@ trait RegisterTrustController extends TrustBaseController {
 object RegisterTrustController extends RegisterTrustController {
   override val registerTrustService = RegisterTrustService
   override val trustExistenceService = TrustExistenceService
-  override lazy val jsonSchemaValidator = JsonSchemaValidator
+  override lazy val jsonSchemaValidator = TrustSchemaValidator
   override val metrics = ApplicationMetrics
 }

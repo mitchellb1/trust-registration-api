@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.rest.resources.core
+package uk.gov.hmrc.trustapi.rest.resources.core
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.estateapi.rest.resources.core.Estate
-import uk.gov.hmrc.trustapi.rest.resources.core.Trust
 
+case class TrustRequest(trust: Trust)
 
-case class TrustEstate(trust: Option[Trust] = None, estate: Option[Estate] = None)
-
-object TrustEstate {
-  implicit val format = Json.format[TrustEstate]
+object TrustRequest {
+  implicit val format = Json.format[TrustRequest]
 }

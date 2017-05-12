@@ -157,11 +157,7 @@ trait EstateBaseController extends BaseController {
       }
     }
   }
-
-  private def isTrustReRegister(request: TrustEstateRequest, isTrust: Boolean) = {
-    if (isTrust) request.trustEstate.trust.get.utr.exists(_.nonEmpty) else false
-  }
-
+  
   private def GetRegisterEstateResponse(estateRequest: EstateRequest)(implicit hc: HeaderCarrier) = {
     registerEstateService.registerEstate(estateRequest.estate).map {
       case Right(identifier) => Created(Json.toJson(identifier))
