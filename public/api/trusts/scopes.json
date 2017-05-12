@@ -1,0 +1,17 @@
+[
+	{
+	  "key": "read:trusts",
+	  "name": "Access trusts information",
+	  "description": "Access information for managing trusts"
+	},
+	{
+	  "key": "write:trusts",
+	  "name": "Add and update trusts information",
+	  "description": "Add and Update information for trusts"
+	},
+	{
+	  "key": "delete:trusts",
+	  "name": "Delete trusts information",
+	  "description": "Delete information for trusts"
+	}
+]

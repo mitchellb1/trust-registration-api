@@ -1,0 +1,12 @@
+{
+  "scopes" : [ {
+    "key" : "write:trusts",
+    "name" : "Add and update trusts information",
+    "description" : "Add and Update information for trusts"}],
+  "api" : {
+    "name" : "Trust Registration Service",
+    "description" : "An API for registering and updating trusts.",
+    "context" : "trusts",
+    "versions" : [ {
+      "version" : "1.0",
+      "status" : "PROTOTYPED"}]}}

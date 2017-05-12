@@ -1,7 +1,7 @@
 #%RAML 1.0
 
-title: Trust Registration Service
-description: An API for registering and updating trusts.
+title: Estates Registration Service
+description: An API for registering and updating estates.
 version: 1.0
 protocols: [ HTTPS ]
 baseUri: https://api.service.hmrc.gov.uk/
@@ -23,28 +23,7 @@ uses:
 
   base: !include resourceTypes/base.raml
   
-  Trust: !include schemas/trust.json#/definitions/trust
-  Estate: !include schemas/estate.json#/definitions/estate
-
-/trusts:
-
-  post:
-    displayName: Full Trust Registration
-    description: Submits an entire set of data for a trust
-    is:
-      - headers.acceptHeader
-    (annotations.scope): "write:trusts-and-estates"
-    securedBy: [ sec.oauth_2_0: { scopes: [ "write:trusts-and-estates" ] } ]
-    responses:
-      200:
-        body:
-          application/json:
-            type: !include "schemas/trn.json"
-            example: !include "examples/trn.json"
-    body:
-      application/json:
-        type: !include "schemas/trust.json"
-        example: !include examples/trust.json
+  Estate: !include schemas/estatesSchema.json
 
 
 /estates:
@@ -53,15 +32,15 @@ uses:
     description: Submits an entire set of data for a estate
     is:
       - headers.acceptHeader
-    (annotations.scope): "write:trusts-and-estates"
-    securedBy: [ sec.oauth_2_0: { scopes: [ "write:trusts-and-estates" ] } ]
+    (annotations.scope): "write:estates"
+    securedBy: [ sec.oauth_2_0: { scopes: [ "write:estates" ] } ]
     responses:
       200:
         body:
           application/json:
-            type: !include "schemas/trn.json"
+            type: !include "schemas/trnSchema.json"
             example: !include "examples/trn.json"
     body:
       application/json:
-        type: !include "schemas/estate.json"
+        type: !include "schemas/estatesSchema.json"
         example: !include examples/estate.json

@@ -1,0 +1,17 @@
+[
+	{
+	  "key": "read:estates",
+	  "name": "Access estates information",
+	  "description": "Access information for managing estates"
+	},
+	{
+	  "key": "write:estates",
+	  "name": "Add and update estates information",
+	  "description": "Add and Update information for estates"
+	},
+	{
+	  "key": "delete:estates",
+	  "name": "Delete estates information",
+	  "description": "Delete information for estates"
+	}
+]
