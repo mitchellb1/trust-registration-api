@@ -1,0 +1,31 @@
+<endpoint>
+    <name>Trust Registration Service</name>
+    <description>This is sample documentation</description>
+    <section id="resource">
+        <title>Resource</title>
+        <resource>GET /trusts</resource>
+    </section>
+    <section id="authorisation">
+        <title>Authorisation</title>
+        <authorisation>
+            <type>USER</type>
+        </authorisation>
+    </section>
+    <section id="content-types">
+        <title>Accepted Media Types</title>
+        <list>
+            <item>
+                <code>application/vnd.hmrc.1.0+json</code>
+            </item>
+        </list>
+    </section>
+    <section id="response">
+        <title>Response</title>
+        <httpStatus>200 (OK)</httpStatus>
+        <json><![CDATA[
+            {
+              "message": "Hello"
+            }
+		]]></json>
+    </section>
+</endpoint>
