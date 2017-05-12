@@ -319,6 +319,42 @@
         "individual"
       ]
     },
+    "declarationType": {
+      "description": "Declaration Type",
+      "additionalProperties": false,
+      "properties": {
+        "correspondenceAddress": {
+          "$ref": "#/definitions/correspondenceAddressType"
+        },
+        "confirmation": {
+          "type": "boolean"
+        },
+        "date": {
+          "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+          "type": "string"
+        },
+        "familyName": {
+          "maxLength": 47,
+          "type": "string"
+        },
+        "givenName": {
+          "maxLength": 25,
+          "type": "string"
+        },
+        "otherName": {
+          "maxLength": 25,
+          "type": "string"
+        }
+      },
+      "required": [
+        "givenName",
+        "familyName",
+        "correspondenceAddress",
+        "date",
+        "confirmation"
+      ],
+      "type": "object"
+    },
     "estateType": {
       "description": "Estate Type",
       "additionalProperties": false,
