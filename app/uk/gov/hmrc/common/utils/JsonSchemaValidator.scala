@@ -109,7 +109,7 @@ trait JsonSchemaValidator {
 object TrustSchemaValidator extends JsonSchemaValidator {
   import play.api.Play.current
 
-  lazy val schema: JsonNode = JsonLoader.fromPath(s"${Play.application.path}/public/api/trusts/conf/1.0/schemas/trustSchema.json")
+  lazy val schema: JsonNode = JsonLoader.fromPath(s"${Play.application.path}/public/api/trusts/conf/1.0/schemas/trustsSchema.json")
 }
 
 object EstateSchemaValidator extends JsonSchemaValidator {
