@@ -22,7 +22,7 @@ import play.api.mvc.{Request, Result}
 import uk.gov.hmrc.common.metrics.ApplicationMetrics
 import uk.gov.hmrc.common.rest.resources.core._
 import uk.gov.hmrc.common.utils.{FailedValidation, JsonSchemaValidator}
-import uk.gov.hmrc.estateapi.rest.resources.core.Estate
+import uk.gov.hmrc.estateapi.rest.resources.core.{Estate, EstateRequest}
 import uk.gov.hmrc.estateapi.rest.services.RegisterEstateService
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.microservice.controller.BaseController
@@ -51,8 +51,8 @@ trait EstateBaseController extends BaseController {
       }
       case _ => {
         try {
-          request.body.validate[TrustEstateRequest].map {
-            request: TrustEstateRequest => {
+          request.body.validate[EstateRequest].map {
+            request: EstateRequest => {
                 GetRegisterEstateResponse(request)
             }
           }.recoverTotal {
@@ -157,13 +157,9 @@ trait EstateBaseController extends BaseController {
       }
     }
   }
-
-  private def isTrustReRegister(request: TrustEstateRequest, isTrust: Boolean) = {
-    if (isTrust) request.trustEstate.trust.get.utr.exists(_.nonEmpty) else false
-  }
-
-  private def GetRegisterEstateResponse(trustEstateRequest: TrustEstateRequest)(implicit hc: HeaderCarrier) = {
-    registerEstateService.registerEstate(trustEstateRequest.trustEstate.estate.get).map {
+  
+  private def GetRegisterEstateResponse(estateRequest: EstateRequest)(implicit hc: HeaderCarrier) = {
+    registerEstateService.registerEstate(estateRequest.estate).map {
       case Right(identifier) => Created(Json.toJson(identifier))
       case Left("503") => InternalServerError
       case _ => BadRequest("""{"message": "Failed serialization"}""")

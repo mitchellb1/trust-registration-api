@@ -52,10 +52,10 @@ trait TrustBaseController extends BaseController {
       }
       case _ => {
         try {
-          request.body.validate[TrustEstateRequest].map {
-            request: TrustEstateRequest => {
+          request.body.validate[TrustRequest].map {
+            request: TrustRequest => {
               if (isTrustReRegister(request)) {
-                val trust = request.trustEstate.trust.get
+                val trust = request.trust
                 val response = trustExistenceService.trustExistence(TrustExistence(trust.name, trust.utr, trust.correspondenceAddress.postalCode))
                 response.flatMap {
                   case Right("204") => {
@@ -174,12 +174,12 @@ trait TrustBaseController extends BaseController {
     }
   }
 
-  private def isTrustReRegister(request: TrustEstateRequest) = {
-    request.trustEstate.trust.get.utr.exists(_.nonEmpty)
+  private def isTrustReRegister(trustRequest: TrustRequest) = {
+    trustRequest.trust.utr.exists(_.nonEmpty)
   }
 
-  private def GetRegisterTrustResponse(trustEstate: TrustEstateRequest)(implicit hc: HeaderCarrier) = {
-    registerTrustService.registerTrust(trustEstate.trustEstate.trust.get).map {
+  private def GetRegisterTrustResponse(trustRequest: TrustRequest)(implicit hc: HeaderCarrier) = {
+    registerTrustService.registerTrust(trustRequest.trust).map {
       case Right(identifier) => Created(Json.toJson(identifier))
       case Left("503") => InternalServerError
       case _ => BadRequest("""{"message": "Failed serialization"}""")

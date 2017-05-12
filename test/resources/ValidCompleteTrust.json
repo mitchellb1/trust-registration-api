@@ -1,5 +1,4 @@
 {
-    "trustEstate":{
       "trust":{
         "name" : "Test Trust",
         "correspondenceAddress" : "{ADDRESS}",
@@ -36,5 +35,5 @@
           "willIntestacyTrust" : "{WILLINTESTACYTRUST}"
         }
       }
-    }
+
 }

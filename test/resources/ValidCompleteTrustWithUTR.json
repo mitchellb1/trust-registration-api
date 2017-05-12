@@ -1,5 +1,4 @@
 {
-    "trustEstate":{
       "trust":{
         "name" : "Test Trust",
         "correspondenceAddress" : "{ADDRESS}",
@@ -37,5 +36,5 @@
         },
         "utr": "2222222222"
       }
-    }
+
 }
