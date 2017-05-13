@@ -4,8 +4,8 @@
       "familyName": "Doe",
       "dateOfBirth": "1989-12-31",
       "nino": "WA123456A",
-      "passport": {
-        "identifier": "b12344b23b45",
+      "passportOrIdCard": {
+        "referenceNumber": "b12344b23b45",
         "expiryDate": "2018-12-25",
         "countryOfIssue": "UK"
       },

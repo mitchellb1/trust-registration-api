@@ -5,6 +5,6 @@
   "dateOfBirth": "1800-01-01",
   "dateOfDeath": null,
   "nino": null,
-  "passport": "{PASSPORT}",
+  "passportOrIdCard": "{PASSPORT}",
   "correspondenceAddress": "{ADDRESS}"
 }

@@ -23,7 +23,7 @@ import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import uk.gov.hmrc.common.connectors.DesConnector
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustapi.rest.services.TrustExistenceService
-import uk.gov.hmrc.trustregistration.ScalaDataExamples
+import uk.gov.hmrc.utils.ScalaDataExamples
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}

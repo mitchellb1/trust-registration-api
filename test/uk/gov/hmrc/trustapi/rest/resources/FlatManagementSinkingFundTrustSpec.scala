@@ -20,7 +20,7 @@ import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.trustapi.rest.resources.core.assets.{Assets, PropertyAsset, ShareAsset}
 import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.Beneficiaries
 import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.FlatManagementSinkingFundTrust
-import uk.gov.hmrc.trustregistration.ScalaDataExamples
+import uk.gov.hmrc.utils.ScalaDataExamples
 
 class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples {
 
@@ -48,7 +48,7 @@ class FlatManagementSinkingFundTrustSpec extends PlaySpec with ScalaDataExamples
       "a share asset is defined" in {
         val assets = Assets(
           monetaryAssets = Some(List(2, 2)),
-          shareAssets = Some(List(ShareAsset(1234, "shareCompanyName", "shareCompanyRegistrationNumber", "shareClass", "shareType", 123400)))
+          shareAssets = Some(List(ShareAsset(1234, "shareCompanyName", "CompanyReg", "Ordinary", "Quoted", 123400)))
         )
 
         val ex = the[IllegalArgumentException] thrownBy FlatManagementSinkingFundTrust(assets, Beneficiaries(otherBeneficiaries = otherBeneficiaries))

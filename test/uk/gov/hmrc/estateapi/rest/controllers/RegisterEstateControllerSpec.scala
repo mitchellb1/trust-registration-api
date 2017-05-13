@@ -31,7 +31,7 @@ import uk.gov.hmrc.estateapi.rest.controllers.RegisterEstateController
 import uk.gov.hmrc.estateapi.rest.resources.core.Estate
 import uk.gov.hmrc.estateapi.rest.services.RegisterEstateService
 import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
+import uk.gov.hmrc.utils.{JsonExamples, ScalaDataExamples}
 
 import scala.concurrent.Future
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration
+package uk.gov.hmrc.utils
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader

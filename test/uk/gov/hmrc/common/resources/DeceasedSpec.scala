@@ -20,7 +20,7 @@ import org.joda.time.DateTime
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsResultException, Json}
 import uk.gov.hmrc.common.rest.resources.core.Deceased
-import uk.gov.hmrc.trustregistration.JsonExamples
+import uk.gov.hmrc.utils.JsonExamples
 
 class DeceasedSpec extends PlaySpec with JsonExamples {
 

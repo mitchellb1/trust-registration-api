@@ -51,7 +51,7 @@ class GetTrusteesSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
       }
 
       "DES returns a 200 response with a JSON array of Trustees containing a Passport" in {
-        val jsonReturn = """[{"givenName":"Juan","familyName":"Doe","dateOfBirth" : "2012-04-23T18:25:43.511Z","passport":{"identifier" : "AA12345","expiryDate" : "2012-04-23T18:25:43.511Z","countryOfIssue" : "ESP"}}]"""
+        val jsonReturn = """[{"givenName":"Juan","familyName":"Doe","dateOfBirth" : "2012-04-23T18:25:43.511Z","passportOrIdCard":{"referenceNumber" : "AA12345","expiryDate" : "2012-04-23T18:25:43.511Z","countryOfIssue" : "ESP"}}]"""
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(jsonReturn)))))
         val result = Await.result(SUT.getTrustees("1234"),Duration.Inf)
         val expectedPassport = Passport("AA12345", new DateTime("2012-04-23T18:25:43.511Z"), "ESP")
@@ -59,7 +59,7 @@ class GetTrusteesSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
       }
 
       "DES returns a 200 response with a JSON array of Trustees containing a Passport when given a 'null' address" in {
-        val jsonReturn = """[{"givenName":"Juan","familyName":"Doe","dateOfBirth" : "2012-04-23T18:25:43.511Z","passport":{"identifier" : "AA12345","expiryDate" : "2012-04-23T18:25:43.511Z","countryOfIssue" : "ESP"}, "correspondenceAddress" : null}]"""
+        val jsonReturn = """[{"givenName":"Juan","familyName":"Doe","dateOfBirth" : "2012-04-23T18:25:43.511Z","passportOrIdCard":{"referenceNumber" : "AA12345","expiryDate" : "2012-04-23T18:25:43.511Z","countryOfIssue" : "ESP"}, "correspondenceAddress" : null}]"""
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(jsonReturn)))))
         val result = Await.result(SUT.getTrustees("1234"),Duration.Inf)
         val expectedPassport = Passport("AA12345", new DateTime("2012-04-23T18:25:43.511Z"), "ESP")
@@ -88,7 +88,7 @@ class GetTrusteesSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
       }
 
       "DES returns a 200 response with a JSON array of Trustees containing an Address and Passport" in {
-        val jsonReturn = """[{"givenName":"Juan","familyName":"Doe","dateOfBirth" : "2012-04-23T18:25:43.511Z","passport":{"identifier" : "AA12345","expiryDate" : "2012-04-23T18:25:43.511Z","countryOfIssue" : "ESP"}, "correspondenceAddress" : {"line1" : "123 Any Street","line2" : "Mowr Town","line3" : "Test","line4" : "Test Test Test 523125223","countryCode" : "ZAR"}}]"""
+        val jsonReturn = """[{"givenName":"Juan","familyName":"Doe","dateOfBirth" : "2012-04-23T18:25:43.511Z","passportOrIdCard":{"referenceNumber" : "AA12345","expiryDate" : "2012-04-23T18:25:43.511Z","countryOfIssue" : "ESP"}, "correspondenceAddress" : {"line1" : "123 Any Street","line2" : "Mowr Town","line3" : "Test","line4" : "Test Test Test 523125223","countryCode" : "ZAR"}}]"""
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(jsonReturn)))))
         val result = Await.result(SUT.getTrustees("1234"),Duration.Inf)
         val expectedPassport = Passport("AA12345", new DateTime("2012-04-23T18:25:43.511Z"), "ESP")
@@ -103,8 +103,8 @@ class GetTrusteesSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
              "familyName": "Doe",
              "dateOfBirth": "1900-01-01T00:00:00.000Z",
              "nino": "1234567890",
-             "passport": {
-                "identifier": "123456",
+             "passportOrIdCard": {
+                "referenceNumber": "123456",
                 "expiryDate": "2016-01-01T00:00:00.000Z",
                 "countryOfIssue": "ES"
              },
@@ -163,7 +163,7 @@ class GetTrusteesSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
         result mustBe InternalServerErrorResponse
       }
       "DES returns an incorrectly formatted expiry date" in {
-        val jsonReturn = """[{"givenName":"Juan","passport":{"identifier" : "AA12345","expiryDate" : "12th Jan 2016","countryOfIssue" : "ESP"}}]"""
+        val jsonReturn = """[{"givenName":"Juan","passportOrIdCard":{"referenceNumber" : "AA12345","expiryDate" : "12th Jan 2016","countryOfIssue" : "ESP"}}]"""
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(jsonReturn)))))
         val result = Await.result(SUT.getTrustees("1234"),Duration.Inf)
         result mustBe InternalServerErrorResponse
@@ -175,7 +175,7 @@ class GetTrusteesSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
         result mustBe InternalServerErrorResponse
       }
       "DES returns a trustee without all the required passport fields" in {
-        val jsonReturn = """[{"givenName":"Juan", "passport" : {"identifier":"AA12345"}}]"""
+        val jsonReturn = """[{"givenName":"Juan", "passportOrIdCard" : {"referenceNumber":"AA12345"}}]"""
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200, Some(Json.parse(jsonReturn)))))
         val result = Await.result(SUT.getTrustees("1234"),Duration.Inf)
         result mustBe InternalServerErrorResponse

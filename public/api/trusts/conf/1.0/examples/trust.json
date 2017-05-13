@@ -29,8 +29,8 @@
         "familyName": "Doe",
         "dateOfBirth": "1989-12-31",
         "nino": "WA123456A",
-        "passport": {
-          "identifier": "b12344b23b45",
+        "passportOrIdCard": {
+          "referenceNumber": "b12344b23b45",
           "expiryDate": "2018-12-25",
           "countryOfIssue": "UK"
         },
@@ -54,7 +54,7 @@
         "dateOfBirth": "1989-12-31",
         "nino": "WA123456A",
         "passport": {
-          "identifier": "b12344b23b45",
+          "referenceNumber": "b12344b23b45",
           "expiryDate": "2018-12-25",
           "countryOfIssue": "UK"
         },
@@ -79,7 +79,7 @@
           "dateOfBirth": "1989-12-31",
           "nino": "WA123456A",
           "passport": {
-            "identifier": "b12344b23b45",
+            "referenceNumber": "b12344b23b45",
             "expiryDate": "2018-12-25",
             "countryOfIssue": "UK"
           },
@@ -101,7 +101,7 @@
           "dateOfBirth": "1989-12-31",
           "nino": "WA123456A",
           "passport": {
-            "identifier": "b12344b23b45",
+            "referenceNumber": "b12344b23b45",
             "expiryDate": "2018-12-25",
             "countryOfIssue": "UK"
           },
@@ -142,7 +142,7 @@
         "dateOfBirth": "1989-12-31",
         "nino": "WA123456A",
         "passport": {
-          "identifier": "b12344b23b45",
+          "referenceNumber": "b12344b23b45",
           "expiryDate": "2018-12-25",
           "countryOfIssue": "UK"
         },
@@ -189,8 +189,8 @@
         "shareAssets": [
           {
             "shareNumber": 4356,
-            "shareClass": "A",
-            "shareType": "FTSE 100",
+            "shareClass": "Ordinary",
+            "shareType": "Quoted",
             "companyRegistrationNumber": "GGG2314dfs",
             "shareValue": 256000
           }
@@ -230,8 +230,8 @@
               "familyName": "Doe",
               "dateOfBirth": "1989-12-31",
               "nino": "WA123456A",
-              "passport": {
-                "identifier": "b12344b23b45",
+              "passportOrIdCard": {
+                "referenceNumber": "b12344b23b45",
                 "expiryDate": "2018-12-25",
                 "countryOfIssue": "UK"
               },
@@ -297,8 +297,8 @@
         "familyName": "Doe",
         "dateOfBirth": "1989-12-31",
         "nino": "WA123456A",
-        "passport": {
-          "identifier": "b12344b23b45",
+        "passportOrIdCard": {
+          "referenceNumber": "b12344b23b45",
           "expiryDate": "2018-12-25",
           "countryOfIssue": "UK"
         },

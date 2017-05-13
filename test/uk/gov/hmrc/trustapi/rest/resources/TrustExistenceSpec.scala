@@ -18,7 +18,7 @@ package uk.gov.hmrc.trustregistration.models
 
 import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.trustapi.rest.resources.core.TrustExistence
-import uk.gov.hmrc.trustregistration.JsonExamples
+import uk.gov.hmrc.utils.JsonExamples
 
 
 class TrustExistenceSpec extends PlaySpec with JsonExamples{

@@ -24,7 +24,7 @@ import uk.gov.hmrc.common.connectors.DesConnector
 import uk.gov.hmrc.common.rest.resources.core._
 import uk.gov.hmrc.estateapi.rest.services.RegisterEstateService
 import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.trustregistration.ScalaDataExamples
+import uk.gov.hmrc.utils.ScalaDataExamples
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}

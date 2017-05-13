@@ -19,7 +19,7 @@ package uk.gov.hmrc.common.rest.resources.core
 import org.joda.time.DateTime
 import play.api.libs.json._
 
-case class Passport(identifier: String,
+case class Passport(referenceNumber: String,
                     expiryDate: DateTime,
                     countryOfIssue: String)
 

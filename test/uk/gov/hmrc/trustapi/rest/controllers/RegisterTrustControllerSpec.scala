@@ -35,7 +35,7 @@ import uk.gov.hmrc.trustapi.rest.controllers.RegisterTrustController
 import uk.gov.hmrc.trustapi.rest.resources.core._
 import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.Beneficiaries
 import uk.gov.hmrc.trustapi.rest.services.{RegisterTrustService, TrustExistenceService}
-import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
+import uk.gov.hmrc.utils.{JsonExamples, ScalaDataExamples}
 
 import scala.concurrent.Future
 
@@ -285,8 +285,8 @@ class RegisterTrustControllerSpec extends PlaySpec
           givenName = "John",
           familyName = "Doe",
           dateOfBirth = new DateTime("1800-01-01"),
-          passport = Some(Passport(
-            identifier = "IDENTIFIER",
+          passportOrIdCard = Some(Passport(
+            referenceNumber = "IDENTIFIER",
             expiryDate = new DateTime("2000-01-01"),
             countryOfIssue = "ES"
           )),
@@ -303,7 +303,7 @@ class RegisterTrustControllerSpec extends PlaySpec
         status(result) mustBe OK
         contentAsString(result) mustBe (
           """[{"givenName":"John","familyName":"Doe","dateOfBirth":"1800-01-01",""" +
-            """"passport":{"identifier":"IDENTIFIER","expiryDate":"2000-01-01","countryOfIssue":"ES"},""" +
+            """"passportOrIdCard":{"referenceNumber":"IDENTIFIER","expiryDate":"2000-01-01","countryOfIssue":"ES"},""" +
             """"correspondenceAddress":{"line1":"Address Line 1","countryCode":"ES"}}]""")
       }
     }
@@ -439,8 +439,8 @@ class RegisterTrustControllerSpec extends PlaySpec
             givenName = "John",
             familyName = "Doe",
             dateOfBirth = new DateTime("1800-01-01"),
-            passport = Some(Passport(
-              identifier = "IDENTIFIER",
+            passportOrIdCard = Some(Passport(
+              referenceNumber = "IDENTIFIER",
               expiryDate = new DateTime("2000-01-01"),
               countryOfIssue = "ES"
             )),
@@ -457,7 +457,7 @@ class RegisterTrustControllerSpec extends PlaySpec
           status(result) mustBe OK
           contentAsString(result) mustBe (
             """[{"givenName":"John","familyName":"Doe","dateOfBirth":"1800-01-01",""" +
-              """"passport":{"identifier":"IDENTIFIER","expiryDate":"2000-01-01","countryOfIssue":"ES"},""" +
+              """"passportOrIdCard":{"referenceNumber":"IDENTIFIER","expiryDate":"2000-01-01","countryOfIssue":"ES"},""" +
               """"correspondenceAddress":{"line1":"Address Line 1","countryCode":"ES"}}]""")
         }
       }
@@ -594,7 +594,7 @@ class RegisterTrustControllerSpec extends PlaySpec
         status(result) mustBe OK
         contentAsString(result) mustBe(
           """{"individual":{"givenName":"Leo","familyName":"Spaceman","dateOfBirth":"1800-01-01",""" +
-          """"passport":{"identifier":"IDENTIFIER","expiryDate":"2020-01-01","countryOfIssue":"ES"},""" +
+          """"passportOrIdCard":{"referenceNumber":"IDENTIFIER","expiryDate":"2020-01-01","countryOfIssue":"ES"},""" +
           """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2","line3":"Line 3","line4":"Line 4",""" +
           """"countryCode":"ES"}},"telephoneNumber":"1234567890","email":"test@test.com"}"""
         )
@@ -713,7 +713,7 @@ class RegisterTrustControllerSpec extends PlaySpec
         status(result) mustBe OK
         contentAsString(result) mustBe(
           """{"individuals":[{"givenName":"Leo","familyName":"Spaceman","dateOfBirth":"1800-01-01",""" +
-          """"passport":{"identifier":"IDENTIFIER","expiryDate":"2020-01-01","countryOfIssue":"ES"},""" +
+          """"passportOrIdCard":{"referenceNumber":"IDENTIFIER","expiryDate":"2020-01-01","countryOfIssue":"ES"},""" +
           """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2",""" +
           """"line3":"Line 3","line4":"Line 4","countryCode":"ES"}}],"companies":[""" +
           """{"name":"Company","correspondenceAddress":{"line1":"Line 1",""" +
@@ -838,15 +838,15 @@ class RegisterTrustControllerSpec extends PlaySpec
   private def withCallToPOST(payload: JsValue)(handler: Future[Result] => Any) = {
     handler(SUT.register.apply(registerRequestWithPayload(payload)))
   }
-  
+
   val matchString = s"""{
   "individualBeneficiaries" : [ {
     "individual" : {
       "givenName" : "Leo",
       "familyName" : "Spaceman",
       "dateOfBirth" : "1800-01-01",
-      "passport" : {
-        "identifier" : "IDENTIFIER",
+      "passportOrIdCard" : {
+        "referenceNumber" : "IDENTIFIER",
         "expiryDate" : "2020-01-01",
         "countryOfIssue" : "ES"
       },
@@ -869,8 +869,8 @@ class RegisterTrustControllerSpec extends PlaySpec
       "givenName" : "Leo",
       "familyName" : "Spaceman",
       "dateOfBirth" : "1800-01-01",
-      "passport" : {
-        "identifier" : "IDENTIFIER",
+      "passportOrIdCard" : {
+        "referenceNumber" : "IDENTIFIER",
         "expiryDate" : "2020-01-01",
         "countryOfIssue" : "ES"
       },
