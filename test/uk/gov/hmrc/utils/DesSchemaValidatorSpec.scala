@@ -19,6 +19,7 @@ package uk.gov.hmrc.utils
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
 import uk.gov.hmrc.common.utils._
+
 import scala.io.Source
 
 class DesSchemaValidatorSpec extends PlaySpec

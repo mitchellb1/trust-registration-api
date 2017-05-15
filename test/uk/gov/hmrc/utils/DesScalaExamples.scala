@@ -21,7 +21,7 @@ import uk.gov.hmrc.common.des._
 trait DesScalaExamples {
 
   val date = "2016-03-31"
-  val nino = "WA1234556A"
+  val nino = "WA123456A"
   val phoneNumber = "0191 000 0000"
   val email = "john.doe@somewhere.co.uk"
   val name = DesName("Joe", Some("John"), "Doe")
