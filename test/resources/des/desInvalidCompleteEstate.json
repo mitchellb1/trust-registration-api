@@ -1,0 +1,89 @@
+{
+  "admin": {
+    "utr": "12345ABCDE"
+  },
+  "correspondence": {
+    "abroadIndicator": false,
+    "name": "Estate Name - AddressLines Missing",
+    "address": {
+      "line3": "address line 1",
+      "line4": "address line 1",
+      "postCode": "NE45 23PQ",
+      "country": "GB"
+    },
+    "phoneNumber": "0191 000 0000"
+  },
+  "yearsReturns": {
+    "taxReturnsNoDues": true,
+    "returns": [
+      {
+        "taxReturnYear": "16",
+        "taxConsequence": true
+      },
+      {
+        "taxReturnYear": "14",
+        "taxConsequence": false
+      }
+    ]
+  },
+  "declaration": {
+    "name": {
+      "firstName": "Joe",
+      "middleName": "John",
+      "lastName": "Doe"
+    },
+    "address": {
+      "line1": "address line 1",
+      "line2": "address line 1",
+      "line3": "address line 1",
+      "line4": "address line 1",
+      "postCode": "NE45 23PQ",
+      "country": "GB"
+    }
+  },
+  "details": {
+    "estate": {
+      "entities": {
+        "personalRepresentative": {
+          "name": {
+            "firstName": "Joe",
+            "middleName": "John",
+            "lastName": "Doe"
+          },
+          "dateOfBirth": "2000-03-31",
+          "identification": {
+            "passport": {
+              "number": "12134567",
+              "expirationDate": "2017-03-31",
+              "countryOfIssue": "AD"
+            },
+            "address": {
+              "line1": "address line 1",
+              "line2": "address line 1",
+              "line3": "address line 1",
+              "line4": "address line 1",
+              "postCode": "NE45 23PQ",
+              "country": "GB"
+            }
+          },
+          "phoneNumber": "0191 000 0000",
+          "email": "john.doe@somewhere.co.uk"
+        },
+        "deceased": {
+          "name": {
+            "firstName": "Joe",
+            "middleName": "John",
+            "lastName": "Doe"
+          },
+          "dateOfBirth": "2000-03-31",
+          "dateOfDeath": "2017-03-31",
+          "identification": {
+            "nino": "WA123456B"
+          }
+        }
+      },
+      "administrationEndDate": "2017-03-31",
+      "periodTaxDues": "01"
+    }
+  }
+}
