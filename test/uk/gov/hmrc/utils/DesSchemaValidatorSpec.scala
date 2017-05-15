@@ -19,6 +19,7 @@ package uk.gov.hmrc.utils
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
 import uk.gov.hmrc.common.utils._
+import scala.io.Source
 
 class DesSchemaValidatorSpec extends PlaySpec
     with OneAppPerSuite
@@ -32,19 +33,20 @@ class DesSchemaValidatorSpec extends PlaySpec
 //        result mustBe SuccessfulValidation
 //      }
 //    }
-//    "read the schema and return a SuccessfulValidation for a estate json" when {
-//      "when we have a valid des json estate" in {
-//        lazy val desEstateJsonNode = Source.fromFile(getClass.getResource("/des/desCompleteEstate.json").getPath).mkString
-//        val result = DesSchemaValidator.validateAgainstSchema(desEstateJsonNode.toString)
-//        result mustBe SuccessfulValidation
-//      }
-//    }
+    "read the schema and return a SuccessfulValidation for a estate json" when {
+      "when we have a valid des json estate" in {
+        lazy val desEstate = Source.fromFile(getClass.getResource("/des/desCompleteEstate.json").getPath).mkString
+        println(s"From file ---- ${desEstate}")
+        val result = DesSchemaValidator.validateAgainstSchema(desEstate)
+        result mustBe SuccessfulValidation
+      }
+    }
 
     "read the schema and return a SuccessfulValidation for a estate created from the case classes" when {
       "when we have a valid des json estate" in {
-        val jsonEstate: String = Json.toJson(completeValidDesEstate).toString()
-        println(jsonEstate)
-        val result = DesSchemaValidator.validateAgainstSchema(jsonEstate)
+        val desEstate: String = Json.prettyPrint(Json.toJson(completeValidDesEstate))
+        println(s"From case classes ---- ${desEstate}")
+        val result = DesSchemaValidator.validateAgainstSchema(desEstate)
         result mustBe SuccessfulValidation
       }
     }

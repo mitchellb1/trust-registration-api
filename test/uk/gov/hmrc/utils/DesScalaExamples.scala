@@ -23,14 +23,14 @@ trait DesScalaExamples {
   val date = "2016-03-31"
   val nino = "WA1234556A"
   val phoneNumber = "0191 000 0000"
-  val email = "john.Doe@somewhere.co.uk"
+  val email = "john.doe@somewhere.co.uk"
   val name = DesName("Joe", Some("John"), "Doe")
   val address = DesAddress(
-    line1 = "Line 1",
-    line2 = "Line 1",
-    line3 = Some("Line 1"),
-    line4 = Some("Line 1"),
-    postCode = None,
+    line1 = "address line 1",
+    line2 = "address line 1",
+    line3 = Some("address line 1"),
+    line4 = Some("address line 1"),
+    postCode = Some("NE45 23PQ"),
     country = "GB")
 
   val admin = DesAdmin("12345ABCDE")
@@ -43,14 +43,11 @@ trait DesScalaExamples {
   //val assets = DesAssets
   val declaration =  DesDeclaration(name, address)
 
-
-
-
-  val desWillId = DesWillIdentification(Some(nino), Some(address))
+  val desWillId = DesWillIdentification(Some(nino), None)
 
   val deceased = DesWill(name, date, date, identification = desWillId)
 
-  val passport = DesPassportType("passportNum", date, "GB")
+  val passport = DesPassportType("12134567", date, "GB")
 
   //val identification = DesIdentification(Some(nino), None, None)
   val identification = DesIdentification(None, Some(passport), Some(address))
@@ -75,7 +72,6 @@ trait DesScalaExamples {
 //  None,
     Some(yearsReturns),
   None,
-
 //    Some(assets),
   declaration: DesDeclaration,
   details)

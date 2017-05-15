@@ -4,7 +4,7 @@
   },
   "correspondence": {
     "abroadIndicator": false,
-    "name": "Trust Name",
+    "name": "SomeName thats not a name",
     "address": {
       "line1": "address line 1",
       "line2": "address line 1",
@@ -32,7 +32,7 @@
     "name": {
       "firstName": "Joe",
       "middleName": "John",
-      "lastName": "Doe"
+      "lastName": "doe"
     },
     "address": {
       "line1": "address line 1",
@@ -50,14 +50,14 @@
           "name": {
             "firstName": "Joe",
             "middleName": "John",
-            "lastName": "Doe"
+            "lastName": "doe"
           },
           "dateOfBirth": "2000-03-31",
           "identification": {
             "passport": {
               "number": "12134567",
               "expirationDate": "2017-03-31",
-              "countryOfIssue": "AD"
+              "countryOfIssue": "GB"
             },
             "address": {
               "line1": "address line 1",
@@ -75,7 +75,7 @@
           "name": {
             "firstName": "Joe",
             "middleName": "John",
-            "lastName": "Doe"
+            "lastName": "doe"
           },
           "dateOfBirth": "2000-03-31",
           "dateOfDeath": "2017-03-31",
