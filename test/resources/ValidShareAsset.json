@@ -1,8 +1,8 @@
 {
   "numberShares" : 1234,
   "shareCompanyName" : "shareCompanyName",
-  "shareCompanyRegistrationNumber" : "shareCompanyRegistrationNumber",
-  "shareClass" : "shareClass",
-  "shareType" : "shareType",
+  "shareCompanyRegistrationNumber" : "CompanyReg",
+  "shareClass" : "Ordinary",
+  "shareType" : "Quoted",
   "currentShareValue" : 123400
 }

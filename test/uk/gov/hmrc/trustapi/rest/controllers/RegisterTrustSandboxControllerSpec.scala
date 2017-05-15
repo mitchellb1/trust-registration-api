@@ -32,7 +32,7 @@ import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.trustapi.rest.controllers.RegisterTrustSandboxController
 import uk.gov.hmrc.trustapi.rest.resources.core.Trust
 import uk.gov.hmrc.trustapi.rest.services.{RegisterTrustService, TrustExistenceService}
-import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
+import uk.gov.hmrc.utils.{JsonExamples, ScalaDataExamples}
 
 import scala.concurrent.Future
 

@@ -25,7 +25,7 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.common.rest.resources.core._
 import uk.gov.hmrc.play.http.HttpResponse
 import uk.gov.hmrc.trustapi.rest.resources.core.Settlors
-import uk.gov.hmrc.trustregistration.JsonExamples
+import uk.gov.hmrc.utils.JsonExamples
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
@@ -41,10 +41,10 @@ class GetSettlorsSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
           Some(Json.parse(validSettlorsJson)))))
 
         val result = Await.result(SUT.getSettlors("1234"),Duration.Inf)
-        val passport = Passport("IDENTIFIER",new DateTime("2020-01-01"),"ES")
+        val passportOrIdCard = Passport("IDENTIFIER",new DateTime("2020-01-01"),"ES")
         val address = Address("Line 1", Some("Line 2"), Some("Line 3"), Some("Line 4"),None, "ES")
-        val expectedIndividualSettlors = Settlors(Some(List(Individual("Leo","Spaceman",new DateTime("1800-01-01"),None,None,None,Some(passport),Some(address)),
-        Individual("Leo","Spaceman",new DateTime("1800-01-01"),None,None,None,Some(passport),Some(address)))))
+        val expectedIndividualSettlors = Settlors(Some(List(Individual("Leo","Spaceman",new DateTime("1800-01-01"),None,None,None,Some(passportOrIdCard),Some(address)),
+        Individual("Leo","Spaceman",new DateTime("1800-01-01"),None,None,None,Some(passportOrIdCard),Some(address)))))
         result mustBe GetSuccessResponse(expectedIndividualSettlors)
       }
 

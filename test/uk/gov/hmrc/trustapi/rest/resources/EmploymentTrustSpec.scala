@@ -20,7 +20,7 @@ import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.trustapi.rest.resources.core.assets.{Assets, PropertyAsset}
 import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.Beneficiaries
 import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.EmploymentTrust
-import uk.gov.hmrc.trustregistration.ScalaDataExamples
+import uk.gov.hmrc.utils.ScalaDataExamples
 
 
 class EmploymentTrustSpec extends PlaySpec with ScalaDataExamples {

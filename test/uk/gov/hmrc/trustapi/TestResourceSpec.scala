@@ -37,14 +37,14 @@ class TestResourceSpec extends UnitSpec {
     "be able to pull in test resources" in {
       val result = Json.parse(validPassportJson).asOpt[Passport].get
 
-      result.identifier shouldBe "IDENTIFIER"
+      result.referenceNumber shouldBe "IDENTIFIER"
     }
 
     "be able to combine test resources" in {
       val result = Json.parse(validIndividualJson).asOpt[Individual].get
 
       result.givenName shouldBe "Leo"
-      result.passport.get.identifier shouldBe "IDENTIFIER"
+      result.passportOrIdCard.get.referenceNumber shouldBe "IDENTIFIER"
     }
 
   }

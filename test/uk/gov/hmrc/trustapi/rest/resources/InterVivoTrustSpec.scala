@@ -20,7 +20,7 @@ import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.trustapi.rest.resources.core.assets.Assets
 import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.Beneficiaries
 import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.InterVivoTrust
-import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
+import uk.gov.hmrc.utils.{JsonExamples, ScalaDataExamples}
 
 class InterVivoTrustSpec extends PlaySpec with ScalaDataExamples with JsonExamples{
   "InterVivoTrust" must{

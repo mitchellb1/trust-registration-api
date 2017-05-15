@@ -24,7 +24,7 @@ import play.api.libs.json.Writes
 import uk.gov.hmrc.common.rest.resources.core.TRN
 import uk.gov.hmrc.estateapi.rest.resources.core.EstateRegistrationDocument
 import uk.gov.hmrc.play.http.{HeaderCarrier, HttpReads, HttpResponse, Upstream4xxResponse}
-import uk.gov.hmrc.trustregistration.ScalaDataExamples
+import uk.gov.hmrc.utils.ScalaDataExamples
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}

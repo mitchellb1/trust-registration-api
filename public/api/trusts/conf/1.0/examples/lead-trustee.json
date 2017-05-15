@@ -5,8 +5,8 @@
     "familyName": "Bloggs",
     "dateOfBirth": "10/10/1967",
     "nino": "WA123456A",
-    "passport": {
-      "identifier": "123435egxb",
+    "passportOrIdCard": {
+      "referenceNumber": "123435egxb",
       "expiryDate": "12/12/2017",
       "countryOfIssue": "UK"
     },

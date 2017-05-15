@@ -24,7 +24,7 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.common.rest.resources.core.{BadRequestResponse, GetSuccessResponse, InternalServerErrorResponse, NotFoundResponse}
 import uk.gov.hmrc.play.http.HttpResponse
 import uk.gov.hmrc.trustapi.rest.resources.core.Protectors
-import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
+import uk.gov.hmrc.utils.{JsonExamples, ScalaDataExamples}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration

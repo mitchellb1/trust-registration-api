@@ -10,13 +10,11 @@ trait MicroService {
   import uk.gov.hmrc._
   import DefaultBuildSettings._
   import TestPhases._
+  import play.sbt.PlayScala
 
-  val appName: String
-
-  lazy val appDependencies : Seq[ModuleID] = ???
-  lazy val plugins : Seq[Plugins] = Seq(play.sbt.PlayScala)
-  lazy val playSettings : Seq[Setting[_]] = Seq.empty
-
+  lazy val appDependencies: Seq[ModuleID] = ???
+  lazy val plugins: Seq[Plugins] = Seq(play.sbt.PlayScala)
+  lazy val playSettings: Seq[Setting[_]] = Seq.empty
   lazy val scoverageSettings = {
     import scoverage._
 
@@ -26,26 +24,26 @@ trait MicroService {
       "sandbox.*",
       "live.*",
       "prod.*",
+      "trusts.*",
+      "estates.*",
+      "app",
       "testOnlyDoNotUseInAppConf.*",
-      "uk.gov.hmrc.trustregistration.config",
-      "uk.gov.hmrc.trustregistration.metrics",
+      "uk.gov.hmrc.common.config",
+      "uk.gov.hmrc.common.metrics",
       "uk.gov.hmrc.BuildInfo")
 
     Seq(
-      ScoverageKeys.coverageExcludedPackages := ScoverageExclusionPatterns.mkString("",";",""),
-      ScoverageKeys.coverageMinimum := 90,
+      ScoverageKeys.coverageExcludedPackages := ScoverageExclusionPatterns.mkString("", ";", ""),
+      ScoverageKeys.coverageMinimum := 85,
       ScoverageKeys.coverageFailOnMinimum := true,
       ScoverageKeys.coverageHighlighting := true
     )
   }
-
-
-
   lazy val microservice = Project(appName, file("."))
-    .enablePlugins(Seq(play.sbt.PlayScala) ++ plugins : _*)
-    .settings(playSettings : _*)
+    .enablePlugins(Seq(play.sbt.PlayScala) ++ plugins: _*)
+    .settings(playSettings: _*)
     .settings(scalaSettings: _*)
-    .settings(scoverageSettings : _*)
+    .settings(scoverageSettings: _*)
     .settings(publishingSettings: _*)
     .settings(defaultSettings(): _*)
     .settings(
@@ -62,7 +60,7 @@ trait MicroService {
     .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
     .settings(
       Keys.fork in IntegrationTest := false,
-      unmanagedSourceDirectories in IntegrationTest <<= (baseDirectory in IntegrationTest)(base => Seq(base / "it")),
+      unmanagedSourceDirectories in IntegrationTest <<= (baseDirectory in IntegrationTest) (base => Seq(base / "it")),
       addTestReportOption(IntegrationTest, "int-test-reports"),
       testGrouping in IntegrationTest := oneForkedJvmPerTest((definedTests in IntegrationTest).value),
       parallelExecution in IntegrationTest := false)
@@ -70,6 +68,7 @@ trait MicroService {
       resolvers += Resolver.bintrayRepo("hmrc", "releases"),
       resolvers += "emueller-bintray" at "http://dl.bintray.com/emueller/maven",
       resolvers += Resolver.jcenterRepo)
+  val appName: String
 }
 
 private object TestPhases {

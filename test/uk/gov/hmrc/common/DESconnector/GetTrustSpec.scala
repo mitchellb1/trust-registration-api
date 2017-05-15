@@ -23,7 +23,7 @@ import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
 import uk.gov.hmrc.common.rest.resources.core.{BadRequestResponse, GetSuccessResponse, InternalServerErrorResponse, NotFoundResponse}
 import uk.gov.hmrc.play.http.HttpResponse
-import uk.gov.hmrc.trustregistration.{JsonExamples, ScalaDataExamples}
+import uk.gov.hmrc.utils.{JsonExamples, ScalaDataExamples}
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}

@@ -25,7 +25,7 @@ case class Individual(givenName: String,
                       otherName: Option[String] = None,
                       nino: Option[String] = None,
                       telephoneNumber: Option[String] = None,
-                      passport: Option[Passport] = None,
+                      passportOrIdCard: Option[Passport] = None,
                       correspondenceAddress: Option[Address] = None)
 
 object Individual {

@@ -7,8 +7,8 @@
       "country": "UK",
       "isUkNational": true,
       "nino": "WA123456C",
-      "passport": {
-        "identifier": "123456789",
+      "passportOrIdCard": {
+        "referenceNumber": "123456789",
         "date": "2015-01-20"
       }
     },
@@ -38,8 +38,8 @@
       "country": "UK",
       "isUkNational": true,
       "nino": "WA123456C",
-      "passport": {
-        "identifier": "123456789",
+      "passportOrIdCard": {
+        "referenceNumber": "123456789",
         "date": "2015-01-20"
       }
     },

@@ -17,12 +17,42 @@
 package uk.gov.hmrc.trustregistration.utils
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.scalatestplus.play.PlaySpec
-import uk.gov.hmrc.common.utils.{FailedValidation, JsonSchemaValidator, SuccessfulValidation, TrustsValidationError}
-import uk.gov.hmrc.trustregistration.SchemaValidationExamples
+import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
+import play.api.libs.json.Json
+import uk.gov.hmrc.common.utils._
+import uk.gov.hmrc.estateapi.rest.resources.core.EstateRequest
+import uk.gov.hmrc.trustapi.rest.resources.core.TrustRequest
+import uk.gov.hmrc.utils.{ScalaDataExamples, SchemaValidationExamples}
+
+class SchemaValidatorSpec extends PlaySpec
+    with OneAppPerSuite
+    with ScalaDataExamples
+    with SchemaValidationExamples {
 
 
-class JsonValidatorSpec extends PlaySpec with SchemaValidationExamples {
+  "TrustSchemaValidator" must {
+    "read the schema and return a SuccessfulValidation for a valid json trust" when {
+      "when we have a non required field missing" in {
+        val jsonTrust = Json.toJson(TrustRequest(trustWithInterVivoTrust)).toString()
+        //println(jsonTrust)
+        val result = TrustSchemaValidator.validateAgainstSchema(jsonTrust)
+
+        result mustBe SuccessfulValidation
+      }
+    }
+  }
+
+  "EstatesSchemaValidator" must {
+    "read the schema and return a SuccessfulValidation for a valid json estate" when {
+      "when we have a non required field missing" in {
+        val jsonEstate = Json.toJson(EstateRequest(validEstateWithPersonalRepresentative)).toString()
+        //println(jsonEstate)
+        val result = EstateSchemaValidator.validateAgainstSchema(jsonEstate)
+
+        result mustBe SuccessfulValidation
+      }
+    }
+  }
 
   "JsonValidator" must {
 
