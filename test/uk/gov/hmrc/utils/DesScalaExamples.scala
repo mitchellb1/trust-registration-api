@@ -21,7 +21,7 @@ import uk.gov.hmrc.common.des._
 trait DesScalaExamples {
 
   val date = "2016-03-31"
-  val nino = DesNino("WA1234556A")
+  val nino = "WA1234556A"
   val phoneNumber = "0191 000 0000"
   val email = "john.Doe@somewhere.co.uk"
   val name = DesName("Joe", Some("John"), "Doe")
@@ -52,10 +52,8 @@ trait DesScalaExamples {
 
   val passport = DesPassportType("passportNum", date, "GB")
 
-  val passportId = DesPassportId(passport: DesPassportType, address)
-
-  //val identification = DesIdentification(Some(nino), None)
-  val identification = DesIdentification(None, Some(passportId))
+  //val identification = DesIdentification(Some(nino), None, None)
+  val identification = DesIdentification(None, Some(passport), Some(address))
 
   val personalRepresentative = DesPersonalRepresentative(name, date, identification, Some(phoneNumber), Some(email))
 
