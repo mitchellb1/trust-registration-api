@@ -27,17 +27,11 @@ class DesSchemaValidatorSpec extends PlaySpec
     with DesScalaExamples {
 
   "DesSchemaValidator" must {
-//    "read the schema and return a SuccessfulValidation for a trust" when {
-//      "when we have a valid des json trust" in {
-//        val desTrust = Json.toJson(TrustRequest(trustWithInterVivoTrust)).toString()
-//        val result = DesSchemaValidator.validateAgainstSchema(desTrust)
-//        result mustBe SuccessfulValidation
-//      }
-//    }
-    "read the schema and return a SuccessfulValidation for a estate json" when {
+
+    "read the schema and return a SuccessfulValidation for a estate json from file" when {
       "when we have a valid des json estate" in {
         lazy val desEstate = Source.fromFile(getClass.getResource("/des/desCompleteEstate.json").getPath).mkString
-        println(s"From file ---- ${desEstate}")
+        //println(s"From file ---- ${desEstate}")
         val result = DesSchemaValidator.validateAgainstSchema(desEstate)
         result mustBe SuccessfulValidation
       }
@@ -46,17 +40,26 @@ class DesSchemaValidatorSpec extends PlaySpec
     "read the schema and return a SuccessfulValidation for a estate created from the case classes" when {
       "when we have a valid des json estate" in {
         val desEstate: String = Json.prettyPrint(Json.toJson(completeValidDesEstate))
-        println(s"From case classes ---- ${desEstate}")
+        //println(s"From case classes ---- ${desEstate}")
         val result = DesSchemaValidator.validateAgainstSchema(desEstate)
         result mustBe SuccessfulValidation
       }
     }
-//    "read the schema and return a failedValidation for a estate" when {
-//      "when we have a valid des json estate" in {
-//        lazy val desEstateJsonNode = Source.fromFile(getClass.getResource("/des/desInvalidCompleteEstate.json").getPath).mkString
-//        val result = DesSchemaValidator.validateAgainstSchema(desEstateJsonNode.toString)
-//        result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("""object has missing required properties (["line1","line2"])""","/correspondence/address")))
-//      }
-//    }
+    "read the schema and return a failedValidation for a estate from a file" when {
+      "when we have an invalid des json estate" in {
+        lazy val desEstateJsonNode = Source.fromFile(getClass.getResource("/des/desInvalidCompleteEstate.json").getPath).mkString
+        val result = DesSchemaValidator.validateAgainstSchema(desEstateJsonNode.toString)
+        result mustBe FailedValidation("Invalid Json",0,List(TrustsValidationError("""object has missing required properties (["line1","line2"])""","/correspondence/address")))
+      }
+    }
+
+    "read the schema and return a SuccessfulValidation for a trust json from file" when {
+      "when we have a valid des json trust" in {
+        lazy val desTrust = Source.fromFile(getClass.getResource("/des/desCompleteTrust.json").getPath).mkString
+        println(s"From file ---- ${desTrust}")
+        val result = DesSchemaValidator.validateAgainstSchema(desTrust)
+        result mustBe SuccessfulValidation
+      }
+    }
   }
 }

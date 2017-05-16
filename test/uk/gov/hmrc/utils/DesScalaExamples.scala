@@ -40,7 +40,6 @@ trait DesScalaExamples {
   val yearsReturns = DesYearsReturns(Some(true), None)
   //val yearsReturns = DesYearsReturns(taxReturnsNoDues false, returns: Option[List[DesYearReturn]] = None)
 
-  //val assets = DesAssets
   val declaration =  DesDeclaration(name, address)
 
   val desWillId = DesWillIdentification(Some(nino), None)
@@ -61,8 +60,6 @@ trait DesScalaExamples {
   val periodTaxDues = "01"
 
   val estate = DesEstate(entities, administrationEndDate, periodTaxDues)
-
- // val desEstateType = DesEstateType(estate)
 
   val details = DesDetails(Some(estate), trust = None)
 
