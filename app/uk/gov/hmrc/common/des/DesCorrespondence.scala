@@ -17,7 +17,7 @@
 package uk.gov.hmrc.common.des
 
 import play.api.libs.json.Json
-case class DesCorrespondence(abroadIndicator: Boolean, name: DesName, addres: DesAddress, phoneNumber: String)
+case class DesCorrespondence(abroadIndicator: Boolean, name: String, address: DesAddress, phoneNumber: String)
 
 object DesCorrespondence {
   implicit val formats = Json.format[DesCorrespondence]

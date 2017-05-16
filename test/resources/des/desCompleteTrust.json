@@ -1,0 +1,335 @@
+{
+  "admin": {
+    "utr": "12345ABCDE"
+  },
+  "correspondence": {
+    "abroadIndicator": false,
+    "name": "Trust Name",
+    "address": {
+      "line1": "address line 1",
+      "line2": "address line 1",
+      "line3": "address line 1",
+      "line4": "address line 1",
+      "postCode": "NE45 23PQ",
+      "country": "GB"
+    },
+    "phoneNumber": "0191 000 0000"
+  },
+  "yearsReturns": {
+    "taxReturnsNoDues": true,
+    "returns": [
+      {
+        "taxReturnYear": "16",
+        "taxConsequence": true
+      },
+      {
+        "taxReturnYear": "14",
+        "taxConsequence": false
+      }
+    ]
+  },
+  "declaration": {
+    "name": {
+      "firstName": "Joe",
+      "middleName": "John",
+      "lastName": "Doe"
+    },
+    "address": {
+      "line1": "address line 1",
+      "line2": "address line 1",
+      "line3": "address line 1",
+      "line4": "address line 1",
+      "postCode": "NE45 23PQ",
+      "country": "GB"
+    }
+  },
+  "details": {
+    "trust": {
+      "details": {
+        "startDate": "1920-01-07",
+        "lawCountry": "GB",
+        "administrationCountry": "GB",
+        "residentialStatus": {
+          "uk": {
+            "scottishLaw": false,
+            "preOffShore": "GB"
+          }
+        },
+        "typeOfTrust": "Will Trust or Intestacy Trust",
+        "deedOfVariation": "Previously there was only an absolute interest under the will",
+        "interVivos": false,
+        "efrbsStartDate": "2016-01-21"
+      },
+      "entities": {
+        "naturalPerson": [
+          {
+            "name": {
+              "firstName": "Joe",
+              "middleName": "John",
+              "lastName": "doe"
+            },
+            "dateOfBirth": "2016-09-28",
+            "identification": {
+              "passport": {
+                "number": "12134566",
+                "expirationDate": "2016-09-25",
+                "countryOfIssue": "AD"
+              },
+              "address": {
+                "line1": "address line 1",
+                "line2": "address line 1",
+                "line3": "address line 1",
+                "line4": "address line 1",
+                "postCode": "NE45 23PQ",
+                "country": "GB"
+              }
+            }
+          }
+        ],
+        "beneficiary": {
+          "individualDetails": [
+            {
+              "name": {
+                "firstName": "Joe",
+                "middleName": "John",
+                "lastName": "doe"
+              },
+              "dateOfBirth": "2016-09-25",
+              "vulnerableBeneficiary": false,
+              "beneficiaryType": "Director",
+              "beneficiaryDiscretion": false,
+              "beneficiaryShareOfIncome": "132",
+              "identification": {
+                "passport": {
+                  "number": "1234567",
+                  "expirationDate": "2016-09-25",
+                  "countryOfIssue": "GB"
+                },
+                "address": {
+                  "line1": "address line 1",
+                  "line2": "address line 1",
+                  "line3": "address line 1",
+                  "line4": "address line 1",
+                  "postCode": "NE45 23PQ",
+                  "country": "GB"
+                }
+              }
+            }
+          ],
+          "company": [
+            {
+              "organisationName": "organisation Name",
+              "beneficiaryDiscretion": false,
+              "beneficiaryShareOfIncome": "AAA",
+              "identification": {
+                "address": {
+                  "line1": "address line 1",
+                  "line2": "address line 1",
+                  "line3": "address line 1",
+                  "line4": "address line 1",
+                  "postCode": "NE45 23PQ",
+                  "country": "GB"
+                },
+                "utr": "12345ABCDE"
+              }
+            }
+          ],
+          "trust": [
+            {
+              "organisationName": "organisation Name 1",
+              "beneficiaryDiscretion": false,
+              "beneficiaryShareOfIncome": "302",
+              "identification": {
+                "address": {
+                  "line1": "address line 1",
+                  "line2": "address line 1",
+                  "line3": "address line 1",
+                  "line4": "address line 1",
+                  "postCode": "NE45 23PQ",
+                  "country": "GB"
+                },
+                "utr": "12345ABCDE"
+              }
+            }
+          ],
+          "charity": [
+            {
+              "organisationName": "organisation Name 2",
+              "beneficiaryDiscretion": false,
+              "beneficiaryShareOfIncome": "50A",
+              "identification": {
+                "address": {
+                  "line1": "address line 1",
+                  "line2": "address line 1",
+                  "line3": "address line 1",
+                  "line4": "address line 1",
+                  "postCode": "NE45 23PQ",
+                  "country": "GB"
+                },
+                "utr": "12345ABCDE"
+              }
+            }
+          ],
+          "unidentified": [
+            {
+              "description": "unidentified description",
+              "beneficiaryDiscretion": false,
+              "beneficiaryShareOfIncome": "70B"
+            }
+          ],
+          "large": [
+            {
+              "organisationName": "organisation Name large",
+              "description": "description large",
+              "numberOfBeneficiary": "4444",
+              "identification": {
+                "address": {
+                  "line1": "address line 1",
+                  "line2": "address line 1",
+                  "line3": "address line 1",
+                  "line4": "address line 1",
+                  "postCode": "NE45 23PQ",
+                  "country": "GB"
+                },
+                "utr": "12345ABCDE"
+              },
+              "beneficiaryDiscretion": false,
+              "beneficiaryShareOfIncome": "100"
+            }
+          ],
+          "other": [
+            {
+              "description": "description other",
+              "address": {
+                "line1": "address line 1",
+                "line2": "address line 1",
+                "line3": "address line 1",
+                "line4": "address line 1",
+                "postCode": "NE45 23PQ",
+                "country": "GB"
+              },
+              "numberOfBeneficiary": "13",
+              "beneficiaryDiscretion": false,
+              "beneficiaryShareOfIncome": "50N"
+            }
+          ]
+        },
+        "deceased": {
+          "name": {
+            "firstName": "Joe",
+            "middleName": "John",
+            "lastName": "doe"
+          },
+          "dateOfBirth": "2016-09-25",
+          "dateOfDeath": "2016-09-25",
+          "identification": {
+            "nino": "WA123456B"
+          }
+        },
+        "leadTrustees": {
+          "name": "joe",
+          "phoneNumber": "0191 000 0066",
+          "email": "john.doe@somewhere.co.uk",
+          "identification": {
+            "utr": "12345ABC"
+          }
+        },
+        "trustees": [
+          {
+            "name": {
+              "firstName": "Joe",
+              "middleName": "John",
+              "lastName": "doe"
+            },
+            "dateOfBirth": "2016-09-25",
+            "identification": {
+              "passport": {
+                "number": "123324",
+                "expirationDate": "2016-09-25",
+                "countryOfIssue": "GB"
+              },
+              "address": {
+                "line1": "address line 1",
+                "line2": "address line 1",
+                "line3": "address line 1",
+                "line4": "address line 1",
+                "postCode": "NE45 23PQ",
+                "country": "GB"
+              }
+            },
+            "phoneNumber": "0191 000 0000"
+          }
+        ],
+        "protectors": {
+          "protector": [],
+          "protectorCompany": []
+        },
+        "settlors": {
+          "settlor": [],
+          "settlorCompany": []
+        }
+      },
+      "assets": {
+        "monetary": [
+          {
+            "assetMonetaryAmount": 23456789
+          }
+        ],
+        "propertyOrLand": [
+          {
+            "buildingLandName": "building Land Name",
+            "address": {
+              "line1": "address line 1",
+              "line2": "address line 1",
+              "line3": "address line 1",
+              "line4": "address line 1",
+              "postCode": "NE45 23PQ",
+              "country": "GB"
+            },
+            "valueFull": 2345,
+            "valuePrevious": 123
+          }
+        ],
+        "shares": [
+          {
+            "numberOfShares": "1000000",
+            "orgName": "org Name sharesshares",
+            "utr": "12345ABCDE",
+            "class": "Ordinary shares",
+            "type": "Quoted",
+            "value": 5000000
+          }
+        ],
+        "business": [
+          {
+            "orgName": "org Name business",
+            "utr": "12345ABCDE",
+            "businessDescription": "business Description 1",
+            "address": {
+              "line1": "address line 1",
+              "line2": "address line 1",
+              "line3": "address line 1",
+              "line4": "address line 1",
+              "postCode": "NE45 23PQ",
+              "country": "GB"
+            },
+            "businessValue": 3454512
+          }
+        ],
+        "partnerShip": [
+          {
+            "utr": "12345ABCDE",
+            "typeOfPartnership": "Partnership Trade",
+            "partnershipStart": "2000-01-31"
+          }
+        ],
+        "other": [
+          {
+            "description": "other description",
+            "value": 1234
+          }
+        ]
+      }
+    }
+  }
+}
