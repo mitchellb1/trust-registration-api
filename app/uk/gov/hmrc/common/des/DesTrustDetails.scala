@@ -15,9 +15,18 @@
  */
 
 package uk.gov.hmrc.common.des
-import play.api.libs.json.{JsPath, Json, Reads}
-case class DesTrustDetails(startDate: String, lawCountry: String, administrationCountry: Option[String] = None, residentialStatus: Option[DesResidentialStatus] = None, typeOfTrust: String, deedOfVariation: Option[String] = None, interVivos: Option[Boolean] = None, efrbsStartDate: Option[String] = None)
+import org.joda.time.DateTime
+import play.api.libs.json._
+case class DesTrustDetails(startDate: DateTime,
+                           lawCountry: String,
+                           administrationCountry: Option[String] = None,
+                           residentialStatus: Option[DesResidentialStatus] = None,
+                           typeOfTrust: String, deedOfVariation: Option[String] = None,
+                           interVivos: Option[Boolean] = None,
+                           efrbsStartDate: Option[DateTime] = None)
 
 object DesTrustDetails {
+  implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
+  implicit val dateWrites: Writes[DateTime] = Writes { (dt: DateTime) => JsString(dt.toString("yyyy-MM-dd")) }
   implicit val formats = Json.format[DesTrustDetails]
 }
