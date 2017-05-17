@@ -16,9 +16,19 @@
 
 package uk.gov.hmrc.common.des
 
-import play.api.libs.json.Json
-case class DesIndividualDetails(name: DesName, dateOfBirth: String, vulnerableBeneficiary: Option[Boolean] = None, beneficiaryType: Option[String] = None, beneficiaryDiscretion: Option[Boolean] = None, beneficiaryShareOfIncome: Option[String] = None, identification: DesIdentification)
+import org.joda.time.DateTime
+import play.api.libs.json.{JsString, Json, Reads, Writes}
+
+case class DesIndividualDetails(name: DesName,
+                                dateOfBirth: DateTime,
+                                vulnerableBeneficiary: Option[Boolean] = None,
+                                beneficiaryType: Option[String] = None,
+                                beneficiaryDiscretion: Option[Boolean] = None,
+                                beneficiaryShareOfIncome: Option[String] = None,
+                                identification: DesIdentification)
 
 object DesIndividualDetails {
+  implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
+  implicit val dateWrites: Writes[DateTime] = Writes { (dt: DateTime) => JsString(dt.toString("yyyy-MM-dd")) }
   implicit val formats = Json.format[DesIndividualDetails]
 }
