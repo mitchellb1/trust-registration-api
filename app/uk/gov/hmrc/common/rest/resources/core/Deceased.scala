@@ -17,12 +17,13 @@
 package uk.gov.hmrc.common.rest.resources.core
 
 import org.joda.time.DateTime
-import play.api.libs.json.{JsString, Json, Reads, Writes}
+import play.api.libs.json._
 
 case class Deceased(individual: Individual, dateOfDeath: DateTime)
 
 object Deceased {
   implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
   implicit val dateWrites: Writes[DateTime] = Writes { (dt: DateTime) => JsString(dt.toString("yyyy-MM-dd")) }
+
   implicit val formats = Json.format[Deceased]
 }

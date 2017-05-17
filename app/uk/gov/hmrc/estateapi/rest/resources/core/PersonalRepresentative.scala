@@ -20,7 +20,7 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.common.rest.resources.core.Individual
 
 
-case class PersonalRepresentative(individual: Individual,telephoneNumber: String,email: String)
+case class PersonalRepresentative(individual: Individual, telephoneNumber: String,email: String)
 
 object PersonalRepresentative {
   implicit val personalRepresentativeFormats = Json.format[PersonalRepresentative]

@@ -16,11 +16,12 @@
 
 package uk.gov.hmrc.utils
 
+import org.joda.time.DateTime
 import uk.gov.hmrc.common.des._
 
 trait DesScalaExamples {
 
-  val date = "2016-03-31"
+  val date = new DateTime("2016-03-31")
   val nino = "WA123456A"
   val phoneNumber = "0191 000 0000"
   val email = "john.doe@somewhere.co.uk"
