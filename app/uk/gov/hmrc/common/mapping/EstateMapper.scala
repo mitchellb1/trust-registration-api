@@ -22,87 +22,33 @@ import uk.gov.hmrc.estateapi.rest.resources.core.Estate
 
 trait EstateMapper {
 
-//  lazy val desEstate = Source.fromFile(getClass.getResource("/des/desCompleteEstate.json").getPath).mkString
-//  lazy val domainEstate = Source.fromFile(getClass.getResource("/des/desCompleteEstate.json").getPath).mkString
-
-
   def toDes(domainEstate: Estate): DesTrustEstate = {
-    //Using the domain
-
-    //val desPersonalRepresentativeAddress: DesAddress = AddressMap.toDes(domainEstate.personalRepresentative.individual.correspondenceAddress.get)
-
-    //val desPersonalRepresentativeName: DesName = DesNameMap.toDes(domainEstate.personalRepresentative.individual)
-
-    //val desPersonalRepresentativeDesIdentification: DesIdentification = DesIdentificationMap.toDes(domainEstate.personalRepresentative.individual)
 
     val personalRepresentative: DesPersonalRepresentative = DesPersonalRepresentativeMap.toDes(domainEstate.personalRepresentative)
 
-    val deceased = DesWillMap.toDes(domainEstate.deceased)
+    val deceased: DesWill = DesWillMap.toDes(domainEstate.deceased)
 
-    val declaration: DesDeclaration = DesDeclarationMap.toDes(domainEstate.declaration)
+    val administrationEndDate: Option[DateTime] = domainEstate.adminPeriodFinishedDate
 
-    val administrationEndDate = domainEstate.adminPeriodFinishedDate
-
-    //------------------------------------------------------------------------------------------------------------------
-//Hard coded
-    val date = new DateTime("2016-03-31")
-    //val nino = "WA123456A"
-    val phoneNumber = "0191 000 0000"
-    //val email = "john.doe@somewhere.co.uk"
-    val name = DesName("Joe", Some("John"), "Doe")
-    val address = DesAddress(
-      line1 = "address line 1",
-      line2 = "address line 1",
-      line3 = Some("address line 1"),
-      line4 = Some("address line 1"),
-      postCode = Some("NE45 23PQ"),
-      country = "GB")
-
-    val admin = DesAdmin("12345ABCDE")
-
-
-    val correspondence = DesCorrespondence(abroadIndicator = true, "SomeName thats not a name", address, phoneNumber)
-    val yearsReturns = DesYearsReturns(Some(true), None)
-    //val yearsReturns = DesYearsReturns(taxReturnsNoDues false, returns: Option[List[DesYearReturn]] = None)
-
-    //val declaration =  DesDeclaration(name, address)
-
-    //val desWillId: DesWillIdentification = DesWillIdentification(Some(nino), None)
-
-    //val deceased = DesWill(name, date, date, identification = desWillId)
-
-    val passport = DesPassportType("12134567", date, "GB")
-
-    //val identification = DesIdentification(Some(nino), None, None)
-    val identification = DesIdentification(None, Some(passport), Some(address))
-
-    //val personalRepresentative = DesPersonalRepresentative(name, date, identification, Some(phoneNumber), Some(email))
-
-    val entities: DesEntities = DesEntities(personalRepresentative, deceased)
-
-    //val administrationEndDate = Some(date)
+    val correspondence: DesCorrespondence = DesCorrespondenceMap.toDes(domainEstate)
 
     val periodTaxDues = "01"
 
-    val estate = DesEstate(entities, administrationEndDate, periodTaxDues)
+    val estate: DesEstate = DesEstate(DesEntities(personalRepresentative, deceased),
+      administrationEndDate,
+      periodTaxDues)
 
-    val details = DesDetails(Some(estate), trust = None)
-
-    val completeValidDesEstate = DesTrustEstate(
-      Some(admin),
+    DesTrustEstate(
+      None,
       correspondence,
       //  None,
-      Some(yearsReturns),
+      Some(DesYearsReturns(Some(true), None)),
       None,
       //    Some(assets),
-      declaration: DesDeclaration,
-      details)
-
-    completeValidDesEstate
+      DesDeclarationMap.toDes(domainEstate.declaration),
+      DesDetails(Some(estate), trust = None)
+    )
   }
-
-
-
 }
 
 object EstateMapper extends EstateMapper

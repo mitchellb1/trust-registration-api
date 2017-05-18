@@ -31,4 +31,5 @@ trait DesWillMap {
     )
   }
 }
+
 object DesWillMap extends DesWillMap

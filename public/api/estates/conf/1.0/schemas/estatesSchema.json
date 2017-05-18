@@ -387,6 +387,9 @@
         },
         "deceased": {
           "$ref": "#/definitions/deceasedType"
+        },
+        "telephoneNumber": {
+          "$ref": "#/definitions/telephoneNumberType"
         }
       },
       "required": ["estateName",

@@ -23,13 +23,14 @@ import uk.gov.hmrc.estateapi.rest.resources.core.PersonalRepresentative
 trait DesPersonalRepresentativeMap {
 
   def toDes(personalRepresentative: PersonalRepresentative): DesPersonalRepresentative = {
-      DesPersonalRepresentative(
-        name = DesNameMap.toDes(personalRepresentative.individual),
-        dateOfBirth = personalRepresentative.individual.dateOfBirth,
-        identification = DesIdentificationMap.toDes(personalRepresentative.individual),
-        phoneNumber = Some(personalRepresentative.telephoneNumber),
-        email = Some(personalRepresentative.email))
+    DesPersonalRepresentative(
+      name = DesNameMap.toDes(personalRepresentative.individual),
+      dateOfBirth = personalRepresentative.individual.dateOfBirth,
+      identification = DesIdentificationMap.toDes(personalRepresentative.individual),
+      phoneNumber = Some(personalRepresentative.telephoneNumber),
+      email = Some(personalRepresentative.email))
 
   }
 }
+
 object DesPersonalRepresentativeMap extends DesPersonalRepresentativeMap

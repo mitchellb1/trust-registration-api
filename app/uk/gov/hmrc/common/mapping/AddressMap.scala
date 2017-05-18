@@ -19,7 +19,7 @@ package uk.gov.hmrc.common.mapping
 import uk.gov.hmrc.common.des.DesAddress
 import uk.gov.hmrc.common.rest.resources.core.Address
 
-trait AddressMap  {
+trait AddressMap {
 
   def toDes(address: Address): DesAddress = {
     new DesAddress(
@@ -32,15 +32,16 @@ trait AddressMap  {
     )
   }
 
-//  def toDomain(address: DesAddress): Address = {
-//  new Address(
-//    line1 = address.line1,
-//    line2 = Some(address.line2),
-//    line3 = address.line3,
-//    line4 = address.line4,
-//    postalCode = address.postCode,
-//    countryCode = address.country
-//    )
-//  }
+  //  def toDomain(address: DesAddress): Address = {
+  //  new Address(
+  //    line1 = address.line1,
+  //    line2 = Some(address.line2),
+  //    line3 = address.line3,
+  //    line4 = address.line4,
+  //    postalCode = address.postCode,
+  //    countryCode = address.country
+  //    )
+  //  }
 }
+
 object AddressMap extends AddressMap

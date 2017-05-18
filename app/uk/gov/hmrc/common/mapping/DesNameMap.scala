@@ -30,22 +30,23 @@ trait DesNameMap {
     )
   }
 
-//  def toDomain(desName: DesName,
-//               nino: Option[String] = None,
-//               telephoneNumber: Option[String] = None,
-//               desPassport: Option[DesPassportType] = None,
-//               desCorrespondenceAddress: Option[DesAddress] = None,
-//               desIndividualDetails: DesIndividualDetails): Individual = {
-//    new Individual(
-//      givenName = desName.firstName,
-//      otherName = desName.middleName,
-//      familyName = desName.lastName,
-//      nino = nino,
-//      telephoneNumber = telephoneNumber,
-//      correspondenceAddress = Some(toDomain(desCorrespondenceAddress.get)),
-//      passportOrIdCard = None,
-//      dateOfBirth = desIndividualDetails.dateOfBirth
-//    )
-//  }
+  //  def toDomain(desName: DesName,
+  //               nino: Option[String] = None,
+  //               telephoneNumber: Option[String] = None,
+  //               desPassport: Option[DesPassportType] = None,
+  //               desCorrespondenceAddress: Option[DesAddress] = None,
+  //               desIndividualDetails: DesIndividualDetails): Individual = {
+  //    new Individual(
+  //      givenName = desName.firstName,
+  //      otherName = desName.middleName,
+  //      familyName = desName.lastName,
+  //      nino = nino,
+  //      telephoneNumber = telephoneNumber,
+  //      correspondenceAddress = Some(toDomain(desCorrespondenceAddress.get)),
+  //      passportOrIdCard = None,
+  //      dateOfBirth = desIndividualDetails.dateOfBirth
+  //    )
+  //  }
 }
+
 object DesNameMap extends DesNameMap

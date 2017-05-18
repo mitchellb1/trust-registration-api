@@ -26,7 +26,8 @@ case class Estate(estateName: String,
                   adminPeriodFinishedDate: Option[DateTime] = None,
                   reasonEstateSetup: String,
                   declaration: Declaration,
-                  deceased: Deceased) {
+                  deceased: Deceased,
+                  telephoneNumber:  String) {
 
 }
 

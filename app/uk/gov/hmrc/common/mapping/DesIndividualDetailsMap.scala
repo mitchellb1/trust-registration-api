@@ -34,15 +34,16 @@ trait DesIndividualDetailsMap {
     )
   }
 
-//  def toDomain(desIndividualDetails: DesIndividualDetails): Individual = {
-//    new Address(
-//      line1 = address.line1,
-//      line2 = Some(address.line2),
-//      line3 = address.line3,
-//      line4 = address.line4,
-//      postalCode = address.postCode,
-//      countryCode = address.country
-//    )
-//  }
+  //  def toDomain(desIndividualDetails: DesIndividualDetails): Individual = {
+  //    new Address(
+  //      line1 = address.line1,
+  //      line2 = Some(address.line2),
+  //      line3 = address.line3,
+  //      line4 = address.line4,
+  //      postalCode = address.postCode,
+  //      countryCode = address.country
+  //    )
+  //  }
 }
+
 object DesIndividualDetailsMap extends DesIndividualDetailsMap

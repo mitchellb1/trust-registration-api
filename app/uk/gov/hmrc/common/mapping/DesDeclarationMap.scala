@@ -34,4 +34,5 @@ trait DesDeclarationMap {
     )
   }
 }
+
 object DesDeclarationMap extends DesDeclarationMap

@@ -30,8 +30,7 @@ trait DesWillIdentificationMap {
         address = Some(AddressMap.toDes(individual.correspondenceAddress.get))
       )
     }
-    else
-    {
+    else {
       new DesWillIdentification(
         nino = Some(individual.nino.getOrElse("")),
         address = None)
@@ -39,4 +38,5 @@ trait DesWillIdentificationMap {
   }
 
 }
+
 object DesWillIdentificationMap extends DesWillIdentificationMap

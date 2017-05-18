@@ -30,18 +30,19 @@ trait DesIdentificationMap {
     )
   }
 
-//  def toDomain(desIdentification: DesIdentification, desName: DesName, desIndividualDetails: DesIndividualDetails): Individual = {
-//
-//    new Individual(
-//      givenName = desName.firstName,
-//      familyName = desName.lastName,
-//      dateOfBirth = desIndividualDetails.dateOfBirth,
-//      otherName = desName.middleName,
-//      nino = desIdentification.nino,
-//      telephoneNumber = None,
-//      passportOrIdCard = None,
-//      correspondenceAddress = Some(AddressMap.toDomain(desIdentification.address.get))
-//    )
-//  }
+  //  def toDomain(desIdentification: DesIdentification, desName: DesName, desIndividualDetails: DesIndividualDetails): Individual = {
+  //
+  //    new Individual(
+  //      givenName = desName.firstName,
+  //      familyName = desName.lastName,
+  //      dateOfBirth = desIndividualDetails.dateOfBirth,
+  //      otherName = desName.middleName,
+  //      nino = desIdentification.nino,
+  //      telephoneNumber = None,
+  //      passportOrIdCard = None,
+  //      correspondenceAddress = Some(AddressMap.toDomain(desIdentification.address.get))
+  //    )
+  //  }
 }
+
 object DesIdentificationMap extends DesIdentificationMap

@@ -91,7 +91,8 @@ trait ScalaDataExamples {
     adminPeriodFinishedDate = Some(new DateTime("1900-01-01")),
     reasonEstateSetup = "incomeTaxDueMoreThan10000",
     declaration = declaration,
-    deceased = deceased)
+    deceased = deceased,
+    telephoneNumber = "0191 365 1234")
 
   val incomeDistribution = IncomeDistribution(
     isIncomeAtTrusteeDiscretion = false,
