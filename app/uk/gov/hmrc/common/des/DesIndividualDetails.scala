@@ -17,7 +17,8 @@
 package uk.gov.hmrc.common.des
 
 import org.joda.time.DateTime
-import play.api.libs.json._
+import play.api.libs.json.{JsString, Json, Reads, Writes}
+
 case class DesIndividualDetails(name: DesName,
                                 dateOfBirth: DateTime,
                                 vulnerableBeneficiary: Option[Boolean] = None,

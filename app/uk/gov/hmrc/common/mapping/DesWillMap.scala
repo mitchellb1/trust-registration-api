@@ -14,14 +14,21 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.des
+package uk.gov.hmrc.common.mapping
 
-import org.joda.time.DateTime
-import play.api.libs.json.{JsString, Json, Reads, Writes}
-case class DesProtector(name: DesName, dateOfBirth: DateTime, identification: DesIdentification)
+import uk.gov.hmrc.common.des.DesWill
+import uk.gov.hmrc.common.rest.resources.core.Deceased
 
-object DesProtector {
-  implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
-  implicit val dateWrites: Writes[DateTime] = Writes { (dt: DateTime) => JsString(dt.toString("yyyy-MM-dd")) }
-  implicit val formats = Json.format[DesProtector]
+
+trait DesWillMap {
+
+  def toDes(deceased: Deceased): DesWill = {
+    new DesWill(
+      name = DesNameMap.toDes(deceased.individual),
+      dateOfBirth = deceased.individual.dateOfBirth,
+      dateOfDeath = deceased.dateOfDeath,
+      identification = DesWillIdentificationMap.toDes(deceased.individual)
+    )
+  }
 }
+object DesWillMap extends DesWillMap

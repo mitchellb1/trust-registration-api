@@ -384,9 +384,17 @@
         },
         "declaration": {
           "$ref": "#/definitions/declarationType"
+        },
+        "deceased": {
+          "$ref": "#/definitions/deceasedType"
         }
       },
-      "required": ["estateName","correspondenceAddress","personalRepresentative","reasonEstateSetup","declaration"],
+      "required": ["estateName",
+        "correspondenceAddress",
+        "personalRepresentative",
+        "reasonEstateSetup",
+        "declaration",
+        "deceased"],
       "type": "object"
     },
     "individualType": {

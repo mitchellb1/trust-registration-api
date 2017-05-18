@@ -21,27 +21,27 @@ import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
 import uk.gov.hmrc.common.mapping.EstateMapper
 import uk.gov.hmrc.common.utils.{DesSchemaValidator, SuccessfulValidation}
-import uk.gov.hmrc.estateapi.rest.resources.core.EstateRequest
 import uk.gov.hmrc.utils.ScalaDataExamples
 
 class EstateMappingSpec extends PlaySpec
   with OneAppPerSuite
   with ScalaDataExamples {
 
-  val domainEstateFromCaseClasses = EstateRequest(validEstateWithPersonalRepresentative)
-  val domainEstateFromFileString: String = Json.prettyPrint(Json.toJson(validEstateWithPersonalRepresentative))
+//  val domainEstateFromCaseClasses = EstateRequest(validEstateWithPersonalRepresentative)
+//  val domainEstateFromFileString: String = Json.prettyPrint(Json.toJson(validEstateWithPersonalRepresentative))
 
   val SUT = EstateMapper
 
   "EstateMapper" must {
-    "accept a valid domain Estates case class" when {
-      "and return a valid DesEstates case class" in {
+    "accept a valid domain Estates case classes" when {
+      "and return a valid DesEstates case classes" in {
 
-        //println(s"From domain case classes ---- ${validEstateWithPersonalRepresentative}")
-        println(s"From domain case classes ---- ${Json.toJson(validEstateWithPersonalRepresentative).toString()}}")
-        val convertedJson = SUT.toDes(validEstateWithPersonalRepresentative)
-        println(s"From des case classes ---- ${Json.toJson(convertedJson).toString()}")
-        val result = DesSchemaValidator.validateAgainstSchema(Json.toJson(convertedJson).toString())
+
+        //println(s"From domain case classes ---- ${Json.toJson(validEstateWithPersonalRepresentative).toString()}}")
+        val convertedToDesCaseClasses = SUT.toDes(validEstateWithPersonalRepresentative)
+        println(s"From des case classes ---- ${Json.toJson(convertedToDesCaseClasses).toString()}")
+
+        val result = DesSchemaValidator.validateAgainstSchema(Json.toJson(convertedToDesCaseClasses).toString())
         result mustBe SuccessfulValidation
       }
     }

@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.common.mapping
 
+import org.joda.time.DateTime
 import uk.gov.hmrc.common.des._
 import uk.gov.hmrc.estateapi.rest.resources.core.Estate
 
@@ -28,44 +29,26 @@ trait EstateMapper {
   def toDes(domainEstate: Estate): DesTrustEstate = {
     //Using the domain
 
-    val desPersonalRepresentativeAddress = AddressMap.toDes(domainEstate.personalRepresentative.individual.correspondenceAddress.get)
+    //val desPersonalRepresentativeAddress: DesAddress = AddressMap.toDes(domainEstate.personalRepresentative.individual.correspondenceAddress.get)
 
-    val desPersonalRepresentativeName = DesName(
-      domainEstate.personalRepresentative.individual.givenName,
-      Some(domainEstate.personalRepresentative.individual.otherName.getOrElse("")),
-      domainEstate.personalRepresentative.individual.familyName)
+    //val desPersonalRepresentativeName: DesName = DesNameMap.toDes(domainEstate.personalRepresentative.individual)
 
-    //    val personalRepresentative: DesPersonalRepresentative = {
-    //      DesPersonalRepresentative(
-    //        name = desPersonalRepresentativeName,
-    //        dateOfBirth = domainEstate.personalRepresentative.individual.dateOfBirth.formatted("yyyy-MM-dd"),
-    //        identification = DesIdentification(None, Some(passport), Some(address)),
-    //        phoneNumber = Some(domainEstate.personalRepresentative.telephoneNumber),
-    //        email = Some(domainEstate.personalRepresentative.email))
-    //    }
+    //val desPersonalRepresentativeDesIdentification: DesIdentification = DesIdentificationMap.toDes(domainEstate.personalRepresentative.individual)
 
-    val desDeclarationAddress = AddressMap.toDes(domainEstate.declaration.correspondenceAddress)
-    val desDeclarationName = DesName(
-      firstName = domainEstate.declaration.givenName,
-      middleName = domainEstate.declaration.otherName,
-      lastName = domainEstate.declaration.familyName)
+    val personalRepresentative: DesPersonalRepresentative = DesPersonalRepresentativeMap.toDes(domainEstate.personalRepresentative)
 
-    //val declaration =  DesDeclaration(name, address)
-    val declaration = DesDeclaration(desDeclarationName, desDeclarationAddress)
+    val deceased = DesWillMap.toDes(domainEstate.deceased)
 
+    val declaration: DesDeclaration = DesDeclarationMap.toDes(domainEstate.declaration)
 
-    //val administrationEndDate = Some(date)
     val administrationEndDate = domainEstate.adminPeriodFinishedDate
 
-
     //------------------------------------------------------------------------------------------------------------------
-
-
-    //Hard coded
-    val date = "2016-03-31"
-    val nino = "WA123456A"
+//Hard coded
+    val date = new DateTime("2016-03-31")
+    //val nino = "WA123456A"
     val phoneNumber = "0191 000 0000"
-    val email = "john.doe@somewhere.co.uk"
+    //val email = "john.doe@somewhere.co.uk"
     val name = DesName("Joe", Some("John"), "Doe")
     val address = DesAddress(
       line1 = "address line 1",
@@ -82,21 +65,22 @@ trait EstateMapper {
     val yearsReturns = DesYearsReturns(Some(true), None)
     //val yearsReturns = DesYearsReturns(taxReturnsNoDues false, returns: Option[List[DesYearReturn]] = None)
 
+    //val declaration =  DesDeclaration(name, address)
 
-    val desWillId = DesWillIdentification(Some(nino), None)
+    //val desWillId: DesWillIdentification = DesWillIdentification(Some(nino), None)
 
-    val deceased = DesWill(name, date, date, identification = desWillId)
+    //val deceased = DesWill(name, date, date, identification = desWillId)
 
     val passport = DesPassportType("12134567", date, "GB")
 
     //val identification = DesIdentification(Some(nino), None, None)
     val identification = DesIdentification(None, Some(passport), Some(address))
 
-    // val personalRepresentative = DesPersonalRepresentative(name, date, identification, Some(phoneNumber), Some(email))
-    val personalRepresentative = DesPersonalRepresentative(desPersonalRepresentativeName, date, identification, Some(phoneNumber), Some(email))
+    //val personalRepresentative = DesPersonalRepresentative(name, date, identification, Some(phoneNumber), Some(email))
 
-    val entities = DesEntities(personalRepresentative: DesPersonalRepresentative, deceased: DesWill)
+    val entities: DesEntities = DesEntities(personalRepresentative, deceased)
 
+    //val administrationEndDate = Some(date)
 
     val periodTaxDues = "01"
 
@@ -104,7 +88,7 @@ trait EstateMapper {
 
     val details = DesDetails(Some(estate), trust = None)
 
-    val completeEstate = DesTrustEstate(
+    val completeValidDesEstate = DesTrustEstate(
       Some(admin),
       correspondence,
       //  None,
@@ -114,10 +98,7 @@ trait EstateMapper {
       declaration: DesDeclaration,
       details)
 
-
-
-
-    completeEstate
+    completeValidDesEstate
   }
 
 
