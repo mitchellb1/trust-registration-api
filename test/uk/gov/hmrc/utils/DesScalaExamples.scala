@@ -25,8 +25,8 @@ trait DesScalaExamples {
   val nino = "WA123456A"
   val phoneNumber = "0191 000 0000"
   val email = "john.doe@somewhere.co.uk"
-  val name = DesName("Joe", Some("John"), "Doe")
-  val address = DesAddress(
+  val desName = DesName("Joe", Some("John"), "Doe")
+  val desAddress = DesAddress(
     line1 = "address line 1",
     line2 = "address line 1",
     line3 = Some("address line 1"),
@@ -37,24 +37,24 @@ trait DesScalaExamples {
   val admin = DesAdmin("12345ABCDE")
 
 
-  val correspondence = DesCorrespondence(abroadIndicator = true, "SomeName thats not a name", address, phoneNumber)
+  val correspondence = DesCorrespondence(abroadIndicator = true, "SomeName thats not a name", desAddress, phoneNumber)
   val yearsReturns = DesYearsReturns(Some(true), None)
   //val yearsReturns = DesYearsReturns(taxReturnsNoDues false, returns: Option[List[DesYearReturn]] = None)
 
-  val declaration =  DesDeclaration(name, address)
+  val desDeclaration =  DesDeclaration(desName, desAddress)
 
   val desWillId = DesWillIdentification(Some(nino), None)
 
-  val deceased = DesWill(name, date, date, identification = desWillId)
+  val desDeceased = DesWill(desName, date, date, identification = desWillId)
 
-  val passport = DesPassportType("12134567", date, "GB")
+  val desPassport = DesPassportType("12134567", date, "GB")
 
   //val identification = DesIdentification(Some(nino), None, None)
-  val identification = DesIdentification(None, Some(passport), Some(address))
+  val desIdentification = DesIdentification(None, Some(desPassport), Some(desAddress))
 
-  val personalRepresentative = DesPersonalRepresentative(name, date, identification, Some(phoneNumber), Some(email))
+  val desPersonalRepresentative = DesPersonalRepresentative(desName, date, desIdentification, Some(phoneNumber), Some(email))
 
-  val entities = DesEntities(personalRepresentative: DesPersonalRepresentative, deceased: DesWill)
+  val entities = DesEntities(desPersonalRepresentative: DesPersonalRepresentative, desDeceased: DesWill)
 
   val administrationEndDate = Some(date)
 
@@ -71,6 +71,6 @@ trait DesScalaExamples {
     Some(yearsReturns),
   None,
 //    Some(assets),
-  declaration: DesDeclaration,
+  desDeclaration: DesDeclaration,
   details)
 }
