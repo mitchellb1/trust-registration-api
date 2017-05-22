@@ -35,16 +35,20 @@ class PersonalRepresentativeMapperSpec extends PlaySpec
          val output: PersonalRepresentative = PersonalRepresentativeMapper.toDomain(desPersonalRepresentative)
          output.email mustBe desPersonalRepresentative.email.get
       }
+      "we have a correct phone number from DES" in {
+         val mapper = new PersonalRepresentativeMapper()
+
+         val output: PersonalRepresentative = PersonalRepresentativeMapper.toDomain(desPersonalRepresentative)
+         output.telephoneNumber mustBe desPersonalRepresentative.phoneNumber.get
+      }
     }
   }
-
-
 }
 
 case class PersonalRepresentativeMapper()
 
 object PersonalRepresentativeMapper extends ScalaDataExamples {
   def toDomain(desPersonalRepresentative: DesPersonalRepresentative) : PersonalRepresentative = {
-        PersonalRepresentative(individual,"adsfadsfads",desPersonalRepresentative.email.get)
+        PersonalRepresentative(individual,desPersonalRepresentative.phoneNumber.get,desPersonalRepresentative.email.get)
   }
 }
