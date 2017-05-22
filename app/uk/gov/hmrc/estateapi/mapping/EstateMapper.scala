@@ -44,13 +44,8 @@ trait EstateMapper{
       country = "GB")
 
     val admin = DesAdmin("12345ABCDE")
-    //if (domainEstate.correspondenceAddress.countryCode.equals("GB")
 
-//    val correspondence = DesCorrespondence(abroadIndicator = true, "SomeName thats not a name", correspondenceAddress, phoneNumber)
-    val desCorrespondence: DesCorrespondence = DesCorrespondenceMapper.toDes(true,
-      domainEstate.estateName,
-      domainEstate.correspondenceAddress,
-      domainEstate.telephoneNumber)
+
 
     val yearsReturns = DesYearsReturns(Some(true), None)
     //val yearsReturns = DesYearsReturns(taxReturnsNoDues false, returns: Option[List[DesYearReturn]] = None)
@@ -78,6 +73,12 @@ trait EstateMapper{
 
     val details = DesDetails(Some(estate), trust = None)
 
+    val desCorrespondence: DesCorrespondence = DesCorrespondenceMapper.toDes(
+      isNotAbroad(domainEstate),
+      domainEstate.estateName,
+      domainEstate.correspondenceAddress,
+      domainEstate.telephoneNumber)
+
     DesTrustEstate(
       Some(admin),
       desCorrespondence,
@@ -87,6 +88,12 @@ trait EstateMapper{
       //    Some(assets),
       declaration: DesDeclaration,
       details)
+
+
+  }
+
+  private def isNotAbroad(domainEstate: Estate) = {
+    !domainEstate.correspondenceAddress.countryCode.equals("GB")
   }
 
   def toDomain(desTrustEstate: DesTrustEstate): EstateRequest = {
