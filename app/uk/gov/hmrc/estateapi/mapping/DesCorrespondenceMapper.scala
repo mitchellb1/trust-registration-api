@@ -14,13 +14,23 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.des
+package uk.gov.hmrc.estateapi.mapping
 
-import play.api.libs.json.Json
-case class DesAddress(line1: String, line2: String, line3: Option[String] = None, line4: Option[String] = None, postCode: Option[String] = None, country: String)
+import uk.gov.hmrc.common.des.DesCorrespondence
+import uk.gov.hmrc.common.mapping.AddressMapper
+import uk.gov.hmrc.common.rest.resources.core.Address
 
-object DesAddress {
-  implicit val formats = Json.format[DesAddress]
+
+class DesCorrespondenceMapper {
+
+  def toDes(abroadIndicator: Boolean, name: String, correspondenceAddress: Address, phoneNumber: String): DesCorrespondence = {
+    DesCorrespondence(abroadIndicator,
+      name,
+      AddressMapper.toDes(correspondenceAddress),
+      phoneNumber)
+  }
 }
 
-class MissingPropertyException(val message: String = "") extends Exception(message)
+object DesCorrespondenceMapper extends DesCorrespondenceMapper {
+
+}

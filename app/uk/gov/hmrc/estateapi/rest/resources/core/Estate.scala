@@ -25,7 +25,8 @@ case class Estate(estateName: String,
                   personalRepresentative: PersonalRepresentative,
                   adminPeriodFinishedDate: Option[DateTime] = None,
                   reasonEstateSetup: String,
-                  declaration: Declaration)
+                  declaration: Declaration,
+                  telephoneNumber: String)
 
 object Estate {
   implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))

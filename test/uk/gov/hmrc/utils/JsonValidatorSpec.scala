@@ -46,7 +46,7 @@ class SchemaValidatorSpec extends PlaySpec
     "read the schema and return a SuccessfulValidation for a valid json estate" when {
       "when we have a non required field missing" in {
         val jsonEstate = Json.toJson(EstateRequest(validEstateWithPersonalRepresentative)).toString()
-        //println(jsonEstate)
+
         val result = EstateSchemaValidator.validateAgainstSchema(jsonEstate)
 
         result mustBe SuccessfulValidation
