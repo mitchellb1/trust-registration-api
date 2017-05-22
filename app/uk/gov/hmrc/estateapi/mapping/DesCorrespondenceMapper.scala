@@ -14,32 +14,23 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.mapping
+package uk.gov.hmrc.estateapi.mapping
 
-import uk.gov.hmrc.common.des.{DesAddress, MissingPropertyException}
+import uk.gov.hmrc.common.des.DesCorrespondence
+import uk.gov.hmrc.common.mapping.AddressMapper
 import uk.gov.hmrc.common.rest.resources.core.Address
 
 
-class AddressMapper(){
-  def toDes(address: Address) : DesAddress = {
-    DesAddress(address.line1,
-      address.line2.getOrElse(throw new MissingPropertyException("Missing address line 2")),
-      address.line3 ,address.line4,
-      address.postalCode,
-      address.countryCode)
-  }
+class DesCorrespondenceMapper {
 
-  def toDomain(address: DesAddress) : Address = {
-    Address(address.line1,
-      Some(address.line2),
-      address.line3 ,
-      address.line4,
-      address.postCode,
-      address.country)
+  def toDes(abroadIndicator: Boolean, name: String, correspondenceAddress: Address, phoneNumber: String): DesCorrespondence = {
+    DesCorrespondence(abroadIndicator,
+      name,
+      AddressMapper.toDes(correspondenceAddress),
+      phoneNumber)
   }
 }
 
-object AddressMapper extends AddressMapper{
+object DesCorrespondenceMapper extends DesCorrespondenceMapper {
 
 }
-

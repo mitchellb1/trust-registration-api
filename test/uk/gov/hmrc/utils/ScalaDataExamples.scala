@@ -88,7 +88,8 @@ trait ScalaDataExamples {
     personalRepresentative = personalRepresentative,
     adminPeriodFinishedDate = Some(new DateTime("1800-01-01")),
     reasonEstateSetup = "incomeTaxDueMoreThan10000",
-    declaration = declaration)
+    declaration = declaration,
+    telephoneNumber = "01913651234")
 
   val incomeDistribution = IncomeDistribution(
     isIncomeAtTrusteeDiscretion = false,

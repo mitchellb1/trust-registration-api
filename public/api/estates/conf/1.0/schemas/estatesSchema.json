@@ -384,9 +384,17 @@
         },
         "declaration": {
           "$ref": "#/definitions/declarationType"
+        },
+        "telephoneNumber": {
+          "$ref": "#/definitions/telephoneNumberType"
         }
       },
-      "required": ["estateName","correspondenceAddress","personalRepresentative","reasonEstateSetup","declaration"],
+      "required": ["estateName",
+        "correspondenceAddress",
+        "personalRepresentative",
+        "reasonEstateSetup",
+        "declaration",
+        "telephoneNumber"],
       "type": "object"
     },
     "individualType": {

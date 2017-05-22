@@ -18,11 +18,12 @@ package uk.gov.hmrc.estateapi.mapping
 
 import org.joda.time.DateTime
 import uk.gov.hmrc.common.des._
+import uk.gov.hmrc.common.mapping.AddressMapper
 import uk.gov.hmrc.common.rest.resources.core._
 import uk.gov.hmrc.estateapi.rest.resources.core.{Estate, EstateRequest, PersonalRepresentative}
 
 
-trait EstateMapper {
+trait EstateMapper{
 
   def toDes(domainEstate: Estate): DesTrustEstate = {
 
@@ -31,6 +32,9 @@ trait EstateMapper {
     val phoneNumber = "0191 000 0000"
     val email = "john.doe@somewhere.co.uk"
     val name = DesName("Joe", Some("John"), "Doe")
+    val correspondenceAddress: DesAddress = AddressMapper.toDes(domainEstate.correspondenceAddress)
+//    val declarationAddress = AddressMapper.toDes(domainEstate.declaration.correspondenceAddress)
+//    val identificationAddress = AddressMapper.toDes(Some(domainEstate.personalRepresentative.individual.correspondenceAddress))
     val address = DesAddress(
       line1 = "address line 1",
       line2 = "address line 1",
@@ -40,8 +44,14 @@ trait EstateMapper {
       country = "GB")
 
     val admin = DesAdmin("12345ABCDE")
+    //if (domainEstate.correspondenceAddress.countryCode.equals("GB")
 
-    val correspondence = DesCorrespondence(abroadIndicator = true, "SomeName thats not a name", address, phoneNumber)
+//    val correspondence = DesCorrespondence(abroadIndicator = true, "SomeName thats not a name", correspondenceAddress, phoneNumber)
+    val desCorrespondence: DesCorrespondence = DesCorrespondenceMapper.toDes(true,
+      domainEstate.estateName,
+      domainEstate.correspondenceAddress,
+      domainEstate.telephoneNumber)
+
     val yearsReturns = DesYearsReturns(Some(true), None)
     //val yearsReturns = DesYearsReturns(taxReturnsNoDues false, returns: Option[List[DesYearReturn]] = None)
 
@@ -70,7 +80,7 @@ trait EstateMapper {
 
     DesTrustEstate(
       Some(admin),
-      correspondence,
+      desCorrespondence,
       //  None,
       Some(yearsReturns),
       None,
@@ -121,7 +131,8 @@ trait EstateMapper {
       personalRepresentative = personalRepresentative,
       adminPeriodFinishedDate = Some(new DateTime("1800-01-01")),
       reasonEstateSetup = "incomeTaxDueMoreThan10000",
-      declaration = declaration)
+      declaration = declaration,
+      telephoneNumber = "0191 123 0000")
 
     EstateRequest(validEstateWithPersonalRepresentative)
 
