@@ -23,8 +23,8 @@ import uk.gov.hmrc.common.rest.resources.core.Individual
 trait DesPassportTypeMapper {
 
   def toDes(individual: Individual): Option[DesPassportType] = {
-    individual.passportOrIdCard.get match {
-      case domainPassport => Some(new DesPassportType( domainPassport.referenceNumber, domainPassport.expiryDate, domainPassport.countryOfIssue))
+    individual.passportOrIdCard match {
+      case Some(domainPassport) => Some(new DesPassportType( domainPassport.referenceNumber, domainPassport.expiryDate, domainPassport.countryOfIssue))
       case _ => None
     }
   }

@@ -23,20 +23,24 @@ import uk.gov.hmrc.common.rest.resources.core.Individual
 trait DesWillIdentificationMapper {
 
   def toDes(individual: Individual): DesWillIdentification = {
-    val ninoExists: String = individual.nino.getOrElse("")
-    if (ninoExists.isEmpty) {
-      new DesWillIdentification(
-        nino = None,
-        address = Some(AddressMapper.toDes(individual.correspondenceAddress.get))
-      )
-    }
-    else {
-      new DesWillIdentification(
-        nino = Some(individual.nino.getOrElse("")),
-        address = None)
+    individual.nino match {
+      case Some(nino) => {
+        new DesWillIdentification(
+          nino = Some(nino),
+          address = None)
+      }
+      case None => {
+        individual.correspondenceAddress match {
+          case Some(address) => {
+            new DesWillIdentification(
+              nino = None,
+              address = Some(AddressMapper.toDes(address)))
+          }
+          case None => throw new MissingPropertyException("Individual has missing Nino and Address")
+        }
+      }
     }
   }
-
 }
 
 object DesWillIdentificationMapper extends DesWillIdentificationMapper

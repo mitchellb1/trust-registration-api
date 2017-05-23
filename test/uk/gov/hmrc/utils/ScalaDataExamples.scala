@@ -66,6 +66,7 @@ trait ScalaDataExamples {
   )
 
   lazy val deceased = Deceased(individual, new DateTime("2000-01-01"))
+  lazy val deceasedwithNino = Deceased(individualwithNino, new DateTime("2000-01-01"))
 
   val company = Company(
     name = "Company",

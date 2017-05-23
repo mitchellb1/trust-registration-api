@@ -45,6 +45,10 @@ class DesPassportMapperSpec extends PlaySpec
         val output: Option[DesPassportType] = SUT.toDes(domainIndividualPassportToMap)
         output.get.countryOfIssue mustBe domainIndividualPassportToMap.passportOrIdCard.get.countryOfIssue
       }
+      "we don't have a passport on des domain" in {
+        val output: Option[DesPassportType] = SUT.toDes(domainIndividualwithNinoToMap)
+        output mustBe None
+      }
     }
   }
 }
