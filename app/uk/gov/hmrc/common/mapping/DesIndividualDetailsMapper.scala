@@ -20,30 +20,19 @@ import uk.gov.hmrc.common.des.DesIndividualDetails
 import uk.gov.hmrc.common.rest.resources.core.Individual
 
 
-trait DesIndividualDetailsMap {
+trait DesIndividualDetailsMapper {
 
   def toDes(individual: Individual): DesIndividualDetails = {
     new DesIndividualDetails(
-      name = DesNameMap.toDes(individual),
+      name = DesNameMapper.toDes(individual),
       dateOfBirth = individual.dateOfBirth,
       vulnerableBeneficiary = None,
       beneficiaryType = None,
       beneficiaryDiscretion = None,
       beneficiaryShareOfIncome = None,
-      identification = DesIdentificationMap.toDes(individual)
+      identification = DesIdentificationMapper.toDes(individual)
     )
   }
-
-  //  def toDomain(desIndividualDetails: DesIndividualDetails): Individual = {
-  //    new Address(
-  //      line1 = address.line1,
-  //      line2 = Some(address.line2),
-  //      line3 = address.line3,
-  //      line4 = address.line4,
-  //      postalCode = address.postCode,
-  //      countryCode = address.country
-  //    )
-  //  }
 }
 
-object DesIndividualDetailsMap extends DesIndividualDetailsMap
+object DesIndividualDetailsMapper extends DesIndividualDetailsMapper

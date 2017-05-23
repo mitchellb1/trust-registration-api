@@ -14,31 +14,23 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.mapping
+package uk.gov.hmrc.estateapi.mapping
 
 import uk.gov.hmrc.common.des.DesCorrespondence
+import uk.gov.hmrc.common.mapping.AddressMapper
 import uk.gov.hmrc.estateapi.rest.resources.core.Estate
 
 
-trait DesCorrespondenceMap {
+trait DesCorrespondenceMapper {
 
-  def toDes(estate: Estate): DesCorrespondence = {
-    if (estate.correspondenceAddress.countryCode.equals("GB")) {
-      DesCorrespondence(
-        abroadIndicator = true,
-        name = estate.estateName,
-        address = AddressMap.toDes(estate.correspondenceAddress),
-        phoneNumber = estate.telephoneNumber
-      )
-    } else {
-      DesCorrespondence(
-        abroadIndicator = false,
-        name = estate.estateName,
-        address = AddressMap.toDes(estate.correspondenceAddress),
-        phoneNumber = estate.telephoneNumber
-      )
-    }
+    def toDes(estate: Estate): DesCorrespondence = {
+        DesCorrespondence(
+          abroadIndicator = !(estate.correspondenceAddress.countryCode.equals("GB")),
+          name = estate.estateName,
+          address = AddressMapper.toDes(estate.correspondenceAddress),
+          phoneNumber = estate.telephoneNumber
+        )
+      }
   }
-}
 
-object DesCorrespondenceMap extends DesCorrespondenceMap
+  object DesCorrespondenceMapper extends DesCorrespondenceMapper

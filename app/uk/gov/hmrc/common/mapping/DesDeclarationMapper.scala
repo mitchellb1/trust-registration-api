@@ -16,20 +16,24 @@
 
 package uk.gov.hmrc.common.mapping
 
-import uk.gov.hmrc.common.des.DesWill
-import uk.gov.hmrc.common.rest.resources.core.Deceased
+import uk.gov.hmrc.common.des.{DesDeclaration, DesName}
+import uk.gov.hmrc.common.rest.resources.core.Declaration
 
+trait DesDeclarationMapper {
 
-trait DesWillMap {
+  def toDes(declaration: Declaration): DesDeclaration = {
 
-  def toDes(deceased: Deceased): DesWill = {
-    new DesWill(
-      name = DesNameMap.toDes(deceased.individual),
-      dateOfBirth = deceased.individual.dateOfBirth,
-      dateOfDeath = deceased.dateOfDeath,
-      identification = DesWillIdentificationMap.toDes(deceased.individual)
+    DesDeclaration(
+
+      name = {
+        DesName(
+          firstName = declaration.givenName,
+          middleName = declaration.otherName,
+          lastName = declaration.familyName)
+      },
+      address = AddressMapper.toDes(declaration.correspondenceAddress)
     )
   }
 }
 
-object DesWillMap extends DesWillMap
+object DesDeclarationMapper extends DesDeclarationMapper

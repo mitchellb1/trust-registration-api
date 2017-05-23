@@ -20,17 +20,16 @@ import uk.gov.hmrc.common.des.DesPersonalRepresentative
 import uk.gov.hmrc.estateapi.rest.resources.core.PersonalRepresentative
 
 
-trait DesPersonalRepresentativeMap {
+trait DesPersonalRepresentativeMapper {
 
   def toDes(personalRepresentative: PersonalRepresentative): DesPersonalRepresentative = {
     DesPersonalRepresentative(
-      name = DesNameMap.toDes(personalRepresentative.individual),
+      name = DesNameMapper.toDes(personalRepresentative.individual),
       dateOfBirth = personalRepresentative.individual.dateOfBirth,
-      identification = DesIdentificationMap.toDes(personalRepresentative.individual),
+      identification = DesIdentificationMapper.toDes(personalRepresentative.individual),
       phoneNumber = Some(personalRepresentative.telephoneNumber),
       email = Some(personalRepresentative.email))
-
   }
 }
 
-object DesPersonalRepresentativeMap extends DesPersonalRepresentativeMap
+object DesPersonalRepresentativeMapper extends DesPersonalRepresentativeMapper

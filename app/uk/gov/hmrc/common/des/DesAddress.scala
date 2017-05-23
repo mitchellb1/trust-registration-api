@@ -22,3 +22,5 @@ case class DesAddress(line1: String, line2: String, line3: Option[String] = None
 object DesAddress {
   implicit val formats = Json.format[DesAddress]
 }
+
+class MissingPropertyException(val message: String = "") extends Exception(message)

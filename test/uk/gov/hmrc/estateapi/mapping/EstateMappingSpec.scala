@@ -19,7 +19,6 @@ package uk.gov.hmrc.estateapi.mapping
 
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
-import uk.gov.hmrc.common.mapping.EstateMapper
 import uk.gov.hmrc.common.utils.{DesSchemaValidator, SuccessfulValidation}
 import uk.gov.hmrc.utils.ScalaDataExamples
 
@@ -46,12 +45,16 @@ class EstateMappingSpec extends PlaySpec
       }
     }
 
-//    "accept a valid des Estates case class" when {
-//      "and return a valid Domain Estates case class" in {
+//    "accept a valid set of des Estates case class" when {
+//      "and return a set of valid Domain Estates case class" in {
 //
-//        println(s"From case classes ---- ${validEstateWithPersonalRepresentative}")
-//        val convertedJson = SUT.toDomain(completeValidDesEstate)
-//        val result = DesSchemaValidator.validateAgainstSchema(Json.toJson(convertedJson).toString())
+//        //println(s"From des case classes ---- ${completeValidDesEstate}")
+//        val convertedToDomainCaseClasses = SUT.toDomain(completeValidDesEstate)
+//        println(s"From domain case classes ---- ${convertedToDomainCaseClasses}")
+//
+//
+//
+//        val result = EstateSchemaValidator.validateAgainstSchema(Json.toJson(convertedToDomainCaseClasses).toString())
 //        result mustBe SuccessfulValidation
 //      }
 //    }

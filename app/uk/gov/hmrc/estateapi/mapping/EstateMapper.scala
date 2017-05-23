@@ -14,23 +14,25 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.mapping
+package uk.gov.hmrc.estateapi.mapping
 
 import org.joda.time.DateTime
 import uk.gov.hmrc.common.des._
+import uk.gov.hmrc.common.mapping._
 import uk.gov.hmrc.estateapi.rest.resources.core.Estate
+
 
 trait EstateMapper {
 
   def toDes(domainEstate: Estate): DesTrustEstate = {
 
-    val personalRepresentative: DesPersonalRepresentative = DesPersonalRepresentativeMap.toDes(domainEstate.personalRepresentative)
+    val personalRepresentative: DesPersonalRepresentative = DesPersonalRepresentativeMapper.toDes(domainEstate.personalRepresentative)
 
-    val deceased: DesWill = DesWillMap.toDes(domainEstate.deceased)
+    val deceased: DesWill = DesWillMapper.toDes(domainEstate.deceased)
 
     val administrationEndDate: Option[DateTime] = domainEstate.adminPeriodFinishedDate
 
-    val correspondence: DesCorrespondence = DesCorrespondenceMap.toDes(domainEstate)
+    val correspondence: DesCorrespondence = DesCorrespondenceMapper.toDes(domainEstate)
 
     val periodTaxDues = "01"
 
@@ -45,7 +47,7 @@ trait EstateMapper {
       Some(DesYearsReturns(Some(true), None)),
       None,
       //    Some(assets),
-      DesDeclarationMap.toDes(domainEstate.declaration),
+      DesDeclarationMapper.toDes(domainEstate.declaration),
       DesDetails(Some(estate), trust = None)
     )
   }

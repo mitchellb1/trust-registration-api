@@ -20,14 +20,14 @@ import uk.gov.hmrc.common.des._
 import uk.gov.hmrc.common.rest.resources.core.Individual
 
 
-trait DesWillIdentificationMap {
+trait DesWillIdentificationMapper {
 
   def toDes(individual: Individual): DesWillIdentification = {
     val ninoExists: String = individual.nino.getOrElse("")
     if (ninoExists.isEmpty) {
       new DesWillIdentification(
         nino = None,
-        address = Some(AddressMap.toDes(individual.correspondenceAddress.get))
+        address = Some(AddressMapper.toDes(individual.correspondenceAddress.get))
       )
     }
     else {
@@ -39,4 +39,4 @@ trait DesWillIdentificationMap {
 
 }
 
-object DesWillIdentificationMap extends DesWillIdentificationMap
+object DesWillIdentificationMapper extends DesWillIdentificationMapper

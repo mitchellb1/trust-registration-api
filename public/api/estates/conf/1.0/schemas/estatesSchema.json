@@ -397,7 +397,8 @@
         "personalRepresentative",
         "reasonEstateSetup",
         "declaration",
-        "deceased"],
+        "deceased",
+        "telephoneNumber"],
       "type": "object"
     },
     "individualType": {

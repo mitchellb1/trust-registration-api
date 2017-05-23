@@ -20,7 +20,7 @@ import uk.gov.hmrc.common.des.DesName
 import uk.gov.hmrc.common.rest.resources.core.Individual
 
 
-trait DesNameMap {
+trait DesNameMapper {
 
   def toDes(individual: Individual): DesName = {
     new DesName(
@@ -29,24 +29,6 @@ trait DesNameMap {
       lastName = individual.familyName
     )
   }
-
-  //  def toDomain(desName: DesName,
-  //               nino: Option[String] = None,
-  //               telephoneNumber: Option[String] = None,
-  //               desPassport: Option[DesPassportType] = None,
-  //               desCorrespondenceAddress: Option[DesAddress] = None,
-  //               desIndividualDetails: DesIndividualDetails): Individual = {
-  //    new Individual(
-  //      givenName = desName.firstName,
-  //      otherName = desName.middleName,
-  //      familyName = desName.lastName,
-  //      nino = nino,
-  //      telephoneNumber = telephoneNumber,
-  //      correspondenceAddress = Some(toDomain(desCorrespondenceAddress.get)),
-  //      passportOrIdCard = None,
-  //      dateOfBirth = desIndividualDetails.dateOfBirth
-  //    )
-  //  }
 }
 
-object DesNameMap extends DesNameMap
+object DesNameMapper extends DesNameMapper
