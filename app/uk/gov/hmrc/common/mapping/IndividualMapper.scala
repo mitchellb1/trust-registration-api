@@ -36,7 +36,7 @@ object IndividualMapper  {
       desName.middleName,
       identification.flatMap(c=>c.nino),
       telephoneNumber,
-      identification.flatMap(i => i.passport.map(p => PassportMapper.toDomain(p))),
-      identification.flatMap(c=>c.address.flatMap(a=>Some(AddressMapper.toDomain(a)))))
+      identification.flatMap(i=>i.passport.map(p=>PassportMapper.toDomain(p))),
+      identification.flatMap(c=>c.address.map(a=>AddressMapper.toDomain(a))))
   }
 }
