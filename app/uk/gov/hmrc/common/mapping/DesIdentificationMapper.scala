@@ -23,11 +23,22 @@ import uk.gov.hmrc.common.rest.resources.core.Individual
 trait DesIdentificationMapper {
 
   def toDes(individual: Individual): DesIdentification = {
-    new DesIdentification(
-      nino = individual.nino,
-      passport = None,
-      address = Some(AddressMapper.toDes(individual.correspondenceAddress.get))
-    )
+    individual.nino match {
+      case Some(nino) => {
+        new DesIdentification(
+          nino = Some(nino),
+          passport = None,
+          address = None
+        )
+      }
+      case None => {
+        new DesIdentification(
+          nino = None,
+          passport = DesPassportTypeMapper.toDes(individual),
+          address = Some(AddressMapper.toDes(individual.correspondenceAddress.get))
+        )
+      }
+    }
   }
 }
 

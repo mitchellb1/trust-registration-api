@@ -54,6 +54,17 @@ trait ScalaDataExamples {
     telephoneNumber = None
   )
 
+  val individualwithNino = Individual(
+    givenName = "Leo",
+    otherName = None,
+    familyName = "Spaceman",
+    dateOfBirth = new DateTime("1900-01-01"),
+    nino = Some("WA123456A"),
+    passportOrIdCard = None,
+    correspondenceAddress = Some(address),
+    telephoneNumber = None
+  )
+
   lazy val deceased = Deceased(individual, new DateTime("2000-01-01"))
 
   val company = Company(

@@ -28,49 +28,52 @@ class DesIdentificationMapperSpec extends PlaySpec
   with DesScalaExamples {
 
   val SUT = DesIdentificationMapper
-  val domainIndividualToMap: Individual = individual
-  val desIdentificationToMap: DesIdentification = desIdentification
-
+  val domainIndividualPassportToMap: Individual = individual
+  val domainIndividualwithNinoToMap: Individual =individualwithNino
 
   "Des Identification Mapper" must {
-//    "map properties correctly" when {
-//      "we have a correct first name in the des domain" in {
-//        val output: DesIdentification = SUT.toDes(domainIndividualToMap)
-//        output.nino mustBe domainIndividualToMap.givenName
-//      }
-//      "we have a correct middle in the des domain" in {
-//        val output: DesIdentification = SUT.toDes(domainIndividualToMap)
-//        output.passport mustBe domainIndividualToMap.otherName
-//      }
-//      "we have a correct last in the des domain" in {
-//        val output: DesIdentification = SUT.toDes(domainIndividualToMap)
-//        output.name.lastName mustBe domainIndividualToMap.familyName
-//      }
-//      "we have a correct line 1 in the address for des domain" in {
-//        val output: DesIdentification = SUT.toDes(domainIndividualToMap)
-//        output.address.line1 mustBe domainIndividualToMap.correspondenceAddress.line1
-//      }
-//      "we have a correct line 2 in the address for des domain" in {
-//        val output: DesIdentification = SUT.toDes(domainIndividualToMap)
-//        output.address.line2 mustBe domainIndividualToMap.correspondenceAddress.line2.get
-//      }
-//      "we have a correct line 3 in the address for des domain" in {
-//        val output: DesIdentification = SUT.toDes(domainIndividualToMap)
-//        output.address.line3 mustBe domainIndividualToMap.correspondenceAddress.line3
-//      }
-//      "we have a correct line 4 in the address for des domain" in {
-//        val output: DesIdentification = SUT.toDes(domainIndividualToMap)
-//        output.address.line4 mustBe domainIndividualToMap.correspondenceAddress.line4
-//      }
-//      "we have a correct postcode for des domain" in {
-//        val output: DesIdentification = SUT.toDes(domainIndividualToMap)
-//        output.address.postCode mustBe domainIndividualToMap.correspondenceAddress.postalCode
-//      }
-//      "we have a correct country for des domain" in {
-//        val output: DesIdentification = SUT.toDes(domainIndividualToMap)
-//        output.address.country mustBe domainIndividualToMap.correspondenceAddress.countryCode
-//      }
-//    }
+    "map properties correctly" when {
+      "we have a correct Nino in the des domain" in {
+        val output: DesIdentification = SUT.toDes(domainIndividualwithNinoToMap)
+        output.nino mustBe domainIndividualwithNinoToMap.nino
+      }
+      "we have a no address in the des domain if we have a nino" in {
+        val output: DesIdentification = SUT.toDes(domainIndividualwithNinoToMap)
+        output.address mustBe None
+      }
+      "we have a no passport details in the des domain" in {
+        val output: DesIdentification = SUT.toDes(domainIndividualwithNinoToMap)
+        output.passport mustBe None
+      }
+      "we have a correct line 1 in the address for des domain if no nino" in {
+        val output: DesIdentification = SUT.toDes(domainIndividualPassportToMap)
+        output.address.get.line1 mustBe domainIndividualPassportToMap.correspondenceAddress.get.line1
+      }
+      "we have a correct line 2 in the address for des domain if no nino" in {
+        val output: DesIdentification = SUT.toDes(domainIndividualPassportToMap)
+        output.address.get.line2 mustBe domainIndividualPassportToMap.correspondenceAddress.get.line2.get
+      }
+      "we have a correct line 3 in the address for des domain if no nino" in {
+        val output: DesIdentification = SUT.toDes(domainIndividualPassportToMap)
+        output.address.get.line3 mustBe domainIndividualPassportToMap.correspondenceAddress.get.line3
+      }
+      "we have a correct line 4 in the address for des domain if no nino" in {
+        val output: DesIdentification = SUT.toDes(domainIndividualPassportToMap)
+        output.address.get.line4 mustBe domainIndividualPassportToMap.correspondenceAddress.get.line4
+      }
+      "we have a correct postcode for des domain if no nino" in {
+        val output: DesIdentification = SUT.toDes(domainIndividualPassportToMap)
+        output.address.get.postCode mustBe domainIndividualPassportToMap.correspondenceAddress.get.postalCode
+      }
+      "we have a correct country for des domain if no nino" in {
+        val output: DesIdentification = SUT.toDes(domainIndividualPassportToMap)
+        output.address.get.country mustBe domainIndividualPassportToMap.correspondenceAddress.get.countryCode
+      }
+      "we have no nino in the des domain if no nino" in {
+        val output: DesIdentification = SUT.toDes(domainIndividualPassportToMap)
+        output.nino mustBe None
+      }
+    }
 
 //    "thrown an exception" when {
 //      "line 2 is not provided" in {

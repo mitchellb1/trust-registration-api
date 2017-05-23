@@ -14,11 +14,20 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.des
+package uk.gov.hmrc.common.mapping
 
-import play.api.libs.json.Json
-case class DesPassportId(passport: DesPassportType, address: DesAddress)
+import uk.gov.hmrc.common.des.{DesPassportType}
+import uk.gov.hmrc.common.rest.resources.core.Individual
 
-object DesPassportId {
-  implicit val formats = Json.format[DesPassportId]
+
+trait DesPassportTypeMapper {
+
+  def toDes(individual: Individual): Option[DesPassportType] = {
+    individual.passportOrIdCard.get match {
+      case domainPassport => Some(new DesPassportType( domainPassport.referenceNumber, domainPassport.expiryDate, domainPassport.countryOfIssue))
+      case _ => None
+    }
+  }
 }
+
+object DesPassportTypeMapper extends DesPassportTypeMapper
