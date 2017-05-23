@@ -17,8 +17,6 @@
 package uk.gov.hmrc.common.mapping
 
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
-import uk.gov.hmrc.common.des.DesPassportType
-import uk.gov.hmrc.common.rest.resources.core.Passport
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
 
@@ -44,13 +42,5 @@ class PassportMapperSpec extends PlaySpec
         output.countryOfIssue mustBe desPassport.countryOfIssue
       }
     }
-  }
-}
-
-case class PassportMapper()
-
-object PassportMapper {
-  def toDomain(passport: DesPassportType) : Passport = {
-    Passport(passport.number, passport.expirationDate, passport.countryOfIssue)
   }
 }

@@ -76,24 +76,3 @@ class IndividualMapperSpec extends PlaySpec
     }
   }
 }
-
-
-case class IndividualMapper()
-
-object IndividualMapper  {
-  def toDomain(desName: DesName,
-               dateOfBirth: DateTime,
-               telephoneNumber: Option[String],
-               address: Option[DesAddress],
-               nino: Option[String],
-               passport: Option[DesPassportType]) : Individual = {
-    Individual(desName.firstName,
-      desName.lastName,
-      dateOfBirth,
-      desName.middleName,
-      nino,
-      telephoneNumber,
-      passport.flatMap(p=>Some(PassportMapper.toDomain(p))),
-      address.flatMap(a=>Some(AddressMapper.toDomain(a))))
-  }
-}
