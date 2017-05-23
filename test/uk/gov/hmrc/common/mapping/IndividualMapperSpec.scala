@@ -80,7 +80,7 @@ class IndividualMapperSpec extends PlaySpec
 
 case class IndividualMapper()
 
-object IndividualMapper  extends ScalaDataExamples {
+object IndividualMapper  {
   def toDomain(desName: DesName,
                dateOfBirth: DateTime,
                telephoneNumber: Option[String],
