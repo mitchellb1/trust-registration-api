@@ -16,10 +16,7 @@
 
 package uk.gov.hmrc.common.mapping
 
-import org.joda.time.DateTime
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
-import uk.gov.hmrc.common.des.{DesAddress, DesName, DesPassportType}
-import uk.gov.hmrc.common.rest.resources.core.Individual
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
 

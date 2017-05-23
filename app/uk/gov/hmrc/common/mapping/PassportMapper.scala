@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-
-
 package uk.gov.hmrc.common.mapping
 
 import uk.gov.hmrc.common.des.DesPassportType

@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-
-
 package uk.gov.hmrc.common.mapping
 
 import org.joda.time.DateTime
