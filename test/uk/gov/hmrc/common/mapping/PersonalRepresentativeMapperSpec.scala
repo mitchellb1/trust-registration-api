@@ -17,7 +17,6 @@
 package uk.gov.hmrc.common.mapping
 
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
-import uk.gov.hmrc.common.des.DesPersonalRepresentative
 import uk.gov.hmrc.estateapi.rest.resources.core.PersonalRepresentative
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
@@ -45,14 +44,3 @@ class PersonalRepresentativeMapperSpec extends PlaySpec
   }
 }
 
-case class PersonalRepresentativeMapper()
-
-object PersonalRepresentativeMapper extends ScalaDataExamples {
-  def toDomain(desPersonalRepresentative: DesPersonalRepresentative) : PersonalRepresentative = {
-        PersonalRepresentative(IndividualMapper.toDomain(desPersonalRepresentative.name,
-          desPersonalRepresentative.dateOfBirth,
-          desPersonalRepresentative.phoneNumber,
-          Some(desPersonalRepresentative.identification)),
-          desPersonalRepresentative.phoneNumber.get,desPersonalRepresentative.email.get)
-  }
-}
