@@ -41,14 +41,6 @@ class PersonalRepresentativeMapperSpec extends PlaySpec
          val output: PersonalRepresentative = PersonalRepresentativeMapper.toDomain(desPersonalRepresentative)
          output.individual.givenName mustBe desPersonalRepresentative.name.firstName
       }
-      "we have a correct date of birth from DES" in {
-         val output: PersonalRepresentative = PersonalRepresentativeMapper.toDomain(desPersonalRepresentative)
-         output.individual.dateOfBirth mustBe desPersonalRepresentative.dateOfBirth
-      }
-      "we have a correct NINO from DES" in {
-         val output: PersonalRepresentative = PersonalRepresentativeMapper.toDomain(desPersonalRepresentative)
-         output.individual.nino mustBe desPersonalRepresentative.identification.nino
-      }
     }
   }
 }
