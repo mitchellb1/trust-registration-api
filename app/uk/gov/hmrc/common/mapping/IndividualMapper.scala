@@ -17,7 +17,7 @@
 package uk.gov.hmrc.common.mapping
 
 import org.joda.time.DateTime
-import uk.gov.hmrc.common.des.{DesAddress, DesName, DesPassportType}
+import uk.gov.hmrc.common.des.{DesIdentification, DesName}
 import uk.gov.hmrc.common.rest.resources.core.Individual
 
 
@@ -27,16 +27,16 @@ object IndividualMapper  {
   def toDomain(desName: DesName,
                dateOfBirth: DateTime,
                telephoneNumber: Option[String],
-               address: Option[DesAddress],
-               nino: Option[String],
-               passport: Option[DesPassportType]) : Individual = {
+               identification: Option[DesIdentification]) : Individual = {
+
+
     Individual(desName.firstName,
       desName.lastName,
       dateOfBirth,
       desName.middleName,
-      nino,
+      identification.flatMap(c=>c.nino),
       telephoneNumber,
-      passport.flatMap(p=>Some(PassportMapper.toDomain(p))),
-      address.flatMap(a=>Some(AddressMapper.toDomain(a))))
+      identification.flatMap(i => i.passport.map(p => PassportMapper.toDomain(p))),
+      identification.flatMap(c=>c.address.flatMap(a=>Some(AddressMapper.toDomain(a)))))
   }
 }

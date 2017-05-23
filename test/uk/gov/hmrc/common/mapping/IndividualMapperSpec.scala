@@ -17,6 +17,8 @@
 package uk.gov.hmrc.common.mapping
 
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
+import uk.gov.hmrc.common.des.DesIdentification
+import uk.gov.hmrc.common.rest.resources.core.Individual
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
 
@@ -25,7 +27,7 @@ class IndividualMapperSpec extends PlaySpec
   with ScalaDataExamples
   with DesScalaExamples {
 
-  val output = IndividualMapper.toDomain(desName,date,Some(phoneNumber), Some(desAddress), Some(nino), Some(desPassport))
+  val output = IndividualMapper.toDomain(desName,date,Some(phoneNumber), Some(desIdentification))
 
   "Individual Mapper" must {
     "Map fields correctly to Domain Individual" when {
@@ -54,11 +56,14 @@ class IndividualMapperSpec extends PlaySpec
       }
 
       "we don't have an address" in {
-        val output = IndividualMapper.toDomain(desName,date,Some(phoneNumber), None, Some(nino), Some(desPassport))
+        val identification = DesIdentification(Some(nino),Some(desPassport),None)
+        val output = IndividualMapper.toDomain(desName,date,Some(phoneNumber), Some(identification))
         output.correspondenceAddress mustBe None
       }
 
       "we have a valid nino" in {
+        val identification = DesIdentification(Some(nino),Some(desPassport),None)
+        val output = IndividualMapper.toDomain(desName,date,Some(phoneNumber), Some(identification))
         output.nino mustBe Some(nino)
       }
 
@@ -67,7 +72,13 @@ class IndividualMapperSpec extends PlaySpec
       }
 
       "we don't have a passportOrIdCard" in {
-        val output = IndividualMapper.toDomain(desName,date,Some(phoneNumber), None, Some(nino), None)
+        val identification = DesIdentification(Some(nino),None,Some(desAddress))
+        val output = IndividualMapper.toDomain(desName,date,Some(phoneNumber), Some(identification))
+        output.passportOrIdCard mustBe None
+      }
+
+      "we don't have an identificiation" in {
+        val output: Individual = IndividualMapper.toDomain(desName,date,Some(phoneNumber), None)
         output.passportOrIdCard mustBe None
       }
     }

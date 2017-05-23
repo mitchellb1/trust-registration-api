@@ -18,7 +18,6 @@ package uk.gov.hmrc.common.mapping
 
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import uk.gov.hmrc.common.des.DesPersonalRepresentative
-import uk.gov.hmrc.common.rest.resources.core.Individual
 import uk.gov.hmrc.estateapi.rest.resources.core.PersonalRepresentative
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
@@ -38,11 +37,9 @@ class PersonalRepresentativeMapperSpec extends PlaySpec
          val output: PersonalRepresentative = PersonalRepresentativeMapper.toDomain(desPersonalRepresentative)
          output.telephoneNumber mustBe desPersonalRepresentative.phoneNumber.get
       }
-      "we have a correct first name , middle name and last name from DES" in {
+      "we have valid data to create a domain individual from DES" in {
          val output: PersonalRepresentative = PersonalRepresentativeMapper.toDomain(desPersonalRepresentative)
          output.individual.givenName mustBe desPersonalRepresentative.name.firstName
-         output.individual.familyName mustBe desPersonalRepresentative.name.lastName
-         output.individual.otherName.get mustBe desPersonalRepresentative.name.middleName.get
       }
       "we have a correct date of birth from DES" in {
          val output: PersonalRepresentative = PersonalRepresentativeMapper.toDomain(desPersonalRepresentative)
@@ -60,11 +57,10 @@ case class PersonalRepresentativeMapper()
 
 object PersonalRepresentativeMapper extends ScalaDataExamples {
   def toDomain(desPersonalRepresentative: DesPersonalRepresentative) : PersonalRepresentative = {
-        PersonalRepresentative(Individual(desPersonalRepresentative.name.firstName,
-          desPersonalRepresentative.name.lastName,
+        PersonalRepresentative(IndividualMapper.toDomain(desPersonalRepresentative.name,
           desPersonalRepresentative.dateOfBirth,
-          desPersonalRepresentative.name.middleName,
-          desPersonalRepresentative.identification.nino),
+          desPersonalRepresentative.phoneNumber,
+          Some(desPersonalRepresentative.identification)),
           desPersonalRepresentative.phoneNumber.get,desPersonalRepresentative.email.get)
   }
 }
