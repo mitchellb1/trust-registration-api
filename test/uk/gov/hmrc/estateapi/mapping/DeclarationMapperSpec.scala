@@ -16,11 +16,8 @@
 
 package uk.gov.hmrc.estateapi.mapping
 
-import org.joda.time.DateTime
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
-import uk.gov.hmrc.common.des.DesDeclaration
-import uk.gov.hmrc.common.mapping.AddressMapper
-import uk.gov.hmrc.common.rest.resources.core.Declaration
+import uk.gov.hmrc.trustapi.mapping.DeclarationMapper
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
 
@@ -57,11 +54,5 @@ class DeclarationMapperSpec extends PlaySpec
         output.confirmation mustBe true
       }
     }
-  }
-}
-
-object DeclarationMapper extends DesScalaExamples{
-  def toDomain(declaration: DesDeclaration, date: DateTime, confirmation: Boolean) : Declaration = {
-    Declaration(AddressMapper.toDomain(declaration.address),confirmation,declaration.name.firstName,declaration.name.lastName,date,declaration.name.middleName)
   }
 }
