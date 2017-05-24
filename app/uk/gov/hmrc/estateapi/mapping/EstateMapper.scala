@@ -34,7 +34,14 @@ trait EstateMapper {
 
     val correspondence: DesCorrespondence = DesCorrespondenceMapper.toDes(domainEstate)
 
-    val periodTaxDues = "01"
+    val yearReturns = Some(DesYearsReturns(Some(true), None))
+
+    val periodTaxDues = domainEstate.reasonEstateSetup match {
+      case "incomeTaxDueMoreThan10000" => "01"
+      case "saleOfEstateAssetsMoreThan250000" => "02"
+      case "saleOfEstateAssetsMoreThan500000" => "03"
+      case "worthMoreThanTwoAndHalfMillionAtTimeOfDeath" => "04"
+    }
 
     val estate: DesEstate = DesEstate(DesEntities(personalRepresentative, deceased),
       administrationEndDate,
@@ -43,10 +50,7 @@ trait EstateMapper {
     DesTrustEstate(
       None,
       correspondence,
-      //  None,
-      Some(DesYearsReturns(Some(true), None)),
-      None,
-      //    Some(assets),
+      yearReturns,
       DesDeclarationMapper.toDes(domainEstate.declaration),
       DesDetails(Some(estate), trust = None)
     )
