@@ -16,18 +16,15 @@
 
 package uk.gov.hmrc.common.mapping
 
-import uk.gov.hmrc.common.des.{DesPassportType}
+import uk.gov.hmrc.common.des.DesPassportType
 import uk.gov.hmrc.common.rest.resources.core.Individual
 
-
-trait DesPassportTypeMapper {
+object DesPassportTypeMapper {
 
   def toDes(individual: Individual): Option[DesPassportType] = {
     individual.passportOrIdCard match {
-      case Some(domainPassport) => Some(new DesPassportType( domainPassport.referenceNumber, domainPassport.expiryDate, domainPassport.countryOfIssue))
+      case Some(domainPassport) => Some(DesPassportType(domainPassport.referenceNumber, domainPassport.expiryDate, domainPassport.countryOfIssue))
       case _ => None
     }
   }
 }
-
-object DesPassportTypeMapper extends DesPassportTypeMapper

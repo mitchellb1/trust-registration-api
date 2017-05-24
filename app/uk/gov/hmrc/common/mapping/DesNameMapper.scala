@@ -19,16 +19,13 @@ package uk.gov.hmrc.common.mapping
 import uk.gov.hmrc.common.des.DesName
 import uk.gov.hmrc.common.rest.resources.core.Individual
 
-
-trait DesNameMapper {
+object DesNameMapper {
 
   def toDes(individual: Individual): DesName = {
-    new DesName(
+    DesName(
       firstName = individual.givenName,
       middleName = individual.otherName,
       lastName = individual.familyName
     )
   }
 }
-
-object DesNameMapper extends DesNameMapper

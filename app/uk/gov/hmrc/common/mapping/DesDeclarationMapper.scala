@@ -19,7 +19,7 @@ package uk.gov.hmrc.common.mapping
 import uk.gov.hmrc.common.des.{DesDeclaration, DesName}
 import uk.gov.hmrc.common.rest.resources.core.Declaration
 
-trait DesDeclarationMapper {
+object DesDeclarationMapper {
 
   def toDes(declaration: Declaration): DesDeclaration = {
 
@@ -35,5 +35,3 @@ trait DesDeclarationMapper {
     )
   }
 }
-
-object DesDeclarationMapper extends DesDeclarationMapper

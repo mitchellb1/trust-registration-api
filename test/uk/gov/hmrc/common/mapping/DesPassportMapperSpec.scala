@@ -21,7 +21,6 @@ import uk.gov.hmrc.common.des.DesPassportType
 import uk.gov.hmrc.common.rest.resources.core.Individual
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
-
 class DesPassportMapperSpec extends PlaySpec
   with OneAppPerSuite
   with ScalaDataExamples

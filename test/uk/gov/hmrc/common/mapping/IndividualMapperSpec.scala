@@ -21,64 +21,53 @@ import uk.gov.hmrc.common.des.DesIdentification
 import uk.gov.hmrc.common.rest.resources.core.Individual
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
-
 class IndividualMapperSpec extends PlaySpec
   with OneAppPerSuite
   with ScalaDataExamples
   with DesScalaExamples {
 
-  val output = IndividualMapper.toDomain(desName,date,Some(phoneNumber), Some(desIdentification))
+  val output = IndividualMapper.toDomain(desName, date, Some(phoneNumber), Some(desIdentification))
 
   "Individual Mapper" must {
     "Map fields correctly to Domain Individual" when {
       "we have a correct first name" in {
         output.givenName mustBe desName.firstName
       }
-
       "we have a correct surname" in {
         output.familyName mustBe desName.lastName
       }
-
       "we have a middle name and we map it to other name succesfully" in {
         output.otherName mustBe desName.middleName
       }
-
       "we have a date of birth" in {
         output.dateOfBirth mustBe date
       }
-
       "we have a telephoneNumber" in {
         output.telephoneNumber mustBe Some(phoneNumber)
       }
-
       "we have an address" in {
         output.correspondenceAddress.get.postalCode mustBe desAddress.postCode
       }
-
       "we don't have an address" in {
-        val identification = DesIdentification(Some(nino),Some(desPassport),None)
-        val output = IndividualMapper.toDomain(desName,date,Some(phoneNumber), Some(identification))
+        val identification = DesIdentification(Some(nino), Some(desPassport), None)
+        val output = IndividualMapper.toDomain(desName, date, Some(phoneNumber), Some(identification))
         output.correspondenceAddress mustBe None
       }
-
       "we have a valid nino" in {
-        val identification = DesIdentification(Some(nino),Some(desPassport),None)
-        val output = IndividualMapper.toDomain(desName,date,Some(phoneNumber), Some(identification))
+        val identification = DesIdentification(Some(nino), Some(desPassport), None)
+        val output = IndividualMapper.toDomain(desName, date, Some(phoneNumber), Some(identification))
         output.nino mustBe Some(nino)
       }
-
       "we have a valid passport" in {
         output.passportOrIdCard.get.countryOfIssue mustBe desPassport.countryOfIssue
       }
-
       "we don't have a passportOrIdCard" in {
-        val identification = DesIdentification(Some(nino),None,Some(desAddress))
-        val output = IndividualMapper.toDomain(desName,date,Some(phoneNumber), Some(identification))
+        val identification = DesIdentification(Some(nino), None, Some(desAddress))
+        val output = IndividualMapper.toDomain(desName, date, Some(phoneNumber), Some(identification))
         output.passportOrIdCard mustBe None
       }
-
       "we don't have an identificiation" in {
-        val output: Individual = IndividualMapper.toDomain(desName,date,Some(phoneNumber), None)
+        val output: Individual = IndividualMapper.toDomain(desName, date, Some(phoneNumber), None)
         output.passportOrIdCard mustBe None
       }
     }

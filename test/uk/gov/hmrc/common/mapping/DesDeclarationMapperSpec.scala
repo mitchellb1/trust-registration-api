@@ -22,7 +22,6 @@ import uk.gov.hmrc.common.des.{DesDeclaration, MissingPropertyException}
 import uk.gov.hmrc.common.rest.resources.core.{Address, Declaration}
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
-
 class DesDeclarationMapperSpec extends PlaySpec
   with OneAppPerSuite
   with ScalaDataExamples
@@ -31,7 +30,6 @@ class DesDeclarationMapperSpec extends PlaySpec
   val SUT = DesDeclarationMapper
   val domainDeclarationToMap: Declaration = declaration
   val desDeclarationToMap: DesDeclaration = desDeclaration
-
 
   "Des Declaration Mapper" must {
     "map properties correctly" when {
@@ -77,7 +75,7 @@ class DesDeclarationMapperSpec extends PlaySpec
       "line 2 is not provided" in {
         val invalidLine2ToMap: Address = Address(
           line1 = "Line 1",
-          line2 = None ,
+          line2 = None,
           line3 = Some("Line 3"),
           line4 = Some("Line 4"),
           postalCode = None,
@@ -96,6 +94,3 @@ class DesDeclarationMapperSpec extends PlaySpec
     }
   }
 }
-
-
-

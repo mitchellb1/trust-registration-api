@@ -19,28 +19,25 @@ package uk.gov.hmrc.common.mapping
 import uk.gov.hmrc.common.des._
 import uk.gov.hmrc.common.rest.resources.core.Individual
 
-
-trait DesWillIdentificationMapper {
+object DesWillIdentificationMapper {
 
   def toDes(individual: Individual): DesWillIdentification = {
     individual.nino match {
       case Some(nino) => {
-        new DesWillIdentification(
+        DesWillIdentification(
           nino = Some(nino),
           address = None)
       }
       case None => {
         individual.correspondenceAddress match {
           case Some(address) => {
-            new DesWillIdentification(
+            DesWillIdentification(
               nino = None,
               address = Some(AddressMapper.toDes(address)))
           }
-          case None => throw new MissingPropertyException("Individual has missing Nino and Address")
+          case None => throw new MissingPropertyException("Mapping to Des error : DesWillIdentificationMapper : Individual has missing Nino and Address")
         }
       }
     }
   }
 }
-
-object DesWillIdentificationMapper extends DesWillIdentificationMapper

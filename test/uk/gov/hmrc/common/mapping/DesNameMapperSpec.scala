@@ -20,7 +20,6 @@ import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import uk.gov.hmrc.common.des.DesName
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
-
 class DesNameMapperSpec extends PlaySpec
   with OneAppPerSuite
   with ScalaDataExamples

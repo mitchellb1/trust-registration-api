@@ -20,7 +20,6 @@ import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import uk.gov.hmrc.estateapi.rest.resources.core.PersonalRepresentative
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
-
 class PersonalRepresentativeMapperSpec extends PlaySpec
   with OneAppPerSuite
   with ScalaDataExamples
@@ -29,16 +28,16 @@ class PersonalRepresentativeMapperSpec extends PlaySpec
   "Personal Representative Mapper" must {
     "Map fields correctly to Domain Personal Representative" when {
       "we have a correct email from DES" in {
-         val output: PersonalRepresentative = PersonalRepresentativeMapper.toDomain(desPersonalRepresentative)
-         output.email mustBe desPersonalRepresentative.email.get
+        val output: PersonalRepresentative = PersonalRepresentativeMapper.toDomain(desPersonalRepresentative)
+        output.email mustBe desPersonalRepresentative.email.get
       }
       "we have a correct phone number from DES" in {
-         val output: PersonalRepresentative = PersonalRepresentativeMapper.toDomain(desPersonalRepresentative)
-         output.telephoneNumber mustBe desPersonalRepresentative.phoneNumber.get
+        val output: PersonalRepresentative = PersonalRepresentativeMapper.toDomain(desPersonalRepresentative)
+        output.telephoneNumber mustBe desPersonalRepresentative.phoneNumber.get
       }
       "we have valid data to create a domain individual from DES" in {
-         val output: PersonalRepresentative = PersonalRepresentativeMapper.toDomain(desPersonalRepresentative)
-         output.individual.givenName mustBe desPersonalRepresentative.name.firstName
+        val output: PersonalRepresentative = PersonalRepresentativeMapper.toDomain(desPersonalRepresentative)
+        output.individual.givenName mustBe desPersonalRepresentative.name.firstName
       }
     }
   }

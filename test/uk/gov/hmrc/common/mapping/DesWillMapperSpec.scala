@@ -21,7 +21,6 @@ import uk.gov.hmrc.common.des.DesWill
 import uk.gov.hmrc.common.rest.resources.core.Deceased
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
-
 class DesWillMapperSpec extends PlaySpec
   with OneAppPerSuite
   with ScalaDataExamples
@@ -29,7 +28,6 @@ class DesWillMapperSpec extends PlaySpec
 
   val SUT = DesWillMapper
   val domainDeceasedToMap: Deceased = deceased
-
 
   "Des Will Mapper" must {
     "map properties correctly" when {
@@ -61,28 +59,6 @@ class DesWillMapperSpec extends PlaySpec
         output.name.lastName mustBe deceased.individual.familyName
       }
     }
-
-//    "thrown an exception" when {
-//      "line 2 is not provided" in {
-//        val invalidLine2ToMap: Address = Address(
-//          line1 = "Line 1",
-//          line2 = None ,
-//          line3 = Some("Line 3"),
-//          line4 = Some("Line 4"),
-//          postalCode = None,
-//          countryCode = "ES"
-//        )
-//        val declaration: Declaration = Declaration(
-//          invalidLine2ToMap,
-//          true: Boolean,
-//          "Joe",
-//          "Bloggs",
-//          new DateTime("1940-03-31"),
-//          None)
-//        val ex = the[MissingPropertyException] thrownBy SUT.toDes(declaration)
-//        ex.getMessage must include("Missing address line 2")
-//      }
-//    }
   }
 }
 

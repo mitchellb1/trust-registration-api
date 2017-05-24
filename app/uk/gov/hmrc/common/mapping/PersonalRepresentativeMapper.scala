@@ -19,16 +19,13 @@ package uk.gov.hmrc.common.mapping
 import uk.gov.hmrc.common.des.DesPersonalRepresentative
 import uk.gov.hmrc.estateapi.rest.resources.core.PersonalRepresentative
 
+object PersonalRepresentativeMapper {
 
-
-case class PersonalRepresentativeMapper()
-
-object PersonalRepresentativeMapper  {
-  def toDomain(desPersonalRepresentative: DesPersonalRepresentative) : PersonalRepresentative = {
+  def toDomain(desPersonalRepresentative: DesPersonalRepresentative): PersonalRepresentative = {
     PersonalRepresentative(IndividualMapper.toDomain(desPersonalRepresentative.name,
       desPersonalRepresentative.dateOfBirth,
       desPersonalRepresentative.phoneNumber,
       Some(desPersonalRepresentative.identification)),
-      desPersonalRepresentative.phoneNumber.get,desPersonalRepresentative.email.get)
+      desPersonalRepresentative.phoneNumber.get, desPersonalRepresentative.email.get)
   }
 }

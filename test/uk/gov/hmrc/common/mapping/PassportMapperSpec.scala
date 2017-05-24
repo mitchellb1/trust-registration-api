@@ -27,17 +27,14 @@ class PassportMapperSpec extends PlaySpec
 
   val output = PassportMapper.toDomain(desPassport)
 
-
   "Passport Mapper" must {
     "Map fields correctly to Domain Passport" when {
       "we have a number" in {
         output.referenceNumber mustBe desPassport.number
       }
-
       "we have a date" in {
         output.expiryDate mustBe desPassport.expirationDate
       }
-
       "we have a country of issue" in {
         output.countryOfIssue mustBe desPassport.countryOfIssue
       }

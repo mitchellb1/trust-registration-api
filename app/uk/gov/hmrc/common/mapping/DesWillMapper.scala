@@ -19,11 +19,10 @@ package uk.gov.hmrc.common.mapping
 import uk.gov.hmrc.common.des.DesWill
 import uk.gov.hmrc.common.rest.resources.core.Deceased
 
-
-trait DesWillMapper {
+object DesWillMapper {
 
   def toDes(deceased: Deceased): DesWill = {
-    new DesWill(
+    DesWill(
       name = DesNameMapper.toDes(deceased.individual),
       dateOfBirth = deceased.individual.dateOfBirth,
       dateOfDeath = deceased.dateOfDeath,
@@ -31,5 +30,3 @@ trait DesWillMapper {
     )
   }
 }
-
-object DesWillMapper extends DesWillMapper

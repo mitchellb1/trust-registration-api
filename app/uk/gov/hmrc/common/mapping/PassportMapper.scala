@@ -19,11 +19,9 @@ package uk.gov.hmrc.common.mapping
 import uk.gov.hmrc.common.des.DesPassportType
 import uk.gov.hmrc.common.rest.resources.core.Passport
 
-
-case class PassportMapper()
-
 object PassportMapper {
-  def toDomain(passport: DesPassportType) : Passport = {
+
+  def toDomain(passport: DesPassportType): Passport = {
     Passport(passport.number, passport.expirationDate, passport.countryOfIssue)
   }
 }

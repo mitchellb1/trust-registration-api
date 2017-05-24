@@ -19,11 +19,10 @@ package uk.gov.hmrc.common.mapping
 import uk.gov.hmrc.common.des.DesIndividualDetails
 import uk.gov.hmrc.common.rest.resources.core.Individual
 
-
-trait DesIndividualDetailsMapper {
+object DesIndividualDetailsMapper {
 
   def toDes(individual: Individual): DesIndividualDetails = {
-    new DesIndividualDetails(
+    DesIndividualDetails(
       name = DesNameMapper.toDes(individual),
       dateOfBirth = individual.dateOfBirth,
       vulnerableBeneficiary = None,
@@ -34,5 +33,3 @@ trait DesIndividualDetailsMapper {
     )
   }
 }
-
-object DesIndividualDetailsMapper extends DesIndividualDetailsMapper

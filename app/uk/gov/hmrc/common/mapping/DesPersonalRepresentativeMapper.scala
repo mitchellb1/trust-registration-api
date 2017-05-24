@@ -19,8 +19,7 @@ package uk.gov.hmrc.common.mapping
 import uk.gov.hmrc.common.des.DesPersonalRepresentative
 import uk.gov.hmrc.estateapi.rest.resources.core.PersonalRepresentative
 
-
-trait DesPersonalRepresentativeMapper {
+object DesPersonalRepresentativeMapper {
 
   def toDes(personalRepresentative: PersonalRepresentative): DesPersonalRepresentative = {
     DesPersonalRepresentative(
@@ -31,5 +30,3 @@ trait DesPersonalRepresentativeMapper {
       email = Some(personalRepresentative.email))
   }
 }
-
-object DesPersonalRepresentativeMapper extends DesPersonalRepresentativeMapper

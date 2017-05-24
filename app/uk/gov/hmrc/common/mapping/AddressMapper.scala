@@ -19,10 +19,10 @@ package uk.gov.hmrc.common.mapping
 import uk.gov.hmrc.common.des.{DesAddress, MissingPropertyException}
 import uk.gov.hmrc.common.rest.resources.core.Address
 
-trait AddressMapper {
+object AddressMapper {
 
   def toDes(address: Address): DesAddress = {
-    new DesAddress(
+    DesAddress(
       line1 = address.line1,
       address.line2.getOrElse(throw new MissingPropertyException("Missing address line 2")),
       line3 = address.line3,
@@ -32,16 +32,14 @@ trait AddressMapper {
     )
   }
 
-    def toDomain(address: DesAddress): Address = {
-    new Address(
+  def toDomain(address: DesAddress): Address = {
+    Address(
       line1 = address.line1,
       line2 = Some(address.line2),
       line3 = address.line3,
       line4 = address.line4,
       postalCode = address.postCode,
       countryCode = address.country
-      )
-    }
+    )
+  }
 }
-
-object AddressMapper extends AddressMapper
