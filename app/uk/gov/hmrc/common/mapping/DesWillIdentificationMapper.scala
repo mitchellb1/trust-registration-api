@@ -22,22 +22,15 @@ import uk.gov.hmrc.common.rest.resources.core.Individual
 object DesWillIdentificationMapper {
 
   def toDes(individual: Individual): DesWillIdentification = {
-    individual.nino match {
-      case Some(nino) => {
-        DesWillIdentification(
-          nino = Some(nino),
-          address = None)
-      }
-      case None => {
+
+    DesWillIdentification(
+      nino = individual.nino,
+      address = {
         individual.correspondenceAddress match {
-          case Some(address) => {
-            DesWillIdentification(
-              nino = None,
-              address = Some(AddressMapper.toDes(address)))
-          }
-          case None => throw new MissingPropertyException("Mapping to Des error : DesWillIdentificationMapper : Individual has missing Nino and Address")
+          case Some(address) => Some(AddressMapper.toDes(address))
+          case None => None
         }
       }
-    }
+    )
   }
 }
