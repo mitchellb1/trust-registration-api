@@ -4,7 +4,23 @@
   "telephoneNumber" : "0044 1234 1234",
   "currentYear" : "1970",
   "commencementDate" : "1900-01-01",
-  "yearsOfTaxConsequence" : [2015,2016],
+  "yearsOfTaxConsequence": {
+    "taxReturnsNoDues": false,
+    "returns": [
+      {
+        "taxReturnYear": "15",
+        "taxConsequence": true
+      },
+      {
+        "taxReturnYear": "16",
+        "taxConsequence": false
+      },
+      {
+        "taxReturnYear": "17",
+        "taxConsequence": true
+      }
+    ]
+  },
   "legality" : "{LEGALITY}",
   "isTrustUkResident" : true,
   "leadTrustee" : {

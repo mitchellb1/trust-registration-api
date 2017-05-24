@@ -18,7 +18,7 @@ package uk.gov.hmrc.trustapi.rest.resources.core
 
 import org.joda.time.DateTime
 import play.api.libs.json.{JsString, Json, Reads, Writes}
-import uk.gov.hmrc.common.rest.resources.core.{Address, Declaration, Legality}
+import uk.gov.hmrc.common.rest.resources.core.{Address, Declaration, Legality, YearsOfTaxConsequence}
 import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.TrustType
 
 case class Trust(name: String,
@@ -26,7 +26,7 @@ case class Trust(name: String,
                  telephoneNumber: String,
                  currentYear: String,
                  commencementDate: DateTime,
-                 yearsOfTaxConsequence: Option[List[Int]] = None,
+                 yearsOfTaxConsequence: Option[YearsOfTaxConsequence] = None,
                  legality: Legality,
                  isTrustUkResident: Boolean,
                  leadTrustee: LeadTrustee,

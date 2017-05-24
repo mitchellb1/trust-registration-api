@@ -22,7 +22,7 @@ import uk.gov.hmrc.common.mapping._
 import uk.gov.hmrc.estateapi.rest.resources.core.Estate
 
 
-trait EstateMapper {
+object EstateMapper {
 
   def toDes(domainEstate: Estate): DesTrustEstate = {
 
@@ -56,5 +56,3 @@ trait EstateMapper {
     )
   }
 }
-
-object EstateMapper extends EstateMapper
