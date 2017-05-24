@@ -38,8 +38,8 @@ trait DesScalaExamples {
 
 
   val correspondence = DesCorrespondence(abroadIndicator = true, "SomeName thats not a name", desAddress, phoneNumber)
+  
   val yearsReturns = DesYearsReturns(Some(true), None)
-  //val yearsReturns = DesYearsReturns(taxReturnsNoDues false, returns: Option[List[DesYearReturn]] = None)
 
   val desDeclaration =  DesDeclaration(desName, desAddress)
 
@@ -49,7 +49,6 @@ trait DesScalaExamples {
 
   val desPassport = DesPassportType("12134567", date, "GB")
 
-  //val identification = DesIdentification(Some(nino), None, None)
   val desIdentification = DesIdentification(None, Some(desPassport), Some(desAddress))
 
   val desPersonalRepresentative = DesPersonalRepresentative(desName, date, desIdentification, Some(phoneNumber), Some(email))
@@ -66,11 +65,8 @@ trait DesScalaExamples {
 
   val completeValidDesEstate = DesTrustEstate(
     Some(admin),
-  correspondence,
-//  None,
+    correspondence,
     Some(yearsReturns),
-  None,
-//    Some(assets),
-  desDeclaration: DesDeclaration,
-  details)
+    desDeclaration: DesDeclaration,
+    details)
 }
