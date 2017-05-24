@@ -20,23 +20,19 @@ import org.joda.time.DateTime
 import uk.gov.hmrc.common.des.{DesIdentification, DesName}
 import uk.gov.hmrc.common.rest.resources.core.Individual
 
-
-case class IndividualMapper()
-
-object IndividualMapper  {
+object IndividualMapper {
   def toDomain(desName: DesName,
                dateOfBirth: DateTime,
                telephoneNumber: Option[String],
-               identification: Option[DesIdentification]) : Individual = {
-
+               identification: Option[DesIdentification]): Individual = {
 
     Individual(desName.firstName,
       desName.lastName,
       dateOfBirth,
       desName.middleName,
-      identification.flatMap(c=>c.nino),
+      identification.flatMap(c => c.nino),
       telephoneNumber,
-      identification.flatMap(i=>i.passport.map(p=>PassportMapper.toDomain(p))),
-      identification.flatMap(c=>c.address.map(a=>AddressMapper.toDomain(a))))
+      identification.flatMap(i => i.passport.map(p => PassportMapper.toDomain(p))),
+      identification.flatMap(c => c.address.map(a => AddressMapper.toDomain(a))))
   }
 }

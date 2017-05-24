@@ -16,12 +16,17 @@
 
 package uk.gov.hmrc.common.mapping
 
-import uk.gov.hmrc.common.des.DesPassportType
-import uk.gov.hmrc.common.rest.resources.core.Passport
+import uk.gov.hmrc.common.des.DesPersonalRepresentative
+import uk.gov.hmrc.estateapi.rest.resources.core.PersonalRepresentative
 
-object PassportMapper {
+object DesPersonalRepresentativeMapper {
 
-  def toDomain(passport: DesPassportType): Passport = {
-    Passport(passport.number, passport.expirationDate, passport.countryOfIssue)
+  def toDes(personalRepresentative: PersonalRepresentative): DesPersonalRepresentative = {
+    DesPersonalRepresentative(
+      name = DesNameMapper.toDes(personalRepresentative.individual),
+      dateOfBirth = personalRepresentative.individual.dateOfBirth,
+      identification = DesIdentificationMapper.toDes(personalRepresentative.individual),
+      phoneNumber = Some(personalRepresentative.telephoneNumber),
+      email = Some(personalRepresentative.email))
   }
 }

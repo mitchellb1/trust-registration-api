@@ -385,6 +385,9 @@
         "declaration": {
           "$ref": "#/definitions/declarationType"
         },
+        "deceased": {
+          "$ref": "#/definitions/deceasedType"
+        },
         "telephoneNumber": {
           "$ref": "#/definitions/telephoneNumberType"
         }
@@ -394,6 +397,7 @@
         "personalRepresentative",
         "reasonEstateSetup",
         "declaration",
+        "deceased",
         "telephoneNumber"],
       "type": "object"
     },

@@ -6,7 +6,7 @@
     "telephoneNumber" : "01913651234",
     "email" : "test@test.com"
   },
-  "adminPeriodFinishedDate" : "1800-01-01",
+  "adminPeriodFinishedDate" : "1900-01-01",
   "reasonEstateSetup" : "incomeTaxDueMoreThan10000",
   "declaration" : "{DECLARATION}"
 }

@@ -21,46 +21,43 @@ import uk.gov.hmrc.common.des.{DesAddress, MissingPropertyException}
 import uk.gov.hmrc.common.rest.resources.core.Address
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
-
 class AddressMapperSpec extends PlaySpec
   with OneAppPerSuite
   with ScalaDataExamples
   with DesScalaExamples {
 
-  val SUT = new AddressMapper()
+  val SUT = AddressMapper
   val domainAddressToMap = address
-  val dessAddressToMap = desAddress
-
+  val desAddressToMap = desAddress
 
   "Address mapper to Domain" must {
     "map properties correctly" when {
       "we have a correct line 1 on DES" in {
-        val output: Address = SUT.toDomain(dessAddressToMap)
-        output.line1 mustBe dessAddressToMap.line1
+        val output: Address = SUT.toDomain(desAddressToMap)
+        output.line1 mustBe desAddressToMap.line1
       }
       "we have a correct line 2 on DES" in {
-        val output: Address = SUT.toDomain(dessAddressToMap)
-        output.line2.get mustBe dessAddressToMap.line2
+        val output: Address = SUT.toDomain(desAddressToMap)
+        output.line2.get mustBe desAddressToMap.line2
       }
       "we have a correct line 3 on DES" in {
-        val output: Address = SUT.toDomain(dessAddressToMap)
-        output.line3 mustBe dessAddressToMap.line3
+        val output: Address = SUT.toDomain(desAddressToMap)
+        output.line3 mustBe desAddressToMap.line3
       }
       "we have a correct line 4 on DES" in {
-        val output: Address = SUT.toDomain(dessAddressToMap)
-        output.line4 mustBe dessAddressToMap.line4
+        val output: Address = SUT.toDomain(desAddressToMap)
+        output.line4 mustBe desAddressToMap.line4
       }
       "we have a correct postcode on DES" in {
-        val output: Address = SUT.toDomain(dessAddressToMap)
-        output.postalCode mustBe dessAddressToMap.postCode
+        val output: Address = SUT.toDomain(desAddressToMap)
+        output.postalCode mustBe desAddressToMap.postCode
       }
       "we have a correct country on DES" in {
-        val output = SUT.toDomain(dessAddressToMap)
-        output.countryCode mustBe dessAddressToMap.country
+        val output = SUT.toDomain(desAddressToMap)
+        output.countryCode mustBe desAddressToMap.country
       }
     }
   }
-
 
   "Address mapper to Des" must {
     "map properties correctly" when {
@@ -89,12 +86,11 @@ class AddressMapperSpec extends PlaySpec
         output.country mustBe domainAddressToMap.countryCode
       }
     }
-
     "thrown an exception" when {
       "line 2 is not provided" in {
         val invalidLine2ToMap = Address(
           line1 = "Line 1",
-          line2 = None ,
+          line2 = None,
           line3 = Some("Line 3"),
           line4 = Some("Line 4"),
           postalCode = None,
@@ -106,6 +102,3 @@ class AddressMapperSpec extends PlaySpec
     }
   }
 }
-
-
-

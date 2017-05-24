@@ -43,8 +43,8 @@ class GetSettlorsSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
         val result = Await.result(SUT.getSettlors("1234"),Duration.Inf)
         val passportOrIdCard = Passport("IDENTIFIER",new DateTime("2020-01-01"),"ES")
         val address = Address("Line 1", Some("Line 2"), Some("Line 3"), Some("Line 4"),None, "ES")
-        val expectedIndividualSettlors = Settlors(Some(List(Individual("Leo","Spaceman",new DateTime("1800-01-01"),None,None,None,Some(passportOrIdCard),Some(address)),
-        Individual("Leo","Spaceman",new DateTime("1800-01-01"),None,None,None,Some(passportOrIdCard),Some(address)))))
+        val expectedIndividualSettlors = Settlors(Some(List(Individual("Leo","Spaceman",new DateTime("1900-01-01"),None,None,None,Some(passportOrIdCard),Some(address)),
+        Individual("Leo","Spaceman",new DateTime("1900-01-01"),None,None,None,Some(passportOrIdCard),Some(address)))))
         result mustBe GetSuccessResponse(expectedIndividualSettlors)
       }
 

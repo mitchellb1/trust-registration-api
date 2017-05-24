@@ -18,131 +18,38 @@ package uk.gov.hmrc.estateapi.mapping
 
 import org.joda.time.DateTime
 import uk.gov.hmrc.common.des._
-import uk.gov.hmrc.common.mapping.AddressMapper
-import uk.gov.hmrc.common.rest.resources.core._
-import uk.gov.hmrc.estateapi.rest.resources.core.{Estate, EstateRequest, PersonalRepresentative}
+import uk.gov.hmrc.common.mapping._
+import uk.gov.hmrc.estateapi.rest.resources.core.Estate
 
 
-trait EstateMapper{
+trait EstateMapper {
 
   def toDes(domainEstate: Estate): DesTrustEstate = {
 
-    val date = new DateTime("2016-03-31")
-    val nino = "WA123456A"
-    val phoneNumber = "0191 000 0000"
-    val email = "john.doe@somewhere.co.uk"
-    val name = DesName("Joe", Some("John"), "Doe")
-    val correspondenceAddress: DesAddress = AddressMapper.toDes(domainEstate.correspondenceAddress)
-//    val declarationAddress = AddressMapper.toDes(domainEstate.declaration.correspondenceAddress)
-//    val identificationAddress = AddressMapper.toDes(Some(domainEstate.personalRepresentative.individual.correspondenceAddress))
-    val address = DesAddress(
-      line1 = "address line 1",
-      line2 = "address line 1",
-      line3 = Some("address line 1"),
-      line4 = Some("address line 1"),
-      postCode = Some("NE45 23PQ"),
-      country = "GB")
+    val personalRepresentative: DesPersonalRepresentative = DesPersonalRepresentativeMapper.toDes(domainEstate.personalRepresentative)
 
-    val admin = DesAdmin("12345ABCDE")
+    val deceased: DesWill = DesWillMapper.toDes(domainEstate.deceased)
 
+    val administrationEndDate: Option[DateTime] = domainEstate.adminPeriodFinishedDate
 
-
-    val yearsReturns = DesYearsReturns(Some(true), None)
-    //val yearsReturns = DesYearsReturns(taxReturnsNoDues false, returns: Option[List[DesYearReturn]] = None)
-
-    val declaration =  DesDeclaration(name, address)
-
-    val desWillId = DesWillIdentification(Some(nino), None)
-
-    val deceased = DesWill(name, date, date, identification = desWillId)
-
-    val passport = DesPassportType("12134567", date, "GB")
-
-    //val identification = DesIdentification(Some(nino), None, None)
-    val identification = DesIdentification(None, Some(passport), Some(address))
-
-    val personalRepresentative = DesPersonalRepresentative(name, date, identification, Some(phoneNumber), Some(email))
-
-    val entities = DesEntities(personalRepresentative: DesPersonalRepresentative, deceased: DesWill)
-
-    val administrationEndDate = Some(date)
+    val correspondence: DesCorrespondence = DesCorrespondenceMapper.toDes(domainEstate)
 
     val periodTaxDues = "01"
 
-    val estate = DesEstate(entities, administrationEndDate, periodTaxDues)
-
-    val details = DesDetails(Some(estate), trust = None)
-
-    val desCorrespondence: DesCorrespondence = DesCorrespondenceMapper.toDes(
-      isNotAbroad(domainEstate),
-      domainEstate.estateName,
-      domainEstate.correspondenceAddress,
-      domainEstate.telephoneNumber)
+    val estate: DesEstate = DesEstate(DesEntities(personalRepresentative, deceased),
+      administrationEndDate,
+      periodTaxDues)
 
     DesTrustEstate(
-      Some(admin),
-      desCorrespondence,
+      None,
+      correspondence,
       //  None,
-      Some(yearsReturns),
+      Some(DesYearsReturns(Some(true), None)),
       None,
       //    Some(assets),
-      declaration: DesDeclaration,
-      details)
-
-
-  }
-
-  private def isNotAbroad(domainEstate: Estate) = {
-    !domainEstate.correspondenceAddress.countryCode.equals("GB")
-  }
-
-  def toDomain(desTrustEstate: DesTrustEstate): EstateRequest = {
-
-    val address = Address(
-      line1 = "Line 1",
-      line2 = Some("Line 2"),
-      line3 = Some("Line 3"),
-      line4 = Some("Line 4"),
-      postalCode = None,
-      countryCode = "ES"
+      DesDeclarationMapper.toDes(domainEstate.declaration),
+      DesDetails(Some(estate), trust = None)
     )
-
-    val passport = Passport(
-      referenceNumber = "IDENTIFIER",
-      expiryDate = new DateTime("2020-01-01"),
-      countryOfIssue = "ES"
-    )
-
-    val individual = Individual(
-      givenName = "Leo",
-      otherName = None,
-      familyName = "Spaceman",
-      dateOfBirth = new DateTime("1800-01-01"),
-      nino = None,
-      passportOrIdCard = Some(passport),
-      correspondenceAddress = Some(address),
-      telephoneNumber = None
-    )
-
-    val personalRepresentative = PersonalRepresentative(individual,"01913651234","test@test.com")
-
-    val declaration = Declaration(correspondenceAddress = address,
-      confirmation = true,
-      givenName = "george",
-      familyName = "Spaceman",
-      date = new DateTime(2000, 1, 1, 0, 0),
-      otherName = Some("fred"))
-
-    val validEstateWithPersonalRepresentative = Estate(estateName = "Test Estate",
-      correspondenceAddress = address,
-      personalRepresentative = personalRepresentative,
-      adminPeriodFinishedDate = Some(new DateTime("1800-01-01")),
-      reasonEstateSetup = "incomeTaxDueMoreThan10000",
-      declaration = declaration,
-      telephoneNumber = "0191 123 0000")
-
-    EstateRequest(validEstateWithPersonalRepresentative)
-
   }
 }
 

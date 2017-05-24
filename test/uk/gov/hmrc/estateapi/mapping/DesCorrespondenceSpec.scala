@@ -22,44 +22,43 @@ import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
 
 
-class DesCorespondenceSpec extends PlaySpec
+class DesCorrespondenceSpec extends PlaySpec
   with OneAppPerSuite
   with ScalaDataExamples
   with DesScalaExamples {
 
   val SUT = DesCorrespondenceMapper
-  val domainAddressToMap = address
-  val dessAddressToMap = desAddress
+
+  val domainEstateToMap = validEstateWithPersonalRepresentative
+
 
   "DesCorrespondenceMapper toDes" must {
     "map properties correctly" when {
       "we have a correct abroadIndicator on the domain" in {
-        val output: DesCorrespondence = SUT.toDes(true, "Test", domainAddressToMap, "01234")
+        val output: DesCorrespondence = SUT.toDes(domainEstateToMap)
         output.abroadIndicator
       }
 
       "we have a correct name" in {
-        val output = SUT.toDes(true,"Test", domainAddressToMap, "01234")
-        output.name mustBe "Test"
+        val output = SUT.toDes(domainEstateToMap)
+        output.name mustBe "Test Estate"
       }
 
       "we have a valid domain address" in {
-        val output = SUT.toDes(true,"Test", domainAddressToMap, "01234")
+        val output = SUT.toDes(domainEstateToMap)
 
-        output.address.line1 mustBe domainAddressToMap.line1
-        output.address.line2 mustBe domainAddressToMap.line2.get
-        output.address.line3 mustBe domainAddressToMap.line3
-        output.address.line4 mustBe domainAddressToMap.line4
-        output.address.postCode mustBe domainAddressToMap.postalCode
-        output.address.country mustBe domainAddressToMap.countryCode
+        output.address.line1 mustBe domainEstateToMap.correspondenceAddress.line1
+        output.address.line2 mustBe domainEstateToMap.correspondenceAddress.line2.get
+        output.address.line3 mustBe domainEstateToMap.correspondenceAddress.line3
+        output.address.line4 mustBe domainEstateToMap.correspondenceAddress.line4
+        output.address.postCode mustBe domainEstateToMap.correspondenceAddress.postalCode
+        output.address.country mustBe domainEstateToMap.correspondenceAddress.countryCode
       }
 
       "we have a phone number" in {
-        val output: DesCorrespondence = SUT.toDes(true,"Test", domainAddressToMap, "01234")
-        output.phoneNumber mustBe "01234"
+        val output: DesCorrespondence = SUT.toDes(domainEstateToMap)
+        output.phoneNumber mustBe "0191 365 1234"
       }
     }
   }
-
-
 }

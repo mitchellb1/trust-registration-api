@@ -284,7 +284,7 @@ class RegisterTrustControllerSpec extends PlaySpec
         val individual = Individual(
           givenName = "John",
           familyName = "Doe",
-          dateOfBirth = new DateTime("1800-01-01"),
+          dateOfBirth = new DateTime("1900-01-01"),
           passportOrIdCard = Some(Passport(
             referenceNumber = "IDENTIFIER",
             expiryDate = new DateTime("2000-01-01"),
@@ -302,7 +302,7 @@ class RegisterTrustControllerSpec extends PlaySpec
 
         status(result) mustBe OK
         contentAsString(result) mustBe (
-          """[{"givenName":"John","familyName":"Doe","dateOfBirth":"1800-01-01",""" +
+          """[{"givenName":"John","familyName":"Doe","dateOfBirth":"1900-01-01",""" +
             """"passportOrIdCard":{"referenceNumber":"IDENTIFIER","expiryDate":"2000-01-01","countryOfIssue":"ES"},""" +
             """"correspondenceAddress":{"line1":"Address Line 1","countryCode":"ES"}}]""")
       }
@@ -438,7 +438,7 @@ class RegisterTrustControllerSpec extends PlaySpec
           val individual = Individual(
             givenName = "John",
             familyName = "Doe",
-            dateOfBirth = new DateTime("1800-01-01"),
+            dateOfBirth = new DateTime("1900-01-01"),
             passportOrIdCard = Some(Passport(
               referenceNumber = "IDENTIFIER",
               expiryDate = new DateTime("2000-01-01"),
@@ -456,7 +456,7 @@ class RegisterTrustControllerSpec extends PlaySpec
 
           status(result) mustBe OK
           contentAsString(result) mustBe (
-            """[{"givenName":"John","familyName":"Doe","dateOfBirth":"1800-01-01",""" +
+            """[{"givenName":"John","familyName":"Doe","dateOfBirth":"1900-01-01",""" +
               """"passportOrIdCard":{"referenceNumber":"IDENTIFIER","expiryDate":"2000-01-01","countryOfIssue":"ES"},""" +
               """"correspondenceAddress":{"line1":"Address Line 1","countryCode":"ES"}}]""")
         }
@@ -593,7 +593,7 @@ class RegisterTrustControllerSpec extends PlaySpec
 
         status(result) mustBe OK
         contentAsString(result) mustBe(
-          """{"individual":{"givenName":"Leo","familyName":"Spaceman","dateOfBirth":"1800-01-01",""" +
+          """{"individual":{"givenName":"Leo","familyName":"Spaceman","dateOfBirth":"1900-01-01",""" +
           """"passportOrIdCard":{"referenceNumber":"IDENTIFIER","expiryDate":"2020-01-01","countryOfIssue":"ES"},""" +
           """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2","line3":"Line 3","line4":"Line 4",""" +
           """"countryCode":"ES"}},"telephoneNumber":"1234567890","email":"test@test.com"}"""
@@ -712,7 +712,7 @@ class RegisterTrustControllerSpec extends PlaySpec
 
         status(result) mustBe OK
         contentAsString(result) mustBe(
-          """{"individuals":[{"givenName":"Leo","familyName":"Spaceman","dateOfBirth":"1800-01-01",""" +
+          """{"individuals":[{"givenName":"Leo","familyName":"Spaceman","dateOfBirth":"1900-01-01",""" +
           """"passportOrIdCard":{"referenceNumber":"IDENTIFIER","expiryDate":"2020-01-01","countryOfIssue":"ES"},""" +
           """"correspondenceAddress":{"line1":"Line 1","line2":"Line 2",""" +
           """"line3":"Line 3","line4":"Line 4","countryCode":"ES"}}],"companies":[""" +
@@ -844,7 +844,7 @@ class RegisterTrustControllerSpec extends PlaySpec
     "individual" : {
       "givenName" : "Leo",
       "familyName" : "Spaceman",
-      "dateOfBirth" : "1800-01-01",
+      "dateOfBirth" : "1900-01-01",
       "passportOrIdCard" : {
         "referenceNumber" : "IDENTIFIER",
         "expiryDate" : "2020-01-01",
@@ -868,7 +868,7 @@ class RegisterTrustControllerSpec extends PlaySpec
     "individual" : {
       "givenName" : "Leo",
       "familyName" : "Spaceman",
-      "dateOfBirth" : "1800-01-01",
+      "dateOfBirth" : "1900-01-01",
       "passportOrIdCard" : {
         "referenceNumber" : "IDENTIFIER",
         "expiryDate" : "2020-01-01",

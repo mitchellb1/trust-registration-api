@@ -14,14 +14,24 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.estateapi.rest.resources.core
+package uk.gov.hmrc.common.mapping
 
-import play.api.libs.json.Json
-import uk.gov.hmrc.common.rest.resources.core.Individual
+import uk.gov.hmrc.common.des.{DesDeclaration, DesName}
+import uk.gov.hmrc.common.rest.resources.core.Declaration
 
+object DesDeclarationMapper {
 
-case class PersonalRepresentative(individual: Individual, telephoneNumber: String,email: String)
+  def toDes(declaration: Declaration): DesDeclaration = {
 
-object PersonalRepresentative {
-  implicit val personalRepresentativeFormats = Json.format[PersonalRepresentative]
+    DesDeclaration(
+
+      name = {
+        DesName(
+          firstName = declaration.givenName,
+          middleName = declaration.otherName,
+          lastName = declaration.familyName)
+      },
+      address = AddressMapper.toDes(declaration.correspondenceAddress)
+    )
+  }
 }
