@@ -19,22 +19,21 @@ package uk.gov.hmrc.estateapi.mapping
 
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
-import uk.gov.hmrc.common.utils.{DesSchemaValidator, EstateSchemaValidator, SuccessfulValidation}
-import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
+import uk.gov.hmrc.common.utils.{DesSchemaValidator, SuccessfulValidation}
+import uk.gov.hmrc.utils.ScalaDataExamples
 
 class EstateMappingSpec extends PlaySpec
   with OneAppPerSuite
-  with ScalaDataExamples
-  with DesScalaExamples{
+  with ScalaDataExamples {
 
-  //  val domainEstateFromCaseClasses = EstateRequest(validEstateWithPersonalRepresentative)
-  //  val domainEstateFromFileString: String = Json.prettyPrint(Json.toJson(validEstateWithPersonalRepresentative))
+//  val domainEstateFromCaseClasses = EstateRequest(validEstateWithPersonalRepresentative)
+//  val domainEstateFromFileString: String = Json.prettyPrint(Json.toJson(validEstateWithPersonalRepresentative))
 
   val SUT = EstateMapper
 
   "EstateMapper" must {
-    "accept a valid set of domain Estates case classes" when {
-      "and return a valid set of DesEstates case classes" in {
+    "accept a valid domain Estates case classes" when {
+      "and return a valid DesEstates case classes" in {
 
 
         //println(s"From domain case classes ---- ${Json.toJson(validEstateWithPersonalRepresentative).toString()}}")
@@ -46,18 +45,18 @@ class EstateMappingSpec extends PlaySpec
       }
     }
 
-    "accept a valid set of des Estates case class" when {
-      "and return a set of valid Domain Estates case class" in {
-
-        //println(s"From des case classes ---- ${completeValidDesEstate}")
-        val convertedToDomainCaseClasses = SUT.toDomain(completeValidDesEstate)
-        println(s"From domain case classes ---- ${convertedToDomainCaseClasses}")
-
-
-
-        val result = EstateSchemaValidator.validateAgainstSchema(Json.toJson(convertedToDomainCaseClasses).toString())
-        result mustBe SuccessfulValidation
-      }
-    }
+//    "accept a valid set of des Estates case class" when {
+//      "and return a set of valid Domain Estates case class" in {
+//
+//        //println(s"From des case classes ---- ${completeValidDesEstate}")
+//        val convertedToDomainCaseClasses = SUT.toDomain(completeValidDesEstate)
+//        println(s"From domain case classes ---- ${convertedToDomainCaseClasses}")
+//
+//
+//
+//        val result = EstateSchemaValidator.validateAgainstSchema(Json.toJson(convertedToDomainCaseClasses).toString())
+//        result mustBe SuccessfulValidation
+//      }
+//    }
   }
 }

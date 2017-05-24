@@ -18,7 +18,7 @@ package uk.gov.hmrc.estateapi.rest.resources.core
 
 import org.joda.time.DateTime
 import play.api.libs.json.{JsString, Json, Reads, Writes}
-import uk.gov.hmrc.common.rest.resources.core.{Address, Declaration}
+import uk.gov.hmrc.common.rest.resources.core.{Address, Deceased, Declaration}
 
 case class Estate(estateName: String,
                   correspondenceAddress: Address,
@@ -26,7 +26,10 @@ case class Estate(estateName: String,
                   adminPeriodFinishedDate: Option[DateTime] = None,
                   reasonEstateSetup: String,
                   declaration: Declaration,
-                  telephoneNumber: String)
+                  deceased: Deceased,
+                  telephoneNumber:  String) {
+
+}
 
 object Estate {
   implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))

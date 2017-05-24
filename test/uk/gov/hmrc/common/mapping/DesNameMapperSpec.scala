@@ -17,27 +17,34 @@
 package uk.gov.hmrc.common.mapping
 
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
+import uk.gov.hmrc.common.des.DesName
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
-
-class PassportMapperSpec extends PlaySpec
+class DesNameMapperSpec extends PlaySpec
   with OneAppPerSuite
   with ScalaDataExamples
   with DesScalaExamples {
 
-  val output = PassportMapper.toDomain(desPassport)
+  val SUT = DesNameMapper
+  val domainIndividualToMap = individual
 
-  "Passport Mapper" must {
-    "Map fields correctly to Domain Passport" when {
-      "we have a number" in {
-        output.referenceNumber mustBe desPassport.number
+  "Name Mapper to Des" must {
+    "map properties correctly" when {
+      "we have a correct first name on des domain" in {
+        val output: DesName = SUT.toDes(domainIndividualToMap)
+        output.firstName mustBe domainIndividualToMap.givenName
       }
-      "we have a date" in {
-        output.expiryDate mustBe desPassport.expirationDate
+      "we have a correct middle name on des domain" in {
+        val output: DesName = SUT.toDes(domainIndividualToMap)
+        output.middleName mustBe domainIndividualToMap.otherName
       }
-      "we have a country of issue" in {
-        output.countryOfIssue mustBe desPassport.countryOfIssue
+      "we have a correct last name on des domain" in {
+        val output: DesName = SUT.toDes(domainIndividualToMap)
+        output.lastName mustBe domainIndividualToMap.familyName
       }
     }
   }
 }
+
+
+

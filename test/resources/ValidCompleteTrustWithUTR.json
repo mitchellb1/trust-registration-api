@@ -4,7 +4,7 @@
         "correspondenceAddress" : "{ADDRESS}",
         "telephoneNumber" : "0044 1234 1234",
         "currentYear" : "1970",
-        "commencementDate" : "1940-01-01",
+        "commencementDate" : "1900-01-01",
         "yearsOfTaxConsequence" : [2015,2016],
         "legality" : "{LEGALITY}",
         "isTrustUkResident" : true,
