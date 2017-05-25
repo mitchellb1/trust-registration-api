@@ -22,7 +22,7 @@ import uk.gov.hmrc.common.mapping._
 import uk.gov.hmrc.estateapi.rest.resources.core.Estate
 
 
-trait EstateMapper {
+object EstateMapper {
 
   def toDes(domainEstate: Estate): DesTrustEstate = {
 
@@ -34,7 +34,7 @@ trait EstateMapper {
 
     val correspondence: DesCorrespondence = DesCorrespondenceMapper.toDes(domainEstate)
 
-    val yearReturns = Some(DesYearsReturns(Some(true), None))
+    val yearReturns = DesYearReturnsMapper.toDes(domainEstate.yearsOfTaxConsequence)
 
     val periodTaxDues = domainEstate.reasonEstateSetup match {
       case "incomeTaxDueMoreThan10000" => "01"
@@ -56,5 +56,3 @@ trait EstateMapper {
     )
   }
 }
-
-object EstateMapper extends EstateMapper

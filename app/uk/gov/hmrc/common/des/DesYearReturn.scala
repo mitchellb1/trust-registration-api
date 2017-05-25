@@ -15,8 +15,8 @@
  */
 
 package uk.gov.hmrc.common.des
-import play.api.libs.json.{JsPath, Json, Reads}
-case class DesYearReturn(taxReturnYear: String, taxReturnYearC: String)
+import play.api.libs.json.Json
+case class DesYearReturn(taxReturnYear: String, taxConsequence: Boolean)
 
 object DesYearReturn {
   implicit val formats = Json.format[DesYearReturn]

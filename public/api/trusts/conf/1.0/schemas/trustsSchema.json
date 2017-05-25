@@ -1376,12 +1376,7 @@
           "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$"
         },
         "yearsOfTaxConsequence": {
-          "type": "array",
-          "items": {
-            "value": {
-              "type": "number"
-            }
-          }
+          "$ref": "#/definitions/yearsReturnType"
         },
         "currentYear": {
           "type": "string"
@@ -1430,6 +1425,40 @@
         "trustType",
         "commencementDate"
       ]
+    },
+    "yearReturnType": {
+      "type": "object",
+      "properties": {
+        "taxReturnYear": {
+          "type": "string",
+          "pattern": "^[0-9]{2}$"
+        },
+        "taxConsequence": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "taxReturnYear",
+        "taxConsequence"
+      ],
+      "additionalProperties": false
+    },
+    "yearsReturnType": {
+      "type": "object",
+      "properties": {
+        "taxReturnsNoDues": {
+          "type": "boolean"
+        },
+        "returns": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": {
+            "$ref": "#/definitions/yearReturnType"
+          }
+        }
+      },
+      "additionalProperties": false
     },
     "trusteesType": {
       "description": "Trustees Type",
