@@ -14,24 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.mapping
+package uk.gov.hmrc.common.mapping.todomain
 
-import uk.gov.hmrc.common.des.{DesDeclaration, DesName}
+import org.joda.time.DateTime
+import uk.gov.hmrc.common.des.DesDeclaration
+import uk.gov.hmrc.common.mapping.AddressMapper
 import uk.gov.hmrc.common.rest.resources.core.Declaration
 
-object DesDeclarationMapper {
-
-  def toDes(declaration: Declaration): DesDeclaration = {
-
-    DesDeclaration(
-
-      name = {
-        DesName(
-          firstName = declaration.givenName,
-          middleName = declaration.otherName,
-          lastName = declaration.familyName)
-      },
-      address = AddressMapper.toDes(declaration.correspondenceAddress)
-    )
+object DeclarationMapper {
+  def toDomain(declaration: DesDeclaration, date: DateTime, confirmation: Boolean) : Declaration = {
+    Declaration(AddressMapper.toDomain(declaration.address),confirmation,declaration.name.firstName,declaration.name.lastName,date,declaration.name.middleName)
   }
 }

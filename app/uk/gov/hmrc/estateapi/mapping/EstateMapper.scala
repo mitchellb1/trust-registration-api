@@ -18,7 +18,7 @@ package uk.gov.hmrc.estateapi.mapping
 
 import org.joda.time.DateTime
 import uk.gov.hmrc.common.des._
-import uk.gov.hmrc.common.mapping._
+import uk.gov.hmrc.common.mapping.todes._
 import uk.gov.hmrc.estateapi.rest.resources.core.Estate
 
 

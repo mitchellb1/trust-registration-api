@@ -14,14 +14,25 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.mapping
+package uk.gov.hmrc.common.mapping.todes
 
-import uk.gov.hmrc.common.des.DesPassportType
-import uk.gov.hmrc.common.rest.resources.core.Passport
+import uk.gov.hmrc.common.des.{DesDeclaration, DesName}
+import uk.gov.hmrc.common.mapping.AddressMapper
+import uk.gov.hmrc.common.rest.resources.core.Declaration
 
-object PassportMapper {
+object DesDeclarationMapper {
 
-  def toDomain(passport: DesPassportType): Passport = {
-    Passport(passport.number, passport.expirationDate, passport.countryOfIssue)
+  def toDes(declaration: Declaration): DesDeclaration = {
+
+    DesDeclaration(
+
+      name = {
+        DesName(
+          firstName = declaration.givenName,
+          middleName = declaration.otherName,
+          lastName = declaration.familyName)
+      },
+      address = AddressMapper.toDes(declaration.correspondenceAddress)
+    )
   }
 }
