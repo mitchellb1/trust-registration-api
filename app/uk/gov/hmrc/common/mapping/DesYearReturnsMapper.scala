@@ -17,12 +17,12 @@
 package uk.gov.hmrc.common.mapping
 
 import uk.gov.hmrc.common.des.{DesYearReturn, DesYearsReturns}
-import uk.gov.hmrc.estateapi.rest.resources.core.Estate
+import uk.gov.hmrc.common.rest.resources.core.YearsOfTaxConsequence
 
 object DesYearReturnsMapper {
 
-  def toDes(domainEstate: Estate): Option[DesYearsReturns] = {
-    domainEstate.yearsOfTaxConsequence match {
+  def toDes(yearsOfTaxConsequence: Option[YearsOfTaxConsequence]): Option[DesYearsReturns] = {
+    yearsOfTaxConsequence match {
       case Some(yearsOfTaxConsequence) => {
         val returns: Option[List[DesYearReturn]] = yearsOfTaxConsequence.returns match {
           case Some(returnsList) => {

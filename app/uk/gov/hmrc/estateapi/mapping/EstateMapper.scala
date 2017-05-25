@@ -34,7 +34,7 @@ object EstateMapper {
 
     val correspondence: DesCorrespondence = DesCorrespondenceMapper.toDes(domainEstate)
 
-    val yearReturns = DesYearReturnsMapper.toDes(domainEstate)
+    val yearReturns = DesYearReturnsMapper.toDes(domainEstate.yearsOfTaxConsequence)
 
     val periodTaxDues = domainEstate.reasonEstateSetup match {
       case "incomeTaxDueMoreThan10000" => "01"
