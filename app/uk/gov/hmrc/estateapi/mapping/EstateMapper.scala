@@ -26,7 +26,10 @@ import uk.gov.hmrc.estateapi.rest.resources.core.Estate
 
 object EstateMapper {
 
-  val reasonForSettingUpEstate = Map("01" -> "incomeTaxDueMoreThan10000", "02" -> "saleOfEstateAssetsMoreThan250000", "03" -> "saleOfEstateAssetsMoreThan500000", "04" -> "worthMoreThanTwoAndHalfMillionAtTimeOfDeath")
+  val reasonForSettingUpEstate = Map("01" -> "incomeTaxDueMoreThan10000",
+    "02" -> "saleOfEstateAssetsMoreThan250000",
+    "03" -> "saleOfEstateAssetsMoreThan500000",
+    "04" -> "worthMoreThanTwoAndHalfMillionAtTimeOfDeath")
 
   def toDes(domainEstate: Estate): DesTrustEstate = {
 
