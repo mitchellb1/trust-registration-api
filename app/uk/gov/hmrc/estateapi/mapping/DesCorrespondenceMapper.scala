@@ -19,18 +19,26 @@ package uk.gov.hmrc.estateapi.mapping
 import uk.gov.hmrc.common.des.DesCorrespondence
 import uk.gov.hmrc.common.mapping.AddressMapper
 import uk.gov.hmrc.estateapi.rest.resources.core.Estate
+import uk.gov.hmrc.trustapi.rest.resources.core.Trust
 
 
-trait DesCorrespondenceMapper {
+object DesCorrespondenceMapper {
 
-    def toDes(estate: Estate): DesCorrespondence = {
-        DesCorrespondence(
-          abroadIndicator = !(estate.correspondenceAddress.countryCode.equals("GB")),
-          name = estate.estateName,
-          address = AddressMapper.toDes(estate.correspondenceAddress),
-          phoneNumber = estate.telephoneNumber
-        )
-      }
+  def toDes(estate: Estate): DesCorrespondence = {
+    DesCorrespondence(
+      abroadIndicator = !(estate.correspondenceAddress.countryCode.equals("GB")),
+      name = estate.estateName,
+      address = AddressMapper.toDes(estate.correspondenceAddress),
+      phoneNumber = estate.telephoneNumber
+    )
   }
 
-  object DesCorrespondenceMapper extends DesCorrespondenceMapper
+  def toDes(trust: Trust): DesCorrespondence = {
+    DesCorrespondence(
+      abroadIndicator = !(trust.correspondenceAddress.countryCode.equals("GB")),
+      name = trust.name,
+      address = AddressMapper.toDes(trust.correspondenceAddress),
+      phoneNumber = trust.telephoneNumber
+    )
+  }
+}
