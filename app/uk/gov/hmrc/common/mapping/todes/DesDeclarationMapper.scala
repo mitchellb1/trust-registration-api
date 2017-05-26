@@ -23,9 +23,7 @@ import uk.gov.hmrc.common.rest.resources.core.Declaration
 object DesDeclarationMapper {
 
   def toDes(declaration: Declaration): DesDeclaration = {
-
     DesDeclaration(
-
       name = {
         DesName(
           firstName = declaration.givenName,

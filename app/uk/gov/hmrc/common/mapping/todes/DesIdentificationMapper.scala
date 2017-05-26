@@ -25,12 +25,7 @@ object DesIdentificationMapper {
   def toDes(individual: Individual): DesIdentification = {
     DesIdentification(
       nino = individual.nino,
-      address = {
-        individual.correspondenceAddress match {
-          case Some(address) => Some(AddressMapper.toDes(address))
-          case None => None
-        }
-      },
+      address = individual.correspondenceAddress.flatMap(a=>Some(AddressMapper.toDes(a))),
       passport = DesPassportTypeMapper.toDes(individual)
     )
   }

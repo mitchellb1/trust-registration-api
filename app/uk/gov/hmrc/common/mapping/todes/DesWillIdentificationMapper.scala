@@ -26,12 +26,6 @@ object DesWillIdentificationMapper {
 
     DesWillIdentification(
       nino = individual.nino,
-      address = {
-        individual.correspondenceAddress match {
-          case Some(address) => Some(AddressMapper.toDes(address))
-          case None => None
-        }
-      }
-    )
+      address = individual.correspondenceAddress.flatMap(a=>Some(AddressMapper.toDes(a))))
   }
 }
