@@ -28,9 +28,6 @@ class EstateMappingSpec extends PlaySpec
   with DesScalaExamples
   with ScalaDataExamples {
 
-//  val domainEstateFromCaseClasses = EstateRequest(validEstateWithPersonalRepresentative)
-//  val domainEstateFromFileString: String = Json.prettyPrint(Json.toJson(validEstateWithPersonalRepresentative))
-
   val SUT = EstateMapper
   val desWill = DesWill(desName,date,date,desWillId)
   val desCorrespondence = DesCorrespondence(true,"Test",desAddress,phoneNumber)
