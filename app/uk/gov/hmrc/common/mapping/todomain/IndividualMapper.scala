@@ -46,8 +46,7 @@ object IndividualMapper {
           desName.middleName,
           desWillIdentification.flatMap(c => c.nino),
           telephoneNumber,
-          None,
-          desWillIdentification.flatMap(c => c.address.map(a => AddressMapper.toDomain(a))))
+          correspondenceAddress = desWillIdentification.flatMap(c => c.address.map(a => AddressMapper.toDomain(a))))
     }
   }
 }
