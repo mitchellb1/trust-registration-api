@@ -80,19 +80,5 @@ class EstateMappingSpec extends PlaySpec
         output.deceased.dateOfDeath mustBe desWill.dateOfDeath
       }
     }
-
-//    "accept a valid set of des Estates case class" when {
-//      "and return a set of valid Domain Estates case class" in {
-//
-//        //println(s"From des case classes ---- ${completeValidDesEstate}")
-//        val convertedToDomainCaseClasses = SUT.toDomain(completeValidDesEstate)
-//        println(s"From domain case classes ---- ${convertedToDomainCaseClasses}")
-//
-//
-//
-//        val result = EstateSchemaValidator.validateAgainstSchema(Json.toJson(convertedToDomainCaseClasses).toString())
-//        result mustBe SuccessfulValidation
-//      }
-//    }
   }
 }
