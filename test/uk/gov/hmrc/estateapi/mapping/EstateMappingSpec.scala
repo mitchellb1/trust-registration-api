@@ -20,8 +20,8 @@ package uk.gov.hmrc.estateapi.mapping
 import org.joda.time.DateTime
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
-import uk.gov.hmrc.common.des.{DesAddress, DesCorrespondence, DesDeclaration, DesEstate}
-import uk.gov.hmrc.common.mapping.{AddressMapper, PersonalRepresentativeMapper}
+import uk.gov.hmrc.common.des._
+import uk.gov.hmrc.common.mapping.{AddressMapper, DeceasedMapper, PersonalRepresentativeMapper}
 import uk.gov.hmrc.common.utils.{DesSchemaValidator, SuccessfulValidation}
 import uk.gov.hmrc.estateapi.rest.resources.core.Estate
 import uk.gov.hmrc.trustapi.mapping.DeclarationMapper
@@ -48,9 +48,12 @@ class EstateMappingSpec extends PlaySpec
     }
 
     "map correctly to a estate domain" when {
+
+      val desWill = DesWill(desName,date,date,desWillId)
+
       val correspondence = DesCorrespondence(true,"Test",desAddress,phoneNumber)
 
-      val output = Mapper.toDomain(estate, desAddress, desDeclaration, correspondence)
+      val output = Mapper.toDomain(estate, desAddress, desDeclaration, correspondence, desWill)
 
       "we have a personal representative" in {
         estate.entities.personalRepresentative.email.get mustBe output.personalRepresentative.email
@@ -81,9 +84,10 @@ class EstateMappingSpec extends PlaySpec
       }
 
       "we have a deceased" in {
-
+        output.deceased.dateOfDeath mustBe desWill.dateOfDeath
       }
     }
+
 //    "accept a valid set of des Estates case class" when {
 //      "and return a set of valid Domain Estates case class" in {
 //
@@ -101,7 +105,7 @@ class EstateMappingSpec extends PlaySpec
 }
 
 object Mapper extends ScalaDataExamples with DesScalaExamples{
-  def toDomain(estate: DesEstate, address: DesAddress, declaration: DesDeclaration, correspondence: DesCorrespondence) : Estate = {
+  def toDomain(estate: DesEstate, address: DesAddress, declaration: DesDeclaration, correspondence: DesCorrespondence, deceased: DesWill) : Estate = {
     Estate(correspondence.name,
       AddressMapper.toDomain(address),
       PersonalRepresentativeMapper.toDomain(estate.entities.personalRepresentative),
@@ -113,7 +117,7 @@ object Mapper extends ScalaDataExamples with DesScalaExamples{
         case "04" => "worthMoreThanTwoAndHalfMillionAtTimeOfDeath"
       },
       DeclarationMapper.toDomain(declaration,new DateTime("2016-03-31"),true),//TODO: For declaration, we have not got a field to map confirmation or date.
-      deceased,
+      DeceasedMapper.toDomain(deceased),
       correspondence.phoneNumber)
   }
 }
