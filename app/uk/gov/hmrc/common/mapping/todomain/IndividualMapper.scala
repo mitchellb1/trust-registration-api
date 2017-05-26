@@ -17,23 +17,36 @@
 package uk.gov.hmrc.common.mapping.todomain
 
 import org.joda.time.DateTime
-import uk.gov.hmrc.common.des.{DesIdentification, DesName}
+import uk.gov.hmrc.common.des.{DesIdentification, DesName, DesWillIdentification}
 import uk.gov.hmrc.common.mapping.AddressMapper
 import uk.gov.hmrc.common.rest.resources.core.Individual
+
 
 object IndividualMapper {
   def toDomain(desName: DesName,
                dateOfBirth: DateTime,
-               telephoneNumber: Option[String],
-               identification: Option[DesIdentification]): Individual = {
+               telephoneNumber: Option[String] = None,
+               desIdentification: Option[DesIdentification] = None,
+               desWillIdentification: Option[DesWillIdentification] = None): Individual = {
 
-    Individual(desName.firstName,
-      desName.lastName,
-      dateOfBirth,
-      desName.middleName,
-      identification.flatMap(c => c.nino),
-      telephoneNumber,
-      identification.flatMap(i => i.passport.map(p => PassportMapper.toDomain(p))),
-      identification.flatMap(c => c.address.map(a => AddressMapper.toDomain(a))))
+    desIdentification match {
+      case Some(id) =>
+        Individual(desName.firstName,
+          desName.lastName,
+          dateOfBirth,
+          desName.middleName,
+          desIdentification.flatMap(c => c.nino),
+          telephoneNumber,
+          desIdentification.flatMap(i => i.passport.map(p => PassportMapper.toDomain(p))),
+          desIdentification.flatMap(c => c.address.map(a => AddressMapper.toDomain(a))))
+      case None =>
+        Individual(desName.firstName,
+          desName.lastName,
+          dateOfBirth,
+          desName.middleName,
+          desWillIdentification.flatMap(c => c.nino),
+          telephoneNumber,
+          correspondenceAddress = desWillIdentification.flatMap(c => c.address.map(a => AddressMapper.toDomain(a))))
+    }
   }
 }
