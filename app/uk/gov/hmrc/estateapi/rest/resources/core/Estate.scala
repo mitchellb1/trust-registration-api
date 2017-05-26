@@ -18,7 +18,7 @@ package uk.gov.hmrc.estateapi.rest.resources.core
 
 import org.joda.time.DateTime
 import play.api.libs.json.{JsString, Json, Reads, Writes}
-import uk.gov.hmrc.common.rest.resources.core.{Address, Deceased, Declaration}
+import uk.gov.hmrc.common.rest.resources.core.{Address, Deceased, Declaration, YearsOfTaxConsequence}
 
 case class Estate(estateName: String,
                   correspondenceAddress: Address,
@@ -27,7 +27,8 @@ case class Estate(estateName: String,
                   reasonEstateSetup: String,
                   declaration: Declaration,
                   deceased: Deceased,
-                  telephoneNumber:  String) {
+                  telephoneNumber:  String,
+                  yearsOfTaxConsequence: Option[YearsOfTaxConsequence] = None) {
 
 }
 

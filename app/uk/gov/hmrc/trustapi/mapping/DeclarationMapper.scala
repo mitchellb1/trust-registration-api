@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.des
-import play.api.libs.json.Json
-case class DesYearReturn(taxReturnYear: String, taxConsequence: Boolean)
+package uk.gov.hmrc.trustapi.mapping
 
-object DesYearReturn {
-  implicit val formats = Json.format[DesYearReturn]
+import org.joda.time.DateTime
+import uk.gov.hmrc.common.des.DesDeclaration
+import uk.gov.hmrc.common.mapping.AddressMapper
+import uk.gov.hmrc.common.rest.resources.core.Declaration
+
+object DeclarationMapper {
+  def toDomain(declaration: DesDeclaration, date: DateTime, confirmation: Boolean) : Declaration = {
+    Declaration(AddressMapper.toDomain(declaration.address),confirmation,declaration.name.firstName,declaration.name.lastName,date,declaration.name.middleName)
+  }
 }

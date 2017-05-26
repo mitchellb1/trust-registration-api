@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.des
-import play.api.libs.json.Json
-case class DesYearReturn(taxReturnYear: String, taxConsequence: Boolean)
+package uk.gov.hmrc.common.rest.resources.core
 
-object DesYearReturn {
-  implicit val formats = Json.format[DesYearReturn]
+import play.api.libs.json.Json
+
+case class YearReturn(taxReturnYear: String, taxConsequence: Boolean)
+
+object YearReturn {
+  implicit val formats = Json.format[YearReturn]
 }
