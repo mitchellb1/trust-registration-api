@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.mapping
+package uk.gov.hmrc.common.mapping.todes
 
 import uk.gov.hmrc.common.des.DesPersonalRepresentative
 import uk.gov.hmrc.estateapi.rest.resources.core.PersonalRepresentative
 
-object PersonalRepresentativeMapper {
+object DesPersonalRepresentativeMapper {
 
-  def toDomain(desPersonalRepresentative: DesPersonalRepresentative): PersonalRepresentative = {
-    PersonalRepresentative(IndividualMapper.toDomain(desPersonalRepresentative.name,
-      desPersonalRepresentative.dateOfBirth,
-      desPersonalRepresentative.phoneNumber,
-      Some(desPersonalRepresentative.identification)),
-      desPersonalRepresentative.phoneNumber.get, desPersonalRepresentative.email.get)
+  def toDes(personalRepresentative: PersonalRepresentative): DesPersonalRepresentative = {
+    DesPersonalRepresentative(
+      name = DesNameMapper.toDes(personalRepresentative.individual),
+      dateOfBirth = personalRepresentative.individual.dateOfBirth,
+      identification = DesIdentificationMapper.toDes(personalRepresentative.individual),
+      phoneNumber = Some(personalRepresentative.telephoneNumber),
+      email = Some(personalRepresentative.email))
   }
 }

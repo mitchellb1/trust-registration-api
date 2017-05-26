@@ -14,23 +14,18 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.mapping
+package uk.gov.hmrc.common.mapping.todes
 
-import uk.gov.hmrc.common.des._
+import uk.gov.hmrc.common.des.DesName
 import uk.gov.hmrc.common.rest.resources.core.Individual
 
-object DesWillIdentificationMapper {
+object DesNameMapper {
 
-  def toDes(individual: Individual): DesWillIdentification = {
-
-    DesWillIdentification(
-      nino = individual.nino,
-      address = {
-        individual.correspondenceAddress match {
-          case Some(address) => Some(AddressMapper.toDes(address))
-          case None => None
-        }
-      }
+  def toDes(individual: Individual): DesName = {
+    DesName(
+      firstName = individual.givenName,
+      middleName = individual.otherName,
+      lastName = individual.familyName
     )
   }
 }

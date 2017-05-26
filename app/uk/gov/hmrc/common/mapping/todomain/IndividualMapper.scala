@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.mapping
+package uk.gov.hmrc.common.mapping.todomain
 
 import org.joda.time.DateTime
 import uk.gov.hmrc.common.des.{DesIdentification, DesName}
+import uk.gov.hmrc.common.mapping.AddressMapper
 import uk.gov.hmrc.common.rest.resources.core.Individual
 
 object IndividualMapper {

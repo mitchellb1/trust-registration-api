@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.mapping
+package uk.gov.hmrc.common.mapping.todes
 
-import uk.gov.hmrc.common.des.DesName
-import uk.gov.hmrc.common.rest.resources.core.Individual
+import uk.gov.hmrc.common.des.DesWill
+import uk.gov.hmrc.common.rest.resources.core.Deceased
 
-object DesNameMapper {
+object DesWillMapper {
 
-  def toDes(individual: Individual): DesName = {
-    DesName(
-      firstName = individual.givenName,
-      middleName = individual.otherName,
-      lastName = individual.familyName
+  def toDes(deceased: Deceased): DesWill = {
+    DesWill(
+      name = DesNameMapper.toDes(deceased.individual),
+      dateOfBirth = deceased.individual.dateOfBirth,
+      dateOfDeath = deceased.dateOfDeath,
+      identification = DesWillIdentificationMapper.toDes(deceased.individual)
     )
   }
 }
