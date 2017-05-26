@@ -61,7 +61,7 @@ object EstateMapper {
       AddressMapper.toDomain(address),
       PersonalRepresentativeMapper.toDomain(estate.entities.personalRepresentative),
       estate.administrationEndDate,
-      (reasonForSettingUpEstate get estate.periodTaxDues).getOrElse(throw new MissingPropertyException("Period tax due not found")),
+      (reasonForSettingUpEstate get estate.periodTaxDues).get,
       DeclarationMapper.toDomain(declaration,new DateTime("2016-03-31"),true),//TODO: For declaration, we have not got a field to map confirmation or date.
       DeceasedMapper.toDomain(deceased),
       correspondence.phoneNumber)

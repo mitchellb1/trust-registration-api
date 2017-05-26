@@ -81,13 +81,6 @@ class EstateMappingSpec extends PlaySpec
       }
     }
 
-    "throw an exception" when {
-      "we cant find the specified period tax " in {
-        val ex = the[MissingPropertyException] thrownBy SUT.toDomain(estate.copy(periodTaxDues = "09"), desAddress, desDeclaration, correspondence, desWill)
-        ex.getMessage must include("Period tax due not found")
-      }
-    }
-
 //    "accept a valid set of des Estates case class" when {
 //      "and return a set of valid Domain Estates case class" in {
 //
