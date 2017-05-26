@@ -17,14 +17,10 @@
 package uk.gov.hmrc.estateapi.mapping
 
 
-import org.joda.time.DateTime
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
 import uk.gov.hmrc.common.des._
-import uk.gov.hmrc.common.mapping.todomain.{DeclarationMapper, PersonalRepresentativeMapper}
-import uk.gov.hmrc.common.mapping.{AddressMapper, DeceasedMapper}
 import uk.gov.hmrc.common.utils.{DesSchemaValidator, SuccessfulValidation}
-import uk.gov.hmrc.estateapi.rest.resources.core.Estate
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
 class EstateMappingSpec extends PlaySpec
@@ -36,6 +32,8 @@ class EstateMappingSpec extends PlaySpec
 //  val domainEstateFromFileString: String = Json.prettyPrint(Json.toJson(validEstateWithPersonalRepresentative))
 
   val SUT = EstateMapper
+  val desWill = DesWill(desName,date,date,desWillId)
+  val desCorrespondence = DesCorrespondence(true,"Test",desAddress,phoneNumber)
 
   "EstateMapper" must {
     "accept a valid domain Estates case classes" when {
@@ -48,12 +46,7 @@ class EstateMappingSpec extends PlaySpec
     }
 
     "map correctly to a estate domain" when {
-
-      val desWill = DesWill(desName,date,date,desWillId)
-
-      val correspondence = DesCorrespondence(true,"Test",desAddress,phoneNumber)
-
-      val output = Mapper.toDomain(estate, desAddress, desDeclaration, correspondence, desWill)
+      val output = SUT.toDomain(estate, desAddress, desDeclaration, desCorrespondence, desWill)
 
       "we have a personal representative" in {
         estate.entities.personalRepresentative.email.get mustBe output.personalRepresentative.email
@@ -72,7 +65,7 @@ class EstateMappingSpec extends PlaySpec
       }
 
       "we have a name" in {
-        correspondence.name mustBe output.estateName
+        desCorrespondence.name mustBe output.estateName
       }
 
       "we have period tax dues" in {
@@ -80,11 +73,18 @@ class EstateMappingSpec extends PlaySpec
       }
 
       "we have a phone number" in {
-        correspondence.phoneNumber mustBe output.telephoneNumber
+        desCorrespondence.phoneNumber mustBe output.telephoneNumber
       }
 
       "we have a deceased" in {
         output.deceased.dateOfDeath mustBe desWill.dateOfDeath
+      }
+    }
+
+    "throw an exception" when {
+      "we cant find the specified period tax " in {
+        val ex = the[MissingPropertyException] thrownBy SUT.toDomain(estate.copy(periodTaxDues = "09"), desAddress, desDeclaration, correspondence, desWill)
+        ex.getMessage must include("Period tax due not found")
       }
     }
 
@@ -101,23 +101,5 @@ class EstateMappingSpec extends PlaySpec
 //        result mustBe SuccessfulValidation
 //      }
 //    }
-  }
-}
-
-object Mapper extends ScalaDataExamples with DesScalaExamples{
-  def toDomain(estate: DesEstate, address: DesAddress, declaration: DesDeclaration, correspondence: DesCorrespondence, deceased: DesWill) : Estate = {
-    Estate(correspondence.name,
-      AddressMapper.toDomain(address),
-      PersonalRepresentativeMapper.toDomain(estate.entities.personalRepresentative),
-      estate.administrationEndDate,
-      estate.periodTaxDues match {
-        case "01" => "incomeTaxDueMoreThan10000"
-        case "02" => "saleOfEstateAssetsMoreThan250000"
-        case "03" => "saleOfEstateAssetsMoreThan500000"
-        case "04" => "worthMoreThanTwoAndHalfMillionAtTimeOfDeath"
-      },
-      DeclarationMapper.toDomain(declaration,new DateTime("2016-03-31"),true),//TODO: For declaration, we have not got a field to map confirmation or date.
-      DeceasedMapper.toDomain(deceased),
-      correspondence.phoneNumber)
   }
 }

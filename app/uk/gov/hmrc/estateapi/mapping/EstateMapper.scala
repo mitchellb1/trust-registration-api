@@ -18,11 +18,15 @@ package uk.gov.hmrc.estateapi.mapping
 
 import org.joda.time.DateTime
 import uk.gov.hmrc.common.des._
+import uk.gov.hmrc.common.mapping.AddressMapper
 import uk.gov.hmrc.common.mapping.todes._
+import uk.gov.hmrc.common.mapping.todomain.{DeceasedMapper, DeclarationMapper, PersonalRepresentativeMapper}
 import uk.gov.hmrc.estateapi.rest.resources.core.Estate
 
 
 object EstateMapper {
+
+  val reasonForSettingUpEstate = Map("01" -> "incomeTaxDueMoreThan10000", "02" -> "saleOfEstateAssetsMoreThan250000", "03" -> "saleOfEstateAssetsMoreThan500000", "04" -> "worthMoreThanTwoAndHalfMillionAtTimeOfDeath")
 
   def toDes(domainEstate: Estate): DesTrustEstate = {
 
@@ -36,12 +40,7 @@ object EstateMapper {
 
     val yearReturns = DesYearReturnsMapper.toDes(domainEstate.yearsOfTaxConsequence)
 
-    val periodTaxDues = domainEstate.reasonEstateSetup match {
-      case "incomeTaxDueMoreThan10000" => "01"
-      case "saleOfEstateAssetsMoreThan250000" => "02"
-      case "saleOfEstateAssetsMoreThan500000" => "03"
-      case "worthMoreThanTwoAndHalfMillionAtTimeOfDeath" => "04"
-    }
+    val periodTaxDues = reasonForSettingUpEstate.find(_._2 == domainEstate.reasonEstateSetup).get._1
 
     val estate: DesEstate = DesEstate(DesEntities(personalRepresentative, deceased),
       administrationEndDate,
@@ -54,5 +53,17 @@ object EstateMapper {
       DesDeclarationMapper.toDes(domainEstate.declaration),
       DesDetails(Some(estate), trust = None)
     )
+  }
+
+  def toDomain(estate: DesEstate, address: DesAddress, declaration: DesDeclaration, correspondence: DesCorrespondence, deceased: DesWill) : Estate = {
+
+    Estate(correspondence.name,
+      AddressMapper.toDomain(address),
+      PersonalRepresentativeMapper.toDomain(estate.entities.personalRepresentative),
+      estate.administrationEndDate,
+      (reasonForSettingUpEstate get estate.periodTaxDues).getOrElse(throw new MissingPropertyException("Period tax due not found")),
+      DeclarationMapper.toDomain(declaration,new DateTime("2016-03-31"),true),//TODO: For declaration, we have not got a field to map confirmation or date.
+      DeceasedMapper.toDomain(deceased),
+      correspondence.phoneNumber)
   }
 }

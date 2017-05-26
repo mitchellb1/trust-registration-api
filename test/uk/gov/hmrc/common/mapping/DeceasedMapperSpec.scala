@@ -18,8 +18,7 @@ package uk.gov.hmrc.common.mapping
 
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import uk.gov.hmrc.common.des.DesWill
-import uk.gov.hmrc.common.mapping.todomain.IndividualMapper
-import uk.gov.hmrc.common.rest.resources.core.Deceased
+import uk.gov.hmrc.common.mapping.todomain.DeceasedMapper
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
 
@@ -44,11 +43,5 @@ class DeceasedMapperSpec extends PlaySpec
         output.dateOfDeath mustBe date
       }
     }
-  }
-}
-
-object DeceasedMapper extends ScalaDataExamples with DesScalaExamples {
-  def toDomain(desWill: DesWill) : Deceased = {
-    Deceased(IndividualMapper.toDomain(desWill.name,desWill.dateOfBirth,desWillIdentification = Some(desWill.identification)), desWill.dateOfDeath)
   }
 }
