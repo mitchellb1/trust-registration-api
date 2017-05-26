@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.mapping
+package uk.gov.hmrc.common.mapping.todomain
 
-import uk.gov.hmrc.common.des.DesWill
-import uk.gov.hmrc.common.rest.resources.core.Deceased
+import uk.gov.hmrc.common.des.DesPassportType
+import uk.gov.hmrc.common.rest.resources.core.Passport
 
-object DesWillMapper {
+object PassportMapper {
 
-  def toDes(deceased: Deceased): DesWill = {
-    DesWill(
-      name = DesNameMapper.toDes(deceased.individual),
-      dateOfBirth = deceased.individual.dateOfBirth,
-      dateOfDeath = deceased.dateOfDeath,
-      identification = DesWillIdentificationMapper.toDes(deceased.individual)
-    )
+  def toDomain(passport: DesPassportType): Passport = {
+    Passport(passport.number, passport.expirationDate, passport.countryOfIssue)
   }
 }

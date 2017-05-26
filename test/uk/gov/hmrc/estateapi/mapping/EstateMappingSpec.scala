@@ -21,10 +21,10 @@ import org.joda.time.DateTime
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
 import uk.gov.hmrc.common.des._
-import uk.gov.hmrc.common.mapping.{AddressMapper, DeceasedMapper, PersonalRepresentativeMapper}
+import uk.gov.hmrc.common.mapping.todomain.{DeclarationMapper, PersonalRepresentativeMapper}
+import uk.gov.hmrc.common.mapping.{AddressMapper, DeceasedMapper}
 import uk.gov.hmrc.common.utils.{DesSchemaValidator, SuccessfulValidation}
 import uk.gov.hmrc.estateapi.rest.resources.core.Estate
-import uk.gov.hmrc.trustapi.mapping.DeclarationMapper
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
 class EstateMappingSpec extends PlaySpec

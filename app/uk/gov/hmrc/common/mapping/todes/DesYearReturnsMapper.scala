@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.mapping
+package uk.gov.hmrc.common.mapping.todes
 
 import uk.gov.hmrc.common.des.{DesYearReturn, DesYearsReturns}
 import uk.gov.hmrc.common.rest.resources.core.YearsOfTaxConsequence

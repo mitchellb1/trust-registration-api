@@ -18,6 +18,7 @@ package uk.gov.hmrc.common.mapping
 
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import uk.gov.hmrc.common.des.DesWill
+import uk.gov.hmrc.common.mapping.todomain.IndividualMapper
 import uk.gov.hmrc.common.rest.resources.core.Deceased
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
