@@ -14,21 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.estateapi.mapping
+package uk.gov.hmrc.common.rest.resources.core
 
-import uk.gov.hmrc.common.des.DesCorrespondence
-import uk.gov.hmrc.common.mapping.AddressMapper
-import uk.gov.hmrc.estateapi.rest.resources.core.Estate
+import play.api.libs.json.Json
 
+case class YearReturn(taxReturnYear: String, taxConsequence: Boolean)
 
-object DesCorrespondenceMapper {
-
-  def toDes(estate: Estate): DesCorrespondence = {
-    DesCorrespondence(
-      abroadIndicator = !(estate.correspondenceAddress.countryCode.equals("GB")),
-      name = estate.estateName,
-      address = AddressMapper.toDes(estate.correspondenceAddress),
-      phoneNumber = estate.telephoneNumber
-    )
-  }
+object YearReturn {
+  implicit val formats = Json.format[YearReturn]
 }
