@@ -23,6 +23,6 @@ object DesYearReturnsMapper {
   def toDes(yearsOfTaxConsequence: Option[YearsOfTaxConsequence]): Option[DesYearsReturns] = {
     yearsOfTaxConsequence.flatMap(years=>
       Some(DesYearsReturns(years.taxReturnsNoDues,
-        years.returns.map(returns=>returns.flatMap(r=>Some(DesYearReturn(r.taxReturnYear,r.taxConsequence)))))))
+        years.returns.map(returns=>returns.map(r=>DesYearReturn(r.taxReturnYear,r.taxConsequence))))))
   }
 }
