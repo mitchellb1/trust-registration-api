@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.estateapi.mapping
+package uk.gov.hmrc.common.mapping.todes
 
 import uk.gov.hmrc.common.des.DesCorrespondence
 import uk.gov.hmrc.common.mapping.AddressMapper

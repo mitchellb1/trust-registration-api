@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.mapping
+package uk.gov.hmrc.common.mapping.todes
 
-import uk.gov.hmrc.common.des.DesPassportType
+import uk.gov.hmrc.common.des._
+import uk.gov.hmrc.common.mapping.AddressMapper
 import uk.gov.hmrc.common.rest.resources.core.Individual
 
-object DesPassportTypeMapper {
+object DesWillIdentificationMapper {
 
-  def toDes(individual: Individual): Option[DesPassportType] = {
-    individual.passportOrIdCard match {
-      case Some(domainPassport) => Some(DesPassportType(domainPassport.referenceNumber, domainPassport.expiryDate, domainPassport.countryOfIssue))
-      case _ => None
-    }
+  def toDes(individual: Individual): DesWillIdentification = {
+    DesWillIdentification(
+      nino = individual.nino,
+      address = individual.correspondenceAddress.map(a=>AddressMapper.toDes(a)))
   }
 }

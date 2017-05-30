@@ -14,18 +14,23 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.mapping
+package uk.gov.hmrc.common.mapping.todes
 
-import uk.gov.hmrc.common.des.DesName
-import uk.gov.hmrc.common.rest.resources.core.Individual
+import uk.gov.hmrc.common.des.{DesDeclaration, DesName}
+import uk.gov.hmrc.common.mapping.AddressMapper
+import uk.gov.hmrc.common.rest.resources.core.Declaration
 
-object DesNameMapper {
+object DesDeclarationMapper {
 
-  def toDes(individual: Individual): DesName = {
-    DesName(
-      firstName = individual.givenName,
-      middleName = individual.otherName,
-      lastName = individual.familyName
+  def toDes(declaration: Declaration): DesDeclaration = {
+    DesDeclaration(
+      name = {
+        DesName(
+          firstName = declaration.givenName,
+          middleName = declaration.otherName,
+          lastName = declaration.familyName)
+      },
+      address = AddressMapper.toDes(declaration.correspondenceAddress)
     )
   }
 }

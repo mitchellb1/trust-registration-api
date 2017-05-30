@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustapi.mapping
+package uk.gov.hmrc.common.mapping.todes
 
-import org.joda.time.DateTime
-import uk.gov.hmrc.common.des.DesDeclaration
-import uk.gov.hmrc.common.mapping.AddressMapper
-import uk.gov.hmrc.common.rest.resources.core.Declaration
+import uk.gov.hmrc.common.des.DesPassportType
+import uk.gov.hmrc.common.rest.resources.core.Individual
 
-object DeclarationMapper {
-  def toDomain(declaration: DesDeclaration, date: DateTime, confirmation: Boolean) : Declaration = {
-    Declaration(AddressMapper.toDomain(declaration.address),confirmation,declaration.name.firstName,declaration.name.lastName,date,declaration.name.middleName)
+object DesPassportTypeMapper {
+
+  def toDes(individual: Individual): Option[DesPassportType] = {
+   individual.passportOrIdCard.map(p=>DesPassportType(p.referenceNumber,p.expiryDate,p.countryOfIssue))
   }
 }

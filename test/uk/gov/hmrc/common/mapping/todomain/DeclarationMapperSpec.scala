@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.estateapi.mapping
+package uk.gov.hmrc.common.mapping.todomain
 
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
-import uk.gov.hmrc.trustapi.mapping.DeclarationMapper
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
 

@@ -19,44 +19,63 @@ package uk.gov.hmrc.estateapi.mapping
 
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
+import uk.gov.hmrc.common.des._
 import uk.gov.hmrc.common.utils.{DesSchemaValidator, SuccessfulValidation}
-import uk.gov.hmrc.utils.ScalaDataExamples
+import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
 class EstateMappingSpec extends PlaySpec
   with OneAppPerSuite
+  with DesScalaExamples
   with ScalaDataExamples {
 
-//  val domainEstateFromCaseClasses = EstateRequest(validEstateWithPersonalRepresentative)
-//  val domainEstateFromFileString: String = Json.prettyPrint(Json.toJson(validEstateWithPersonalRepresentative))
-
   val SUT = EstateMapper
+  val desWill = DesWill(desName,date,date,desWillId)
+  val desCorrespondence = DesCorrespondence(true,"Test",desAddress,phoneNumber)
 
   "EstateMapper" must {
     "accept a valid domain Estates case classes" when {
       "and return a valid DesEstates case classes" in {
-
-
-        //println(s"From domain case classes ---- ${Json.toJson(validEstateWithPersonalRepresentative).toString()}}")
         val convertedToDesCaseClasses = SUT.toDes(validEstateWithPersonalRepresentative)
-        println(s"From des case classes ---- ${Json.toJson(convertedToDesCaseClasses).toString()}")
 
         val result = DesSchemaValidator.validateAgainstSchema(Json.toJson(convertedToDesCaseClasses).toString())
         result mustBe SuccessfulValidation
       }
     }
 
-//    "accept a valid set of des Estates case class" when {
-//      "and return a set of valid Domain Estates case class" in {
-//
-//        //println(s"From des case classes ---- ${completeValidDesEstate}")
-//        val convertedToDomainCaseClasses = SUT.toDomain(completeValidDesEstate)
-//        println(s"From domain case classes ---- ${convertedToDomainCaseClasses}")
-//
-//
-//
-//        val result = EstateSchemaValidator.validateAgainstSchema(Json.toJson(convertedToDomainCaseClasses).toString())
-//        result mustBe SuccessfulValidation
-//      }
-//    }
+    "map correctly to a estate domain" when {
+      val output = SUT.toDomain(estate, desAddress, desDeclaration, desCorrespondence, desWill)
+
+      "we have a personal representative" in {
+        estate.entities.personalRepresentative.email.get mustBe output.personalRepresentative.email
+      }
+
+      "we have a correct address" in {
+        desAddress.line1 mustBe output.correspondenceAddress.line1
+      }
+
+      "we have an admin period finished date" in {
+        estate.administrationEndDate.get mustBe output.adminPeriodFinishedDate.get
+      }
+
+      "we have a declaration" in {
+        desDeclaration.name.firstName mustBe output.declaration.givenName
+      }
+
+      "we have a name" in {
+        desCorrespondence.name mustBe output.estateName
+      }
+
+      "we have period tax dues" in {
+        output.reasonEstateSetup mustBe "incomeTaxDueMoreThan10000"
+      }
+
+      "we have a phone number" in {
+        desCorrespondence.phoneNumber mustBe output.telephoneNumber
+      }
+
+      "we have a deceased" in {
+        output.deceased.dateOfDeath mustBe desWill.dateOfDeath
+      }
+    }
   }
 }
