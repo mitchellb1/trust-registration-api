@@ -22,53 +22,56 @@ import play.api.libs.json.Reads._
 import play.api.libs.json.{JsPath, Writes, _}
 
 
-//trait DesLeadTrustee
-case class DesLeadTrustee(leadTrusteeOrg: Option[DesLeadTrusteeOrg] = None, leadTrusteeInd: Option[DesLeadTrusteeInd] = None)
-{
-   // val leadTrusteeOrg: Option[DesLeadTrusteeOrg] = None
-    //val leadTrusteeInd: Option[DesLeadTrusteeInd] = None
-}
+case class DesLeadTrusteeOrg(name: String, phoneNumber: String, email: Option[String] = None, identification: DesOrgIdentification) extends DesLeadTrustee
+case class DesLeadTrusteeInd(name: DesName, dateOfBirth: DateTime, identification: DesIdentification, phoneNumber: String, email: Option[String] = None) extends DesLeadTrustee
+
+
+trait DesLeadTrustee
 
 object DesLeadTrustee {
 
- // implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
-  //implicit val dateWrites: Writes[DateTime] = Writes { (dt: DateTime) => JsString(dt.toString("yyyy-MM-dd")) }
+  implicit val desLeadTrusteeOrgWrites: Writes[DesLeadTrusteeOrg] = (
+    (JsPath \ "name").write[String] and
+      (JsPath \ "phoneNumber").write[String] and
+      (JsPath \ "email").writeNullable[String] and
+      (JsPath \ "identification").write[DesOrgIdentification]
+    ){req: DesLeadTrusteeOrg => (req.name, req.phoneNumber, req.email, req.identification)}
 
-  implicit val desLeadTrusteeWrites = new Writes[DesLeadTrustee] {
-    def writes(leadTrustee: DesLeadTrustee) = {
-      leadTrustee match {
-        case (Some(org: DesLeadTrusteeOrg), _) => Json.obj(
-          "name" -> org.name,
-          "phoneNumber" -> org.phoneNumber,
-          "email" -> org.email,
-          "identification" -> org.identification)
-        case (_, Some(ind: DesLeadTrusteeInd)) => Json.obj(
-          "name" -> ind.name,
-          "dateOfBirth" -> ind.dateOfBirth,
-          "identification" -> ind.identification,
-          "phoneNumber" -> ind.phoneNumber,
-          "email" -> ind.email
-        )
-      }
+  implicit val desLeadTrusteeIndWrites: Writes[DesLeadTrusteeInd] = (
+      (JsPath \ "name").write[DesName] and
+      (JsPath \ "dateOfBirth").write[String].contramap[DateTime](d => d.toString("yyyy-MM-dd")) and
+      (JsPath \ "identification").write[DesIdentification] and
+      (JsPath \ "phoneNumber").write[String] and
+      (JsPath \ "email").writeNullable[String]
+    ){req: DesLeadTrusteeInd => (req.name, req.dateOfBirth, req.identification, req.phoneNumber, req.email)}
+
+  implicit val desLeadTrusteeWrites: Writes[DesLeadTrustee] = Writes[DesLeadTrustee] {
+    case r: DesLeadTrusteeOrg => desLeadTrusteeOrgWrites.writes(r)
+    case r: DesLeadTrusteeInd => desLeadTrusteeIndWrites.writes(r)
+  }
+
+  implicit val desLeadTrusteeOrgReads: Reads[DesLeadTrusteeOrg] = (
+      (JsPath \ "name").read[String] and
+      (JsPath \ "phoneNumber").read[String] and
+      (JsPath \ "email").readNullable[String] and
+      (JsPath \ "identification").read[DesOrgIdentification]
+    ) (DesLeadTrusteeOrg.apply _)
+
+  implicit val desLeadTrusteeIndReads: Reads[DesLeadTrusteeInd] = (
+      (JsPath \ "name").read[DesName] and
+      (JsPath \ "dateOfBirth").read[DateTime] and
+      (JsPath \ "identification").read[DesIdentification] and
+      (JsPath \ "phoneNumber").read[String] and
+      (JsPath \ "email").readNullable[String]
+    ) (DesLeadTrusteeInd.apply _)
+
+  implicit val desLeadTrusteeReads: Reads[DesLeadTrustee] = Reads[DesLeadTrustee] { json =>
+    (json \ "dateOfBirth").validate[DateTime].flatMap {
+      case x:DateTime => desLeadTrusteeIndReads.reads(json)
+      case _ => desLeadTrusteeOrgReads.reads(json)
     }
   }
 
-  implicit val formatsDesLeadTrusteeInd: OFormat[DesLeadTrusteeInd] = Json.format[DesLeadTrusteeInd]
-  implicit val formatsDesLeadTrusteeOrg: OFormat[DesLeadTrusteeOrg] = Json.format[DesLeadTrusteeOrg]
+  implicit val desLeadTrusteeFormats: Format[DesLeadTrustee] = Format(desLeadTrusteeReads, desLeadTrusteeWrites)
 
-  implicit val desLeadTrusteeReads: Unit = {
-    def Reads(leadTrustee: DesLeadTrustee): Either[OFormat[DesLeadTrusteeOrg], OFormat[DesLeadTrusteeInd]] = {
-      leadTrustee match {
-        case (Some(org: DesLeadTrusteeOrg), _) => {
-          Left(formatsDesLeadTrusteeOrg)
-        }
-
-        case (_, Some(ind: DesLeadTrusteeInd)) => {
-          Right(formatsDesLeadTrusteeInd)
-        }
-      }
-    }
-  }
-
-  implicit val leadTrusteeOrigFormats: Format[DesLeadTrustee] = Format(desLeadTrusteeReads, desLeadTrusteeWrites)
 }

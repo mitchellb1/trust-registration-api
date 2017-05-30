@@ -22,6 +22,7 @@ import uk.gov.hmrc.trustapi.rest.resources.core.Trust
 
 object TrustMapper {
 
+  //TODO  Replace hardcoded values with mappers
   def toDes(domainTrust: Trust): DesTrustEstate = {
 
     val correspondence: DesCorrespondence = DesCorrespondenceMapper.toDes(domainTrust)
@@ -37,7 +38,6 @@ object TrustMapper {
       startDate = domainTrust.commencementDate,
       lawCountry = domainTrust.legality.governingCountryCode,
       administrationCountry = domainTrust.legality.administrationCountryCode,
-      //residentialStatus = Some(DesResidentialStatus(Some(ukres))),
       residentialStatus = None,
       typeOfTrust = "Will Trust or Intestacy Trust",
       deedOfVariation = None,
@@ -59,7 +59,7 @@ object TrustMapper {
 
     val leadTrusteeOrg = DesLeadTrusteeOrg(name="some company", phoneNumber = "0", email = None, identification =  identification)
 
-    val leadTrustee: DesLeadTrustee = DesLeadTrustee(Some(leadTrusteeOrg), None)
+    val leadTrustee: DesLeadTrustee = leadTrusteeOrg
 
     val settlors: DesSettlorType = DesSettlorType(settlor = None, settlorCompany = None)
 
