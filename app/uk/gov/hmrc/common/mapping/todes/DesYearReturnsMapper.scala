@@ -21,8 +21,8 @@ import uk.gov.hmrc.common.rest.resources.core.YearsOfTaxConsequence
 
 object DesYearReturnsMapper {
   def toDes(yearsOfTaxConsequence: Option[YearsOfTaxConsequence]): Option[DesYearsReturns] = {
-    yearsOfTaxConsequence.flatMap(years=>
-      Some(DesYearsReturns(years.taxReturnsNoDues,
-        years.returns.map(returns=>returns.map(r=>DesYearReturn(r.taxReturnYear,r.taxConsequence))))))
+    yearsOfTaxConsequence.map(years=>
+      DesYearsReturns(years.taxReturnsNoDues,
+        years.returns.map(returns=>returns.map(r=>DesYearReturn(r.taxReturnYear,r.taxConsequence)))))
   }
 }
