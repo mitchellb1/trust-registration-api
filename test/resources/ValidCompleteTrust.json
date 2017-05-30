@@ -49,6 +49,13 @@
         },
         "trustType": {
           "willIntestacyTrust" : "{WILLINTESTACYTRUST}"
+        },
+        "declaration": {"correspondenceAddress": "{ADDRESS}",
+          "confirmation": true,
+          "date": "2000-01-01",
+          "familyName": "Spaceman",
+          "givenName": "george",
+          "otherName": "joe"
         }
       }
 

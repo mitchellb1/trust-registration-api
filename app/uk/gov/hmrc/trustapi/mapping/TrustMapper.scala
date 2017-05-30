@@ -17,7 +17,7 @@
 package uk.gov.hmrc.trustapi.mapping
 
 import uk.gov.hmrc.common.des._
-import uk.gov.hmrc.estateapi.mapping.DesCorrespondenceMapper
+import uk.gov.hmrc.common.mapping.todes.{DesCorrespondenceMapper, DesDeclarationMapper}
 import uk.gov.hmrc.trustapi.rest.resources.core.Trust
 
 object TrustMapper {
@@ -31,7 +31,7 @@ object TrustMapper {
 
     val name = DesName("joe", None, "Blogs")
     val address = DesAddress(line1 = "weqr", line2 = "erqw", line3 = None, line4 = None, postCode = None, country = "GB")
-    val declaration = DesDeclaration(name, address)
+    val declaration = DesDeclarationMapper.toDes(domainTrust.declaration)
 
     val ukres: DesUkResidentialStatus = DesUkResidentialStatus(true, None)
     val details: DesTrustDetails = DesTrustDetails(
@@ -55,7 +55,7 @@ object TrustMapper {
       large = None,
       other = None)
 
-    val identification :  DesOrgIdentification = DesOrgIdentification(utr = Some("123456"), address = None)
+    val identification:  DesOrgIdentification = DesOrgIdentification(utr = Some("123456"), address = None)
 
     val leadTrusteeOrg = DesLeadTrusteeOrg(name="some company", phoneNumber = "0", email = None, identification =  identification)
 
