@@ -69,4 +69,6 @@ trait DesScalaExamples {
     Some(yearsReturns),
     desDeclaration: DesDeclaration,
     details)
+
+  val desOrgIdentification = DesOrgIdentification(Some("19423480234"),Some(desAddress))
 }
