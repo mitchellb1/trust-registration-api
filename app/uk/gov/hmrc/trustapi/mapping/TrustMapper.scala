@@ -16,9 +16,7 @@
 
 package uk.gov.hmrc.trustapi.mapping
 
-import org.joda.time.DateTime
 import uk.gov.hmrc.common.des._
-import uk.gov.hmrc.common.mapping.DesDeclarationMapper
 import uk.gov.hmrc.estateapi.mapping.DesCorrespondenceMapper
 import uk.gov.hmrc.trustapi.rest.resources.core.Trust
 
@@ -26,41 +24,48 @@ object TrustMapper {
 
   def toDes(domainTrust: Trust): DesTrustEstate = {
 
-    //val deceased: DesWill = DesWillMapper.toDes(domainTrust.deceased)
-
     val correspondence: DesCorrespondence = DesCorrespondenceMapper.toDes(domainTrust)
 
     val yearReturns = Some(DesYearsReturns(Some(true), None))
 
-    val declaration = DesDeclarationMapper.toDes(domainTrust.declaration.get)
+    val name = DesName("joe", None, "Blogs")
+    val address = DesAddress(line1 = "weqr", line2 = "erqw", line3 = None, line4 = None, postCode = None, country = "GB")
+    val declaration = DesDeclaration(name, address)
 
     val ukres: DesUkResidentialStatus = DesUkResidentialStatus(true, None)
-    val details: DesTrustDetails = DesTrustDetails(startDate = domainTrust.commencementDate,
+    val details: DesTrustDetails = DesTrustDetails(
+      startDate = domainTrust.commencementDate,
       lawCountry = domainTrust.legality.governingCountryCode,
       administrationCountry = domainTrust.legality.administrationCountryCode,
-      residentialStatus = Some(DesResidentialStatus(Some(ukres))),
-      typeOfTrust = "",
-      deedOfVariation = Some(""),
-      interVivos = Some(true),
-      efrbsStartDate = Some(new DateTime()))
+      //residentialStatus = Some(DesResidentialStatus(Some(ukres))),
+      residentialStatus = None,
+      typeOfTrust = "Will Trust or Intestacy Trust",
+      deedOfVariation = None,
+      interVivos = None,
+      efrbsStartDate = None)
+
+    val uBen = DesUnidentified(description = "d", beneficiaryDiscretion = None, beneficiaryShareOfIncome = None)
 
     val beneficiary: DesBeneficiary = DesBeneficiary(
-      individualDetails =  List[DesIndividualDetails](),
-      company =  List[DesCompany](),
-      trust =  List[DesBeneficiaryTrust](),
-      charity =  List[DesCharity](),
-      unidentified =  List[DesUnidentified](),
-      large =  List[DesLarge](),
-      other =  List[DesOther]())
+      individualDetails = None,
+      company = None,
+      trust = None,
+      charity = None,
+      unidentified = None,
+      large = None,
+      other = None)
 
     val identification :  DesOrgIdentification = DesOrgIdentification(utr = Some("123456"), address = None)
-    val leadTrusteeOrg = DesLeadTrusteeOrg(name="", phoneNumber = "", email = None, identification =  identification)
-    val leadTrustee: DesLeadTrustee = DesLeadTrustee(leadTrusteeOrg = Some(leadTrusteeOrg), leadTrusteeInd = None)
+
+    val leadTrusteeOrg = DesLeadTrusteeOrg(name="some company", phoneNumber = "0", email = None, identification =  identification)
+
+    val leadTrustee: DesLeadTrustee = DesLeadTrustee(Some(leadTrusteeOrg), None)
+
     val settlors: DesSettlorType = DesSettlorType(settlor = None, settlorCompany = None)
 
     val entities: DesTrustEntities = DesTrustEntities(
       naturalPerson = None,
-      beneficiary: DesBeneficiary,
+      beneficiary = beneficiary,
       deceased = None,
       leadTrustees = leadTrustee,
       trustees = None,
@@ -68,9 +73,17 @@ object TrustMapper {
       settlors = settlors
     )
 
+    val money = DesMonetary(assetMonetaryAmount = 0)
 
-    //TODO fix trusts to take assets
-    val desTrust: DesTrust = DesTrust(details, entities)
+    val assets = DesAssets(
+      monetary = None,
+      propertyOrLand = None,
+      shares = None,
+      business = None,
+      partnerShip = None,
+      other = None)
+
+    val desTrust: DesTrust = DesTrust(details, entities, assets)
 
     DesTrustEstate(
       None,

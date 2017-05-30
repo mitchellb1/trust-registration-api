@@ -17,8 +17,12 @@
 package uk.gov.hmrc.common.des
 
 import play.api.libs.json.Json
+
 case class DesLeadTrusteeOrg(name: String, phoneNumber: String, email: Option[String] = None, identification: DesOrgIdentification)
 
 object DesLeadTrusteeOrg {
-  implicit val formats = Json.format[DesLeadTrusteeOrg]
+  //  implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
+  //  implicit val dateWrites: Writes[DateTime] = Writes { (dt: DateTime) => JsString(dt.toString("yyyy-MM-dd")) }
+  //  implicit val formatsDesLeadTrusteeOrg = Json.format[DesLeadTrusteeOrg]
+
 }

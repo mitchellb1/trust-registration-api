@@ -31,8 +31,8 @@ class TrustMappingSpec extends PlaySpec
   val SUT = TrustMapper
 
   "EstateMapper" must {
-    "accept a valid domain Trust case classes" when {
-      "and return a valid DesTrust case classes" in {
+    "accept a valid set of domain Trust case classes" when {
+      "and return a set of valid DesTrust case classes" in {
 
 
         //println(s"From domain case classes ---- ${Json.toJson(validEstateWithPersonalRepresentative).toString()}}")
@@ -43,19 +43,5 @@ class TrustMappingSpec extends PlaySpec
         result mustBe SuccessfulValidation
       }
     }
-
-//    "accept a valid set of des Trust case class" when {
-//      "and return a set of valid Domain Trust case class" in {
-//
-//        //println(s"From des case classes ---- ${completeValidDesEstate}")
-//        val convertedToDomainCaseClasses = SUT.toDomain(completeValidDesEstate)
-//        println(s"From domain case classes ---- ${convertedToDomainCaseClasses}")
-//
-//
-//
-//        val result = TrustSchemaValidator.validateAgainstSchema(Json.toJson(convertedToDomainCaseClasses).toString())
-//        result mustBe SuccessfulValidation
-//      }
-//    }
   }
 }
