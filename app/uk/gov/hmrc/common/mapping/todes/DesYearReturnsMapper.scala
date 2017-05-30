@@ -20,24 +20,9 @@ import uk.gov.hmrc.common.des.{DesYearReturn, DesYearsReturns}
 import uk.gov.hmrc.common.rest.resources.core.YearsOfTaxConsequence
 
 object DesYearReturnsMapper {
-
   def toDes(yearsOfTaxConsequence: Option[YearsOfTaxConsequence]): Option[DesYearsReturns] = {
-    yearsOfTaxConsequence match {
-      case Some(yearsOfTaxConsequence) => {
-        val returns: Option[List[DesYearReturn]] = yearsOfTaxConsequence.returns match {
-          case Some(returnsList) => {
-           val listDesYears: List[DesYearReturn] =  for {
-              singleReturn <- returnsList
-              taxReturnYear = singleReturn.taxReturnYear
-              taxConsequence =  singleReturn.taxConsequence
-            } yield DesYearReturn(taxReturnYear, taxConsequence)
-            Some(listDesYears)
-          }
-           case None => None
-        }
-        Some(DesYearsReturns(yearsOfTaxConsequence.taxReturnsNoDues,returns))
-      }
-      case None => None
-    }
+    yearsOfTaxConsequence.map(years=>
+      DesYearsReturns(years.taxReturnsNoDues,
+        years.returns.map(returns=>returns.map(r=>DesYearReturn(r.taxReturnYear,r.taxConsequence)))))
   }
 }

@@ -23,15 +23,8 @@ import uk.gov.hmrc.common.rest.resources.core.Individual
 object DesWillIdentificationMapper {
 
   def toDes(individual: Individual): DesWillIdentification = {
-
     DesWillIdentification(
       nino = individual.nino,
-      address = {
-        individual.correspondenceAddress match {
-          case Some(address) => Some(AddressMapper.toDes(address))
-          case None => None
-        }
-      }
-    )
+      address = individual.correspondenceAddress.map(a=>AddressMapper.toDes(a)))
   }
 }
