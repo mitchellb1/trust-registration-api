@@ -52,8 +52,6 @@ trait ScalaDataExamples {
     telephoneNumber = None
   )
 
-  val settlors = Settlors(Some(List(individual)))
-
   val individualwithNino = Individual(
     givenName = "Leo",
     otherName = None,
@@ -213,4 +211,6 @@ trait ScalaDataExamples {
   val interVivoTrust = Some(InterVivoTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false, incomeDistribution)))),true, Some("dovTypeAbsolute")))
   val trustWithInterVivoTrust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1900-01-01"),yearsOfTaxConsequence,legality,true,leadTrusteeIndividual, Trustees(None, None),
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(Some(List(individual,individual)))), TrustType(interVivoTrust = interVivoTrust))
+
+  val settlors = Settlors(Some(List(individual)),Some(List(company)))
 }

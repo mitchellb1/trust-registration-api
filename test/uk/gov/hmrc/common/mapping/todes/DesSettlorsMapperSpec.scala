@@ -30,8 +30,24 @@ class DesSettlorsMapperSpec extends PlaySpec
     "DES Settlor mapper" should {
       "map a rest domain settlor  to des settlor correctly" when {
         "we have an individual" in {
-            val output = DesSettlorTypeMapper.toDes(settlors)
-            output.settlor.get.head.name.firstName mustBe settlors.individuals.get.head.givenName
+            val settlorsNoCompany = settlors.copy(companies = None)
+            val output = DesSettlorTypeMapper.toDes(settlorsNoCompany)
+
+            output.settlor.get.head.name.firstName mustBe settlorsNoCompany.individuals.get.head.givenName
+        }
+
+        "we have a valid company to create a des settlor company" when {
+          val settlorsNoIndividual = settlors.copy(individuals = None)
+          val output = DesSettlorTypeMapper.toDes(settlorsNoIndividual)
+
+          output.settlorCompany.get.head.name mustBe settlorsNoIndividual.companies.get.head.name
+        }
+
+        "we have both individual and company" when {
+          val output = DesSettlorTypeMapper.toDes(settlors)
+
+          output.settlor.get.head.name.firstName mustBe settlors.individuals.get.head.givenName
+          output.settlorCompany.get.head.name mustBe settlors.companies.get.head.name
         }
       }
     }
@@ -39,7 +55,8 @@ class DesSettlorsMapperSpec extends PlaySpec
 
 object DesSettlorTypeMapper {
   def toDes(settlors: Settlors) : DesSettlorType = {
-    DesSettlorType(settlors.individuals.map(li=>li.map(i=>DesSettlorMapper.toDes(i))))
+    DesSettlorType(settlors.individuals.map(li=>li.map(i=>DesSettlorMapper.toDes(i))),
+    settlors.companies.map(li=>li.map(y=>DesSettlorCompanyMapper.toDes(y,"Trading",false))))//TODO:We are missing mapping for companyType and companyTime
   }
 }
 
