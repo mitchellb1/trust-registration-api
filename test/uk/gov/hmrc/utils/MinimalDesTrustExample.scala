@@ -14,35 +14,31 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustapi.mapping
+package uk.gov.hmrc.utils
 
 import uk.gov.hmrc.common.des._
-import uk.gov.hmrc.common.mapping.todes.{DesCorrespondenceMapper, DesDeclarationMapper, DesYearReturnsMapper}
+import uk.gov.hmrc.common.mapping.todes.{DesCorrespondenceMapper, DesDeclarationMapper}
 import uk.gov.hmrc.trustapi.rest.resources.core.Trust
 
-object TrustMapper {
-
-
+//Please do not Delete
+object MinimalDesTrustExample {
   def toDes(domainTrust: Trust): DesTrustEstate = {
-
-    val admin: Option[DesAdmin] = domainTrust.utr.map(utr => DesAdmin(utr))
 
     val correspondence: DesCorrespondence = DesCorrespondenceMapper.toDes(domainTrust)
 
-    val yearReturns: Option[DesYearsReturns] = DesYearReturnsMapper.toDes(domainTrust.yearsOfTaxConsequence)
+    val yearReturns = Some(DesYearsReturns(Some(true), None))
 
-    val declaration: DesDeclaration = DesDeclarationMapper.toDes(domainTrust.declaration)
+    val name = DesName("joe", None, "Blogs")
+    val address = DesAddress(line1 = "weqr", line2 = "erqw", line3 = None, line4 = None, postCode = None, country = "GB")
+    val declaration = DesDeclarationMapper.toDes(domainTrust.declaration)
 
-
-
-    //TODO  Replace hardcoded values below with mappers
-    //val ukres: DesUkResidentialStatus = DesUkResidentialStatus(true, None)
+    val ukres: DesUkResidentialStatus = DesUkResidentialStatus(true, None)
     val details: DesTrustDetails = DesTrustDetails(
       startDate = domainTrust.commencementDate,
       lawCountry = domainTrust.legality.governingCountryCode,
       administrationCountry = domainTrust.legality.administrationCountryCode,
       residentialStatus = None,
-      typeOfTrust = TrustTypeMapper.toDes(domainTrust),
+      typeOfTrust = "Will Trust or Intestacy Trust",
       deedOfVariation = None,
       interVivos = None,
       efrbsStartDate = None)
@@ -58,7 +54,7 @@ object TrustMapper {
       large = None,
       other = None)
 
-    val identification: DesOrgIdentification = DesOrgIdentification(utr = Some("123456"), address = None)
+    val identification:  DesOrgIdentification = DesOrgIdentification(utr = Some("123456"), address = None)
 
     val leadTrusteeOrg = DesLeadTrusteeOrg(name="some company", phoneNumber = "0", email = None, identification =  identification)
 
@@ -89,7 +85,7 @@ object TrustMapper {
     val desTrust: DesTrust = DesTrust(details, entities, assets)
 
     DesTrustEstate(
-      admin,
+      None,
       correspondence,
       yearReturns,
       declaration,

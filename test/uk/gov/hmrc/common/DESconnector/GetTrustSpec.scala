@@ -42,7 +42,7 @@ class GetTrustSpec extends PlaySpec
           Some(Json.parse(validTrustJson)))))
 
         val result = Await.result(SUT.getTrust("1234"),Duration.Inf)
-        result mustBe GetSuccessResponse(trust)
+        result mustBe GetSuccessResponse(trustWithWillIntestacyTrustDOV)
       }
 
       "DES returns a 200 response with a Trust JSON object that contains all required fields and a InterVivo Trust" in {
@@ -50,7 +50,7 @@ class GetTrustSpec extends PlaySpec
           Some(Json.parse(validTrustWithInterVivoJson)))))
 
         val result = Await.result(SUT.getTrust("12324"),Duration.Inf)
-        result mustBe GetSuccessResponse(trustWithInterVivoTrust)
+        result mustBe GetSuccessResponse(trustWithInterVivoTrustDOV)
       }
 
       "DES returns a 200 response with a Trust JSON object that contains all required fields and a Flat Management Sinking Fund" in {

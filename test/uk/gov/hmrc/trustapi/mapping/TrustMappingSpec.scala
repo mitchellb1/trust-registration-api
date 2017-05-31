@@ -27,18 +27,15 @@ class TrustMappingSpec extends PlaySpec
   with OneAppPerSuite
   with ScalaDataExamples {
 
-//  val domainEstateFromCaseClasses = EstateRequest(validEstateWithPersonalRepresentative)
-//  val domainEstateFromFileString: String = Json.prettyPrint(Json.toJson(validEstateWithPersonalRepresentative))
-
   val SUT = TrustMapper
 
   "TrustMapper" must {
     "accept a valid set of domain Trust case classes" when {
       "and return a set of valid DesTrust case classes" in {
 
-        Logger.info(s"From domain case classes ---- ${Json.toJson(trust).toString()}}")
-        val convertedToDesCaseClasses = SUT.toDes(trust)
-        Logger.info(s"From des case classes ---- ${Json.toJson(convertedToDesCaseClasses).toString()}")
+        //Logger.info(s"From domain case classes ---- ${Json.toJson(trust).toString()}")
+        val convertedToDesCaseClasses = SUT.toDes(trustWithWillIntestacyTrustDOV)
+        //Logger.info(s"From des case classes ---- ${Json.toJson(convertedToDesCaseClasses).toString()}")
 
         val result = DesSchemaValidator.validateAgainstSchema(Json.toJson(convertedToDesCaseClasses).toString())
         result mustBe SuccessfulValidation

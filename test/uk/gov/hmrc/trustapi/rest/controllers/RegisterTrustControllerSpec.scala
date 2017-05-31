@@ -768,13 +768,13 @@ class RegisterTrustControllerSpec extends PlaySpec
       "return 200 ok with valid json" when {
         "the endpoint is called with a valid identifier" in {
           when(mockRegisterTrustService.getTrust(any[String])(any[HeaderCarrier]))
-            .thenReturn(Future.successful(new GetSuccessResponse[Trust](trust)))
+            .thenReturn(Future.successful(new GetSuccessResponse[Trust](trustWithWillIntestacyTrustDOV)))
 
           val result = SUT.getTrust("sadfg").apply(FakeRequest("GET", ""))
           val jsonResult = Json.parse(contentAsString(result))
 
           status(result) mustBe OK
-          jsonResult.as[Trust] mustBe trust
+          jsonResult.as[Trust] mustBe trustWithWillIntestacyTrustDOV
         }
       }
 
