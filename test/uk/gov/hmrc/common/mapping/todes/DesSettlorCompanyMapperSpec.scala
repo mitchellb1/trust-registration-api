@@ -17,9 +17,6 @@
 package uk.gov.hmrc.common.mapping.todes
 
 import org.scalatestplus.play.PlaySpec
-import uk.gov.hmrc.common.des.{DesOrgIdentification, DesSettlorCompany}
-import uk.gov.hmrc.common.mapping.AddressMapper
-import uk.gov.hmrc.common.rest.resources.core.Company
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
 
@@ -55,8 +52,3 @@ class DesSettlorCompanyMapperSpec extends PlaySpec
   }
 }
 
-object DesSettlorCompanyMapper extends DesScalaExamples{
-  def toDes(company: Company,companyType: String,companyTime: Boolean) : DesSettlorCompany = {
-    DesSettlorCompany(company.name, companyType, companyTime, DesOrgIdentification(company.referenceNumber,Some(AddressMapper.toDes(company.correspondenceAddress))))
-  }
-}
