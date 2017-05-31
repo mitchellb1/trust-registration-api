@@ -26,8 +26,6 @@ import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes._
 
 
 trait ScalaDataExamples {
-  val settlors = Settlors(Some(List(individual)))
-
   val address = Address(
     line1 = "Line 1",
     line2 = Some("Line 2"),
@@ -53,6 +51,8 @@ trait ScalaDataExamples {
     correspondenceAddress = Some(address),
     telephoneNumber = None
   )
+
+  val settlors = Settlors(Some(List(individual)))
 
   val individualwithNino = Individual(
     givenName = "Leo",
