@@ -16,12 +16,13 @@
 
 package uk.gov.hmrc.common.mapping.todes
 
-import uk.gov.hmrc.common.des.{DesOrgIdentification, DesProtectorCompany}
+import uk.gov.hmrc.common.des.DesOrgIdentification
 import uk.gov.hmrc.common.mapping.AddressMapper
 import uk.gov.hmrc.common.rest.resources.core.Company
 
-object DesProtectorCompanyMapper {
-  def toDes(company: Company) : DesProtectorCompany = {
-    DesProtectorCompany(company.name, DesOrgIdentificationMapper.toDes(company))
+
+object DesOrgIdentificationMapper  {
+  def toDes(company: Company) : DesOrgIdentification = {
+    DesOrgIdentification(company.referenceNumber,Some(AddressMapper.toDes(company.correspondenceAddress)))
   }
 }

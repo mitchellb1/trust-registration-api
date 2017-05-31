@@ -16,12 +16,27 @@
 
 package uk.gov.hmrc.common.mapping.todes
 
-import uk.gov.hmrc.common.des.{DesOrgIdentification, DesProtectorCompany}
-import uk.gov.hmrc.common.mapping.AddressMapper
-import uk.gov.hmrc.common.rest.resources.core.Company
+import org.scalatestplus.play.PlaySpec
+import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
-object DesProtectorCompanyMapper {
-  def toDes(company: Company) : DesProtectorCompany = {
-    DesProtectorCompany(company.name, DesOrgIdentificationMapper.toDes(company))
+
+class DesOrgIdentificationMapperSpec extends PlaySpec
+  with ScalaDataExamples
+  with DesScalaExamples {
+
+  val output = DesOrgIdentificationMapper.toDes(company)
+
+  "Des org identification mapper" should {
+    "map a rest company to a org identificaiton succesfully" when {
+      "we have a valid utr" in {
+        output.utr mustBe company.referenceNumber
+      }
+
+      "we have a valid address" in {
+        output.address.get.line1 mustBe company.correspondenceAddress.line1
+      }
+    }
   }
 }
+
+

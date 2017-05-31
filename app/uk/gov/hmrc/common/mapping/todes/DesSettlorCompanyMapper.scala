@@ -23,6 +23,6 @@ import uk.gov.hmrc.common.rest.resources.core.Company
 
 object DesSettlorCompanyMapper {
   def toDes(company: Company,companyType: String,companyTime: Boolean) : DesSettlorCompany = {
-    DesSettlorCompany(company.name, companyType, companyTime, DesOrgIdentification(company.referenceNumber,Some(AddressMapper.toDes(company.correspondenceAddress))))
+    DesSettlorCompany(company.name, companyType, companyTime, DesOrgIdentificationMapper.toDes(company))
   }
 }
