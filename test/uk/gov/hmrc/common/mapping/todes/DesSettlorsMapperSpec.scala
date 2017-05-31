@@ -30,10 +30,10 @@ class DesSettlorsMapperSpec extends PlaySpec
     "DES Settlor mapper" should {
       "map a rest domain settlor  to des settlor correctly" when {
         "we have an individual" in {
-            val settlorsNoCompany = settlors.copy(companies = None)
-            val output = DesSettlorTypeMapper.toDes(settlorsNoCompany)
+          val settlorsNoCompany = settlors.copy(companies = None)
+          val output = DesSettlorTypeMapper.toDes(settlorsNoCompany)
 
-            output.settlor.get.head.name.firstName mustBe settlorsNoCompany.individuals.get.head.givenName
+          output.settlor.get.head.name.firstName mustBe settlorsNoCompany.individuals.get.head.givenName
         }
 
         "we have a valid company to create a des settlor company" when {
