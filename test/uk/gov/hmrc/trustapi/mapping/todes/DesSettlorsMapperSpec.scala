@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.mapping.todes
+package uk.gov.hmrc.trustapi.mapping.todes
 
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
-import uk.gov.hmrc.common.des.DesSettlorType
-import uk.gov.hmrc.trustapi.rest.resources.core.Settlors
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
 
@@ -53,10 +51,4 @@ class DesSettlorsMapperSpec extends PlaySpec
     }
   }
 
-object DesSettlorTypeMapper {
-  def toDes(settlors: Settlors) : DesSettlorType = {
-    DesSettlorType(settlors.individuals.map(li=>li.map(i=>DesSettlorMapper.toDes(i))),
-    settlors.companies.map(li=>li.map(y=>DesSettlorCompanyMapper.toDes(y,"Trading",false))))//TODO:We are missing mapping for companyType and companyTime
-  }
-}
 
