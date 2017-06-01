@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.mapping.todes
+package uk.gov.hmrc.trustapi.mapping.todes
 
 import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
