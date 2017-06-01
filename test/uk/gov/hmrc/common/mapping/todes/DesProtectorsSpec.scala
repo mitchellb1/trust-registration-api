@@ -17,7 +17,6 @@
 package uk.gov.hmrc.common.mapping.todes
 
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
-import uk.gov.hmrc.common.des.DesProtectorType
 import uk.gov.hmrc.trustapi.rest.resources.core.Protectors
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
