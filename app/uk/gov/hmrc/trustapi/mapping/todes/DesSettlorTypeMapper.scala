@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.mapping.todes
+package uk.gov.hmrc.trustapi.mapping.todes
 
-import uk.gov.hmrc.common.des.{DesOrgIdentification, DesProtectorCompany}
-import uk.gov.hmrc.common.mapping.AddressMapper
-import uk.gov.hmrc.common.rest.resources.core.Company
+import uk.gov.hmrc.common.des.DesSettlorType
+import uk.gov.hmrc.trustapi.rest.resources.core.Settlors
 
-object DesProtectorCompanyMapper {
-  def toDes(company: Company) : DesProtectorCompany = {
-    DesProtectorCompany(company.name, DesOrgIdentification(company.referenceNumber, Some(AddressMapper.toDes(company.correspondenceAddress))))
+object DesSettlorTypeMapper {
+  def toDes(settlors: Settlors) : DesSettlorType = {
+    DesSettlorType(settlors.individuals.map(li=>li.map(i=>DesSettlorMapper.toDes(i))),
+      settlors.companies.map(li=>li.map(y=>DesSettlorCompanyMapper.toDes(y,"Trading",false))))//TODO:We are missing mapping for companyType and companyTime
   }
 }

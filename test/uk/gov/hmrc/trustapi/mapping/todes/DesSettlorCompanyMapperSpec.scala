@@ -14,32 +14,37 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.mapping.todes
+package uk.gov.hmrc.trustapi.mapping.todes
 
 import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
 
-class DesProtectorMapperSpec extends PlaySpec
+class DesSettlorCompanyMapperSpec extends PlaySpec
   with ScalaDataExamples
   with DesScalaExamples {
 
-  "Des protector mapper" should {
-    "map an invidual to a desprotector correctly" when {
-      "we have an individuals name details" in {
-        val output = DesProtectorMapper.toDes(individual)
-        individual.givenName mustBe output.name.firstName
+  "Des settlor company mapper" should {
+    val companyType = "Trading"
+    val output = DesSettlorCompanyMapper.toDes(company,companyType,false)
+
+    "map a rest domain company to des protector company correctly" when {
+      "we have a valid name" in {
+        output.name mustBe company.name
       }
-      "we have an individual date of birth" in {
-        val output = DesProtectorMapper.toDes(individual)
-        individual.dateOfBirth mustBe output.dateOfBirth
+
+      "we have a company type" in {
+        output.companyType mustBe companyType
       }
-      "we have valid identificaion details" in {
-        val output = DesProtectorMapper.toDes(individual)
-        individual.correspondenceAddress.get.line1 mustBe output.identification.address.get.line1
+
+      "we have a companyTime flag" in {
+        output.companyTime mustBe false
+      }
+
+      "we have a valid utr and address to create an org identification" in {
+        output.identification.utr mustBe company.referenceNumber
       }
     }
   }
 }
-
 

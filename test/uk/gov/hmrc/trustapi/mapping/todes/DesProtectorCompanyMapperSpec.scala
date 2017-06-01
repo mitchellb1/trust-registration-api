@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.mapping.todes
+package uk.gov.hmrc.trustapi.mapping.todes
 
 import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
@@ -33,12 +33,8 @@ class DesProtectorCompanyMapperSpec extends PlaySpec
         output.name mustBe company.name
       }
 
-      "we have valid utr" in {
+      "we have a valid utr and address to create an org identification" in {
         output.identification.utr mustBe company.referenceNumber
-      }
-
-      "we have valid address" in {
-        output.identification.address.get.line1 mustBe company.correspondenceAddress.line1
       }
     }
   }
