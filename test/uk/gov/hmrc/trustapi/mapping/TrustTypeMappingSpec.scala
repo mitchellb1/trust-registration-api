@@ -31,7 +31,7 @@ class TrustTypeMappingSpec extends PlaySpec
     "accept a valid set of domain will Intestacy Trust case classes" when {
       "and return a string containing >Will Trust or Intestacy Trust<" in {
 
-        //Logger.info(s"From domain case classes ---- ${Json.toJson(trust).toString()}")
+        //Logger.info(s"From domain case classes ---- ${Json.toJson(trustWithWillIntestacyTrust).toString()}")
         val result = SUT.toDes(trustWithWillIntestacyTrust)
 
         result mustBe "Will Trust or Intestacy Trust"
@@ -41,7 +41,7 @@ class TrustTypeMappingSpec extends PlaySpec
     "accept a valid set of domain will Intestacy Trust Dov case classes" when {
       "and return a string containing >Deed of Variation Trust or Family Arrangement<" in {
 
-        //Logger.info(s"From domain case classes ---- ${Json.toJson(trust).toString()}")
+        //Logger.info(s"From domain case classes ---- ${Json.toJson(trustWithWillIntestacyTrustDOV).toString()}")
         val result = SUT.toDes(trustWithWillIntestacyTrustDOV)
 
         result mustBe "Deed of Variation Trust or Family Arrangement"
@@ -51,7 +51,7 @@ class TrustTypeMappingSpec extends PlaySpec
     "accept a valid set of domain Inter vivos Settlement Trust case classes" when {
       "and return a string containing >Inter vivos Settlement<" in {
 
-        //Logger.info(s"From domain case classes ---- ${Json.toJson(trust).toString()}")
+        //Logger.info(s"From domain case classes ---- ${Json.toJson(trustWithInterVivoTrust).toString()}")
         val result = SUT.toDes(trustWithInterVivoTrust)
 
         result mustBe "Inter vivos Settlement"
@@ -61,7 +61,7 @@ class TrustTypeMappingSpec extends PlaySpec
     "accept a valid set of domain Inter vivos Settlement DOV case classes" when {
       "and return a string containing >Deed of Variation Trust or Family Arrangement<" in {
 
-        //Logger.info(s"From domain case classes ---- ${Json.toJson(trust).toString()}")
+        //Logger.info(s"From domain case classes ---- ${Json.toJson(trustWithInterVivoTrustDOV).toString()}")
         val result = SUT.toDes(trustWithInterVivoTrustDOV)
 
         result mustBe "Deed of Variation Trust or Family Arrangement"
@@ -71,7 +71,7 @@ class TrustTypeMappingSpec extends PlaySpec
     "accept a valid set of domain Employment Related Trust case classes" when {
       "and return a string containing >Employment Related<" in {
 
-        //Logger.info(s"From domain case classes ---- ${Json.toJson(trust).toString()}")
+        //Logger.info(s"From domain case classes ---- ${Json.toJson(trustWithEmploymentTrust).toString()}")
         val result = SUT.toDes(trustWithEmploymentTrust)
 
         result mustBe "Employment Related"
@@ -81,7 +81,7 @@ class TrustTypeMappingSpec extends PlaySpec
     "accept a valid set of domain Heritage Maintenance Fund Trust case classes" when {
       "and return a string containing >Heritage Maintenance Fund<" in {
 
-        //Logger.info(s"From domain case classes ---- ${Json.toJson(trust).toString()}")
+        //Logger.info(s"From domain case classes ---- ${Json.toJson(trustWithHeritageMaintenance).toString()}")
         val result = SUT.toDes(trustWithHeritageMaintenance)
 
         result mustBe "Heritage Maintenance Fund"
@@ -91,7 +91,7 @@ class TrustTypeMappingSpec extends PlaySpec
     "accept a valid set of domain Flat management Trust case classes" when {
       "and return a string containing >Flat Management Company or Sinking Fund<" in {
 
-        //Logger.info(s"From domain case classes ---- ${Json.toJson(trust).toString()}")
+        //Logger.info(s"From domain case classes ---- ${Json.toJson(trustWithFlatManagementFund).toString()}")
         val result = SUT.toDes(trustWithFlatManagementFund)
 
         result mustBe "Flat Management Company or Sinking Fund"

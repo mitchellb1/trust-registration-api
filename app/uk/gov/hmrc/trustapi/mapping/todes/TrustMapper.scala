@@ -41,7 +41,7 @@ object TrustMapper {
       }).getOrElse(None)
     }
 
-    //TODO DOMAIN SCHEMA CHANGE : Check intevivo business logic
+    //TODO DOMAIN SCHEMA CHANGE : Check intervivo business logic
     val intervivos: Option[Boolean] = {
       domainTrust.trustType.interVivoTrust.map[Option[Boolean]](interVivoTrust => Some(true)).getOrElse(Some(false))
     }
@@ -51,6 +51,7 @@ object TrustMapper {
           domainTrust.trustType.employmentTrust.map[Option[DateTime]](emp =>
             emp.employerFinancedRetirementBenefitSchemeStartDate).getOrElse(None)
       }
+
 
     //TODO  Replace hardcoded values below with mappers
     //val ukres: DesUkResidentialStatus = DesUkResidentialStatus(true, None)
@@ -62,9 +63,9 @@ object TrustMapper {
       typeOfTrust = DesTrustTypeMapper.toDes(domainTrust),
       deedOfVariation = deedOfVariation,
       interVivos = intervivos,
-      efrbsStartDate = efrbsStartDate)
+      efrbsStartDate = None)
 
-    val uBen = DesUnidentified(description = "d", beneficiaryDiscretion = None, beneficiaryShareOfIncome = None)
+    //val uBen = DesUnidentified(description = "d", beneficiaryDiscretion = None, beneficiaryShareOfIncome = None)
 
     val beneficiary: DesBeneficiary = DesBeneficiary(
       individualDetails = None,
@@ -77,7 +78,7 @@ object TrustMapper {
 
     val identification: DesOrgIdentification = DesOrgIdentification(utr = Some("123456"), address = None)
 
-    val leadTrusteeOrg = DesLeadTrusteeOrg(name="some company", phoneNumber = "0", email = None, identification =  identification)
+    val leadTrusteeOrg: DesLeadTrusteeOrg = DesLeadTrusteeOrg(name="some company", phoneNumber = "0", email = None, identification =  identification)
 
     val leadTrustee: DesLeadTrustee = leadTrusteeOrg
 

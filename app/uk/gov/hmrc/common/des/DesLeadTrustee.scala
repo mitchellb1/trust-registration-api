@@ -21,10 +21,8 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json.{JsPath, Writes, _}
 
-
 case class DesLeadTrusteeOrg(name: String, phoneNumber: String, email: Option[String] = None, identification: DesOrgIdentification) extends DesLeadTrustee
 case class DesLeadTrusteeInd(name: DesName, dateOfBirth: DateTime, identification: DesIdentification, phoneNumber: String, email: Option[String] = None) extends DesLeadTrustee
-
 
 trait DesLeadTrustee
 

@@ -20,17 +20,25 @@ import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
 
-class DesProtectorCompanyMapperSpec extends PlaySpec
+class DesSettlorCompanyMapperSpec extends PlaySpec
   with ScalaDataExamples
   with DesScalaExamples {
 
-  "Des protector company mapper" should {
-    val output = DesProtectorCompanyMapper.toDes(company)
-
+  "Des settlor company mapper" should {
+    val companyType = "Trading"
+    val output = DesSettlorCompanyMapper.toDes(company,companyType,false)
 
     "map a rest domain company to des protector company correctly" when {
-      "we have a valid name " in {
+      "we have a valid name" in {
         output.name mustBe company.name
+      }
+
+      "we have a company type" in {
+        output.companyType mustBe companyType
+      }
+
+      "we have a companyTime flag" in {
+        output.companyTime mustBe false
       }
 
       "we have a valid utr and address to create an org identification" in {
@@ -39,6 +47,4 @@ class DesProtectorCompanyMapperSpec extends PlaySpec
     }
   }
 }
-
-
 

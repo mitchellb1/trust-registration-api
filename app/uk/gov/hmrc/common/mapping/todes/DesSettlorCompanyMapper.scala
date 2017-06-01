@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.des
+package uk.gov.hmrc.common.mapping.todes
 
-import play.api.libs.json.Json
-case class DesSettlorCompany(name: String, companyType: String, companyTime: Boolean, identification: DesOrgIdentification)
+import uk.gov.hmrc.common.des.{DesOrgIdentification, DesSettlorCompany}
+import uk.gov.hmrc.common.mapping.AddressMapper
+import uk.gov.hmrc.common.rest.resources.core.Company
 
-object DesSettlorCompany {
-  implicit val formats = Json.format[DesSettlorCompany]
+
+object DesSettlorCompanyMapper {
+  def toDes(company: Company,companyType: String,companyTime: Boolean) : DesSettlorCompany = {
+    DesSettlorCompany(company.name, companyType, companyTime, DesOrgIdentificationMapper.toDes(company))
+  }
 }

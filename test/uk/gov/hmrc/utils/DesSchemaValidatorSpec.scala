@@ -56,7 +56,6 @@ class DesSchemaValidatorSpec extends PlaySpec
     "read the schema and return a SuccessfulValidation for a trust json from file" when {
       "when we have a valid des json trust" in {
         lazy val desTrust = Source.fromFile(getClass.getResource("/des/desCompleteTrust.json").getPath).mkString
-        println(s"From file ---- ${desTrust}")
         val result = DesSchemaValidator.validateAgainstSchema(desTrust)
         result mustBe SuccessfulValidation
       }
