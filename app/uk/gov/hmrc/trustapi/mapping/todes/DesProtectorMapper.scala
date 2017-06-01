@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.mapping.todes
+package uk.gov.hmrc.trustapi.mapping.todes
 
-import uk.gov.hmrc.common.des.DesProtectorType
-import uk.gov.hmrc.trustapi.rest.resources.core.Protectors
+import uk.gov.hmrc.common.des.DesProtector
+import uk.gov.hmrc.common.mapping.todes.{DesIdentificationMapper, DesNameMapper}
+import uk.gov.hmrc.common.rest.resources.core.Individual
 
-
-object DesProtectorsMapper {
-  def toDes(protector: Protectors) : DesProtectorType = {
-    DesProtectorType(protector.individuals.map(li=>li.map(i=>DesProtectorMapper.toDes(i))),
-      protector.companies.map(lc => lc.map(c=>DesProtectorCompanyMapper.toDes(c))))
+object DesProtectorMapper {
+  def toDes(individual: Individual) : DesProtector = {
+    DesProtector(DesNameMapper.toDes(individual), individual.dateOfBirth, DesIdentificationMapper.toDes(individual))
   }
 }
