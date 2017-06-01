@@ -18,7 +18,7 @@ package uk.gov.hmrc.trustapi.mapping.todes
 
 import org.joda.time.DateTime
 import uk.gov.hmrc.common.des._
-import uk.gov.hmrc.common.mapping.todes.{DesCorrespondenceMapper, DesDeclarationMapper, DesProtectorsMapper, DesYearReturnsMapper}
+import uk.gov.hmrc.common.mapping.todes.{DesCorrespondenceMapper, DesDeclarationMapper, DesYearReturnsMapper}
 import uk.gov.hmrc.trustapi.rest.resources.core.Trust
 
 object TrustMapper {
