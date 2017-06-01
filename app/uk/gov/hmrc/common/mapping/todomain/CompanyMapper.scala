@@ -24,19 +24,14 @@ import uk.gov.hmrc.common.rest.resources.core.Company
 
 
 object CompanyMapper {
-  def toDomain(desCompany: Option[DesCompany] = None, desSettlorCompany: Option[DesSettlorCompany] = None) : Company = {
-    val atLeastOneTypeOfCompanyDefined = !desCompany.isEmpty || !desSettlorCompany.isEmpty
-    require(atLeastOneTypeOfCompanyDefined)
-
-    desCompany match {
-      case Some(company) => {
+  def toDomain(company: DesMappableCompany) : Company = {
+    company match {
+      case company: DesCompany => {
         Company(company.organisationName,
           AddressMapper.toDomain(company.identification.address.getOrElse(throw new MissingPropertyException("Missing address"))),
           company.identification.utr)
       }
-
-      case None => {
-        val settlorCompany = desSettlorCompany.get
+      case settlorCompany: DesSettlorCompany => {
         Company(settlorCompany.name,
           AddressMapper.toDomain(settlorCompany.identification.address.getOrElse(throw new MissingPropertyException("Missing address"))),
           settlorCompany.identification.utr)
@@ -44,3 +39,5 @@ object CompanyMapper {
     }
   }
 }
+
+trait DesMappableCompany

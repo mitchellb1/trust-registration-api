@@ -29,7 +29,7 @@ class CompanyMapperSpec extends PlaySpec
   "Company mapper" must {
     "Map a des company to a domain company correctly" when {
       val desCompany = DesCompany("Test",None,None,desOrgIdentification)
-      val output = CompanyMapper.toDomain(Some(desCompany))
+      val output = CompanyMapper.toDomain(desCompany)
 
       "we have a correct company name" in {
         output.name mustBe desCompany.organisationName
@@ -45,7 +45,7 @@ class CompanyMapperSpec extends PlaySpec
 
       "we dont have a utr" in {
         val companyNoUTR = desCompany.copy(identification = DesOrgIdentification(None,Some(desAddress)))
-        val output = CompanyMapper.toDomain(Some(companyNoUTR))
+        val output = CompanyMapper.toDomain(companyNoUTR)
 
         output.referenceNumber mustBe companyNoUTR.identification.utr
       }
@@ -53,7 +53,7 @@ class CompanyMapperSpec extends PlaySpec
 
     "Map a des settlor company to a domain company correctly" when {
       val desSettlorCompany =  DesSettlorCompany("Test","Investment",false,desOrgIdentification)
-      val output = CompanyMapper.toDomain(desSettlorCompany = Some(desSettlorCompany))
+      val output = CompanyMapper.toDomain(desSettlorCompany)
 
       "we have a name" in {
         output.name mustBe desSettlorCompany.name
@@ -69,7 +69,7 @@ class CompanyMapperSpec extends PlaySpec
 
       "we dont have a utr" in {
         val companyNoUTR = desSettlorCompany.copy(identification = DesOrgIdentification(None,Some(desAddress)))
-        val output = CompanyMapper.toDomain(desSettlorCompany= Some(companyNoUTR))
+        val output = CompanyMapper.toDomain(companyNoUTR)
 
         output.referenceNumber mustBe companyNoUTR.identification.utr
       }
@@ -78,15 +78,9 @@ class CompanyMapperSpec extends PlaySpec
     "throw an exception" when {
       "we don't have an address" in {
         val desCompanyNoId = DesCompany("Test",None,None,DesOrgIdentification())
-        val ex = the[MissingPropertyException] thrownBy CompanyMapper.toDomain(Some(desCompanyNoId))
+        val ex = the[MissingPropertyException] thrownBy CompanyMapper.toDomain(desCompanyNoId)
 
         ex.getMessage must include("Missing address")
-      }
-
-      "we don't specify any companies for the mapper" in {
-        val ex = the[IllegalArgumentException] thrownBy CompanyMapper.toDomain(None,None)
-
-        ex.getMessage must include("requirement failed")
       }
     }
   }

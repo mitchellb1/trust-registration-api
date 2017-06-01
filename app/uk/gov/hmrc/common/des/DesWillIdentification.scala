@@ -16,7 +16,8 @@
 
 package uk.gov.hmrc.common.des
 import play.api.libs.json.Json
-case class DesWillIdentification(nino: Option[String] = None, address: Option[DesAddress] = None)
+import uk.gov.hmrc.common.mapping.todomain.DesMappableIdentification
+case class DesWillIdentification(nino: Option[String] = None, address: Option[DesAddress] = None) extends DesMappableIdentification
 
 object DesWillIdentification {
   implicit val formats = Json.format[DesWillIdentification]

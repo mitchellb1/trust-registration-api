@@ -17,7 +17,8 @@
 package uk.gov.hmrc.common.des
 
 import play.api.libs.json.Json
-case class DesSettlorCompany(name: String, companyType: String, companyTime: Boolean, identification: DesOrgIdentification)
+import uk.gov.hmrc.common.mapping.todomain.DesMappableCompany
+case class DesSettlorCompany(name: String, companyType: String, companyTime: Boolean, identification: DesOrgIdentification) extends DesMappableCompany
 
 object DesSettlorCompany {
   implicit val formats = Json.format[DesSettlorCompany]
