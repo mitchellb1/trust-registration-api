@@ -220,5 +220,4 @@ trait ScalaDataExamples {
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(Some(List(individual,individual)))), TrustType(interVivoTrust = interVivoTrust),declaration)
 
   val settlors = Settlors(Some(List(individual)),Some(List(company)))
-
 }
