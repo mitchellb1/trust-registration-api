@@ -63,11 +63,3 @@ class CompanyMapperSpec extends PlaySpec
     }
   }
 }
-
-object CompanyMapper extends ScalaDataExamples{
-  def toDomain(company: DesCompany) : Company = {
-     Company(company.organisationName,
-       AddressMapper.toDomain(company.identification.address.getOrElse(throw new MissingPropertyException("Missing address"))),
-       company.identification.utr)
-  }
-}
