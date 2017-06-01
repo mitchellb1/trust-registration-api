@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustapi.mapping
+package uk.gov.hmrc.trustapi.mapping.todes
 
+import org.joda.time.DateTime
 import uk.gov.hmrc.common.des._
-import uk.gov.hmrc.common.mapping.todes.{DesCorrespondenceMapper, DesDeclarationMapper, DesYearReturnsMapper}
+import uk.gov.hmrc.common.mapping.todes.{DesCorrespondenceMapper, DesDeclarationMapper, DesProtectorsMapper, DesYearReturnsMapper}
 import uk.gov.hmrc.trustapi.rest.resources.core.Trust
 
 object TrustMapper {
@@ -33,7 +34,23 @@ object TrustMapper {
 
     val declaration: DesDeclaration = DesDeclarationMapper.toDes(domainTrust.declaration)
 
+    //TODO DOMAIN SCHEMA CHANGE : Mappings for deed of variation not matching to des schema
+    val deedOfVariation: Option[String] = {
+      domainTrust.trustType.willIntestacyTrust.map[Option[String]](wi => {
+        if (wi.isDovTypeAddition) Some("Addition to the will trust") else None
+      }).getOrElse(None)
+    }
 
+    //TODO DOMAIN SCHEMA CHANGE : Check intevivo business logic
+    val intervivos: Option[Boolean] = {
+      domainTrust.trustType.interVivoTrust.map[Option[Boolean]](interVivoTrust => Some(true)).getOrElse(Some(false))
+    }
+
+    //TODO DOMAIN SCHEMA CHANGE : Check efrbsStartDate business logic
+    val efrbsStartDate: Option[DateTime] = {
+          domainTrust.trustType.employmentTrust.map[Option[DateTime]](emp =>
+            emp.employerFinancedRetirementBenefitSchemeStartDate).getOrElse(None)
+      }
 
     //TODO  Replace hardcoded values below with mappers
     //val ukres: DesUkResidentialStatus = DesUkResidentialStatus(true, None)
@@ -42,10 +59,10 @@ object TrustMapper {
       lawCountry = domainTrust.legality.governingCountryCode,
       administrationCountry = domainTrust.legality.administrationCountryCode,
       residentialStatus = None,
-      typeOfTrust = TrustTypeMapper.toDes(domainTrust),
-      deedOfVariation = None,
-      interVivos = None,
-      efrbsStartDate = None)
+      typeOfTrust = DesTrustTypeMapper.toDes(domainTrust),
+      deedOfVariation = deedOfVariation,
+      interVivos = intervivos,
+      efrbsStartDate = efrbsStartDate)
 
     val uBen = DesUnidentified(description = "d", beneficiaryDiscretion = None, beneficiaryShareOfIncome = None)
 
@@ -64,6 +81,10 @@ object TrustMapper {
 
     val leadTrustee: DesLeadTrustee = leadTrusteeOrg
 
+    val trustees: Option[List[DesTrustee]] = None
+
+    //val protectors: Option[DesProtectorType] = Some(DesProtectorsMapper.toDes(domainTrust.protectors))
+
     val settlors: DesSettlorType = DesSettlorType(settlor = None, settlorCompany = None)
 
     val entities: DesTrustEntities = DesTrustEntities(
@@ -71,8 +92,8 @@ object TrustMapper {
       beneficiary = beneficiary,
       deceased = None,
       leadTrustees = leadTrustee,
-      trustees = None,
-      protectors = None,
+      trustees = trustees,
+      protectors = Some(DesProtectorsMapper.toDes(domainTrust.protectors)),
       settlors = settlors
     )
 

@@ -21,7 +21,8 @@ import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
 import uk.gov.hmrc.common.utils.{DesSchemaValidator, SuccessfulValidation}
 import uk.gov.hmrc.utils.ScalaDataExamples
-import play.api.{Logger}
+import play.api.Logger
+import uk.gov.hmrc.trustapi.mapping.todes.TrustMapper
 
 class TrustMappingSpec extends PlaySpec
   with OneAppPerSuite

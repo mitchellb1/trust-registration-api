@@ -17,6 +17,7 @@
 package uk.gov.hmrc.trustapi.mapping
 
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
+import uk.gov.hmrc.trustapi.mapping.todes.DesTrustTypeMapper
 import uk.gov.hmrc.utils.ScalaDataExamples
 
 class TrustTypeMappingSpec extends PlaySpec
@@ -24,7 +25,7 @@ class TrustTypeMappingSpec extends PlaySpec
   with ScalaDataExamples {
 
 
-  val SUT = TrustTypeMapper
+  val SUT = DesTrustTypeMapper
 
   "TrustTypeMapper" must {
     "accept a valid set of domain will Intestacy Trust case classes" when {

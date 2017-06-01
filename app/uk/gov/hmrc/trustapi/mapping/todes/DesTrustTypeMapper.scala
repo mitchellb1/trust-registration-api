@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustapi.mapping
+package uk.gov.hmrc.trustapi.mapping.todes
 
 import uk.gov.hmrc.common.des.MissingPropertyException
 import uk.gov.hmrc.trustapi.rest.resources.core.Trust
 
-object TrustTypeMapper {
+object DesTrustTypeMapper {
   def toDes(domainTrust: Trust): String = {
 
     domainTrust.trustType.employmentTrust.map(emp => "Employment Related")
