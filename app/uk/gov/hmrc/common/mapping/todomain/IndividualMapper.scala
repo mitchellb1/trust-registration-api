@@ -28,40 +28,31 @@ object IndividualMapper {
                telephoneNumber: Option[String] = None,
                identification: Option[DesMappableIdentification] = None) : Individual = {
 
+    val individual = Individual(desName.firstName,desName.lastName,dateOfBirth,desName.middleName,telephoneNumber = telephoneNumber)
+
     identification match {
       case Some(id) => {
         id match {
           case desIdentification:DesIdentification => {
-            addIdentificationToIndividual(
-              createIndividualWithBasicProperties(desName,
-                dateOfBirth,telephoneNumber))(desIdentification.nino,
+            addIdentificationToIndividual(individual,
+              desIdentification.nino,
               desIdentification.passport.map(p => PassportMapper.toDomain(p)),
               desIdentification.address.map(a => AddressMapper.toDomain(a)))
           }
           case desWillIdentification:DesWillIdentification => {
-            addIdentificationToIndividual(
-              createIndividualWithBasicProperties(desName,dateOfBirth,telephoneNumber))(desWillIdentification.nino,
+            addIdentificationToIndividual(individual,
+              desWillIdentification.nino,
               address = desWillIdentification.address.map(a => AddressMapper.toDomain(a)))
           }
         }
       }
       case None => {
-        createIndividualWithBasicProperties(desName, dateOfBirth, telephoneNumber)
+        individual
       }
     }
   }
 
-
-
-  private def createIndividualWithBasicProperties(desName: DesName, dateOfBirth: DateTime, telephoneNumber: Option[String]) = {
-    Individual(desName.firstName,
-      desName.lastName,
-      dateOfBirth,
-      desName.middleName,
-      telephoneNumber = telephoneNumber)
-  }
-
-  private def addIdentificationToIndividual(individual: Individual)(referenceNumber: Option[String], passport: Option[Passport] = None, address: Option[Address]): Individual ={
+  private def addIdentificationToIndividual(individual: Individual,referenceNumber: Option[String], passport: Option[Passport] = None, address: Option[Address]): Individual ={
     individual.copy(nino = referenceNumber, passportOrIdCard = passport, correspondenceAddress = address)
   }
 }
