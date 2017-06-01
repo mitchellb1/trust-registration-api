@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.common.mapping.todomain
 
-import uk.gov.hmrc.common.des.{DesCompany, MissingPropertyException}
+import uk.gov.hmrc.common.des.{DesCompany, DesSettlorCompany, MissingPropertyException}
 import uk.gov.hmrc.common.mapping.AddressMapper
 import uk.gov.hmrc.common.rest.resources.core.Company
 
@@ -24,9 +24,20 @@ import uk.gov.hmrc.common.rest.resources.core.Company
 
 
 object CompanyMapper {
-  def toDomain(company: DesCompany) : Company = {
-    Company(company.organisationName,
-      AddressMapper.toDomain(company.identification.address.getOrElse(throw new MissingPropertyException("Missing address"))),
-      company.identification.utr)
+  def toDomain(desCompany: Option[DesCompany] = None, desSettlorCompany: Option[DesSettlorCompany] = None) : Company = {
+    desCompany match {
+      case Some(company) => {
+        Company(company.organisationName,
+          AddressMapper.toDomain(company.identification.address.getOrElse(throw new MissingPropertyException("Missing address"))),
+          company.identification.utr)
+      }
+
+      case None => {
+        val settlorCompany = desSettlorCompany.get
+        Company(settlorCompany.name,
+          AddressMapper.toDomain(settlorCompany.identification.address.getOrElse(throw new MissingPropertyException("Missing address"))),
+          settlorCompany.identification.utr)
+      }
+    }
   }
 }
