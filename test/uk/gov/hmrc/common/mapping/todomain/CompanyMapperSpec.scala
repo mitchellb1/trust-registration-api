@@ -82,6 +82,12 @@ class CompanyMapperSpec extends PlaySpec
 
         ex.getMessage must include("Missing address")
       }
+
+      "we don't specify any companies for the mapper" in {
+        val ex = the[IllegalArgumentException] thrownBy CompanyMapper.toDomain(None,None)
+
+        ex.getMessage must include("requirement failed")
+      }
     }
   }
 }

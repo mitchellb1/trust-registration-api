@@ -25,6 +25,9 @@ import uk.gov.hmrc.common.rest.resources.core.Company
 
 object CompanyMapper {
   def toDomain(desCompany: Option[DesCompany] = None, desSettlorCompany: Option[DesSettlorCompany] = None) : Company = {
+    val atLeastOneTypeOfCompanyDefined = !desCompany.isEmpty || !desSettlorCompany.isEmpty
+    require(atLeastOneTypeOfCompanyDefined)
+
     desCompany match {
       case Some(company) => {
         Company(company.organisationName,
