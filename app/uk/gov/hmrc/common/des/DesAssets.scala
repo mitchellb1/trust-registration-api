@@ -17,7 +17,14 @@
 package uk.gov.hmrc.common.des
 
 import play.api.libs.json.Json
-case class DesAssets(monetary: List[DesMonetary], propertyOrLand: List[DesPropertyLand], shares: List[DesShare], business: List[DesBusinessAsset], partnerShip: List[DesPartnership], other: List[DesOtherAsset])
+
+case class DesAssets(
+                      monetary: Option[List[DesMonetary]] = None,
+                      propertyOrLand: Option[List[DesPropertyLand]] = None,
+                      shares: Option[List[DesShare]] = None,
+                      business: Option[List[DesBusinessAsset]] = None,
+                      partnerShip: Option[List[DesPartnership]] = None,
+                      other: Option[List[DesOtherAsset]] = None)
 
 object DesAssets {
   implicit val formats = Json.format[DesAssets]

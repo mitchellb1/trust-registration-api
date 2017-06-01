@@ -15,7 +15,7 @@
  */
 
 package uk.gov.hmrc.common.des
-import play.api.libs.json.{JsPath, Json, Reads}
+import play.api.libs.json.Json
 case class DesYearsReturns(taxReturnsNoDues: Option[Boolean] = None, returns: Option[List[DesYearReturn]] = None)
 
 object DesYearsReturns {

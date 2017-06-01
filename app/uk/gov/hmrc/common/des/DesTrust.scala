@@ -15,8 +15,8 @@
  */
 
 package uk.gov.hmrc.common.des
-import play.api.libs.json.{JsPath, Json, Reads}
-case class DesTrust(details: DesTrustDetails, entities: DesTrustEntities)
+import play.api.libs.json.Json
+case class DesTrust(details: DesTrustDetails, entities: DesTrustEntities, assets: DesAssets)
 
 object DesTrust {
   implicit val formats = Json.format[DesTrust]

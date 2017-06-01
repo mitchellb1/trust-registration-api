@@ -35,7 +35,7 @@ case class Trust(name: String,
                  settlors: Settlors,
                  naturalPeople: Option[NaturalPeople] = None,
                  trustType: TrustType,
-                 declaration: Option[Declaration] = None,
+                 declaration: Declaration,
                  isSchedule5A: Option[Boolean] = None,
                  nonResidentType: Option[String] = None,
                  utr: Option[String] = None

@@ -48,5 +48,12 @@
   },
   "trustType": {
     "interVivoTrust" : "{INTERVIVOTRUST}"
+  },
+  "declaration": {"correspondenceAddress": "{ADDRESS}",
+    "confirmation": true,
+    "date": "2000-01-01",
+    "familyName": "Spaceman",
+    "givenName": "george",
+    "otherName": "joe"
   }
 }

@@ -1422,6 +1422,7 @@
         "settlors",
         "protectors",
         "legality",
+        "declaration",
         "trustType",
         "commencementDate"
       ]

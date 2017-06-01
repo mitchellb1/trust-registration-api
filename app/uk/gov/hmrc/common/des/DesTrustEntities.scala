@@ -15,7 +15,8 @@
  */
 
 package uk.gov.hmrc.common.des
-import play.api.libs.json.{JsPath, Json, Reads}
+import play.api.libs.json.Json
+
 case class DesTrustEntities(naturalPerson: Option[List[DesNaturalPerson]] = None, beneficiary: DesBeneficiary, deceased: Option[DesWill] = None, leadTrustees: DesLeadTrustee, trustees: Option[List[DesTrustee]] = None, protectors: Option[DesProtectorType] = None, settlors: DesSettlorType)
 
 object DesTrustEntities {
