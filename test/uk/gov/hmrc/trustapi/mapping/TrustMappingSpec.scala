@@ -32,7 +32,7 @@ class TrustMappingSpec extends PlaySpec
 
   "TrustMapper" must {
     "accept a valid set of domain Trust case classes" when {
-      "and return a set of valid DesTrust case classes" in {
+      "and return a set of valid DesTrust case classes that validate with the schema" in {
 
         //Logger.info(s"From domain case classes ---- ${Json.toJson(trustWithWillIntestacyTrust).toString()}")
         val convertedToDesCaseClasses = SUT.toDes(trustWithWillIntestacyTrust)
