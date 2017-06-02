@@ -31,7 +31,7 @@ class TrustTypeSpec extends PlaySpec with ScalaDataExamples {
 
       "more than one trust type is defined" in {
         val ex = the[IllegalArgumentException] thrownBy TrustType(
-          willIntestacyTrust = Some(willIntestacyTrust),
+          willIntestacyTrust = Some(willIntestacyTrustDOV),
           heritageMaintenanceFundTrust = heritageFund
         )
 

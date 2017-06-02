@@ -21,10 +21,8 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json.{JsPath, Writes, _}
 
-
 case class DesLeadTrusteeOrg(name: String, phoneNumber: String, email: Option[String] = None, identification: DesOrgIdentification) extends DesLeadTrustee
 case class DesLeadTrusteeInd(name: DesName, dateOfBirth: DateTime, identification: DesIdentification, phoneNumber: String, email: Option[String] = None) extends DesLeadTrustee
-
 
 trait DesLeadTrustee
 
@@ -66,9 +64,10 @@ object DesLeadTrustee {
     ) (DesLeadTrusteeInd.apply _)
 
   implicit val desLeadTrusteeReads: Reads[DesLeadTrustee] = Reads[DesLeadTrustee] { json =>
-    (json \ "dateOfBirth").validate[DateTime].flatMap {
-      case x:DateTime => desLeadTrusteeIndReads.reads(json)
-      case _ => desLeadTrusteeOrgReads.reads(json)
+    (json \ "dateOfBirth").toOption match {
+    //(json \ "dateOfBirth").validate[DateTime].flatMap {
+      case None => desLeadTrusteeOrgReads.reads(json)
+      case _ => desLeadTrusteeIndReads.reads(json)
     }
   }
 

@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustapi.mapping
+package uk.gov.hmrc.utils
 
 import uk.gov.hmrc.common.des._
 import uk.gov.hmrc.common.mapping.todes.{DesCorrespondenceMapper, DesDeclarationMapper}
 import uk.gov.hmrc.trustapi.rest.resources.core.Trust
 
-object TrustMapper {
-
-  //TODO  Replace hardcoded values with mappers
+//Please do not Delete
+object MinimalDesTrustExample {
   def toDes(domainTrust: Trust): DesTrustEstate = {
 
     val correspondence: DesCorrespondence = DesCorrespondenceMapper.toDes(domainTrust)

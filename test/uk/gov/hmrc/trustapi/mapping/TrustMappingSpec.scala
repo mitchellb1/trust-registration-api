@@ -21,23 +21,21 @@ import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
 import uk.gov.hmrc.common.utils.{DesSchemaValidator, SuccessfulValidation}
 import uk.gov.hmrc.utils.ScalaDataExamples
-import play.api.{Logger}
+import play.api.Logger
+import uk.gov.hmrc.trustapi.mapping.todes.TrustMapper
 
 class TrustMappingSpec extends PlaySpec
   with OneAppPerSuite
   with ScalaDataExamples {
 
-//  val domainEstateFromCaseClasses = EstateRequest(validEstateWithPersonalRepresentative)
-//  val domainEstateFromFileString: String = Json.prettyPrint(Json.toJson(validEstateWithPersonalRepresentative))
-
   val SUT = TrustMapper
 
   "TrustMapper" must {
     "accept a valid set of domain Trust case classes" when {
-      "and return a set of valid DesTrust case classes" in {
+      "and return a set of valid DesTrust case classes that validate with the schema" in {
 
-        Logger.info(s"From domain case classes ---- ${Json.toJson(trust).toString()}}")
-        val convertedToDesCaseClasses = SUT.toDes(trust)
+        //Logger.info(s"From domain case classes ---- ${Json.toJson(trustWithWillIntestacyTrust).toString()}")
+        val convertedToDesCaseClasses = SUT.toDes(trustWithWillIntestacyTrust)
         Logger.info(s"From des case classes ---- ${Json.toJson(convertedToDesCaseClasses).toString()}")
 
         val result = DesSchemaValidator.validateAgainstSchema(Json.toJson(convertedToDesCaseClasses).toString())

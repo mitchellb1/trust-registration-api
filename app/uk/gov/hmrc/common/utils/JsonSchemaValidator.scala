@@ -53,6 +53,7 @@ trait JsonSchemaValidator {
             SuccessfulValidation
           } else {
             val failedValidation = FailedValidation("Invalid Json",0, getValidationErrors(validationOutput))
+            Logger.info(getValidationErrors(validationOutput).mkString)
             Logger.info("Failed schema validation")
             Logger.debug(failedValidation.toString)
             failedValidation

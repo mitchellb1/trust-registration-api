@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.des
-import org.joda.time.DateTime
-import play.api.libs.json.{JsString, Json, Reads, Writes}
-case class DesTrust(details: DesTrustDetails, entities: DesTrustEntities, assets: DesAssets)
+package uk.gov.hmrc.trustapi.mapping.todes
 
-object DesTrust {
-  implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
-  implicit val dateWrites: Writes[DateTime] = Writes { (dt: DateTime) => JsString(dt.toString("yyyy-MM-dd")) }
-  implicit val formats = Json.format[DesTrust]
+import uk.gov.hmrc.common.des.DesUkResidentialStatus
+import uk.gov.hmrc.trustapi.rest.resources.core.Trust
+
+
+object DesUKResidentialStatusMapper {
+
+  def toDes(domainTrust: Trust): Option[DesUkResidentialStatus] = {
+      Some(DesUkResidentialStatus(true, None))
+  }
 }

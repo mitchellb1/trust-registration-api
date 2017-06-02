@@ -100,10 +100,10 @@ class RegisterTrustServiceSpec extends PlaySpec
       }
 
       "a SuccessResponse is returned from DES for the call to getTrust" in {
-        when(mockDesConnector.getTrust(any())(any())).thenReturn(Future.successful(GetSuccessResponse(trust)))
+        when(mockDesConnector.getTrust(any())(any())).thenReturn(Future.successful(GetSuccessResponse(trustWithWillIntestacyTrustDOV)))
 
         val result = Await.result(SUT.getTrust("1234567890")(HeaderCarrier()), Duration.Inf)
-        result mustBe GetSuccessResponse(trust)
+        result mustBe GetSuccessResponse(trustWithWillIntestacyTrustDOV)
       }
     }
 
