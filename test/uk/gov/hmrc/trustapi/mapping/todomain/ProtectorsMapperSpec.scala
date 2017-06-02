@@ -43,16 +43,5 @@ class ProtectorsMapperSpec extends PlaySpec
         output.companies.get.head.referenceNumber mustBe protectors.protectorCompany.get.head.identification.utr
       }
     }
-
-    "throw an exception" when {
-      "we are missing a desprotector company address" in {
-        val identification = DesOrgIdentification(Some("test"),None)
-        val protectorCompany = DesProtectorCompany("Test",identification)
-        val protectors = DesProtectorType(protectorCompany = Some(List(protectorCompany,protectorCompany)))
-        val ex = the[MissingPropertyException] thrownBy ProtectorsMapper.toDomain(protectors)
-
-        ex.getMessage must include("Missing address")
-      }
-    }
   }
 }
