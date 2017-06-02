@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.des
-import play.api.libs.json.Json
-import uk.gov.hmrc.common.mapping.todomain.DesMappableIdentification
-case class DesWillIdentification(nino: Option[String] = None, address: Option[DesAddress] = None) extends DesMappableIdentification
+package uk.gov.hmrc.trustapi.mapping.todomain
 
-object DesWillIdentification {
-  implicit val formats = Json.format[DesWillIdentification]
+import uk.gov.hmrc.common.des.DesSettlorType
+import uk.gov.hmrc.common.mapping.todomain.{CompanyMapper, IndividualMapper}
+import uk.gov.hmrc.trustapi.rest.resources.core.Settlors
+
+
+object SettlorsMapper {
+  def toDomain(settlors: DesSettlorType) : Settlors = {
+    Settlors(settlors.settlor.map(ls=>ls.map(s=>IndividualMapper.toDomain(s.name,s.dateOfBirth,None,Some(s.identification)))), //TODO: Missing phone number mapping
+      settlors.settlorCompany.map(lsc=>lsc.map(c=>CompanyMapper.toDomain(c))))
+  }
 }
