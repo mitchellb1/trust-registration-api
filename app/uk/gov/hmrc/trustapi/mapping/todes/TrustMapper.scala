@@ -73,6 +73,18 @@ object TrustMapper {
       interVivos = intervivos,
       efrbsStartDate = efrbsStartDate)
 
+    //DesEntities variables  -------------------------------------------------------------------------------------------
+    val naturalPerson = None
+
+    val leadTrustee: DesLeadTrustee = DesLeadTrusteesMapper.toDes(domainTrust.leadTrustee)
+
+    val trustees: Option[List[DesTrustee]] = None
+
+    val protectors = None
+    //    val protectors: Option[DesProtectorType] = Some(DesProtectorsMapper.toDes(domainTrust.protectors))
+
+    val settlors: DesSettlorType = DesSettlorTypeMapper.toDes(domainTrust.settlors)
+
     val beneficiary: DesBeneficiary = DesBeneficiary(
       individualDetails = None,
       company = None,
@@ -82,22 +94,10 @@ object TrustMapper {
       large = None,
       other = None)
 
-
-    val identification:  DesOrgIdentification = DesOrgIdentification(utr = Some("123456"), address = None)
-
-    val leadTrusteeOrg = DesLeadTrusteeOrg(name="some company", phoneNumber = "0", email = None, identification =  identification)
-
-    val leadTrustee: DesLeadTrustee = leadTrusteeOrg
-
-    val trustees: Option[List[DesTrustee]] = None
-
-    val protectors = None
-    //    val protectors: Option[DesProtectorType] = Some(DesProtectorsMapper.toDes(domainTrust.protectors))
-
-    val settlors: DesSettlorType = DesSettlorTypeMapper.toDes(domainTrust.settlors)
+    //End DesEntities variables  ---------------------------------------------------------------------------------------
 
     val entities: DesTrustEntities = DesTrustEntities(
-      naturalPerson = None,
+      naturalPerson = naturalPerson,
       beneficiary = beneficiary,
       deceased = deceased,
       leadTrustees = leadTrustee,
