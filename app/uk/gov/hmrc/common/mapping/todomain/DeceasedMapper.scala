@@ -22,6 +22,6 @@ import uk.gov.hmrc.common.rest.resources.core.Deceased
 
 object DeceasedMapper {
   def toDomain(desWill: DesWill) : Deceased = {
-    Deceased(IndividualMapper.toDomain(desWill.name,desWill.dateOfBirth,desWillIdentification = Some(desWill.identification)), desWill.dateOfDeath)
+    Deceased(IndividualMapper.toDomain(desWill.name,desWill.dateOfBirth,identification = Some(desWill.identification)), desWill.dateOfDeath)
   }
 }

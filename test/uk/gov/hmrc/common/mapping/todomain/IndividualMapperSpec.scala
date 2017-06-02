@@ -76,7 +76,7 @@ class IndividualMapperSpec extends PlaySpec
       }
       "we have a deswill identification" in {
         val desWillId = DesWillIdentification(Some(nino),Some(desAddress))
-        val output = IndividualMapper.toDomain(desName, date, Some(phoneNumber),None, Some(desWillId))
+        val output = IndividualMapper.toDomain(desName, date, Some(phoneNumber), Some(desWillId))
 
         output.nino mustBe Some(nino)
         output.correspondenceAddress.get.line1 mustBe desWillId.address.get.line1

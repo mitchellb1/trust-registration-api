@@ -17,36 +17,45 @@
 package uk.gov.hmrc.common.mapping.todomain
 
 import org.joda.time.DateTime
-import uk.gov.hmrc.common.des.{DesIdentification, DesName, DesWillIdentification}
+import uk.gov.hmrc.common.des._
 import uk.gov.hmrc.common.mapping.AddressMapper
-import uk.gov.hmrc.common.rest.resources.core.Individual
+import uk.gov.hmrc.common.rest.resources.core.{Address, Individual, Passport}
 
 
 object IndividualMapper {
   def toDomain(desName: DesName,
                dateOfBirth: DateTime,
                telephoneNumber: Option[String] = None,
-               desIdentification: Option[DesIdentification] = None,
-               desWillIdentification: Option[DesWillIdentification] = None): Individual = {
+               identification: Option[DesMappableIdentification] = None) : Individual = {
 
-    desIdentification match {
-      case Some(id) =>
-        Individual(desName.firstName,
-          desName.lastName,
-          dateOfBirth,
-          desName.middleName,
-          desIdentification.flatMap(c => c.nino),
-          telephoneNumber,
-          desIdentification.flatMap(i => i.passport.map(p => PassportMapper.toDomain(p))),
-          desIdentification.flatMap(c => c.address.map(a => AddressMapper.toDomain(a))))
-      case None =>
-        Individual(desName.firstName,
-          desName.lastName,
-          dateOfBirth,
-          desName.middleName,
-          desWillIdentification.flatMap(c => c.nino),
-          telephoneNumber,
-          correspondenceAddress = desWillIdentification.flatMap(c => c.address.map(a => AddressMapper.toDomain(a))))
+    val individual = Individual(desName.firstName,desName.lastName,dateOfBirth,desName.middleName,telephoneNumber = telephoneNumber)
+
+    identification match {
+      case Some(id) => {
+        id match {
+          case desIdentification:DesIdentification => {
+            addIdentificationToIndividual(individual,
+              desIdentification.nino,
+              desIdentification.passport.map(p => PassportMapper.toDomain(p)),
+              desIdentification.address.map(a => AddressMapper.toDomain(a)))
+          }
+          case desWillIdentification:DesWillIdentification => {
+            addIdentificationToIndividual(individual,
+              desWillIdentification.nino,
+              address = desWillIdentification.address.map(a => AddressMapper.toDomain(a)))
+          }
+        }
+      }
+      case None => {
+        individual
+      }
     }
   }
+
+  private def addIdentificationToIndividual(individual: Individual,referenceNumber: Option[String], passport: Option[Passport] = None, address: Option[Address]): Individual ={
+    individual.copy(nino = referenceNumber, passportOrIdCard = passport, correspondenceAddress = address)
+  }
 }
+
+
+trait DesMappableIdentification
