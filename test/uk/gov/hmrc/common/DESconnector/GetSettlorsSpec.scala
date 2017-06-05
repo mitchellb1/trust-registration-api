@@ -24,7 +24,7 @@ import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
 import uk.gov.hmrc.common.rest.resources.core._
 import uk.gov.hmrc.play.http.HttpResponse
-import uk.gov.hmrc.trustapi.rest.resources.core.Settlors
+import uk.gov.hmrc.trustapi.rest.resources.core.{SettlorCompany, Settlors}
 import uk.gov.hmrc.utils.JsonExamples
 
 import scala.concurrent.duration.Duration
@@ -49,13 +49,15 @@ class GetSettlorsSpec extends PlaySpec with OneAppPerSuite with DESConnectorMock
       }
 
       "DES returns a 200 response with a settlors JSON object that contains a list of companies" in {
-        val validSettlorsJson = ("""{"companies" : [{COMPANY},{COMPANY}]}""").replace("{COMPANY}", validCompanyJson)
+        val validSettlorsJson = ("""{"settlorCompanies" : [{COMPANY},{COMPANY}]}""").replace("{COMPANY}", validSettlorCompanyJson)
         when (mockHttpGet.GET[HttpResponse](Matchers.any())(Matchers.any(),Matchers.any())).thenReturn(Future.successful(HttpResponse(200,
           Some(Json.parse(validSettlorsJson)))))
 
         val result = Await.result(SUT.getSettlors("1234"),Duration.Inf)
         val address = Address("Line 1", Some("Line 2"), Some("Line 3"), Some("Line 4"),None, "ES")
-        val expectedCompanySettlors = Settlors(None,Some(List(Company("Company",address,Some("AAA5221")),Company("Company",address,Some("AAA5221")))))
+        val expectedCompanySettlors = Settlors(None,Some(
+          List( SettlorCompany(Company("CompanyName",address,Some("AAA5221")),"Trading",true),
+                SettlorCompany(Company("CompanyName",address,Some("AAA5221")),"Trading",true))))
 
         result mustBe GetSuccessResponse(expectedCompanySettlors)
       }

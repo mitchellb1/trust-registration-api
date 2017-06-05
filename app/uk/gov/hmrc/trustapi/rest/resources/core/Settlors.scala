@@ -17,12 +17,12 @@
 package uk.gov.hmrc.trustapi.rest.resources.core
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.common.rest.resources.core.{Company, Individual}
+import uk.gov.hmrc.common.rest.resources.core.{Individual}
 
 
-case class Settlors(individuals: Option[List[Individual]] = None, companies: Option[List[Company]] = None) {
+case class Settlors(individuals: Option[List[Individual]] = None, settlorCompanies: Option[List[SettlorCompany]] = None) {
 
-  val moreThanZeroSettlor = individuals.getOrElse(Nil).size + companies.getOrElse(Nil).size > 0
+  val moreThanZeroSettlor = individuals.getOrElse(Nil).size + settlorCompanies.getOrElse(Nil).size > 0
 
   require(moreThanZeroSettlor,MoreThanZeroSettlorsException())
 }

@@ -21,8 +21,6 @@ import uk.gov.hmrc.common.mapping.AddressMapper
 import uk.gov.hmrc.common.rest.resources.core.Company
 
 
-
-
 object CompanyMapper {
   def toDomain(company: DesMappableCompany) : Company = {
     company match {

@@ -50,7 +50,7 @@ object EstateMapper {
       periodTaxDues)
 
     DesTrustEstate(
-      None,
+      None, //TODO Does an Estate have a Utr in the same way as a Trust
       correspondence,
       yearReturns,
       DesDeclarationMapper.toDes(domainEstate.declaration),
@@ -59,7 +59,7 @@ object EstateMapper {
   }
 
   def toDomain(estate: DesEstate, address: DesAddress, declaration: DesDeclaration, correspondence: DesCorrespondence, deceased: DesWill) : Estate = {
-
+//TODO Domain Estate doesn't have years of taxConsequence - Should it?
     Estate(correspondence.name,
       AddressMapper.toDomain(address),
       PersonalRepresentativeMapper.toDomain(estate.entities.personalRepresentative),

@@ -20,10 +20,13 @@ import uk.gov.hmrc.common.des.DesSettlorType
 import uk.gov.hmrc.common.mapping.todomain.{CompanyMapper, IndividualMapper}
 import uk.gov.hmrc.trustapi.rest.resources.core.Settlors
 
-
 object SettlorsMapper {
-  def toDomain(settlors: DesSettlorType) : Settlors = {
-    Settlors(settlors.settlor.map(ls=>ls.map(s=>IndividualMapper.toDomain(s.name,s.dateOfBirth,None,Some(s.identification)))), //TODO: Missing phone number mapping
-      settlors.settlorCompany.map(lsc=>lsc.map(c=>CompanyMapper.toDomain(c))))
+  def toDomain(desSettlorType: DesSettlorType) : Settlors = {
+    Settlors(desSettlorType.settlor.map(ls=>ls.map(s=>IndividualMapper.toDomain(s.name,s.dateOfBirth,None,Some(s.identification)))), //TODO: Missing phone number mapping
+      desSettlorType.settlorCompany.map(listOfSettlorcompanies => {
+        listOfSettlorcompanies.map(settlorCompany => {
+          SettlorCompanyMapper.toDomain(settlorCompany)
+        })
+      }))
   }
 }

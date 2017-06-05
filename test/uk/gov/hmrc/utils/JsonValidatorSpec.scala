@@ -32,9 +32,9 @@ class SchemaValidatorSpec extends PlaySpec
 
   "TrustSchemaValidator" must {
     "read the schema and return a SuccessfulValidation for a valid json trust" when {
-      "when we have a non required field missing" in {
+      "we have a non required field missing" in {
         val jsonTrust = Json.toJson(TrustRequest(trustWithInterVivoTrustDOV)).toString()
-        //println(jsonTrust)
+        println(jsonTrust)
         val result = TrustSchemaValidator.validateAgainstSchema(jsonTrust)
 
         result mustBe SuccessfulValidation
@@ -44,7 +44,7 @@ class SchemaValidatorSpec extends PlaySpec
 
   "EstatesSchemaValidator" must {
     "read the schema and return a SuccessfulValidation for a valid json estate" when {
-      "when we have a non required field missing" in {
+      "we have a non required field missing" in {
         val jsonEstate = Json.toJson(EstateRequest(validEstateWithPersonalRepresentative)).toString()
         val result = EstateSchemaValidator.validateAgainstSchema(jsonEstate)
 
