@@ -16,22 +16,17 @@
 
 package uk.gov.hmrc.trustapi.mapping.todes
 
-import uk.gov.hmrc.common.des.MissingPropertyException
 import uk.gov.hmrc.trustapi.rest.resources.core.Trust
+import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes._
 
 object DesTrustTypeMapper {
   def toDes(domainTrust: Trust): String = {
-
-    domainTrust.trustType.employmentTrust.map(emp => "Employment Related")
-      .orElse(domainTrust.trustType.flatManagementSinkingFundTrust.map(fmc => "Flat Management Company or Sinking Fund"))
-      .orElse(domainTrust.trustType.heritageMaintenanceFundTrust.map(hm => "Heritage Maintenance Fund"))
-      .orElse(domainTrust.trustType.interVivoTrust.map(iv => {
-        iv.dovType.map(dovtypeExists => "Deed of Variation Trust or Family Arrangement")
-          .orElse(Some("Inter vivos Settlement")).get
-      }))
-      .orElse(domainTrust.trustType.willIntestacyTrust.map(wi => {
-        if (wi.isDovTypeAddition) "Deed of Variation Trust or Family Arrangement" else "Will Trust or Intestacy Trust"
-      }))
-      .getOrElse(throw new MissingPropertyException("Cannot find trust type"))
+    domainTrust.trustType.currentTrustType match {
+      case _: EmploymentTrust => "Employment Related"
+      case _: FlatManagementSinkingFundTrust => "Flat Management Company or Sinking Fund"
+      case _: HeritageMaintenanceFundTrust => "Heritage Maintenance Fund"
+      case iv : InterVivoTrust => if (iv.dovType.isEmpty)  "Inter vivos Settlement" else "Deed of Variation Trust or Family Arrangement"
+      case wi: WillIntestacyTrust =>  if (wi.isDovTypeAddition) "Deed of Variation Trust or Family Arrangement" else "Will Trust or Intestacy Trust"
+    }
   }
 }
