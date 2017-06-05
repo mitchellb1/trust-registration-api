@@ -66,7 +66,6 @@ object DesLeadTrustee {
 
   implicit val desLeadTrusteeReads: Reads[DesLeadTrustee] = Reads[DesLeadTrustee] { json =>
     (json \ "dateOfBirth").toOption match {
-    //(json \ "dateOfBirth").validate[DateTime].flatMap {
       case None => desLeadTrusteeOrgReads.reads(json)
       case _ => desLeadTrusteeIndReads.reads(json)
     }
