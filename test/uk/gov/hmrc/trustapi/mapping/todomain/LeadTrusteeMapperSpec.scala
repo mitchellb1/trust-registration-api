@@ -17,9 +17,7 @@
 package uk.gov.hmrc.trustapi.mapping.todomain
 
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
-import uk.gov.hmrc.common.des.{DesLeadTrustee, DesLeadTrusteeInd, DesLeadTrusteeOrg}
-import uk.gov.hmrc.common.mapping.todomain.{CompanyMapper, IndividualMapper}
-import uk.gov.hmrc.trustapi.rest.resources.core.LeadTrustee
+import uk.gov.hmrc.common.des.{DesLeadTrusteeInd, DesLeadTrusteeOrg}
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
 
@@ -28,47 +26,34 @@ class LeadTrusteeMapperSpec extends PlaySpec
   with ScalaDataExamples
   with DesScalaExamples {
 
+  val individualLeadTrustee = DesLeadTrusteeInd(desName,date,desIdentification,phoneNumber,Some(email))
+  val companyLeadTrustee = DesLeadTrusteeOrg("Test", "Test", Some(email), desOrgIdentification)
+
+
   "Lead trustee mapper" should {
     "map a desleadtrustee to a lead trustee correctly" when {
       "we have a valid DesLeadTrusteeInd" in {
-        val leadTrustee = DesLeadTrusteeInd(desName,date,desIdentification,phoneNumber,Some(email))
-        val output = LeadTrusteeMapper.toDomain(leadTrustee,phoneNumber, email)
+        val output = LeadTrusteeMapper.toDomain(individualLeadTrustee,phoneNumber, email)
         
-        output.individual.get.familyName mustBe leadTrustee.name.lastName
+        output.individual.get.familyName mustBe individualLeadTrustee.name.lastName
       }
 
       "we have a valid DesLeadTrusteeOrg" in {
-        val leadTrustee = DesLeadTrusteeOrg("Test", "Test", Some(email), desOrgIdentification)
-        val output = LeadTrusteeMapper.toDomain(leadTrustee,phoneNumber, email)
+        val output = LeadTrusteeMapper.toDomain(companyLeadTrustee,phoneNumber, email)
 
-        output.company.get.name mustBe leadTrustee.name
+        output.company.get.name mustBe companyLeadTrustee.name
       }
 
       "we have a telephone Number" in {
-        val leadTrustee = DesLeadTrusteeOrg("Test", "Test", Some(email), desOrgIdentification)
-        val output = LeadTrusteeMapper.toDomain(leadTrustee, phoneNumber, email)
+        val output = LeadTrusteeMapper.toDomain(companyLeadTrustee, phoneNumber, email)
 
         output.telephoneNumber mustBe phoneNumber
       }
 
       "we have an email" in {
-        val leadTrustee = DesLeadTrusteeOrg("Test", "Test", Some(email), desOrgIdentification)
-        val output = LeadTrusteeMapper.toDomain(leadTrustee, phoneNumber, email)
+        val output = LeadTrusteeMapper.toDomain(individualLeadTrustee, phoneNumber, email)
 
         output.email mustBe email
-      }
-    }
-  }
-}
-
-object LeadTrusteeMapper extends ScalaDataExamples{
-  def toDomain(leadTrustee: DesLeadTrustee, telephoneNumber: String, email: String) : LeadTrustee = {
-    leadTrustee match {
-      case individual: DesLeadTrusteeInd => {
-        LeadTrustee(Some(IndividualMapper.toDomain(individual.name,individual.dateOfBirth,Some(individual.phoneNumber),Some(individual.identification))),None,telephoneNumber,"Tesaaat")
-      }
-      case company: DesLeadTrusteeOrg => {
-        LeadTrustee(None,Some(CompanyMapper.toDomain(company)), telephoneNumber,email)
       }
     }
   }
