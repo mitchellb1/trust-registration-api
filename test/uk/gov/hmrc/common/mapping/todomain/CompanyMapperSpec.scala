@@ -99,6 +99,30 @@ class CompanyMapperSpec extends PlaySpec
       }
     }
 
+    "Map a DesLeadTrusteeOrg to a domain company correctly" when {
+      val desLeadTrusteeCompany = DesLeadTrusteeOrg("Test", phoneNumber, Some(email),desOrgIdentification)
+      val output = CompanyMapper.toDomain(desLeadTrusteeCompany)
+
+      "we have a name" in {
+        output.name mustBe desLeadTrusteeCompany.name
+      }
+
+      "we have a correct des address" in {
+        output.correspondenceAddress.line1 mustBe desLeadTrusteeCompany.identification.address.get.line1
+      }
+
+      "we have a correct utr" in {
+        output.referenceNumber mustBe desLeadTrusteeCompany.identification.utr
+      }
+
+      "we dont have a utr" in {
+        val companyNoUTR = desLeadTrusteeCompany.copy(identification = DesOrgIdentification(None,Some(desAddress)))
+        val output = CompanyMapper.toDomain(companyNoUTR)
+
+        output.referenceNumber mustBe companyNoUTR.identification.utr
+      }
+    }
+
     "throw an exception" when {
       "we don't have an address in des company" in {
         val desCompanyNoId = DesCompany("Test",None,None,DesOrgIdentification())
@@ -116,6 +140,13 @@ class CompanyMapperSpec extends PlaySpec
 
       "we don't have an address in des protector company" in {
         val desProtectorCompanyNoId = DesProtectorCompany("Test",DesOrgIdentification())
+        val ex = the[MissingPropertyException] thrownBy CompanyMapper.toDomain(desProtectorCompanyNoId)
+
+        ex.getMessage must include("Missing address")
+      }
+
+      "we don't have an address in des lead trustee company" in {
+        val desProtectorCompanyNoId = DesLeadTrusteeOrg("Test","011111",None,DesOrgIdentification())
         val ex = the[MissingPropertyException] thrownBy CompanyMapper.toDomain(desProtectorCompanyNoId)
 
         ex.getMessage must include("Missing address")
