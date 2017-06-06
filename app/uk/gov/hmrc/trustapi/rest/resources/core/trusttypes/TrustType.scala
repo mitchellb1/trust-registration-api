@@ -25,14 +25,18 @@ case class TrustType(willIntestacyTrust: Option[WillIntestacyTrust] = None,
                      flatManagementSinkingFundTrust: Option[FlatManagementSinkingFundTrust] = None,
                      employmentTrust: Option[EmploymentTrust] = None
                     ) {
-  val numberOfSubmittedTrustTypes = List(willIntestacyTrust.isDefined,
-    interVivoTrust.isDefined,
-    heritageMaintenanceFundTrust.isDefined,
-    flatManagementSinkingFundTrust.isDefined,
-    employmentTrust.isDefined).filter(i => i).size
+  val definedTrusts = List(willIntestacyTrust,
+    interVivoTrust,
+    heritageMaintenanceFundTrust,
+    flatManagementSinkingFundTrust,
+    employmentTrust).flatten
+
+  val numberOfSubmittedTrustTypes = definedTrusts.size
 
   require(numberOfSubmittedTrustTypes > 0, NoTrustTypeException())
   require(numberOfSubmittedTrustTypes == 1, OnlyOneTrustTypeAllowedException())
+
+  val currentTrustType = definedTrusts.head
 }
 
 object TrustType {
