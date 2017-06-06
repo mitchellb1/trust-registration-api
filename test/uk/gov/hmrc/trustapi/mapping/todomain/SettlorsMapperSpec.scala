@@ -41,7 +41,7 @@ class SettlorsMapperSpec extends PlaySpec
         val settlorscompany = DesSettlorType(None,Some(List(settlorcompany,settlorcompany,settlorcompany,settlorcompany)))
         val output = SettlorsMapper.toDomain(settlorscompany)
 
-        output.companies.get.head.referenceNumber mustBe settlorscompany.settlorCompany.get.head.identification.utr
+        output.settlorCompanies.get.head.company.referenceNumber mustBe settlorscompany.settlorCompany.get.head.identification.utr
       }
     }
   }
