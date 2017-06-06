@@ -18,7 +18,6 @@ package uk.gov.hmrc.trustapi.mapping.todes
 
 import uk.gov.hmrc.common.des.{DesResidentialStatus}
 import uk.gov.hmrc.trustapi.rest.resources.core.Trust
-import uk.gov.hmrc.trustapi.mapping.todes.{DesUKResidentialStatusMapper, DesNonUkResidentialStatusMapper}
 
 
 object DesResidentialStatusMapper {

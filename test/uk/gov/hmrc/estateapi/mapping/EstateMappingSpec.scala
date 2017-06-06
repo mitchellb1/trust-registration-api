@@ -30,7 +30,7 @@ class EstateMappingSpec extends PlaySpec
 
   val SUT = EstateMapper
   val desWill = DesWill(desName,date,date,desWillId)
-  val desCorrespondence = DesCorrespondence(true,"Test",desAddress,phoneNumber)
+  val desCorrespondence = DesCorrespondence(true,"Test Estate",desAddress,phoneNumber)
 
   "EstateMapper" must {
     "accept a valid domain Estates case classes" when {
@@ -43,7 +43,7 @@ class EstateMappingSpec extends PlaySpec
     }
 
     "map correctly to a estate domain" when {
-      val output = SUT.toDomain(estate, desAddress, desDeclaration, desCorrespondence, desWill)
+      val output = SUT.toDomain(completeValidDesEstate)
 
       "we have a personal representative" in {
         estate.entities.personalRepresentative.email.get mustBe output.personalRepresentative.email
@@ -75,6 +75,10 @@ class EstateMappingSpec extends PlaySpec
 
       "we have a deceased" in {
         output.deceased.dateOfDeath mustBe desWill.dateOfDeath
+      }
+
+      "we have a utr" in {
+        output.utr mustBe Some(admin.utr)
       }
     }
   }

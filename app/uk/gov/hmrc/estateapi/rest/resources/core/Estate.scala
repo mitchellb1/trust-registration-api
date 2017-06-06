@@ -28,7 +28,8 @@ case class Estate(estateName: String,
                   declaration: Declaration,
                   deceased: Deceased,
                   telephoneNumber:  String,
-                  yearsOfTaxConsequence: Option[YearsOfTaxConsequence] = None) {
+                  yearsOfTaxConsequence: Option[YearsOfTaxConsequence] = None,
+                  utr: Option[String] = None) {
 
 }
 

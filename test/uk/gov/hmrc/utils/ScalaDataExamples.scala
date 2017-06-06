@@ -105,7 +105,8 @@ trait ScalaDataExamples {
     declaration = declaration,
     deceased = deceased,
     telephoneNumber = "0191 365 1234",
-    yearsOfTaxConsequence = yearsOfTaxConsequence)
+    yearsOfTaxConsequence = yearsOfTaxConsequence,
+    utr = Some("1234567890"))
 
   val incomeDistribution = IncomeDistribution(
     isIncomeAtTrusteeDiscretion = false,

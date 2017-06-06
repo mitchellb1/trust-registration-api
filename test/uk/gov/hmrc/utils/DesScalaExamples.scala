@@ -37,8 +37,8 @@ trait DesScalaExamples {
   val admin = DesAdmin("12345ABCDE")
 
 
-  val correspondence = DesCorrespondence(abroadIndicator = true, "SomeName thats not a name", desAddress, phoneNumber)
-  
+  val correspondence = DesCorrespondence(abroadIndicator = true, "Test Estate", desAddress, phoneNumber)
+
   val yearsReturns = DesYearsReturns(Some(true), None)
 
   val desDeclaration =  DesDeclaration(desName, desAddress)
