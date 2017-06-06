@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.common.des
+package uk.gov.hmrc.trustapi.mapping.todomain
 
-import play.api.libs.json.Json
-import uk.gov.hmrc.common.mapping.todomain.DesMappableCompany
-case class DesProtectorCompany(name: String, identification: DesOrgIdentification) extends DesMappableCompany
+import uk.gov.hmrc.common.des.DesProtectorType
+import uk.gov.hmrc.common.mapping.todomain.{CompanyMapper, IndividualMapper}
+import uk.gov.hmrc.trustapi.rest.resources.core.Protectors
 
-object DesProtectorCompany {
-  implicit val formats = Json.format[DesProtectorCompany]
+object ProtectorsMapper {
+  def toDomain(protectors: DesProtectorType) : Protectors = {
+    Protectors(protectors.protector.map(lp=>lp.map(p=>IndividualMapper.toDomain(p.name,p.dateOfBirth,identification = Some(p.identification)))),
+      protectors.protectorCompany.map(lpc=>lpc.map(c=>CompanyMapper.toDomain(c))))
+  }
 }

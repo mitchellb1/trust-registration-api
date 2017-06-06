@@ -17,7 +17,7 @@
 package uk.gov.hmrc.common.mapping.todomain
 
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
-import uk.gov.hmrc.common.des.{DesCompany, DesOrgIdentification, DesSettlorCompany, MissingPropertyException}
+import uk.gov.hmrc.common.des._
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
 
@@ -75,10 +75,79 @@ class CompanyMapperSpec extends PlaySpec
       }
     }
 
+    "Map a des protector company to a domain company correctly" when {
+      val desProtectorCompany =  DesProtectorCompany("Test",desOrgIdentification)
+      val output = CompanyMapper.toDomain(desProtectorCompany)
+
+      "we have a name" in {
+        output.name mustBe desProtectorCompany.name
+      }
+
+      "we have a correct des address" in {
+        output.correspondenceAddress.line1 mustBe desProtectorCompany.identification.address.get.line1
+      }
+
+      "we have a correct utr" in {
+        output.referenceNumber mustBe desProtectorCompany.identification.utr
+      }
+
+      "we dont have a utr" in {
+        val companyNoUTR = desProtectorCompany.copy(identification = DesOrgIdentification(None,Some(desAddress)))
+        val output = CompanyMapper.toDomain(companyNoUTR)
+
+        output.referenceNumber mustBe companyNoUTR.identification.utr
+      }
+    }
+
+    "Map a DesLeadTrusteeOrg to a domain company correctly" when {
+      val desLeadTrusteeCompany = DesLeadTrusteeOrg("Test", phoneNumber, Some(email),desOrgIdentification)
+      val output = CompanyMapper.toDomain(desLeadTrusteeCompany)
+
+      "we have a name" in {
+        output.name mustBe desLeadTrusteeCompany.name
+      }
+
+      "we have a correct des address" in {
+        output.correspondenceAddress.line1 mustBe desLeadTrusteeCompany.identification.address.get.line1
+      }
+
+      "we have a correct utr" in {
+        output.referenceNumber mustBe desLeadTrusteeCompany.identification.utr
+      }
+
+      "we dont have a utr" in {
+        val companyNoUTR = desLeadTrusteeCompany.copy(identification = DesOrgIdentification(None,Some(desAddress)))
+        val output = CompanyMapper.toDomain(companyNoUTR)
+
+        output.referenceNumber mustBe companyNoUTR.identification.utr
+      }
+    }
+
     "throw an exception" when {
-      "we don't have an address" in {
+      "we don't have an address in des company" in {
         val desCompanyNoId = DesCompany("Test",None,None,DesOrgIdentification())
         val ex = the[MissingPropertyException] thrownBy CompanyMapper.toDomain(desCompanyNoId)
+
+        ex.getMessage must include("Missing address")
+      }
+
+      "we don't have an address in des settlor company" in {
+        val desSettlorCompany = DesSettlorCompany("Test","Test",false,DesOrgIdentification())
+        val ex = the[MissingPropertyException] thrownBy CompanyMapper.toDomain(desSettlorCompany)
+
+        ex.getMessage must include("Missing address")
+      }
+
+      "we don't have an address in des protector company" in {
+        val desProtectorCompanyNoId = DesProtectorCompany("Test",DesOrgIdentification())
+        val ex = the[MissingPropertyException] thrownBy CompanyMapper.toDomain(desProtectorCompanyNoId)
+
+        ex.getMessage must include("Missing address")
+      }
+
+      "we don't have an address in des lead trustee company" in {
+        val desProtectorCompanyNoId = DesLeadTrusteeOrg("Test","011111",None,DesOrgIdentification())
+        val ex = the[MissingPropertyException] thrownBy CompanyMapper.toDomain(desProtectorCompanyNoId)
 
         ex.getMessage must include("Missing address")
       }
