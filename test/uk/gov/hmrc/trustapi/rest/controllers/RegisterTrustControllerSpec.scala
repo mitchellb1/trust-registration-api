@@ -365,7 +365,9 @@ class RegisterTrustControllerSpec extends PlaySpec
     "return 200 ok with valid json" when {
       "the endpoint is called with a valid identifier" in {
         val validAddress = Address("Fake Street 123, Testland",None,None,None,None,"ES")
-        val validCompanySettlors = Settlors(None,Some(List(Company("Company",validAddress,Some("AAA5221")),Company("Company",validAddress,Some("AAA5221")))))
+        val validCompanySettlors = Settlors(None,Some(List(
+          SettlorCompany(Company("Company",validAddress,Some("AAA5221")),"Trading", true),
+          SettlorCompany(Company("Company",validAddress,Some("AAA5221")),"Trading", true))))
 
         val expectedSettlorsJson = ("""{"companies" : [{COMPANY},{COMPANY}]}""").replace("{COMPANY}", validCompanyJson)
 

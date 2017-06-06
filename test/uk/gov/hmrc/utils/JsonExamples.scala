@@ -34,10 +34,16 @@ trait JsonExamples {
 
   lazy val validDeceasedJson = s"""{"individual":${validIndividualJson},"dateOfDeath":"2000-01-01"}"""
 
+  lazy val validSettlorCompanyJson = Source
+    .fromFile(getClass.getResource("/ValidSettlorCompany.json").getPath)
+    .mkString
+    .replace("\"{COMPANY}\"", validCompanyJson)
+
   lazy val validCompanyJson = Source
     .fromFile(getClass.getResource("/ValidCompany.json").getPath)
     .mkString
     .replace("\"{ADDRESS}\"", validAddressJson)
+
   lazy val invalidCompanyJson = Source
     .fromFile(getClass.getResource("/InvalidCompany.json").getPath)
     .mkString

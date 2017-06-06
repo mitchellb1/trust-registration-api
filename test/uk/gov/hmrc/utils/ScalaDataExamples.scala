@@ -220,5 +220,6 @@ trait ScalaDataExamples {
   val trustWithInterVivoTrust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1900-01-01"),yearsOfTaxConsequence,legality,true,leadTrusteeIndividual, Trustees(None, None),
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(Some(List(individual,individual)))), TrustType(interVivoTrust = interVivoTrust),declaration)
 
-  val settlors = Settlors(Some(List(individual)),Some(List(company)))
+  val settlorCompany = SettlorCompany(company,"Trading", true)
+  val settlors = Settlors(Some(List(individual)),Some(List(settlorCompany)))
 }
