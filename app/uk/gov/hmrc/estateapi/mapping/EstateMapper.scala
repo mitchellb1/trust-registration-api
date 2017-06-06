@@ -34,28 +34,37 @@ object EstateMapper {
 
   def toDes(domainEstate: Estate): DesTrustEstate = {
 
+    val deceased: DesWill = DesWillMapper.toDes(domainEstate.deceased)
+
     val personalRepresentative: DesPersonalRepresentative = DesPersonalRepresentativeMapper.toDes(domainEstate.personalRepresentative)
 
-    val deceased: DesWill = DesWillMapper.toDes(domainEstate.deceased)
+    val entities = DesEntities(personalRepresentative = personalRepresentative, deceased = deceased)
 
     val administrationEndDate: Option[DateTime] = domainEstate.adminPeriodFinishedDate
 
-    val correspondence: DesCorrespondence = DesCorrespondenceMapper.toDes(domainEstate)
-
-    val yearReturns = DesYearReturnsMapper.toDes(domainEstate.yearsOfTaxConsequence)
-
     val periodTaxDues = reasonForSettingUpEstate.find(_._2 == domainEstate.reasonEstateSetup).get._1
 
-    val estate: DesEstate = DesEstate(DesEntities(personalRepresentative, deceased),
-      administrationEndDate,
-      periodTaxDues)
+    val desEstate: DesEstate = DesEstate(
+      entities = entities,
+      administrationEndDate = administrationEndDate,
+      periodTaxDues = periodTaxDues)
+
+    val admin = domainEstate.utr.map(utr => DesAdmin(utr))
+
+    val correspondence: DesCorrespondence = DesCorrespondenceMapper.toDes(domainEstate)
+
+    val yearsReturns: Option[DesYearsReturns] = DesYearReturnsMapper.toDes(domainEstate.yearsOfTaxConsequence)
+
+    val declaration = DesDeclarationMapper.toDes(domainEstate.declaration)
+
+    val details = DesDetails(Some(desEstate), trust = None)
 
     DesTrustEstate(
-      None,
-      correspondence,
-      yearReturns,
-      DesDeclarationMapper.toDes(domainEstate.declaration),
-      DesDetails(Some(estate), trust = None)
+      admin = admin,
+      correspondence = correspondence,
+      yearsReturns = yearsReturns,
+      declaration = declaration,
+      details = details
     )
   }
 
