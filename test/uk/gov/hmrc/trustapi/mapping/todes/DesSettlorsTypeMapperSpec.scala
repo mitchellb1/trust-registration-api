@@ -20,32 +20,34 @@ import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
 
-class DesSettlorsMapperSpec extends PlaySpec
+class DesSettlorsTypeMapperSpec extends PlaySpec
   with OneAppPerSuite
   with ScalaDataExamples
   with DesScalaExamples
   {
+    val SUT = DesSettlorTypeMapper
+
     "DES Settlor mapper" should {
       "map a rest domain settlor  to des settlor correctly" when {
         "we have an individual" in {
-          val settlorsNoCompany = settlors.copy(companies = None)
-          val output = DesSettlorTypeMapper.toDes(settlorsNoCompany)
+          val settlorsNoCompany = settlors.copy(settlorCompanies = None)
+          val output = SUT.toDes(settlorsNoCompany)
 
           output.settlor.get.head.name.firstName mustBe settlorsNoCompany.individuals.get.head.givenName
         }
 
         "we have a valid company to create a des settlor company" when {
           val settlorsNoIndividual = settlors.copy(individuals = None)
-          val output = DesSettlorTypeMapper.toDes(settlorsNoIndividual)
+          val output = SUT.toDes(settlorsNoIndividual)
 
-          output.settlorCompany.get.head.name mustBe settlorsNoIndividual.companies.get.head.name
+          output.settlorCompany.get.head.name mustBe settlorsNoIndividual.settlorCompanies.get.head.company.name
         }
 
         "we have both individual and company" when {
-          val output = DesSettlorTypeMapper.toDes(settlors)
+          val output = SUT.toDes(settlors)
 
           output.settlor.get.head.name.firstName mustBe settlors.individuals.get.head.givenName
-          output.settlorCompany.get.head.name mustBe settlors.companies.get.head.name
+          output.settlorCompany.get.head.name mustBe settlors.settlorCompanies.get.head.company.name
         }
       }
     }

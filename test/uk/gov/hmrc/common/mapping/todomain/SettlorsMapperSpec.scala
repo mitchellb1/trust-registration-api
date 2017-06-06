@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustapi.mapping.todomain
+package uk.gov.hmrc.common.mapping.todomain
 
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import uk.gov.hmrc.common.des.{DesSettlor, DesSettlorCompany, DesSettlorType}
+import uk.gov.hmrc.trustapi.mapping.todomain.SettlorsMapper
 import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
 
 
@@ -28,7 +29,7 @@ class SettlorsMapperSpec extends PlaySpec
 
   "Settlors mapper" should {
     "map a des settlors to a domain settlors correctly" when {
-      "we have a list of dessettlor" in {
+      "we have a list of DES settlor individuals" in {
         val settlor = DesSettlor(desName,date,desIdentification)
         val settlors = DesSettlorType(Some(List(settlor,settlor,settlor,settlor)))
         val output = SettlorsMapper.toDomain(settlors)
@@ -36,12 +37,14 @@ class SettlorsMapperSpec extends PlaySpec
         output.individuals.get.head.givenName mustBe settlors.settlor.get.head.name.firstName
       }
 
-      "we have a list of dessettlorcompany" in {
+      "we have a list of DES settlor companies" in {
         val settlorcompany = DesSettlorCompany("Test","Investment",false,desOrgIdentification)
         val settlorscompany = DesSettlorType(None,Some(List(settlorcompany,settlorcompany,settlorcompany,settlorcompany)))
         val output = SettlorsMapper.toDomain(settlorscompany)
 
         output.settlorCompanies.get.head.company.referenceNumber mustBe settlorscompany.settlorCompany.get.head.identification.utr
+        output.settlorCompanies.get.head.twoYearTrading mustBe settlorscompany.settlorCompany.get.head.companyTime
+        output.settlorCompanies.get.head.typeOfSettlorCompany mustBe settlorscompany.settlorCompany.get.head.companyType
       }
     }
   }

@@ -16,14 +16,23 @@
 
 package uk.gov.hmrc.trustapi.mapping.todes
 
-import uk.gov.hmrc.common.des.{DesResidentialStatus}
+import uk.gov.hmrc.common.des.{DesNonUkResidentialStatus, DesResidentialStatus, DesUkResidentialStatus}
 import uk.gov.hmrc.trustapi.rest.resources.core.Trust
-import uk.gov.hmrc.trustapi.mapping.todes.{DesUKResidentialStatusMapper, DesNonUkResidentialStatusMapper}
 
 
 object DesResidentialStatusMapper {
 
-  def toDes(domainTrust: Trust): DesResidentialStatus = {
-    DesResidentialStatus(DesUKResidentialStatusMapper.toDes(domainTrust), DesNonUkResidentialStatusMapper.toDes(domainTrust))
+  def toDes(domainTrust: Trust): Option[DesResidentialStatus] = {
+    domainTrust.isTrustUkResident match {
+      case true => {
+        val ukres: DesUkResidentialStatus = DesUkResidentialStatus(domainTrust.legality.isEstablishedUnderScottishLaw,
+          domainTrust.legality.previousOffshoreCountryCode)
+        Some(DesResidentialStatus(Some(ukres), None))
+      }
+      case false => {//TODO SCHEMA CHANGE : Missing required elements for non uk residents Check Bussiness Rules
+        val nonUKres: DesNonUkResidentialStatus = DesNonUkResidentialStatus(true, Some(true),Some(false),None)
+        Some(DesResidentialStatus(None, Some(nonUKres)))
+      }
+    }
   }
 }

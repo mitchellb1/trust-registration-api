@@ -41,6 +41,10 @@ object TrustMapper {
     //End DesTrustEstate variables
 
     //DesTrustDetails variables
+    val residentialStatus = DesResidentialStatusMapper.toDes(domainTrust)
+
+    val typeOfTrust = DesTrustTypeMapper.toDes(domainTrust)
+
     //TODO DOMAIN SCHEMA CHANGE : Mappings for deed of variation not matching to des schema
     val deedOfVariation: Option[String] = {
       domainTrust.trustType.willIntestacyTrust.map[Option[String]](wi => {
@@ -60,27 +64,25 @@ object TrustMapper {
       }
     //End DesTrustDetails variables
 
-    //TODO  Replace hardcoded values below with mappers
-    //val ukres: DesUkResidentialStatus = DesUkResidentialStatus(true, None)
-
     val details: DesTrustDetails = DesTrustDetails(
       startDate = domainTrust.commencementDate,
       lawCountry = domainTrust.legality.governingCountryCode,
       administrationCountry = domainTrust.legality.administrationCountryCode,
-      residentialStatus = None,
-      typeOfTrust = DesTrustTypeMapper.toDes(domainTrust),
+      residentialStatus = residentialStatus,
+      typeOfTrust = typeOfTrust,
       deedOfVariation = deedOfVariation,
       interVivos = intervivos,
       efrbsStartDate = efrbsStartDate)
 
     //DesEntities variables  -------------------------------------------------------------------------------------------
-    val naturalPerson = None
+    //val naturalPerson = None
+    val naturalPerson: Option[List[DesNaturalPerson]] = DesNaturalPersonMapper.toDes(domainTrust.naturalPeople)
 
     val leadTrustee: DesLeadTrustee = DesLeadTrusteesMapper.toDes(domainTrust.leadTrustee)
 
     val trustees: Option[List[DesTrustee]] = None
 
-    val protectors = None
+    val protectors: Option[DesProtectorType] = None
     //    val protectors: Option[DesProtectorType] = Some(DesProtectorsMapper.toDes(domainTrust.protectors))
 
     val settlors: DesSettlorType = DesSettlorTypeMapper.toDes(domainTrust.settlors)

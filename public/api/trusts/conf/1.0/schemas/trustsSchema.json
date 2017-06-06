@@ -1160,10 +1160,10 @@
       "description": "Settlors Type",
       "additionalProperties": false,
       "properties": {
-        "companies": {
+        "settlorCompanies": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/companyType"
+            "$ref": "#/definitions/settlorCompanyType"
           }
         },
         "individuals": {
@@ -1173,6 +1173,26 @@
           }
         }
       }
+    },
+    "settlorCompanyType": {
+      "description": "Company Settlor Type",
+      "additionalProperties": false,
+      "type": "object",
+      "properties": {
+        "company": {
+          "$ref": "#/definitions/companyType"
+        },
+        "typeOfSettlorCompany": {
+          "enum": [
+            "Trading",
+            "Investment"
+          ]
+        },
+        "twoYearTrading": {
+          "type": "boolean"
+        }
+      },
+      "required":["company", "typeOfSettlorCompany", "twoYearTrading"]
     },
     "shareAssetsType": {
       "description": "Share Assets Type",

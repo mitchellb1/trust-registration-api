@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustapi.mapping.todes
+package uk.gov.hmrc.trustapi.mapping.todomain
 
-import uk.gov.hmrc.common.des.DesSettlorType
-import uk.gov.hmrc.trustapi.rest.resources.core.Settlors
+import uk.gov.hmrc.common.des.DesSettlorCompany
+import uk.gov.hmrc.common.mapping.todomain.CompanyMapper
+import uk.gov.hmrc.trustapi.rest.resources.core.SettlorCompany
 
-object DesSettlorTypeMapper {
-  def toDes(settlors: Settlors) : DesSettlorType = {
-    DesSettlorType(settlors.individuals.map(li=>li.map(i=>DesSettlorMapper.toDes(i))),
-      settlors.settlorCompanies.map(li=>li.map(settlorCompany=>DesSettlorCompanyMapper.toDes(settlorCompany.company,
-        settlorCompany.typeOfSettlorCompany,
-        settlorCompany.twoYearTrading))))
+
+object SettlorCompanyMapper {
+  def toDomain(desSettlorCompany: DesSettlorCompany): SettlorCompany =  {
+    SettlorCompany(CompanyMapper.toDomain(desSettlorCompany), desSettlorCompany.companyType, desSettlorCompany.companyTime)
   }
 }

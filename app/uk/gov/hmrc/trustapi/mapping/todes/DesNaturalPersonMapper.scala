@@ -16,13 +16,20 @@
 
 package uk.gov.hmrc.trustapi.mapping.todes
 
-import uk.gov.hmrc.common.des.DesNonUkResidentialStatus
-import uk.gov.hmrc.trustapi.rest.resources.core.Trust
+import uk.gov.hmrc.common.des.DesNaturalPerson
+import uk.gov.hmrc.common.mapping.todes.{DesIdentificationMapper, DesNameMapper}
+import uk.gov.hmrc.trustapi.rest.resources.core.NaturalPeople
 
-object DesNonUkResidentialStatusMapper {
 
-  def toDes(domainTrust: Trust): Option[DesNonUkResidentialStatus] = {
-    Some(DesNonUkResidentialStatus(true, None, None, None))
+object DesNaturalPersonMapper {
+  def toDes(naturalPeopleOpt: Option[NaturalPeople]): Option[List[DesNaturalPerson]] = {
+    naturalPeopleOpt.flatMap(naturalPeople => {
+      naturalPeople.individuals.map(individualList => {
+        individualList.map(individual => {
+          DesNaturalPerson(DesNameMapper.toDes(individual), individual.dateOfBirth, DesIdentificationMapper.toDes(individual))
+        })
+      })
+    })
   }
-
 }
+

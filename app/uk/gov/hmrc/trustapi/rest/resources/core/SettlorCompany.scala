@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustapi.mapping.todes
+package uk.gov.hmrc.trustapi.rest.resources.core
 
-import uk.gov.hmrc.common.des.DesSettlorType
-import uk.gov.hmrc.trustapi.rest.resources.core.Settlors
+import play.api.libs.json.Json
+import uk.gov.hmrc.common.rest.resources.core.Company
 
-object DesSettlorTypeMapper {
-  def toDes(settlors: Settlors) : DesSettlorType = {
-    DesSettlorType(settlors.individuals.map(li=>li.map(i=>DesSettlorMapper.toDes(i))),
-      settlors.settlorCompanies.map(li=>li.map(settlorCompany=>DesSettlorCompanyMapper.toDes(settlorCompany.company,
-        settlorCompany.typeOfSettlorCompany,
-        settlorCompany.twoYearTrading))))
-  }
+
+case class SettlorCompany (company: Company, typeOfSettlorCompany: String, twoYearTrading: Boolean){
+
+}
+object SettlorCompany {
+  implicit val SettlorCompaniesFormats = Json.format[SettlorCompany]
 }
