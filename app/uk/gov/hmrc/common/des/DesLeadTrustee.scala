@@ -20,8 +20,9 @@ import org.joda.time.DateTime
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json.{JsPath, Writes, _}
+import uk.gov.hmrc.common.mapping.todomain.DesMappableCompany
 
-case class DesLeadTrusteeOrg(name: String, phoneNumber: String, email: Option[String] = None, identification: DesOrgIdentification) extends DesLeadTrustee
+case class DesLeadTrusteeOrg(name: String, phoneNumber: String, email: Option[String] = None, identification: DesOrgIdentification) extends DesLeadTrustee with DesMappableCompany
 case class DesLeadTrusteeInd(name: DesName, dateOfBirth: DateTime, identification: DesIdentification, phoneNumber: String, email: Option[String] = None) extends DesLeadTrustee
 
 trait DesLeadTrustee
@@ -65,7 +66,6 @@ object DesLeadTrustee {
 
   implicit val desLeadTrusteeReads: Reads[DesLeadTrustee] = Reads[DesLeadTrustee] { json =>
     (json \ "dateOfBirth").toOption match {
-    //(json \ "dateOfBirth").validate[DateTime].flatMap {
       case None => desLeadTrusteeOrgReads.reads(json)
       case _ => desLeadTrusteeIndReads.reads(json)
     }

@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.common.mapping.todomain
 
-import uk.gov.hmrc.common.des.{DesCompany, DesProtectorCompany, DesSettlorCompany, MissingPropertyException}
+import uk.gov.hmrc.common.des._
 import uk.gov.hmrc.common.mapping.AddressMapper
 import uk.gov.hmrc.common.rest.resources.core.Company
 
@@ -38,6 +38,9 @@ object CompanyMapper {
       }
       case protectorCompany: DesProtectorCompany => {
         Company(protectorCompany.name,AddressMapper.toDomain(protectorCompany.identification.address.getOrElse(throw new MissingPropertyException("Missing address"))), protectorCompany.identification.utr)
+      }
+      case leadTrusteeCompany: DesLeadTrusteeOrg => {
+        Company(leadTrusteeCompany.name,AddressMapper.toDomain(leadTrusteeCompany.identification.address.getOrElse(throw new MissingPropertyException("Missing address"))), leadTrusteeCompany.identification.utr)
       }
     }
   }
