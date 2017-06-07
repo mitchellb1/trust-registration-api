@@ -21,7 +21,8 @@ import uk.gov.hmrc.common.des._
 import uk.gov.hmrc.common.mapping.AddressMapper
 import uk.gov.hmrc.common.mapping.todes._
 import uk.gov.hmrc.common.mapping.todomain.{DeceasedMapper, DeclarationMapper, PersonalRepresentativeMapper}
-import uk.gov.hmrc.estateapi.rest.resources.core.Estate
+import uk.gov.hmrc.common.rest.resources.core.{Deceased, YearsOfTaxConsequence}
+import uk.gov.hmrc.estateapi.rest.resources.core.{Estate, PersonalRepresentative}
 
 
 object EstateMapper {
@@ -33,40 +34,52 @@ object EstateMapper {
 
   def toDes(domainEstate: Estate): DesTrustEstate = {
 
+    val deceased: DesWill = DesWillMapper.toDes(domainEstate.deceased)
+
     val personalRepresentative: DesPersonalRepresentative = DesPersonalRepresentativeMapper.toDes(domainEstate.personalRepresentative)
 
-    val deceased: DesWill = DesWillMapper.toDes(domainEstate.deceased)
+    val entities = DesEntities(personalRepresentative = personalRepresentative, deceased = deceased)
 
     val administrationEndDate: Option[DateTime] = domainEstate.adminPeriodFinishedDate
 
-    val correspondence: DesCorrespondence = DesCorrespondenceMapper.toDes(domainEstate)
-
-    val yearReturns = DesYearReturnsMapper.toDes(domainEstate.yearsOfTaxConsequence)
-
     val periodTaxDues = reasonForSettingUpEstate.find(_._2 == domainEstate.reasonEstateSetup).get._1
 
-    val estate: DesEstate = DesEstate(DesEntities(personalRepresentative, deceased),
-      administrationEndDate,
-      periodTaxDues)
+    val desEstate: DesEstate = DesEstate(
+      entities = entities,
+      administrationEndDate = administrationEndDate,
+      periodTaxDues = periodTaxDues)
+
+    val admin = domainEstate.utr.map(utr => DesAdmin(utr))
+
+    val correspondence: DesCorrespondence = DesCorrespondenceMapper.toDes(domainEstate)
+
+    val yearsReturns: Option[DesYearsReturns] = DesYearReturnsMapper.toDes(domainEstate.yearsOfTaxConsequence)
+
+    val declaration = DesDeclarationMapper.toDes(domainEstate.declaration)
+
+    val details = DesDetails(Some(desEstate), trust = None)
 
     DesTrustEstate(
-      None, //TODO Does an Estate have a Utr in the same way as a Trust
-      correspondence,
-      yearReturns,
-      DesDeclarationMapper.toDes(domainEstate.declaration),
-      DesDetails(Some(estate), trust = None)
+      admin = admin,
+      correspondence = correspondence,
+      yearsReturns = yearsReturns,
+      declaration = declaration,
+      details = details
     )
   }
 
-  def toDomain(estate: DesEstate, address: DesAddress, declaration: DesDeclaration, correspondence: DesCorrespondence, deceased: DesWill) : Estate = {
-//TODO Domain Estate doesn't have years of taxConsequence - Should it?
-    Estate(correspondence.name,
-      AddressMapper.toDomain(address),
-      PersonalRepresentativeMapper.toDomain(estate.entities.personalRepresentative),
-      estate.administrationEndDate,
-      (reasonForSettingUpEstate get estate.periodTaxDues).get,
-      DeclarationMapper.toDomain(declaration,new DateTime("2016-03-31"),true),//TODO: For declaration, we have not got a field to map confirmation or date.
-      DeceasedMapper.toDomain(deceased),
-      correspondence.phoneNumber)
+  def toDomain(desTrustEstate: DesTrustEstate) : Estate = {
+
+    Estate(estateName = desTrustEstate.correspondence.name,
+      correspondenceAddress = AddressMapper.toDomain(desTrustEstate.correspondence.address),
+      personalRepresentative = PersonalRepresentativeMapper.toDomain(desTrustEstate.details.estate.get.entities.personalRepresentative),
+      adminPeriodFinishedDate = desTrustEstate.details.estate.get.administrationEndDate,
+      reasonEstateSetup = (reasonForSettingUpEstate get desTrustEstate.details.estate.get.periodTaxDues).get,
+      declaration = DeclarationMapper.toDomain(desTrustEstate.declaration,new DateTime("2016-03-31"),true),//TODO: For declaration, we have not got a field to map confirmation or date.
+      deceased = DeceasedMapper.toDomain(desTrustEstate.details.estate.get.entities.deceased),
+      telephoneNumber = desTrustEstate.correspondence.phoneNumber,
+      yearsOfTaxConsequence = None,
+      utr = Some(desTrustEstate.admin.get.utr)
+      )
   }
 }
