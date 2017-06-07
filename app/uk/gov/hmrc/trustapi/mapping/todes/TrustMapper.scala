@@ -45,11 +45,21 @@ object TrustMapper {
 
     val typeOfTrust = DesTrustTypeMapper.toDes(domainTrust)
 
-    //TODO DOMAIN SCHEMA CHANGE : Mappings for deed of variation not matching to des schema
     val deedOfVariation: Option[String] = {
-      domainTrust.trustType.willIntestacyTrust.map[Option[String]](wi => {
-        if (wi.isDovTypeAddition) Some("Addition to the will trust") else None
-      }).getOrElse(None)
+      if (domainTrust.trustType.willIntestacyTrust != None) {
+        domainTrust.trustType.willIntestacyTrust.map[Option[String]](wi => {
+          if (wi.isDovTypeAddition) Some("Addition to the will trust") else None
+        }).getOrElse(None)
+      }
+      else if (domainTrust.trustType.interVivoTrust != None) {
+        domainTrust.trustType.interVivoTrust.map[Option[String]](iv => iv.dovType match {
+          case Some("dovTypeAbsolute") => Some("Previously there was only an absolute interest under the will")
+          case Some("dovTypeReplace") => Some("Replaced the will trust")
+        }).getOrElse(None)
+      }
+      else {
+        None
+      }
     }
 
     //TODO POTENTIAL DOMAIN SCHEMA CHANGE : Check intervivo business logic
@@ -59,9 +69,9 @@ object TrustMapper {
 
     //TODO POTENTIAL DOMAIN SCHEMA CHANGE : Check efrbsStartDate business logic
     val efrbsStartDate: Option[DateTime] = {
-          domainTrust.trustType.employmentTrust.map[Option[DateTime]](emp =>
-            emp.employerFinancedRetirementBenefitSchemeStartDate).getOrElse(None)
-      }
+      domainTrust.trustType.employmentTrust.map[Option[DateTime]](emp =>
+        emp.employerFinancedRetirementBenefitSchemeStartDate).getOrElse(None)
+    }
     //End DesTrustDetails variables
 
     val details: DesTrustDetails = DesTrustDetails(

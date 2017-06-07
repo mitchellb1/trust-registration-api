@@ -42,5 +42,26 @@ class TrustMappingSpec extends PlaySpec
         result mustBe SuccessfulValidation
       }
     }
+    "return Addition to the will trust" when {
+      "given a will intestacy trust that is a dead of variation" in {
+        val convertedToDesCaseClasses = SUT.toDes(trustWithWillIntestacyTrustDOV)
+        val jsonOutput = Json.toJson(convertedToDesCaseClasses).toString()
+        jsonOutput must include( "Addition to the will trust")
+      }
+    }
+    "return Replaced the will trust" when {
+      "given a will intestacy trust that is a dead of variation" in {
+        val convertedToDesCaseClasses = SUT.toDes(trustWithInterVivoTrustDOV1)
+        val jsonOutput = Json.toJson(convertedToDesCaseClasses).toString()
+        jsonOutput must include( "Replaced the will trust")
+      }
+    }
+    "return Previously there was only an absolute interest under the will" when {
+      "given a will intestacy trust that is a dead of variation" in {
+        val convertedToDesCaseClasses = SUT.toDes(trustWithInterVivoTrustDOV)
+        val jsonOutput = Json.toJson(convertedToDesCaseClasses).toString()
+        jsonOutput must include( "Previously there was only an absolute interest under the will")
+      }
+    }
   }
 }
