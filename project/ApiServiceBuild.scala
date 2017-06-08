@@ -21,11 +21,9 @@ private object AppDependencies {
   private val microserviceBootstrapVersion = "5.5.0"
   private val playHealthVersion = "2.0.0"
   private val playAuthVersion = "4.2.0"
-  private val playUrlBindersVersion = "2.0.0"
   private val playJsonLoggerVersion = "3.0.0"
   private val playConfigVersion = "3.0.0"
   private val hmrcTestVersion = "2.0.0"
-  private val playReactivemongoVersion = "5.1.0"
   private val domainVersion = "4.0.0"
 
   private val playHmrcApiVersion = "0.5.0"
@@ -36,13 +34,10 @@ private object AppDependencies {
   private val wireMockVersion = "1.57"
 
   val compile = Seq(
-    "uk.gov.hmrc" %% "play-reactivemongo" % playReactivemongoVersion,
-
     ws,
     "uk.gov.hmrc" %% "microservice-bootstrap" % microserviceBootstrapVersion,
     "uk.gov.hmrc" %% "play-authorisation" % playAuthVersion,
     "uk.gov.hmrc" %% "play-health" % playHealthVersion,
-    "uk.gov.hmrc" %% "play-url-binders" % playUrlBindersVersion,
     "uk.gov.hmrc" %% "play-config" % playConfigVersion,
     "uk.gov.hmrc" %% "play-json-logger" % playJsonLoggerVersion,
     "uk.gov.hmrc" %% "domain" % domainVersion,
