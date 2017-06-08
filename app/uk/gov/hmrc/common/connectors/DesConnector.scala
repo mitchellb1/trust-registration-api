@@ -140,7 +140,7 @@ trait DesConnector extends ServicesConfig with RawResponseReads {
   }
 
 
-  def trustExistenceLookUp(trustExistence: TrustExistence)(implicit hc : HeaderCarrier) = {
+  def trustExistenceLookUp(trustExistence: TrustExistence)(implicit hc : HeaderCarrier): Future[Either[String, String] with Product with Serializable] = {
     val uri: String = s"$trustsServiceUrl/trustExistence"
     val desRespone = httpPost.POST[TrustExistence,HttpResponse](uri,trustExistence)(implicitly, httpReads, implicitly)
 
