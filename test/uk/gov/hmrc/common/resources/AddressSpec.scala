@@ -17,9 +17,10 @@
 package uk.gov.hmrc.trustregistration.models
 
 import org.scalatestplus.play.PlaySpec
-import play.api.libs.json.Json
+import play.api.libs.json.{JsPath, JsString, Json, Writes}
 import uk.gov.hmrc.common.rest.resources.core.Address
 import uk.gov.hmrc.utils.{JsonExamples, ScalaDataExamples}
+import play.api.libs.functional.syntax._
 
 class  AddressSpec extends PlaySpec with JsonExamples with ScalaDataExamples {
 
@@ -46,6 +47,40 @@ class  AddressSpec extends PlaySpec with JsonExamples with ScalaDataExamples {
 
         address.line1 mustBe "123 Easy Street"
         address.postalCode.isDefined mustBe false
+      }
+    }
+
+    "convert to a valid DES Address JSON body" when {
+      "we have a full address" in {
+        val address = Address(
+          line1 = "Line 1",
+          line2 = Some("Line 2"),
+          line3 = Some("Line 3"),
+          line4 = Some("Line 4"),
+          postalCode = Some("Test"),
+          countryCode = "GB"
+        )
+
+
+       val addressWrites : Writes[Address] = (
+            (JsPath \ "line1").write[String] and
+            (JsPath \ "line2").writeNullable[String] and
+            (JsPath \ "line3").writeNullable[String] and
+            (JsPath \ "line4").writeNullable[String] and
+            (JsPath \ "postCode").writeNullable[String] and
+            (JsPath \ "country").write[String]
+            )(unlift(Address.unapply))
+
+
+
+        val json = Json.toJson(address)(addressWrites)
+
+        (json \ "line1").get mustBe JsString(address.line1)
+        (json \ "line2").get mustBe JsString(address.line2.get)
+        (json \ "line3").get mustBe JsString(address.line3.get)
+        (json \ "line4").get mustBe JsString(address.line4.get)
+        (json \ "postCode").get mustBe JsString(address.postalCode.get)
+        (json \ "country").get mustBe JsString(address.countryCode)
       }
     }
 
