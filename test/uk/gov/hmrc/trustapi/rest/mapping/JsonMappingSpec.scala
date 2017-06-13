@@ -47,16 +47,16 @@ class JsonMapperSpec extends PlaySpec with ScalaDataExamples {
       val domainTrust = trustWithEmploymentTrust
       val json: JsValue = Json.toJson(domainTrust)(trustWrites)
       "The trust has a valid name" in {
-        (json \ "correspondence" \ "name").get mustBe JsString("Test Trust")
+        (json \ "correspondence" \ "name").get mustBe JsString(domainTrust.name)
       }
       "The trust has a valid phoneNumber" in {
-        (json \ "correspondence" \ "phoneNumber").get mustBe JsString("0044 1234 1234")
+        (json \ "correspondence" \ "phoneNumber").get mustBe JsString(domainTrust.telephoneNumber)
       }
       "The trust has a valid address" in {
-        (json \ "correspondence" \ "address" \ "line1").get mustBe JsString("Line 1")
+        (json \ "correspondence" \ "address" \ "line1").get mustBe JsString(domainTrust.correspondenceAddress.line1)
       }
       "We have an abroad indicator" in {
-        (json \ "correspondence" \ "abroadIndicator").get mustBe JsBoolean(true)
+        (json \ "correspondence" \ "abroadIndicator").get mustBe JsBoolean(domainTrust.correspondenceAddress.countryCode != "GB")
       }
     }
   }
