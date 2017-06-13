@@ -51,36 +51,54 @@ class  AddressSpec extends PlaySpec with JsonExamples with ScalaDataExamples {
     }
 
     "convert to a valid DES Address JSON body" when {
+      val addressWritesToDes: Writes[Address] = (
+        (JsPath \ "line1").write[String] and
+          (JsPath \ "line2").writeNullable[String] and
+          (JsPath \ "line3").writeNullable[String] and
+          (JsPath \ "line4").writeNullable[String] and
+          (JsPath \ "postCode").writeNullable[String] and
+          (JsPath \ "country").write[String]
+        ) (unlift(Address.unapply))
+
       "we have a full address" in {
+        val gbAddress = address.copy(countryCode = "GB",postalCode = Some("Test"))
+
+        val json = Json.toJson(gbAddress)(addressWritesToDes)
+
+        (json \ "line1").get mustBe JsString(gbAddress.line1)
+        (json \ "line2").get mustBe JsString(gbAddress.line2.get)
+        (json \ "line3").get mustBe JsString(gbAddress.line3.get)
+        (json \ "line4").get mustBe JsString(gbAddress.line4.get)
+        (json \ "postCode").get mustBe JsString(gbAddress.postalCode.get)
+        (json \ "country").get mustBe JsString(gbAddress.countryCode)
+      }
+
+      "we have a full valid address with missing optional properties" in {
         val address = Address(
           line1 = "Line 1",
-          line2 = Some("Line 2"),
-          line3 = Some("Line 3"),
-          line4 = Some("Line 4"),
+          line2 = None,
+          line3 = None,
+          line4 = None,
           postalCode = Some("Test"),
           countryCode = "GB"
         )
 
+        val json = Json.toJson(address)(addressWritesToDes)
 
-       val addressWrites : Writes[Address] = (
-            (JsPath \ "line1").write[String] and
-            (JsPath \ "line2").writeNullable[String] and
-            (JsPath \ "line3").writeNullable[String] and
-            (JsPath \ "line4").writeNullable[String] and
-            (JsPath \ "postCode").writeNullable[String] and
-            (JsPath \ "country").write[String]
-            )(unlift(Address.unapply))
+        json.toString() mustNot  include("line2")
+        json.toString() mustNot  include("line3")
+        json.toString() mustNot  include("line4")
+      }
 
-
-
-        val json = Json.toJson(address)(addressWrites)
+      "we have a foreign address" in {
+        val json = Json.toJson(address)(addressWritesToDes)
 
         (json \ "line1").get mustBe JsString(address.line1)
         (json \ "line2").get mustBe JsString(address.line2.get)
         (json \ "line3").get mustBe JsString(address.line3.get)
         (json \ "line4").get mustBe JsString(address.line4.get)
-        (json \ "postCode").get mustBe JsString(address.postalCode.get)
         (json \ "country").get mustBe JsString(address.countryCode)
+        json.toString() mustNot  include("postCode")
       }
     }
 
