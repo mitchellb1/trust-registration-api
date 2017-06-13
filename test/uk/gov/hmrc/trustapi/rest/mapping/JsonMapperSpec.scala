@@ -18,7 +18,6 @@ package uk.gov.hmrc.trustapi.rest.mapping
 
 
 import org.scalatestplus.play.PlaySpec
-import play.api.libs.functional.syntax.unlift
 import play.api.libs.json._
 import uk.gov.hmrc.common.rest.resources.core.{Address, Declaration, YearReturn, YearsOfTaxConsequence}
 import uk.gov.hmrc.trustapi.rest.resources.core.Trust
@@ -27,11 +26,6 @@ import uk.gov.hmrc.utils.ScalaDataExamples
 
 
 class JsonMapperSpec extends PlaySpec with ScalaDataExamples {
-
-
-
-
-
 
   val trustWrites = new Writes[Trust] {
     def writes(trust: Trust) = {
@@ -52,10 +46,7 @@ class JsonMapperSpec extends PlaySpec with ScalaDataExamples {
       )))
     }
   }
-
-
-
-
+  
   "TrustToDesWrites" should {
     "Convert the domain representation of an Employment Trust to a DES schema valid JSON body" when {
       val domainTrust = trustWithEmploymentTrust
