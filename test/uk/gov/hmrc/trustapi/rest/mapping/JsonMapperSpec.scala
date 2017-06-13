@@ -29,9 +29,8 @@ class JsonMapperSpec extends PlaySpec with ScalaDataExamples {
   //Domain to DES custom writes
 
   val trustWrites = new Writes[Trust] {
-
     def writes(trust: Trust) = {
-      val result = JsObject(
+      JsObject(
         Map("correspondence" -> Json.obj(
           "abroadIndicator" -> JsBoolean(trust.correspondenceAddress.countryCode != "GB"),
           "name" -> JsString(trust.name),
@@ -40,7 +39,6 @@ class JsonMapperSpec extends PlaySpec with ScalaDataExamples {
           optAdminAttribute("admin", trust.utr) ++
           optYearsReturnsAttribute("yearsReturns", trust.yearsOfTaxConsequence)
       )
-      result
     }
     def optAdminAttribute(s: String, option: Option[String]) = {
       option.map(value => (s, Json.obj(
@@ -49,7 +47,6 @@ class JsonMapperSpec extends PlaySpec with ScalaDataExamples {
     }
 
     def optYearsReturnsAttribute(s: String, option: Option[YearsOfTaxConsequence]) = {
-
       option.map(value => (s, Json.toJson(value)))
     }
   }
