@@ -17,7 +17,9 @@
 package uk.gov.hmrc.common.rest.resources.core
 
 import org.joda.time.DateTime
-import play.api.libs.json.{JsString, Json, Reads, Writes}
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
+
 
 case class Declaration(correspondenceAddress: Address,
                        confirmation: Boolean,
@@ -31,4 +33,10 @@ object Declaration {
   implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
   implicit val dateWrites: Writes[DateTime] = Writes { (dt: DateTime) => JsString(dt.toString("yyyy-MM-dd")) }
   implicit val formats = Json.format[Declaration]
+  val writesToDes: Writes[Declaration] = (
+    (JsPath \ "address").write[Address](Address.writesToDes) and
+      (JsPath \ "name" \ "firstName").write[String] and
+      (JsPath \ "name" \ "middleName").writeNullable[String] and
+      (JsPath \ "name" \ "lastName").write[String]
+    )(declaration => (declaration.correspondenceAddress,declaration.givenName,declaration.otherName, declaration.familyName))
 }

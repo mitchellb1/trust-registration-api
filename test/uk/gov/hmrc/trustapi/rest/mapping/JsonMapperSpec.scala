@@ -18,15 +18,20 @@ package uk.gov.hmrc.trustapi.rest.mapping
 
 
 import org.scalatestplus.play.PlaySpec
+import play.api.libs.functional.syntax.unlift
 import play.api.libs.json._
-import uk.gov.hmrc.common.rest.resources.core.{Address, YearReturn, YearsOfTaxConsequence}
+import uk.gov.hmrc.common.rest.resources.core.{Address, Declaration, YearReturn, YearsOfTaxConsequence}
 import uk.gov.hmrc.trustapi.rest.resources.core.Trust
 import uk.gov.hmrc.utils.ScalaDataExamples
 
 
+
 class JsonMapperSpec extends PlaySpec with ScalaDataExamples {
 
-  //Domain to DES custom writes
+
+
+
+
 
   val trustWrites = new Writes[Trust] {
     def writes(trust: Trust) = {
@@ -35,19 +40,16 @@ class JsonMapperSpec extends PlaySpec with ScalaDataExamples {
           "abroadIndicator" -> JsBoolean(trust.correspondenceAddress.countryCode != "GB"),
           "name" -> JsString(trust.name),
           "phoneNumber" -> JsString(trust.telephoneNumber),
-          "address" -> Json.toJson(trust.correspondenceAddress)(Address.writesToDes))) ++
+          "address" -> Json.toJson(trust.correspondenceAddress)(Address.writesToDes)),
+          "declaration" -> Json.toJson(trust.declaration)(Declaration.writesToDes)) ++
           optAdminAttribute("admin", trust.utr) ++
-          optYearsReturnsAttribute("yearsReturns", trust.yearsOfTaxConsequence)
+          trust.yearsOfTaxConsequence.map(v => ("yearsReturns",Json.toJson(v)))
       )
     }
     def optAdminAttribute(s: String, option: Option[String]) = {
       option.map(value => (s, Json.obj(
         "utr" -> JsString(value)
       )))
-    }
-
-    def optYearsReturnsAttribute(s: String, option: Option[YearsOfTaxConsequence]) = {
-      option.map(value => (s, Json.toJson(value)))
     }
   }
 
@@ -96,6 +98,29 @@ class JsonMapperSpec extends PlaySpec with ScalaDataExamples {
         val domainTrust = trustWithEmploymentTrust.copy(yearsOfTaxConsequence = None)
         val json: JsValue = Json.toJson(domainTrust)(trustWrites)
         json.toString() mustNot include("yearsReturns")
+      }
+
+      "we have a declaration with a first name" in {
+        (json \ "declaration" \ "name" \ "firstName").get.as[String] mustBe domainTrust.declaration.givenName
+      }
+
+      "we have a declaration with a last name" in {
+        (json \ "declaration" \ "name" \ "lastName").get.as[String] mustBe domainTrust.declaration.familyName
+      }
+
+      "there is declaration with middlename" in {
+        (json \ "declaration" \ "name" \ "middleName").get.as[String] mustBe domainTrust.declaration.otherName.get
+      }
+
+      "there is a declaration with no middlename" in {
+        val domainTrust = trustWithEmploymentTrust.copy(declaration = declaration.copy(otherName = None))
+        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
+
+        (json \ "declaration" \ "name").toString() mustNot include("middleName")
+      }
+
+      "we have a declaration address" in {
+        (json \ "declaration" \ "address" \ "line1").get.as[String] mustBe domainTrust.declaration.correspondenceAddress.line1
       }
     }
   }
