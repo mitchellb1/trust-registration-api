@@ -17,7 +17,7 @@
 package uk.gov.hmrc.common.rest.resources.core
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Reads}
+import play.api.libs.json._
 import uk.gov.hmrc.trustapi.rest.resources.core.{PostCodeMissingForGBAddressException, PostalCodeNotPresentForNonGbAddressException}
 
 case class Address(
@@ -36,6 +36,25 @@ case class Address(
 }
 
 object Address {
+  val readsFromDes : Reads[Address] = (
+    (JsPath \\ "line1").read[String] and
+      (JsPath \\ "line2").readNullable[String] and
+      (JsPath \\ "line3").readNullable[String] and
+      (JsPath \\ "line4").readNullable[String] and
+      (JsPath \\ "postCode").readNullable[String] and
+      (JsPath \\ "country").read[String]
+    )(Address.apply _)
+
+  val writesToDes: Writes[Address] = (
+    (JsPath \ "line1").write[String] and
+      (JsPath \ "line2").writeNullable[String] and
+      (JsPath \ "line3").writeNullable[String] and
+      (JsPath \ "line4").writeNullable[String] and
+      (JsPath \ "postCode").writeNullable[String] and
+      (JsPath \ "country").write[String]
+    ) (unlift(Address.unapply))
+
+
   implicit val addressReads: Reads[Address] = (
     (JsPath \\ "line1").read[String] and
       (JsPath \\ "line2").readNullable[String] and

@@ -17,7 +17,7 @@
 package uk.gov.hmrc.trustregistration.models
 
 import org.scalatestplus.play.PlaySpec
-import play.api.libs.json.{JsPath, JsString, Json, Writes}
+import play.api.libs.json._
 import uk.gov.hmrc.common.rest.resources.core.Address
 import uk.gov.hmrc.utils.{JsonExamples, ScalaDataExamples}
 import play.api.libs.functional.syntax._
@@ -50,20 +50,41 @@ class  AddressSpec extends PlaySpec with JsonExamples with ScalaDataExamples {
       }
     }
 
-    "convert to a valid DES Address JSON body" when {
-      val addressWritesToDes: Writes[Address] = (
-        (JsPath \ "line1").write[String] and
-          (JsPath \ "line2").writeNullable[String] and
-          (JsPath \ "line3").writeNullable[String] and
-          (JsPath \ "line4").writeNullable[String] and
-          (JsPath \ "postCode").writeNullable[String] and
-          (JsPath \ "country").write[String]
-        ) (unlift(Address.unapply))
+    "convert from a valid DES JSON body " when {
+      "we have a full address" in {
+        val address = Json.parse("""{"line1" : "Test", "line2" : "Test2", "line3" : "Test3", "line4" : "Test4", "postCode" : "WN1 2TT", "country" : "GB"}""")
 
+        val output = address.validate[Address](Address.readsFromDes).get
+
+        output.line1 mustBe (address \ "line1").as[String]
+        output.line2.get mustBe (address \ "line2").as[String]
+        output.line3.get mustBe (address \ "line3").as[String]
+        output.line4.get mustBe (address \ "line4").as[String]
+        output.postalCode.get mustBe (address \ "postCode").as[String]
+        output.countryCode mustBe (address \ "country").as[String]
+      }
+
+
+      "we have only required fields " in {
+        val address = Json.parse("""{"line1" : "line1Address", "line2" : "line2Address", "postCode" : "NE1 111", "country" : "GB"}""")
+        val output = address.validate[Address](Address.readsFromDes).get
+
+        output.line1 mustBe "line1Address"
+        output.line2.get mustBe "line2Address"
+        output.line3 mustBe None
+        output.line4 mustBe None
+        output.postalCode.get mustBe  "NE1 111"
+        output.countryCode mustBe "GB"
+      }
+
+
+    }
+
+    "convert to a valid DES Address JSON body" when {
       "we have a full address" in {
         val gbAddress = address.copy(countryCode = "GB",postalCode = Some("Test"))
 
-        val json = Json.toJson(gbAddress)(addressWritesToDes)
+        val json = Json.toJson(gbAddress)(Address.writesToDes)
 
         (json \ "line1").get mustBe JsString(gbAddress.line1)
         (json \ "line2").get mustBe JsString(gbAddress.line2.get)
@@ -83,7 +104,7 @@ class  AddressSpec extends PlaySpec with JsonExamples with ScalaDataExamples {
           countryCode = "GB"
         )
 
-        val json = Json.toJson(address)(addressWritesToDes)
+        val json = Json.toJson(address)(Address.writesToDes)
 
         json.toString() mustNot  include("line2")
         json.toString() mustNot  include("line3")
@@ -91,7 +112,7 @@ class  AddressSpec extends PlaySpec with JsonExamples with ScalaDataExamples {
       }
 
       "we have a foreign address" in {
-        val json = Json.toJson(address)(addressWritesToDes)
+        val json = Json.toJson(address)(Address.writesToDes)
 
         (json \ "line1").get mustBe JsString(address.line1)
         (json \ "line2").get mustBe JsString(address.line2.get)
