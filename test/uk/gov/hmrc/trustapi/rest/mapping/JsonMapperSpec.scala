@@ -30,17 +30,20 @@ class JsonMapperSpec extends PlaySpec with ScalaDataExamples {
 
   val trustWrites = new Writes[Trust] {
     def writes(trust: Trust) = {
-
-      Json.obj(
+      val result = Json.obj(
         "correspondence" -> Json.obj(
         "abroadIndicator" -> JsBoolean(trust.correspondenceAddress.countryCode != "GB"),
         "name" -> JsString(trust.name),
         "phoneNumber" -> JsString(trust.telephoneNumber),
-        "address" -> Json.toJson(trust.correspondenceAddress)(Address.writesToDes)),
-        "admin"-> Json.obj(
-          "utr"-> JsString(trust.utr.getOrElse(""))
-        )
+        "address" -> Json.toJson(trust.correspondenceAddress)(Address.writesToDes))
       )
+
+      if (trust.utr.isDefined) {
+        result ++ Json.obj("admin" -> Json.obj(
+            "utr"-> JsString(trust.utr.get)
+          )
+        )
+      } else result
     }
   }
 
@@ -70,7 +73,7 @@ class JsonMapperSpec extends PlaySpec with ScalaDataExamples {
         (json \ "admin" \ "utr").get mustBe JsString(domainTrust.utr.get)
       }
       "There is no UTR" in {
-        (json \ "admin" \ "utr").get mustBe JsString("")
+        json.toString() mustNot include("admin")
       }
     }
   }
