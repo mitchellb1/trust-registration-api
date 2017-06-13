@@ -30,12 +30,12 @@ class JsonMapperSpec extends PlaySpec with ScalaDataExamples {
 
   val trustWrites = new Writes[Trust] {
     def writes(trust: Trust) = {
-      val address = Json.toJson(trust.correspondenceAddress)(Address.writesToDes)
 
       Json.obj("correspondence" -> Json.obj(
+        "abroadIndicator" -> JsBoolean(trust.correspondenceAddress.countryCode != "GB"),
         "name" -> JsString(trust.name),
         "phoneNumber" -> JsString(trust.telephoneNumber),
-        "address" -> address))
+        "address" -> Json.toJson(trust.correspondenceAddress)(Address.writesToDes)))
     }
   }
 
@@ -44,82 +44,20 @@ class JsonMapperSpec extends PlaySpec with ScalaDataExamples {
 
   "TrustToDesWrites" should {
     "Convert the domain representation of an Employment Trust to a DES schema valid JSON body" when {
+      val domainTrust = trustWithEmploymentTrust
+      val json: JsValue = Json.toJson(domainTrust)(trustWrites)
       "The trust has a valid name" in {
-        val domainTrust = trustWithEmploymentTrust
-
-        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
-
         (json \ "correspondence" \ "name").get mustBe JsString("Test Trust")
       }
       "The trust has a valid phoneNumber" in {
-        val domainTrust = trustWithEmploymentTrust
-
-        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
-
         (json \ "correspondence" \ "phoneNumber").get mustBe JsString("0044 1234 1234")
       }
       "The trust has a valid address" in {
-        val domainTrust = trustWithEmploymentTrust
-
-        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
-
         (json \ "correspondence" \ "address" \ "line1").get mustBe JsString("Line 1")
+      }
+      "We have an abroad indicator" in {
+        (json \ "correspondence" \ "abroadIndicator").get mustBe JsBoolean(true)
       }
     }
   }
 }
-
-/*
-
-{
-  "correspondence": {
-    "abroadIndicator": true,
-    "name": "Test Trust",
-    "address": {
-      "line1": "Line 1",
-      "line2": "Line 2",
-      "line3": "Line 3",
-      "line4": "Line 4",
-      "country": "ES"
-    },
-    "phoneNumber": "0044 1234 1234"
-  },
-  "yearsReturns": {
-    "taxReturnsNoDues": true
-  },
-  "declaration": {
-    "name": {
-      "firstName": "joe",
-      "lastName": "Blogs"
-    },
-    "address": {
-      "line1": "weqr",
-      "line2": "erqw",
-      "country": "GB"
-    }
-  },
-  "details": {
-    "trust": {
-      "details": {
-        "startDate": "1900-01-05",
-        "lawCountry": "ES",
-        "administrationCountry": "ES",
-        "typeOfTrust": "Will Trust or Intestacy Trust"
-      },
-      "entities": {
-        "beneficiary": {},
-        "leadTrustees": {
-          "name": "some company",
-          "phoneNumber": "01",
-          "identification": {
-            "utr": "32532"
-          },
-          "email": ""
-        },
-        "settlors": {}
-      },
-      "assets": {}
-    }
-  }
-}
- */
