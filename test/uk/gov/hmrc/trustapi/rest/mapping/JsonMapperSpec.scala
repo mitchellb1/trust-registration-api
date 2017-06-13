@@ -31,11 +31,16 @@ class JsonMapperSpec extends PlaySpec with ScalaDataExamples {
   val trustWrites = new Writes[Trust] {
     def writes(trust: Trust) = {
 
-      Json.obj("correspondence" -> Json.obj(
+      Json.obj(
+        "correspondence" -> Json.obj(
         "abroadIndicator" -> JsBoolean(trust.correspondenceAddress.countryCode != "GB"),
         "name" -> JsString(trust.name),
         "phoneNumber" -> JsString(trust.telephoneNumber),
-        "address" -> Json.toJson(trust.correspondenceAddress)(Address.writesToDes)))
+        "address" -> Json.toJson(trust.correspondenceAddress)(Address.writesToDes)),
+        "admin"-> Json.obj(
+          "utr"-> JsString(trust.utr.getOrElse(""))
+        )
+      )
     }
   }
 
@@ -46,6 +51,7 @@ class JsonMapperSpec extends PlaySpec with ScalaDataExamples {
     "Convert the domain representation of an Employment Trust to a DES schema valid JSON body" when {
       val domainTrust = trustWithEmploymentTrust
       val json: JsValue = Json.toJson(domainTrust)(trustWrites)
+
       "The trust has a valid name" in {
         (json \ "correspondence" \ "name").get mustBe JsString(domainTrust.name)
       }
@@ -57,6 +63,14 @@ class JsonMapperSpec extends PlaySpec with ScalaDataExamples {
       }
       "We have an abroad indicator" in {
         (json \ "correspondence" \ "abroadIndicator").get mustBe JsBoolean(domainTrust.correspondenceAddress.countryCode != "GB")
+      }
+      "The trust has a UTR" in {
+        val domainTrust = trustWithEmploymentTrust.copy(utr = Some("ASDFAJSDFANSD"))
+        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
+        (json \ "admin" \ "utr").get mustBe JsString(domainTrust.utr.get)
+      }
+      "There is no UTR" in {
+        (json \ "admin" \ "utr").get mustBe JsString("")
       }
     }
   }
