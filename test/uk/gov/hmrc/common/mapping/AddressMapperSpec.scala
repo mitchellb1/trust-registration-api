@@ -22,7 +22,7 @@ import uk.gov.hmrc.common.rest.resources.core.Address
 import uk.gov.hmrc.utils.{JsonExamples, ScalaDataExamples}
 
 
-class AddressMappingSpec extends PlaySpec with JsonExamples with ScalaDataExamples {
+class AddressMapperSpec extends PlaySpec with JsonExamples with ScalaDataExamples {
 
   "Address" must {
     "convert from a valid DES JSON body " when {
