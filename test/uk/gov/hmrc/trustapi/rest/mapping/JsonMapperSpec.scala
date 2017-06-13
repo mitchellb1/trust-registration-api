@@ -19,7 +19,7 @@ package uk.gov.hmrc.trustapi.rest.mapping
 
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json._
-import uk.gov.hmrc.common.rest.resources.core.Address
+import uk.gov.hmrc.common.rest.resources.core.{Address, YearReturn, YearsOfTaxConsequence}
 import uk.gov.hmrc.trustapi.rest.resources.core.Trust
 import uk.gov.hmrc.utils.ScalaDataExamples
 
@@ -29,23 +29,6 @@ class JsonMapperSpec extends PlaySpec with ScalaDataExamples {
   //Domain to DES custom writes
 
   val trustWrites = new Writes[Trust] {
-   /* def writes(trust: Trust) = {
-      val result = Json.obj(
-
-        "correspondence" -> Json.obj(
-        "abroadIndicator" -> JsBoolean(trust.correspondenceAddress.countryCode != "GB"),
-        "name" -> JsString(trust.name),
-        "phoneNumber" -> JsString(trust.telephoneNumber),
-        "address" -> Json.toJson(trust.correspondenceAddress)(Address.writesToDes))
-      )
-
-      if (trust.utr.isDefined) {
-        result ++ Json.obj("admin" -> Json.obj(
-            "utr"-> JsString(trust.utr.get)
-          )
-        )
-      } else result
-    }*/
 
     def writes(trust: Trust) = {
       val result = JsObject(
@@ -54,15 +37,21 @@ class JsonMapperSpec extends PlaySpec with ScalaDataExamples {
           "name" -> JsString(trust.name),
           "phoneNumber" -> JsString(trust.telephoneNumber),
           "address" -> Json.toJson(trust.correspondenceAddress)(Address.writesToDes))) ++
-          optAdminAttribute("admin", trust.utr)
+          optAdminAttribute("admin", trust.utr) ++
+          optYearsReturnsAttribute("yearsReturns", trust.yearsOfTaxConsequence)
       )
       result
     }
-    def optAdminAttribute(s: String, option: Option[String]) =
+    def optAdminAttribute(s: String, option: Option[String]) = {
       option.map(value => (s, Json.obj(
-        "utr"-> JsString(value)
+        "utr" -> JsString(value)
       )))
+    }
 
+    def optYearsReturnsAttribute(s: String, option: Option[YearsOfTaxConsequence]) = {
+
+      option.map(value => (s, Json.toJson(value)))
+    }
   }
 
 
@@ -92,6 +81,24 @@ class JsonMapperSpec extends PlaySpec with ScalaDataExamples {
       }
       "There is no UTR" in {
         json.toString() mustNot include("admin")
+      }
+      "we have years returns with taxreturnnodues flag" in {
+        val domainTrust = trustWithEmploymentTrust.copy(yearsOfTaxConsequence = Some(YearsOfTaxConsequence(Some(false))))
+        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
+        (json \ "yearsReturns" \ "taxReturnsNoDues").get.asOpt[Boolean] mustBe domainTrust.yearsOfTaxConsequence.get.taxReturnsNoDues
+      }
+
+      "years returns has retuns information for two years" in {
+        val domainTrust = trustWithEmploymentTrust.copy(yearsOfTaxConsequence = Some(YearsOfTaxConsequence(Some(false), Some(List(YearReturn("16", false),YearReturn("15", true))))))
+        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
+
+        (json \ "yearsReturns" \ "returns").get.as[List[YearReturn]] mustBe domainTrust.yearsOfTaxConsequence.get.returns.get
+      }
+
+      "we don't have years returns" in {
+        val domainTrust = trustWithEmploymentTrust.copy(yearsOfTaxConsequence = None)
+        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
+        json.toString() mustNot include("yearsReturns")
       }
     }
   }
