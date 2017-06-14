@@ -25,7 +25,6 @@ import uk.gov.hmrc.utils.ScalaDataExamples
 
 class DesRequestJsonMapperSpec extends PlaySpec with ScalaDataExamples {
 
-
   "TrustToDesWrites" should {
     "Convert the domain representation of an Employment Trust to a DES schema valid JSON body" when {
       val domainTrust = trustWithEmploymentTrust
