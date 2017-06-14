@@ -35,19 +35,15 @@ class DesRequestJsonMapperSpec extends PlaySpec with ScalaDataExamples {
         trustDetails.commencementDate,
         trustDetails.legality.governingCountryCode,
         trustDetails.legality.administrationCountryCode,
+        trustDetails.trustType.currentTrustType,
+        trustDetails.trustType.deedOfVariation,
         trustDetails.legality.isEstablishedUnderScottishLaw,
         trustDetails.legality.previousOffshoreCountryCode
       ))
 
 
-  private def commonDetails = {
-      (JsPath \ "startDate").write[DateTime] and
-      (JsPath \ "lawCountry").write[String] and
-      (JsPath \ "administrationCountry").writeNullable[String]
-  }
-
   val trustDetailsToDesNonUkResidentWrites: Writes[Trust] = (
-      commonDetails and
+    commonDetails and
       (JsPath \ "residentialStatus" \ "nonUK" \ "sch5atcgga92").write[Boolean] and
       (JsPath \ "residentialStatus" \ "nonUK" \ "s218ihta84").writeNullable[Boolean] and
       (JsPath \ "residentialStatus" \ "nonUK" \ "agentS218IHTA84").writeNullable[Boolean] and
@@ -56,11 +52,21 @@ class DesRequestJsonMapperSpec extends PlaySpec with ScalaDataExamples {
     trustDetails.commencementDate,
     trustDetails.legality.governingCountryCode,
     trustDetails.legality.administrationCountryCode,
+    trustDetails.trustType.currentTrustType,
+    trustDetails.trustType.deedOfVariation,
     true, //TODO: Mapping property sch5atcgga92 missing
     Some(true), //TODO: Mapping property s218ihta84 missing
     Some(true), //TODO: Mapping property agentS218IHTA84 missing
     Some("Non Resident Domiciled") //TODO: Mapping property trusteeStatus missing
   ))
+
+  private def commonDetails = {
+      (JsPath \ "startDate").write[DateTime] and
+      (JsPath \ "lawCountry").write[String] and
+      (JsPath \ "administrationCountry").writeNullable[String] and
+      (JsPath \ "typeOfTrust").write[String] and
+      (JsPath \ "deedOfVariation").writeNullable[String]
+  }
 
   val trustWrites = new Writes[Trust] {
     def writes(trust: Trust) = {
@@ -170,6 +176,14 @@ class DesRequestJsonMapperSpec extends PlaySpec with ScalaDataExamples {
         (json \ "details" \ "trust" \ "details" \ "residentialStatus" \ "nonUK" \ "sch5atcgga92").get.as[Boolean] mustBe true //TODO: Mapping property s218ihta84 missing
         (json \ "details" \ "trust" \ "details" \ "residentialStatus" \ "nonUK" \ "agentS218IHTA84").get.as[Boolean] mustBe true //TODO: Mapping property agentS218IHTA84 missing
         (json \ "details" \ "trust" \ "details" \ "residentialStatus" \ "nonUK" \ "trusteeStatus").get.as[String] mustBe "Non Resident Domiciled" //TODO: Mapping property trusteeStatus missing
+      }
+
+      "we have a type of trust" in {
+        (json \ "details" \ "trust" \ "details" \ "typeOfTrust").get.as[String] mustBe domainTrust.trustType.currentTrustType
+      }
+
+      "we have no deed of variation" in {
+        (json \ "details" \ "trust" \ "details" \ "deedOfVariation").validate[JsString].isError mustBe true
       }
     }
   }
