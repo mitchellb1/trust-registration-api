@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.trustapi.rest.resources.core
 
+import play.api.libs.functional.syntax._
 import org.joda.time.DateTime
-import play.api.libs.json.{JsString, Json, Reads, Writes}
+import play.api.libs.json._
 import uk.gov.hmrc.common.rest.resources.core.{Address, Declaration, Legality, YearsOfTaxConsequence}
 import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.TrustType
 
@@ -46,4 +47,59 @@ object Trust {
   implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
   implicit val dateWrites: Writes[DateTime] = Writes { (dt: DateTime) => JsString(dt.toString("yyyy-MM-dd")) }
   implicit val formats = Json.format[Trust]
+
+  val ukResidentDetails : Writes[Legality] = (
+    (JsPath \ "residentialStatus" \ "uk" \ "scottishLaw").write[Boolean] and
+      (JsPath \ "residentialStatus" \ "uk" \ "preOffShore").writeNullable[String]
+    )(legality =>(legality.isEstablishedUnderScottishLaw,
+    legality.previousOffshoreCountryCode))
+
+  val nonUkResidentDetails : Writes[Legality] = (
+    (JsPath \ "residentialStatus" \ "nonUK" \ "sch5atcgga92").write[Boolean] and
+      (JsPath \ "residentialStatus" \ "nonUK" \ "s218ihta84").writeNullable[Boolean] and
+      (JsPath \ "residentialStatus" \ "nonUK" \ "agentS218IHTA84").writeNullable[Boolean] and
+      (JsPath \ "residentialStatus" \ "nonUK" \ "trusteeStatus").writeNullable[String]
+    )(_ => (
+    true, //TODO: Mapping property sch5atcgga92 missing
+    Some(true), //TODO: Mapping property s218ihta84 missing
+    Some(true), //TODO: Mapping property agentS218IHTA84 missing
+    Some("Non Resident Domiciled"))) //TODO: Mapping property trusteeStatus missing))
+
+  def trustDetailsToDesWrites(isUkResident: Boolean): Writes[Trust] = (
+    (JsPath \ "startDate").write[DateTime] and
+      (JsPath \ "lawCountry").write[String] and
+      (JsPath \ "administrationCountry").writeNullable[String] and
+      (JsPath \ "typeOfTrust").write[String] and
+      (JsPath \ "deedOfVariation").writeNullable[String] and
+      (JsPath \ "interVivos").write[Boolean]  and
+      (JsPath \ "efrbsStartDate").writeNullable[DateTime] and
+      (JsPath).write[Legality](if (isUkResident) ukResidentDetails else nonUkResidentDetails)
+    )(trustDetails =>  (
+    trustDetails.commencementDate,
+    trustDetails.legality.governingCountryCode,
+    trustDetails.legality.administrationCountryCode,
+    trustDetails.trustType.currentTrustType,
+    trustDetails.trustType.deedOfVariation,
+    trustDetails.trustType.isInterVivo,
+    trustDetails.trustType.employmentTrust.flatMap(c=>c.employerFinancedRetirementBenefitSchemeStartDate),
+    trustDetails.legality
+  ))
+
+  val trustWrites = new Writes[Trust] {
+    def writes(trust: Trust) = {
+      JsObject(
+        Map("correspondence" -> Json.obj(
+          "abroadIndicator" -> JsBoolean(trust.correspondenceAddress.countryCode != "GB"),
+          "name" -> JsString(trust.name),
+          "phoneNumber" -> JsString(trust.telephoneNumber),
+          "address" -> Json.toJson(trust.correspondenceAddress)(Address.writesToDes)),
+          "declaration" -> Json.toJson(trust.declaration)(Declaration.writesToDes),
+          "details" -> Json.obj(
+            "trust"-> Json.obj(
+              "details"-> Json.toJson(trust)(Trust.trustDetailsToDesWrites(trust.isTrustUkResident))))) ++
+          trust.utr.map(v => ("admin", Json.obj("utr" -> JsString(v)))) ++
+          trust.yearsOfTaxConsequence.map(v => ("yearsReturns",Json.toJson(v)))
+      )
+    }
+  }
 }

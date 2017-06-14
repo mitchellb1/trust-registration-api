@@ -15,91 +15,21 @@
  */
 
 package uk.gov.hmrc.common.mapping
-import play.api.libs.functional.syntax._
-import org.joda.time.DateTime
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json._
-import uk.gov.hmrc.common.rest.resources.core.{Address, Declaration, YearReturn, YearsOfTaxConsequence}
+import uk.gov.hmrc.common.rest.resources.core._
 import uk.gov.hmrc.trustapi.rest.resources.core.Trust
-import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.{Beneficiaries, IndividualBeneficiary}
-import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.{EmploymentTrust, TrustType}
 import uk.gov.hmrc.utils.ScalaDataExamples
 
 
 
 class DesRequestJsonMapperSpec extends PlaySpec with ScalaDataExamples {
 
-  val trustDetailsToDesUkWrites: Writes[Trust] = (
-      commonDetails and
-      (JsPath \ "residentialStatus" \ "uk" \ "scottishLaw").write[Boolean] and
-      (JsPath \ "residentialStatus" \ "uk" \ "preOffShore").writeNullable[String]
-    )(trustDetails =>  (
-        trustDetails.commencementDate,
-        trustDetails.legality.governingCountryCode,
-        trustDetails.legality.administrationCountryCode,
-        trustDetails.trustType.currentTrustType,
-        trustDetails.trustType.deedOfVariation,
-        trustDetails.trustType.isInterVivo,
-        trustDetails.trustType.employmentTrust.flatMap(c=>c.employerFinancedRetirementBenefitSchemeStartDate),
-        trustDetails.legality.isEstablishedUnderScottishLaw,
-        trustDetails.legality.previousOffshoreCountryCode
-
-      ))
-
-
-  val trustDetailsToDesNonUkResidentWrites: Writes[Trust] = (
-    commonDetails and
-      (JsPath \ "residentialStatus" \ "nonUK" \ "sch5atcgga92").write[Boolean] and
-      (JsPath \ "residentialStatus" \ "nonUK" \ "s218ihta84").writeNullable[Boolean] and
-      (JsPath \ "residentialStatus" \ "nonUK" \ "agentS218IHTA84").writeNullable[Boolean] and
-      (JsPath \ "residentialStatus" \ "nonUK" \ "trusteeStatus").writeNullable[String]
-    )(trustDetails =>  (
-    trustDetails.commencementDate,
-    trustDetails.legality.governingCountryCode,
-    trustDetails.legality.administrationCountryCode,
-    trustDetails.trustType.currentTrustType,
-    trustDetails.trustType.deedOfVariation,
-    trustDetails.trustType.isInterVivo,
-    trustDetails.trustType.employmentTrust.flatMap(c=>c.employerFinancedRetirementBenefitSchemeStartDate),
-    true, //TODO: Mapping property sch5atcgga92 missing
-    Some(true), //TODO: Mapping property s218ihta84 missing
-    Some(true), //TODO: Mapping property agentS218IHTA84 missing
-    Some("Non Resident Domiciled") //TODO: Mapping property trusteeStatus missing
-  ))
-
-  private def commonDetails = {
-      (JsPath \ "startDate").write[DateTime] and
-      (JsPath \ "lawCountry").write[String] and
-      (JsPath \ "administrationCountry").writeNullable[String] and
-      (JsPath \ "typeOfTrust").write[String] and
-      (JsPath \ "deedOfVariation").writeNullable[String] and
-      (JsPath \ "interVivos").write[Boolean]  and
-      (JsPath \ "efrbsStartDate").writeNullable[DateTime]
-  }
-
-  val trustWrites = new Writes[Trust] {
-    def writes(trust: Trust) = {
-      JsObject(
-        Map("correspondence" -> Json.obj(
-          "abroadIndicator" -> JsBoolean(trust.correspondenceAddress.countryCode != "GB"),
-          "name" -> JsString(trust.name),
-          "phoneNumber" -> JsString(trust.telephoneNumber),
-          "address" -> Json.toJson(trust.correspondenceAddress)(Address.writesToDes)),
-          "declaration" -> Json.toJson(trust.declaration)(Declaration.writesToDes),
-          "details" -> Json.obj(
-            "trust"-> Json.obj(
-              "details"-> Json.toJson(trust)(if (trust.isTrustUkResident) trustDetailsToDesUkWrites else trustDetailsToDesNonUkResidentWrites)))) ++
-          trust.utr.map(v => ("admin", Json.obj("utr" -> JsString(v)))) ++
-          trust.yearsOfTaxConsequence.map(v => ("yearsReturns",Json.toJson(v)))
-
-      )
-    }
-  }
 
   "TrustToDesWrites" should {
     "Convert the domain representation of an Employment Trust to a DES schema valid JSON body" when {
       val domainTrust = trustWithEmploymentTrust
-      val json: JsValue = Json.toJson(domainTrust)(trustWrites)
+      val json: JsValue = Json.toJson(domainTrust)(Trust.trustWrites)
 
       "The trust has a valid name" in {
         (json \ "correspondence" \ "name").get mustBe JsString(domainTrust.name)
@@ -115,7 +45,7 @@ class DesRequestJsonMapperSpec extends PlaySpec with ScalaDataExamples {
       }
       "The trust has a UTR" in {
         val domainTrust = trustWithEmploymentTrust.copy(utr = Some("ASDFAJSDFANSD"))
-        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
+        val json: JsValue = Json.toJson(domainTrust)(Trust.trustWrites)
         (json \ "admin" \ "utr").get mustBe JsString(domainTrust.utr.get)
       }
       "There is no UTR" in {
@@ -123,118 +53,21 @@ class DesRequestJsonMapperSpec extends PlaySpec with ScalaDataExamples {
       }
       "we have years returns with taxreturnnodues flag" in {
         val domainTrust = trustWithEmploymentTrust.copy(yearsOfTaxConsequence = Some(YearsOfTaxConsequence(Some(false))))
-        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
+        val json: JsValue = Json.toJson(domainTrust)(Trust.trustWrites)
         (json \ "yearsReturns" \ "taxReturnsNoDues").get.asOpt[Boolean] mustBe domainTrust.yearsOfTaxConsequence.get.taxReturnsNoDues
       }
 
       "years returns has retuns information for two years" in {
         val domainTrust = trustWithEmploymentTrust.copy(yearsOfTaxConsequence = Some(YearsOfTaxConsequence(Some(false), Some(List(YearReturn("16", false),YearReturn("15", true))))))
-        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
+        val json: JsValue = Json.toJson(domainTrust)(Trust.trustWrites)
 
         (json \ "yearsReturns" \ "returns").get.as[List[YearReturn]] mustBe domainTrust.yearsOfTaxConsequence.get.returns.get
       }
 
       "we don't have years returns" in {
         val domainTrust = trustWithEmploymentTrust.copy(yearsOfTaxConsequence = None)
-        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
+        val json: JsValue = Json.toJson(domainTrust)(Trust.trustWrites)
         (json \ "yearsReturns" ).validate[JsObject].isError  mustBe true
-      }
-
-      "we have a trust commencement date" in {
-        (json \ "details" \ "trust" \ "details" \ "startDate").get.as[DateTime] mustBe domainTrust.commencementDate
-      }
-
-      "we have a trust law country" in {
-        (json \ "details" \ "trust" \ "details" \ "lawCountry").get.as[String] mustBe domainTrust.legality.governingCountryCode
-      }
-
-      "we have an administration country" in {
-        (json \ "details" \ "trust" \ "details" \ "administrationCountry").get.as[String] mustBe domainTrust.legality.administrationCountryCode.get
-      }
-
-      "trust have no administration country" in {
-        val domainTrust = trustWithEmploymentTrust.copy(legality= legality.copy(administrationCountryCode = None))
-        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
-        (json \ "details" \ "trust" \ "details" \ "administrationCountry").validate[JsValue].isError mustBe true
-      }
-
-      "we have a uk resident with scottishLaw flag" in {
-        (json \ "details" \ "trust" \ "details" \ "residentialStatus" \ "uk" \ "scottishLaw").get.as[Boolean] mustBe domainTrust.legality.isEstablishedUnderScottishLaw
-      }
-
-      "we have a uk resident with preoffshore country code details." in {
-        val domainTrust = trustWithEmploymentTrust.copy(legality= legality.copy(previousOffshoreCountryCode = Some("IT")))
-        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
-        (json \ "details" \ "trust" \ "details" \ "residentialStatus" \ "uk" \ "preOffShore").get.as[String] mustBe domainTrust.legality.previousOffshoreCountryCode.get
-      }
-
-      "we have a uk resident with no preoffshore country code details." in {
-        (json \ "details" \ "trust" \ "details" \ "residentialStatus" \ "uk" \ "preOffShore").validate[JsString].isError mustBe true
-      }
-
-      "we have a non uk resident with sch5atcgga92 flag" in {
-        val domainTrust = trustWithEmploymentTrust.copy(isTrustUkResident = false)
-        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
-        (json \ "details" \ "trust" \ "details" \ "residentialStatus" \ "nonUK" \ "sch5atcgga92").get.as[Boolean] mustBe true //TODO: Mapping property sch5atcgga92 missing
-      }
-
-      "we have the rest of non uk resident properties" in {
-        val domainTrust = trustWithEmploymentTrust.copy(isTrustUkResident = false)
-        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
-
-        (json \ "details" \ "trust" \ "details" \ "residentialStatus" \ "nonUK" \ "sch5atcgga92").get.as[Boolean] mustBe true //TODO: Mapping property s218ihta84 missing
-        (json \ "details" \ "trust" \ "details" \ "residentialStatus" \ "nonUK" \ "agentS218IHTA84").get.as[Boolean] mustBe true //TODO: Mapping property agentS218IHTA84 missing
-        (json \ "details" \ "trust" \ "details" \ "residentialStatus" \ "nonUK" \ "trusteeStatus").get.as[String] mustBe "Non Resident Domiciled" //TODO: Mapping property trusteeStatus missing
-      }
-
-      "we have a type of trust" in {
-        (json \ "details" \ "trust" \ "details" \ "typeOfTrust").get.as[String] mustBe domainTrust.trustType.currentTrustType
-      }
-
-      "we have no deed of variation" in {
-        (json \ "details" \ "trust" \ "details" \ "deedOfVariation").validate[JsString].isError mustBe true
-      }
-
-      "we have deed of variation for InterVivoTrust dovTypeReplace" in {
-        val domainTrust = trustWithInterVivoTrustDOV1
-        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
-        (json \ "details" \ "trust" \ "details" \ "deedOfVariation").as[String] mustBe domainTrust.trustType.deedOfVariation.get
-      }
-
-      "we have deed of variation for InterVivoTrust dovTypeAbsolute" in {
-        val domainTrust = trustWithInterVivoTrustDOV
-        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
-        (json \ "details" \ "trust" \ "details" \ "deedOfVariation").as[String] mustBe domainTrust.trustType.deedOfVariation.get
-      }
-
-      "we have deed of variation trust type WillIntestacyTrust" in {
-        val domainTrust = trustWithWillIntestacyTrustDOV
-        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
-        (json \ "details" \ "trust" \ "details" \ "deedOfVariation").as[String] mustBe domainTrust.trustType.deedOfVariation.get
-      }
-
-
-      "we have interVivos of trust which is false " in {
-        val domainTrust = trustWithWillIntestacyTrustDOV
-        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
-        (json \ "details" \ "trust" \ "details" \ "interVivos").as[Boolean] mustBe false
-      }
-
-      "we have interVivos of trust which is true" in {
-        val domainTrust = trustWithInterVivoTrustDOV1
-        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
-        (json \ "details" \ "trust" \ "details" \ "interVivos").as[Boolean] mustBe true
-      }
-
-      "we have an efrbsStartDate" in {
-        (json \ "details" \ "trust" \ "details" \ "efrbsStartDate").get.asOpt[DateTime] mustBe domainTrust.trustType.employmentTrust.get.employerFinancedRetirementBenefitSchemeStartDate
-      }
-
-      "we don't have an efrbsStartDate" in {
-        val employmentTrust = Some(EmploymentTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false, incomeDistribution)))),None,None))
-        val domainTrust = trustWithEmploymentTrust.copy(trustType = TrustType(employmentTrust = employmentTrust))
-        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
-        (json \ "details" \ "trust" \ "details" \ "efrbsStartDate").validate[JsString].isError mustBe true
       }
     }
   }
