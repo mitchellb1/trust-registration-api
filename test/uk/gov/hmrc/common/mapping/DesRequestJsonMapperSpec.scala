@@ -35,14 +35,9 @@ class DesRequestJsonMapperSpec extends PlaySpec with ScalaDataExamples {
           "phoneNumber" -> JsString(trust.telephoneNumber),
           "address" -> Json.toJson(trust.correspondenceAddress)(Address.writesToDes)),
           "declaration" -> Json.toJson(trust.declaration)(Declaration.writesToDes)) ++
-          optAdminAttribute("admin", trust.utr) ++
+          trust.utr.map(v => ("admin", Json.obj("utr" -> JsString(v)))) ++
           trust.yearsOfTaxConsequence.map(v => ("yearsReturns",Json.toJson(v)))
       )
-    }
-    def optAdminAttribute(s: String, option: Option[String]) = {
-      option.map(value => (s, Json.obj(
-        "utr" -> JsString(value)
-      )))
     }
   }
 
