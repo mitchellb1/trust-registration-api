@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustapi.rest.mapping
-
+package uk.gov.hmrc.common.mapping
 
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json._
@@ -25,7 +24,7 @@ import uk.gov.hmrc.utils.ScalaDataExamples
 
 
 
-class TrustMapperSpec extends PlaySpec with ScalaDataExamples {
+class DesRequestJsonMapperSpec extends PlaySpec with ScalaDataExamples {
 
   val trustWrites = new Writes[Trust] {
     def writes(trust: Trust) = {

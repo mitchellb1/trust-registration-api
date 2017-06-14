@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustapi.rest.mapping
+package uk.gov.hmrc.common.mapping
 
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsValue, Json}
