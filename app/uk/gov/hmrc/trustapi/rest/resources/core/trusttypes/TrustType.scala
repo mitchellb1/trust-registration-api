@@ -55,6 +55,11 @@ case class TrustType(willIntestacyTrust: Option[WillIntestacyTrust] = None,
     case wi: WillIntestacyTrust => if (wi.isDovTypeAddition) Some("Addition to the will trust") else None
     case _ => None
   }
+
+  val isInterVivo = definedTrusts.head match {
+    case _: InterVivoTrust => true
+    case _ => false
+  }
 }
 
 object TrustType {

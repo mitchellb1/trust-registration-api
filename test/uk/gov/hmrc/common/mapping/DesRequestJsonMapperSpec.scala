@@ -21,6 +21,8 @@ import org.scalatestplus.play.PlaySpec
 import play.api.libs.json._
 import uk.gov.hmrc.common.rest.resources.core.{Address, Declaration, YearReturn, YearsOfTaxConsequence}
 import uk.gov.hmrc.trustapi.rest.resources.core.Trust
+import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.{Beneficiaries, IndividualBeneficiary}
+import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.{EmploymentTrust, TrustType}
 import uk.gov.hmrc.utils.ScalaDataExamples
 
 
@@ -37,8 +39,11 @@ class DesRequestJsonMapperSpec extends PlaySpec with ScalaDataExamples {
         trustDetails.legality.administrationCountryCode,
         trustDetails.trustType.currentTrustType,
         trustDetails.trustType.deedOfVariation,
+        trustDetails.trustType.isInterVivo,
+        trustDetails.trustType.employmentTrust.flatMap(c=>c.employerFinancedRetirementBenefitSchemeStartDate),
         trustDetails.legality.isEstablishedUnderScottishLaw,
         trustDetails.legality.previousOffshoreCountryCode
+
       ))
 
 
@@ -54,6 +59,8 @@ class DesRequestJsonMapperSpec extends PlaySpec with ScalaDataExamples {
     trustDetails.legality.administrationCountryCode,
     trustDetails.trustType.currentTrustType,
     trustDetails.trustType.deedOfVariation,
+    trustDetails.trustType.isInterVivo,
+    trustDetails.trustType.employmentTrust.flatMap(c=>c.employerFinancedRetirementBenefitSchemeStartDate),
     true, //TODO: Mapping property sch5atcgga92 missing
     Some(true), //TODO: Mapping property s218ihta84 missing
     Some(true), //TODO: Mapping property agentS218IHTA84 missing
@@ -65,7 +72,9 @@ class DesRequestJsonMapperSpec extends PlaySpec with ScalaDataExamples {
       (JsPath \ "lawCountry").write[String] and
       (JsPath \ "administrationCountry").writeNullable[String] and
       (JsPath \ "typeOfTrust").write[String] and
-      (JsPath \ "deedOfVariation").writeNullable[String]
+      (JsPath \ "deedOfVariation").writeNullable[String] and
+      (JsPath \ "interVivos").write[Boolean]  and
+      (JsPath \ "efrbsStartDate").writeNullable[DateTime]
   }
 
   val trustWrites = new Writes[Trust] {
@@ -184,6 +193,48 @@ class DesRequestJsonMapperSpec extends PlaySpec with ScalaDataExamples {
 
       "we have no deed of variation" in {
         (json \ "details" \ "trust" \ "details" \ "deedOfVariation").validate[JsString].isError mustBe true
+      }
+
+      "we have deed of variation for InterVivoTrust dovTypeReplace" in {
+        val domainTrust = trustWithInterVivoTrustDOV1
+        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
+        (json \ "details" \ "trust" \ "details" \ "deedOfVariation").as[String] mustBe domainTrust.trustType.deedOfVariation.get
+      }
+
+      "we have deed of variation for InterVivoTrust dovTypeAbsolute" in {
+        val domainTrust = trustWithInterVivoTrustDOV
+        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
+        (json \ "details" \ "trust" \ "details" \ "deedOfVariation").as[String] mustBe domainTrust.trustType.deedOfVariation.get
+      }
+
+      "we have deed of variation trust type WillIntestacyTrust" in {
+        val domainTrust = trustWithWillIntestacyTrustDOV
+        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
+        (json \ "details" \ "trust" \ "details" \ "deedOfVariation").as[String] mustBe domainTrust.trustType.deedOfVariation.get
+      }
+
+
+      "we have interVivos of trust which is false " in {
+        val domainTrust = trustWithWillIntestacyTrustDOV
+        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
+        (json \ "details" \ "trust" \ "details" \ "interVivos").as[Boolean] mustBe false
+      }
+
+      "we have interVivos of trust which is true" in {
+        val domainTrust = trustWithInterVivoTrustDOV1
+        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
+        (json \ "details" \ "trust" \ "details" \ "interVivos").as[Boolean] mustBe true
+      }
+
+      "we have an efrbsStartDate" in {
+        (json \ "details" \ "trust" \ "details" \ "efrbsStartDate").get.asOpt[DateTime] mustBe domainTrust.trustType.employmentTrust.get.employerFinancedRetirementBenefitSchemeStartDate
+      }
+
+      "we don't have an efrbsStartDate" in {
+        val employmentTrust = Some(EmploymentTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false, incomeDistribution)))),None,None))
+        val domainTrust = trustWithEmploymentTrust.copy(trustType = TrustType(employmentTrust = employmentTrust))
+        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
+        (json \ "details" \ "trust" \ "details" \ "efrbsStartDate").validate[JsString].isError mustBe true
       }
     }
   }
