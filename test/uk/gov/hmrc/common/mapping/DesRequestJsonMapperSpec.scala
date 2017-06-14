@@ -15,7 +15,8 @@
  */
 
 package uk.gov.hmrc.common.mapping
-
+import play.api.libs.functional.syntax._
+import org.joda.time.DateTime
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json._
 import uk.gov.hmrc.common.rest.resources.core.{Address, Declaration, YearReturn, YearsOfTaxConsequence}
@@ -26,6 +27,41 @@ import uk.gov.hmrc.utils.ScalaDataExamples
 
 class DesRequestJsonMapperSpec extends PlaySpec with ScalaDataExamples {
 
+  val trustDetailsToDesUkWrites: Writes[Trust] = (
+      commonDetails and
+      (JsPath \ "residentialStatus" \ "uk" \ "scottishLaw").write[Boolean] and
+      (JsPath \ "residentialStatus" \ "uk" \ "preOffShore").writeNullable[String]
+    )(trustDetails =>  (
+        trustDetails.commencementDate,
+        trustDetails.legality.governingCountryCode,
+        trustDetails.legality.administrationCountryCode,
+        trustDetails.legality.isEstablishedUnderScottishLaw,
+        trustDetails.legality.previousOffshoreCountryCode
+      ))
+
+
+  private def commonDetails = {
+      (JsPath \ "startDate").write[DateTime] and
+      (JsPath \ "lawCountry").write[String] and
+      (JsPath \ "administrationCountry").writeNullable[String]
+  }
+
+  val trustDetailsToDesNonUkResidentWrites: Writes[Trust] = (
+      commonDetails and
+      (JsPath \ "residentialStatus" \ "nonUK" \ "sch5atcgga92").write[Boolean] and
+      (JsPath \ "residentialStatus" \ "nonUK" \ "s218ihta84").writeNullable[Boolean] and
+      (JsPath \ "residentialStatus" \ "nonUK" \ "agentS218IHTA84").writeNullable[Boolean] and
+      (JsPath \ "residentialStatus" \ "nonUK" \ "trusteeStatus").writeNullable[String]
+    )(trustDetails =>  (
+    trustDetails.commencementDate,
+    trustDetails.legality.governingCountryCode,
+    trustDetails.legality.administrationCountryCode,
+    true, //TODO: Mapping property sch5atcgga92 missing
+    Some(true), //TODO: Mapping property s218ihta84 missing
+    Some(true), //TODO: Mapping property agentS218IHTA84 missing
+    Some("Non Resident Domiciled") //TODO: Mapping property trusteeStatus missing
+  ))
+
   val trustWrites = new Writes[Trust] {
     def writes(trust: Trust) = {
       JsObject(
@@ -34,9 +70,13 @@ class DesRequestJsonMapperSpec extends PlaySpec with ScalaDataExamples {
           "name" -> JsString(trust.name),
           "phoneNumber" -> JsString(trust.telephoneNumber),
           "address" -> Json.toJson(trust.correspondenceAddress)(Address.writesToDes)),
-          "declaration" -> Json.toJson(trust.declaration)(Declaration.writesToDes)) ++
+          "declaration" -> Json.toJson(trust.declaration)(Declaration.writesToDes),
+          "details" -> Json.obj(
+            "trust"-> Json.obj(
+              "details"-> Json.toJson(trust)(if (trust.isTrustUkResident) trustDetailsToDesUkWrites else trustDetailsToDesNonUkResidentWrites)))) ++
           trust.utr.map(v => ("admin", Json.obj("utr" -> JsString(v)))) ++
           trust.yearsOfTaxConsequence.map(v => ("yearsReturns",Json.toJson(v)))
+
       )
     }
   }
@@ -64,7 +104,7 @@ class DesRequestJsonMapperSpec extends PlaySpec with ScalaDataExamples {
         (json \ "admin" \ "utr").get mustBe JsString(domainTrust.utr.get)
       }
       "There is no UTR" in {
-        json.toString() mustNot include("admin")
+        (json \ "admin" ).validate[JsObject].isError  mustBe true
       }
       "we have years returns with taxreturnnodues flag" in {
         val domainTrust = trustWithEmploymentTrust.copy(yearsOfTaxConsequence = Some(YearsOfTaxConsequence(Some(false))))
@@ -82,7 +122,54 @@ class DesRequestJsonMapperSpec extends PlaySpec with ScalaDataExamples {
       "we don't have years returns" in {
         val domainTrust = trustWithEmploymentTrust.copy(yearsOfTaxConsequence = None)
         val json: JsValue = Json.toJson(domainTrust)(trustWrites)
-        json.toString() mustNot include("yearsReturns")
+        (json \ "yearsReturns" ).validate[JsObject].isError  mustBe true
+      }
+
+      "we have a trust commencement date" in {
+        (json \ "details" \ "trust" \ "details" \ "startDate").get.as[DateTime] mustBe domainTrust.commencementDate
+      }
+
+      "we have a trust law country" in {
+        (json \ "details" \ "trust" \ "details" \ "lawCountry").get.as[String] mustBe domainTrust.legality.governingCountryCode
+      }
+
+      "we have an administration country" in {
+        (json \ "details" \ "trust" \ "details" \ "administrationCountry").get.as[String] mustBe domainTrust.legality.administrationCountryCode.get
+      }
+
+      "trust have no administration country" in {
+        val domainTrust = trustWithEmploymentTrust.copy(legality= legality.copy(administrationCountryCode = None))
+        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
+        (json \ "details" \ "trust" \ "details" \ "administrationCountry").validate[JsValue].isError mustBe true
+      }
+
+      "we have a uk resident with scottishLaw flag" in {
+        (json \ "details" \ "trust" \ "details" \ "residentialStatus" \ "uk" \ "scottishLaw").get.as[Boolean] mustBe domainTrust.legality.isEstablishedUnderScottishLaw
+      }
+
+      "we have a uk resident with preoffshore country code details." in {
+        val domainTrust = trustWithEmploymentTrust.copy(legality= legality.copy(previousOffshoreCountryCode = Some("IT")))
+        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
+        (json \ "details" \ "trust" \ "details" \ "residentialStatus" \ "uk" \ "preOffShore").get.as[String] mustBe domainTrust.legality.previousOffshoreCountryCode.get
+      }
+
+      "we have a uk resident with no preoffshore country code details." in {
+        (json \ "details" \ "trust" \ "details" \ "residentialStatus" \ "uk" \ "preOffShore").validate[JsString].isError mustBe true
+      }
+
+      "we have a non uk resident with sch5atcgga92 flag" in {
+        val domainTrust = trustWithEmploymentTrust.copy(isTrustUkResident = false)
+        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
+        (json \ "details" \ "trust" \ "details" \ "residentialStatus" \ "nonUK" \ "sch5atcgga92").get.as[Boolean] mustBe true //TODO: Mapping property sch5atcgga92 missing
+      }
+
+      "we have the rest of non uk resident properties" in {
+        val domainTrust = trustWithEmploymentTrust.copy(isTrustUkResident = false)
+        val json: JsValue = Json.toJson(domainTrust)(trustWrites)
+
+        (json \ "details" \ "trust" \ "details" \ "residentialStatus" \ "nonUK" \ "sch5atcgga92").get.as[Boolean] mustBe true //TODO: Mapping property s218ihta84 missing
+        (json \ "details" \ "trust" \ "details" \ "residentialStatus" \ "nonUK" \ "agentS218IHTA84").get.as[Boolean] mustBe true //TODO: Mapping property agentS218IHTA84 missing
+        (json \ "details" \ "trust" \ "details" \ "residentialStatus" \ "nonUK" \ "trusteeStatus").get.as[String] mustBe "Non Resident Domiciled" //TODO: Mapping property trusteeStatus missing
       }
     }
   }
