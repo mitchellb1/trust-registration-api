@@ -19,7 +19,7 @@ package uk.gov.hmrc.trustapi.rest.resources.core
 import play.api.libs.functional.syntax._
 import org.joda.time.DateTime
 import play.api.libs.json._
-import uk.gov.hmrc.common.rest.resources.core.{Address, Declaration, Legality, YearsOfTaxConsequence}
+import uk.gov.hmrc.common.rest.resources.core._
 import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.TrustType
 
 case class Trust(name: String,
@@ -85,6 +85,30 @@ object Trust {
     trustDetails.legality
   ))
 
+
+  val naturalPeopleWrites : Writes[NaturalPeople] = (
+    (JsPath).writeNullable[List[Individual]](individualListWrites) and
+      (JsPath \ "somethingto").writeNullable[String]//TODO to remove this
+    )(naturalPeople => (naturalPeople.individuals, None))
+
+
+   val individualWrites: Writes[Individual] = (
+     (JsPath \ "name" \ "firstName").write[String] and
+      (JsPath \ "name" \ "middleName").writeNullable[String] and
+      (JsPath \ "name" \ "lastName").write[String] and
+       (JsPath \ "dateOfBirth").write[DateTime]  and
+       (JsPath \ "identification" \ "nino").writeNullable[String]
+     ) (indv => (indv.givenName, indv.otherName, indv.familyName,indv.dateOfBirth, indv.nino))
+
+
+  def individualListWrites: Writes[List[Individual]] = (
+    (JsPath \"naturalPerson").format[JsArray].inmap(
+      (v: JsArray) => v.value.map(v => v.as[Individual]).toList,
+      (l: List[Individual]) => JsArray(l.map(indv => Json.toJson(indv)(individualWrites)))
+    ))
+
+
+
   val trustWrites = new Writes[Trust] {
     def writes(trust: Trust) = {
       JsObject(
@@ -96,10 +120,14 @@ object Trust {
           "declaration" -> Json.toJson(trust.declaration)(Declaration.writesToDes),
           "details" -> Json.obj(
             "trust"-> Json.obj(
-              "details"-> Json.toJson(trust)(Trust.trustDetailsToDesWrites(trust.isTrustUkResident))))) ++
+              "details"-> Json.toJson(trust)(Trust.trustDetailsToDesWrites(trust.isTrustUkResident))))
+          ) ++
           trust.utr.map(v => ("admin", Json.obj("utr" -> JsString(v)))) ++
-          trust.yearsOfTaxConsequence.map(v => ("yearsReturns",Json.toJson(v)))
-      )
+          trust.yearsOfTaxConsequence.map(v => ("yearsReturns",Json.toJson(v))) ++
+          trust.naturalPeople.map(n => ("entities", Json.toJson(n)(naturalPeopleWrites))
+            ))
+
+
     }
   }
 }
