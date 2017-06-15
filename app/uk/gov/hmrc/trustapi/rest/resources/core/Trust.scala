@@ -88,7 +88,7 @@ object Trust {
 
   val naturalPeopleWrites : Writes[NaturalPeople] = (
     (JsPath).writeNullable[List[Individual]](individualListWrites) and
-      (JsPath \ "somethingto").writeNullable[String]//TODO to remove this
+      (JsPath \ "somethingto").writeNullable[String]//TODO need to remove 
     )(naturalPeople => (naturalPeople.individuals, None))
 
 
@@ -100,7 +100,7 @@ object Trust {
        (JsPath \ "identification" \ "nino").writeNullable[String]
      ) (indv => (indv.givenName, indv.otherName, indv.familyName,indv.dateOfBirth, indv.nino))
 
-
+//TODO check if any alternate way possible.
   def individualListWrites: Writes[List[Individual]] = (
     (JsPath \"naturalPerson").format[JsArray].inmap(
       (v: JsArray) => v.value.map(v => v.as[Individual]).toList,
