@@ -87,22 +87,20 @@ object Trust {
 
 
   val naturalPeopleWrites : Writes[NaturalPeople] = (
-    (JsPath).writeNullable[List[Individual]](individualListWrites) and
-      (JsPath \ "somethingto").writeNullable[String]//TODO need to remove 
-    )(naturalPeople => (naturalPeople.individuals, None))
+      (JsPath).writeNullable[List[Individual]](individualListWrites).contramap(_.individuals)
+    )
 
-
-   val individualWrites: Writes[Individual] = (
-     (JsPath \ "name" \ "firstName").write[String] and
+  val individualWrites: Writes[Individual] = (
+    (JsPath \ "name" \ "firstName").write[String] and
       (JsPath \ "name" \ "middleName").writeNullable[String] and
       (JsPath \ "name" \ "lastName").write[String] and
-       (JsPath \ "dateOfBirth").write[DateTime]  and
-       (JsPath \ "identification" \ "nino").writeNullable[String]
-     ) (indv => (indv.givenName, indv.otherName, indv.familyName,indv.dateOfBirth, indv.nino))
+      (JsPath \ "dateOfBirth").write[DateTime] and
+      (JsPath \ "identification" \ "nino").writeNullable[String]
+    ) (indv => (indv.givenName, indv.otherName, indv.familyName, indv.dateOfBirth, indv.nino))
 
-//TODO check if any alternate way possible.
+  //TODO check if any alternate way possible.
   def individualListWrites: Writes[List[Individual]] = (
-    (JsPath \"naturalPerson").format[JsArray].inmap(
+    (JsPath \ "naturalPerson").format[JsArray].inmap(
       (v: JsArray) => v.value.map(v => v.as[Individual]).toList,
       (l: List[Individual]) => JsArray(l.map(indv => Json.toJson(indv)(individualWrites)))
     ))
