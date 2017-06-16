@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.trustapi.rest.resources.core
 
-import play.api.libs.json.Json
+import play.api.libs.json._
 import uk.gov.hmrc.common.rest.resources.core.Individual
 
 case class NaturalPeople(individuals: Option[List[Individual]]) {
@@ -27,4 +27,10 @@ case class NaturalPeople(individuals: Option[List[Individual]]) {
 
 object NaturalPeople {
   implicit val naturalPeopleFormats = Json.format[NaturalPeople]
+
+  def addDesNaturalPeople(ppl: Option[NaturalPeople]): JsValue = {
+    if (ppl.isEmpty) JsNull else JsObject(Map("naturalPerson" -> JsArray(
+      ppl.get.individuals.get.map(c=>Json.toJson(c)(Individual.writesToDes))
+    )))
+  }
 }

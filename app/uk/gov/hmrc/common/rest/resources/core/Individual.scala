@@ -17,7 +17,9 @@
 package uk.gov.hmrc.common.rest.resources.core
 
 import org.joda.time.DateTime
-import play.api.libs.json.{JsString, Json, Reads, Writes}
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
+
 
 case class Individual(givenName: String,
                       familyName: String,
@@ -32,4 +34,12 @@ object Individual {
   implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
   implicit val dateWrites: Writes[DateTime] = Writes { (dt: DateTime) => JsString(dt.toString("yyyy-MM-dd")) }
   implicit val formats = Json.format[Individual]
+
+  val writesToDes: Writes[Individual] = (
+    (JsPath \ "name" \ "firstName").write[String] and
+      (JsPath \ "name" \ "middleName").writeNullable[String] and
+      (JsPath \ "name" \ "lastName").write[String] and
+      (JsPath \ "dateOfBirth").write[DateTime] and
+      (JsPath \ "identification" \ "nino").writeNullable[String]
+    ) (indv => (indv.givenName, indv.otherName, indv.familyName, indv.dateOfBirth, indv.nino))
 }
