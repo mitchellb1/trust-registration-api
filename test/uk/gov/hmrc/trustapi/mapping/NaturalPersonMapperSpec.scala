@@ -61,7 +61,7 @@ class NaturalPersonMapperSpec extends PlaySpec with OneAppPerSuite with ScalaDat
         ( naturalPersonList \  "dateOfBirth").get.as[DateTime] mustBe domainTrust.naturalPeople.get.individuals.get.head.dateOfBirth
       }
 
-      "we have entities natural person with identification ie nino" in {
+      "we have entities natural person with nino as identification" in {
         val naturalPeopleWithNino = Some(NaturalPeople(Some(List(individualwithNino))))
         val domainTrust = trustWithEmploymentTrust.copy(naturalPeople = naturalPeopleWithNino)
         val json: JsValue = Json.toJson(domainTrust)(Trust.trustWrites)
