@@ -58,7 +58,7 @@ object Trust {
       (JsPath \ "deedOfVariation").writeNullable[String] and
       (JsPath \ "interVivos").write[Boolean]  and
       (JsPath \ "efrbsStartDate").writeNullable[DateTime] and
-      (JsPath).write[Legality](if (isUkResident) Legality.ukResidentDetailsWritesToDes else Legality.nonUkResidentDetailsWritesToDes)
+      (JsPath).write[Legality](Legality.residentDetailsToDes(isUkResident))
     )(trustDetails =>  (
     trustDetails.commencementDate,
     trustDetails.legality.governingCountryCode,

@@ -35,8 +35,6 @@ object Declaration {
   implicit val formats = Json.format[Declaration]
   val writesToDes: Writes[Declaration] = (
     (JsPath \ "address").write[Address](Address.writesToDes) and
-      (JsPath \ "name" \ "firstName").write[String] and
-      (JsPath \ "name" \ "middleName").writeNullable[String] and
-      (JsPath \ "name" \ "lastName").write[String]
-    )(declaration => (declaration.correspondenceAddress,declaration.givenName,declaration.otherName, declaration.familyName))
+      (JsPath \ "name").write[(String,Option[String],String)](Individual.nameWritesToDes)
+    )(declaration => (declaration.correspondenceAddress,(declaration.givenName,declaration.otherName, declaration.familyName)))
 }

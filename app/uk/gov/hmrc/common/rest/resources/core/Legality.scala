@@ -27,6 +27,11 @@ case class Legality(governingCountryCode: String,
 object Legality {
   implicit val formats = Json.format[Legality]
 
+
+  def residentDetailsToDes(isUkResident: Boolean): Writes[Legality] = {
+    if (isUkResident)  ukResidentDetailsWritesToDes else nonUkResidentDetailsWritesToDes
+  }
+
   val ukResidentDetailsWritesToDes : Writes[Legality] = (
     (JsPath \ "residentialStatus" \ "uk" \ "scottishLaw").write[Boolean] and
       (JsPath \ "residentialStatus" \ "uk" \ "preOffShore").writeNullable[String]

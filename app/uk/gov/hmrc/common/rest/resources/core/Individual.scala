@@ -35,11 +35,17 @@ object Individual {
   implicit val dateWrites: Writes[DateTime] = Writes { (dt: DateTime) => JsString(dt.toString("yyyy-MM-dd")) }
   implicit val formats = Json.format[Individual]
 
+
+
+  val nameWritesToDes: Writes[(String,Option[String],String)] = (
+    (JsPath \ "firstName").write[String] and
+      (JsPath \ "middleName").writeNullable[String] and
+      (JsPath \ "lastName").write[String]
+    )(n => (n._1,n._2,n._3))
+
   val writesToDes: Writes[Individual] = (
-    (JsPath \ "name" \ "firstName").write[String] and
-      (JsPath \ "name" \ "middleName").writeNullable[String] and
-      (JsPath \ "name" \ "lastName").write[String] and
+    (JsPath \ "name").write[(String,Option[String],String)](nameWritesToDes) and
       (JsPath \ "dateOfBirth").write[DateTime] and
       (JsPath \ "identification" \ "nino").writeNullable[String]
-    ) (indv => (indv.givenName, indv.otherName, indv.familyName, indv.dateOfBirth, indv.nino))
+    ) (indv => ((indv.givenName, indv.otherName, indv.familyName), indv.dateOfBirth, indv.nino))
 }
