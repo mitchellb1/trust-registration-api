@@ -16,9 +16,12 @@
 
 package uk.gov.hmrc.trustapi.mapping
 
+import org.joda.time.DateTime
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
 import uk.gov.hmrc.trustapi.rest.resources.core.Trust
+import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.{Beneficiaries, IndividualBeneficiary}
+import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.{EmploymentTrust, TrustType}
 import uk.gov.hmrc.utils.ScalaDataExamples
 
 class BeneficiaryMapperSpec extends PlaySpec with OneAppPerSuite with ScalaDataExamples {
@@ -26,11 +29,31 @@ class BeneficiaryMapperSpec extends PlaySpec with OneAppPerSuite with ScalaDataE
   "Beneficiary Mapper" should {
     "Map a domain representation of beneficiaries to a valid JSON Representation of DES beneficiaries" when {
       "we have individual beneficiaries" when {
-        "and we have a name" in {
+        "we have a name" in {
           val domainTrust = trustWithEmploymentTrust
           val json = Json.toJson(domainTrust)(Trust.trustWrites)
+
           val beneficiariesList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "individualDetails")(0)
           (beneficiariesList \ "name" \ "firstName").get.as[String] mustBe domainTrust.trustType.employmentTrust.get.beneficiaries.individualBeneficiaries.get.head.individual.givenName
+          (beneficiariesList \ "name" \ "lastName").get.as[String] mustBe domainTrust.trustType.employmentTrust.get.beneficiaries.individualBeneficiaries.get.head.individual.familyName
+        }
+
+        "we have a name with otherName/middelName" in {
+          val employmentTrust = Some(EmploymentTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individualWithOtherName,false, incomeDistribution)))),Some(true),Some(new DateTime("1900-01-01"))))
+          val domainTrust = trustWithEmploymentTrust.copy(trustType = TrustType(employmentTrust=employmentTrust))
+          val json = Json.toJson(domainTrust)(Trust.trustWrites)
+
+          val beneficiariesList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "individualDetails")(0)
+          (beneficiariesList \ "name" \ "middleName").get.as[String] mustBe domainTrust.trustType.employmentTrust.get.beneficiaries.individualBeneficiaries.get.head.individual.otherName.get
+        }
+
+        "we have date of birth details" in {
+          val domainTrust = trustWithEmploymentTrust
+          val json = Json.toJson(domainTrust)(Trust.trustWrites)
+          println(json)
+          val beneficiariesList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "individualDetails")(0)
+          //TODO
+          //(beneficiariesList \ "dateOfBirth").get.as[String] mustBe "1900-01-01"
         }
       }
     }

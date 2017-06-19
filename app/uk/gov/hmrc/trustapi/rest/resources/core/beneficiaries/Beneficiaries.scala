@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries
 
+import org.joda.time.DateTime
 import play.api.libs.json._
 import uk.gov.hmrc.common.rest.resources.core.Individual
 import uk.gov.hmrc.common.rest.resources.core.Individual.nameWritesToDes
@@ -47,8 +48,8 @@ object Beneficiaries {
 
   val writesToBeneficiary: Writes[Individual] = (
     (JsPath \ "name").write[(String,Option[String],String)](nameWritesToDes) and
-      (JsPath \ "something").writeNullable[String]
-    ) (indv => ((indv.givenName, indv.otherName, indv.familyName),None))
+      (JsPath \ "dateOfBirth").write[DateTime]
+    ) (indv => ((indv.givenName, indv.otherName, indv.familyName),indv.dateOfBirth))
 }
 
 
