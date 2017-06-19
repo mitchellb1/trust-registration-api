@@ -19,10 +19,9 @@ package uk.gov.hmrc.trustapi.rest.resources.core
 import org.joda.time.DateTime
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
-import uk.gov.hmrc.common.rest.resources.core.Individual.nameWritesToDes
 import uk.gov.hmrc.common.rest.resources.core._
-import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.IndividualBeneficiary
-import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.{EmploymentTrust, TrustType}
+import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.Beneficiaries
+import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.TrustType
 
 case class Trust(name: String,
                  correspondenceAddress: Address,
@@ -75,6 +74,7 @@ object Trust {
   ))
 
 
+
   val trustWrites = new Writes[Trust] {
     def writes(trust: Trust) = {
       val trustsMap =  Map("correspondence" -> Json.obj(
@@ -87,41 +87,12 @@ object Trust {
           "trust"-> Json.obj(
             "details"-> Json.toJson(trust)(Trust.trustDetailsToDesWrites(trust.isTrustUkResident)),
             "entities" -> Json.obj(
-              "beneficiary" -> addBeneficiary(trust.trustType)))))
-      val naturalPeople =   Map("entities" -> NaturalPeople.addDesNaturalPeople(trust.naturalPeople))
+              "naturalPerson" -> trust.naturalPeople.map(c=>JsArray(c.individuals.get.map(c=>Json.toJson(c)(Individual.writesToDes)))),
+              "beneficiary" -> Beneficiaries.addBeneficiary(trust.trustType)))))
 
-      JsObject(trustsMap ++ naturalPeople ++
+      JsObject(trustsMap ++
           trust.utr.map(v => ("admin", Json.obj("utr" -> JsString(v)))) ++
           trust.yearsOfTaxConsequence.map(v => ("yearsReturns",Json.toJson(v))))
     }
   }
-
-
-
-  def addBeneficiary(trustType: TrustType): JsValue ={
-    trustType.definedTrusts.head match {
-      case  empTrust: EmploymentTrust =>{
-       val indvBeneficiary = empTrust.beneficiaries.individualBeneficiaries
-          addIndvBenificiary(indvBeneficiary)
-      }
-      case _ => JsNull
-    }
-  }
-
-
-
-  val writesToBeneficiary: Writes[Individual] = (
-    (JsPath \ "name").write[(String,Option[String],String)](nameWritesToDes) and
-      (JsPath \ "something").writeNullable[String]
-    ) (indv => ((indv.givenName, indv.otherName, indv.familyName),None))
-
-  def addIndvBenificiary(indvBeneficiary: Option[List[IndividualBeneficiary]]): JsValue = {
-    if (indvBeneficiary.isEmpty) JsNull else JsObject(Map("individualDetails" -> JsArray(
-      indvBeneficiary.get.map(c => Json.toJson(c.individual)(writesToBeneficiary))
-    )))
-  }
-
-
-
-
 }

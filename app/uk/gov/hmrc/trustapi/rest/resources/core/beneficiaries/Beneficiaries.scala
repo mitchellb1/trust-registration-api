@@ -16,7 +16,12 @@
 
 package uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries
 
-import play.api.libs.json.Json
+import play.api.libs.json._
+import uk.gov.hmrc.common.rest.resources.core.Individual
+import uk.gov.hmrc.common.rest.resources.core.Individual.nameWritesToDes
+import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.{EmploymentTrust, TrustType}
+import play.api.libs.functional.syntax._
+
 
 case class Beneficiaries(individualBeneficiaries: Option[List[IndividualBeneficiary]] = None,
                          employeeBeneficiaries: Option[List[EmployeeBeneficiary]] = None,
@@ -30,6 +35,20 @@ case class Beneficiaries(individualBeneficiaries: Option[List[IndividualBenefici
 
 object Beneficiaries {
   implicit val beneficiariesFormat = Json.format[Beneficiaries]
+
+  def addBeneficiary(trustType: TrustType): JsValue ={
+    trustType.definedTrusts.head match {
+      case  empTrust: EmploymentTrust =>{
+        empTrust.beneficiaries.individualBeneficiaries.map(ind=>JsObject(Map("individualDetails" -> JsArray(ind.map(c => Json.toJson(c.individual)(writesToBeneficiary)))))).getOrElse(JsNull)
+      }
+      case _ => JsNull
+    }
+  }
+
+  val writesToBeneficiary: Writes[Individual] = (
+    (JsPath \ "name").write[(String,Option[String],String)](nameWritesToDes) and
+      (JsPath \ "something").writeNullable[String]
+    ) (indv => ((indv.givenName, indv.otherName, indv.familyName),None))
 }
 
 
