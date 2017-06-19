@@ -17,13 +17,11 @@
 package uk.gov.hmrc.trustapi.mapping
 
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
-import play.api.libs.json.Json
-import uk.gov.hmrc.trustapi.rest.resources.core.Trust
 import uk.gov.hmrc.utils.ScalaDataExamples
 
 class BeneficiaryMapperSpec extends PlaySpec with OneAppPerSuite with ScalaDataExamples {
 
-  "Beneficiary Mapper" should {
+/*  "Beneficiary Mapper" should {
     "Map a domain representation of beneficiaries to a valid JSON Representation of DES beneficiaries" when {
       "we have individual beneficiaries" when {
         "and we have a name" in {
@@ -35,5 +33,5 @@ class BeneficiaryMapperSpec extends PlaySpec with OneAppPerSuite with ScalaDataE
         }
       }
     }
-  }
+  }*/
 }

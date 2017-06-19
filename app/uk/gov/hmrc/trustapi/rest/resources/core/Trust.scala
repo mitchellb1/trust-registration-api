@@ -85,17 +85,12 @@ object Trust {
         "declaration" -> Json.toJson(trust.declaration)(Declaration.writesToDes),
         "details" -> Json.obj(
           "trust"-> Json.obj(
-            "details"-> Json.toJson(trust)(Trust.trustDetailsToDesWrites(trust.isTrustUkResident)))),
-        "entities" -> Json.obj(
-          "beneficiary" -> addBeneficiary(trust.trustType)
-        )
-      )
+            "details"-> Json.toJson(trust)(Trust.trustDetailsToDesWrites(trust.isTrustUkResident)),
+            "entities" -> Json.obj(
+              "beneficiary" -> addBeneficiary(trust.trustType)))))
       val naturalPeople =   Map("entities" -> NaturalPeople.addDesNaturalPeople(trust.naturalPeople))
 
-      val merged = trustsMap.toSeq ++ naturalPeople.toSeq // naturalPeople, (_, av, bv: String) => Seq(av, bv))
-
-
-      JsObject(merged ++
+      JsObject(trustsMap ++ naturalPeople ++
           trust.utr.map(v => ("admin", Json.obj("utr" -> JsString(v)))) ++
           trust.yearsOfTaxConsequence.map(v => ("yearsReturns",Json.toJson(v))))
     }
