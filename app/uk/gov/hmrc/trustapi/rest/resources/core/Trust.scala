@@ -73,9 +73,9 @@ object Trust {
 
   val entitiesWrites : Writes[Trust] = (
     (JsPath \ "naturalPerson").writeNullable[List[JsValue]] and
-      (JsPath \ "beneficiary").write[JsValue]
+      (JsPath \ "beneficiary").write[TrustType](Beneficiaries.beneficiaryWritesToDes)
   )(t => (t.naturalPeople.flatMap(np=>np.individuals.map(inds => inds.map(i => Json.toJson(i)(Individual.writesToDes)))),
-    Beneficiaries.addBeneficiary(t.trustType)))
+    t.trustType))
 
   val trustWrites = new Writes[Trust] {
     def writes(trust: Trust) = {
