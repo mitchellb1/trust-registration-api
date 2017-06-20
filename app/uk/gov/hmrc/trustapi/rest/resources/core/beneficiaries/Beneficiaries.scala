@@ -66,8 +66,10 @@ object Beneficiaries {
 
 
   val companyBeneficiaryWritesToDes: Writes[CompanyBeneficiary] = (
-    (JsPath \ "organisationName").write[String]
-    ).contramap(_.company.name)
+     (JsPath \ "organisationName").write[String] and
+       (JsPath \ "beneficiaryDiscretion").write[Boolean] and
+       (JsPath \ "beneficiaryShareOfIncome").writeNullable[String]
+    )(c=> (c.company.name, c.incomeDistribution.isIncomeAtTrusteeDiscretion, c.incomeDistribution.shareOfIncome.map(c=>c.toString)))
 
   val individualBeneficiaryWritesToDes: Writes[IndividualBeneficiary] = (
     (JsPath \ "name").write[(String,Option[String],String)](nameWritesToDes) and
