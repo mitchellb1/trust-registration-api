@@ -95,7 +95,10 @@ class BeneficiaryMapperSpec extends PlaySpec with OneAppPerSuite with ScalaDataE
       }
 
       "we have company beneficiaries" when {
-        "we have orgnisation name " in {
+        val domainTrust = trustWithEmploymentTrustAndCompanyBen
+        val json = Json.toJson(domainTrust)(Trust.trustWrites)
+
+        "we have organisation name " in {
           val companyBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "company")(0)
           (companyBeneficaryList \ "organisationName").get.as[String] mustBe domainTrust.trustType.employmentTrust.get.beneficiaries.companyBeneficiaries.get.head.company.name
         }

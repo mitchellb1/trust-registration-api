@@ -216,8 +216,12 @@ trait ScalaDataExamples {
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(Some(List(individual,individual)))), TrustType(heritageMaintenanceFundTrust = heritageFund),declaration)
 
   val employmentTrust = Some(EmploymentTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false, incomeDistribution)))),Some(true),Some(new DateTime("1900-01-01"))))
+  val employmentTrustWithCompanyBeneficiaries = Some(EmploymentTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false, incomeDistribution))), companyBeneficiaries = Some(List(companyBeneficiary))),Some(true),Some(new DateTime("1900-01-01"))))
   val trustWithEmploymentTrust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1900-01-01"),yearsOfTaxConsequence,legality,true,leadTrusteeIndividual, Trustees(None, None),
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(Some(List(individual,individual)))), TrustType(employmentTrust = employmentTrust),declaration)
+
+
+  val trustWithEmploymentTrustAndCompanyBen = trustWithEmploymentTrust.copy(trustType = TrustType(employmentTrust = employmentTrustWithCompanyBeneficiaries))
 
   val flatManagementFund = Some(FlatManagementSinkingFundTrust(monetaryAssets , Beneficiaries(otherBeneficiaries = otherBeneficiaries)))
   val trustWithFlatManagementFund = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1900-01-01"),yearsOfTaxConsequence,legality,true,leadTrusteeIndividual, Trustees(None, None),
