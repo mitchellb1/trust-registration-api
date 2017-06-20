@@ -50,9 +50,6 @@ object Trust {
   implicit val formats = Json.format[Trust]
 
 
-
-
-
   def trustDetailsToDesWrites(isUkResident: Boolean): Writes[Trust] = (
     (JsPath \ "startDate").write[DateTime] and
       (JsPath \ "lawCountry").write[String] and
@@ -74,6 +71,11 @@ object Trust {
   ))
 
 
+  val entitiesWrites : Writes[Trust] = (
+    (JsPath \ "naturalPerson").writeNullable[List[JsValue]] and
+      (JsPath \ "beneficiary").write[JsValue]
+  )(t => (t.naturalPeople.flatMap(np=>np.individuals.map(inds => inds.map(i => Json.toJson(i)(Individual.writesToDes)))),
+    Beneficiaries.addBeneficiary(t.trustType)))
 
   val trustWrites = new Writes[Trust] {
     def writes(trust: Trust) = {
@@ -86,9 +88,7 @@ object Trust {
         "details" -> Json.obj(
           "trust"-> Json.obj(
             "details"-> Json.toJson(trust)(Trust.trustDetailsToDesWrites(trust.isTrustUkResident)),
-            "entities" -> Json.obj(
-              "naturalPerson" -> trust.naturalPeople.map(c=>JsArray(c.individuals.get.map(c=>Json.toJson(c)(Individual.writesToDes)))),
-              "beneficiary" -> Beneficiaries.addBeneficiary(trust.trustType)))))
+            "entities" -> Json.toJson(trust)(entitiesWrites))))
 
       JsObject(trustsMap ++
           trust.utr.map(v => ("admin", Json.obj("utr" -> JsString(v)))) ++
