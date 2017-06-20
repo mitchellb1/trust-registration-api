@@ -43,10 +43,10 @@ object Beneficiaries {
   val beneficiaryWritesToDes : Writes [TrustType] = (
     (JsPath \ "individualDetails").writeNullable[JsValue] and
     (JsPath \ "company").writeNullable[JsValue]
-  )(t=> (addBeneficiary(t),addCompanyBeneficiary(t)))
+  )(b=> (addIndividualBeneficiary(b),addCompanyBeneficiary(b)))
 
 
-  def addBeneficiary(trustType: TrustType): Option[JsValue] ={
+  def addIndividualBeneficiary(trustType: TrustType): Option[JsValue] ={
     trustType.definedTrusts.head match {
       case  empTrust: EmploymentTrust =>{
         empTrust.beneficiaries.individualBeneficiaries.map(ind=>JsArray(ind.map(c => Json.toJson(c)(individualBeneficiaryWritesToDes))))
