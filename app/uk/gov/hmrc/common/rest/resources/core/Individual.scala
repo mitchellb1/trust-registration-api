@@ -48,4 +48,10 @@ object Individual {
       (JsPath \ "dateOfBirth").write[DateTime] and
       (JsPath \ "identification" \ "nino").writeNullable[String]
     ) (indv => ((indv.givenName, indv.otherName, indv.familyName), indv.dateOfBirth, indv.nino))
+
+  val identificationWritesToDes : Writes[Individual] = (
+    (JsPath \ "nino").writeNullable[String] and
+      (JsPath \ "passport").writeNullable[Passport](Passport.passportIdentificationWritesToDes) and
+      (JsPath \ "address").writeNullable[Address](Address.writesToDes)
+    )(id => (id.nino,id.passportOrIdCard,id.correspondenceAddress))
 }

@@ -21,7 +21,9 @@ import uk.gov.hmrc.common.rest.resources.core.Individual
 
 case class IndividualBeneficiary(individual: Individual,
                                  isVulnerable: Boolean,
-                                 incomeDistribution: IncomeDistribution)
+                                 incomeDistribution: IncomeDistribution){
+  val beneficiaryType = "NA"
+}
 
 object IndividualBeneficiary {
   implicit val individualBeneficiaryFormats = Json.format[IndividualBeneficiary]

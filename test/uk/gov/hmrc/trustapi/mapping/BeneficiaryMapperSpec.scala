@@ -28,14 +28,15 @@ class BeneficiaryMapperSpec extends PlaySpec with OneAppPerSuite with ScalaDataE
 
   "Beneficiary Mapper" should {
     "Map a domain representation of beneficiaries to a valid JSON Representation of DES beneficiaries" when {
+
+      val domainTrust = trustWithEmploymentTrust
+      val json = Json.toJson(domainTrust)(Trust.trustWrites)
+
       "we have individual beneficiaries" when {
         "we have a name" in {
-          val domainTrust = trustWithEmploymentTrust
-          val json = Json.toJson(domainTrust)(Trust.trustWrites)
-
           val beneficiariesList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "individualDetails")(0)
+
           (beneficiariesList \ "name" \ "firstName").get.as[String] mustBe domainTrust.trustType.employmentTrust.get.beneficiaries.individualBeneficiaries.get.head.individual.givenName
-          (beneficiariesList \ "name" \ "lastName").get.as[String] mustBe domainTrust.trustType.employmentTrust.get.beneficiaries.individualBeneficiaries.get.head.individual.familyName
         }
 
         "we have a name with otherName/middelName" in {
@@ -48,12 +49,48 @@ class BeneficiaryMapperSpec extends PlaySpec with OneAppPerSuite with ScalaDataE
         }
 
         "we have date of birth details" in {
-          val domainTrust = trustWithEmploymentTrust
-          val json = Json.toJson(domainTrust)(Trust.trustWrites)
-          println(json)
           val beneficiariesList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "individualDetails")(0)
-          //TODO
-          //(beneficiariesList \ "dateOfBirth").get.as[String] mustBe "1900-01-01"
+
+          (beneficiariesList \ "dateOfBirth").get.as[DateTime] mustBe domainTrust.trustType.employmentTrust.get.beneficiaries.individualBeneficiaries.get.head.individual.dateOfBirth
+          (beneficiariesList \ "dateOfBirth").get.as[String] mustBe "1900-01-01"
+        }
+
+        "we have a vulnerable beneficiary flag" in {
+          val beneficiariesList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "individualDetails")(0)
+
+          (beneficiariesList \ "vulnerableBeneficiary").get.as[Boolean] mustBe domainTrust.trustType.employmentTrust.get.beneficiaries.individualBeneficiaries.get.head.isVulnerable
+        }
+
+        "we have beneficiaryType details" in {
+          val beneficiariesList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "individualDetails")(0)
+
+          (beneficiariesList \ "beneficiaryType").get.as[String] mustBe domainTrust.trustType.employmentTrust.get.beneficiaries.individualBeneficiaries.get.head.beneficiaryType
+        }
+
+        "we have beneficiaryDiscretion details " in {
+          val beneficiariesList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "individualDetails")(0)
+
+          (beneficiariesList \ "beneficiaryDiscretion").get.as[Boolean] mustBe domainTrust.trustType.employmentTrust.get.beneficiaries.individualBeneficiaries.get.head.incomeDistribution.isIncomeAtTrusteeDiscretion
+        }
+
+        "we have beneficiaryShareOfIncome details" in {
+          val beneficiariesList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "individualDetails")(0)
+
+          (beneficiariesList \ "beneficiaryShareOfIncome").get.as[String] mustBe String.valueOf(domainTrust.trustType.employmentTrust.get.beneficiaries.individualBeneficiaries.get.head.incomeDistribution.shareOfIncome.get)
+        }
+
+        "we don't have beneficiaryShafeOfIncome details" in {
+          val employmentTrust = Some(EmploymentTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individualWithOtherName,false, incomeDistribution.copy(shareOfIncome = None, isIncomeAtTrusteeDiscretion = true))))),Some(true),Some(new DateTime("1900-01-01"))))
+          val domainTrust = trustWithEmploymentTrust.copy(trustType = TrustType(employmentTrust=employmentTrust))
+          val json = Json.toJson(domainTrust)(Trust.trustWrites)
+          val beneficiariesList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "individualDetails")(0)
+          (beneficiariesList \ "beneficiaryShareOfIncome").validate[String].isError mustBe true
+        }
+
+        "we have beneficiary with identification details with passport details with passport number" in {
+          val beneficiariesList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "individualDetails")(0)
+
+          (beneficiariesList \ "identification" \ "passport" \ "number").get.as[String] mustBe domainTrust.trustType.employmentTrust.get.beneficiaries.individualBeneficiaries.get.head.individual.passportOrIdCard.get.referenceNumber
         }
       }
     }

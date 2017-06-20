@@ -17,11 +17,12 @@
 package uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries
 
 import org.joda.time.DateTime
+import play.api.libs.functional.syntax._
+import play.api.libs.json.Writes._
 import play.api.libs.json._
 import uk.gov.hmrc.common.rest.resources.core.Individual
 import uk.gov.hmrc.common.rest.resources.core.Individual.nameWritesToDes
 import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.{EmploymentTrust, TrustType}
-import play.api.libs.functional.syntax._
 
 
 case class Beneficiaries(individualBeneficiaries: Option[List[IndividualBeneficiary]] = None,
@@ -40,16 +41,27 @@ object Beneficiaries {
   def addBeneficiary(trustType: TrustType): JsValue ={
     trustType.definedTrusts.head match {
       case  empTrust: EmploymentTrust =>{
-        empTrust.beneficiaries.individualBeneficiaries.map(ind=>JsObject(Map("individualDetails" -> JsArray(ind.map(c => Json.toJson(c.individual)(writesToBeneficiary)))))).getOrElse(JsNull)
+        empTrust.beneficiaries.individualBeneficiaries.map(ind=>JsObject(Map("individualDetails" -> JsArray(ind.map(c => Json.toJson(c)(writesToBeneficiary)))))).getOrElse(JsNull)
       }
       case _ => JsNull
     }
   }
 
-  val writesToBeneficiary: Writes[Individual] = (
+  val writesToBeneficiary: Writes[IndividualBeneficiary] = (
     (JsPath \ "name").write[(String,Option[String],String)](nameWritesToDes) and
-      (JsPath \ "dateOfBirth").write[DateTime]
-    ) (indv => ((indv.givenName, indv.otherName, indv.familyName),indv.dateOfBirth))
+      (JsPath \ "dateOfBirth").write[DateTime](jodaDateWrites("YYYY-MM-DD"))  and
+      (JsPath \ "vulnerableBeneficiary").write[Boolean] and
+      (JsPath \ "beneficiaryType").write[String] and
+      (JsPath \ "beneficiaryDiscretion").write[Boolean] and
+      (JsPath \ "beneficiaryShareOfIncome").writeNullable[String] and
+      (JsPath \ "identification").write[Individual](Individual.identificationWritesToDes)
+    ) (i => ((i.individual.givenName, i.individual.otherName, i.individual.familyName),
+    i.individual.dateOfBirth,
+    i.isVulnerable,
+    i.beneficiaryType,
+    i.incomeDistribution.isIncomeAtTrusteeDiscretion,
+    i.incomeDistribution.shareOfIncome.map(c=>c.toString),
+    i.individual))
 }
 
 

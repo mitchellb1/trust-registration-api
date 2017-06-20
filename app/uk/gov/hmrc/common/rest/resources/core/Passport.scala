@@ -17,7 +17,10 @@
 package uk.gov.hmrc.common.rest.resources.core
 
 import org.joda.time.DateTime
+import play.api.libs.functional.syntax.unlift
 import play.api.libs.json._
+import play.api.libs.functional.syntax._
+
 
 case class Passport(referenceNumber: String,
                     expiryDate: DateTime,
@@ -28,4 +31,9 @@ object Passport {
   implicit val dateWrites: Writes[DateTime] = Writes { (dt: DateTime) => JsString(dt.toString("yyyy-MM-dd")) }
   implicit val passportFormat = Json.format[Passport]
 
+  val passportIdentificationWritesToDes : Writes[Passport] = (
+    (JsPath \ "number").write[String] and
+      (JsPath \ "expirationDate").write[DateTime] and
+      (JsPath \  "countryOfIssue").write[String]
+    )(unlift(Passport.unapply))
 }
