@@ -16,13 +16,10 @@
 
 package uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries
 
-import org.joda.time.DateTime
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Writes._
 import play.api.libs.json._
-import uk.gov.hmrc.common.rest.resources.core.Individual
-import uk.gov.hmrc.common.rest.resources.core.Individual.nameWritesToDes
-import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.{EmploymentTrust, InterVivoTrust, TrustType}
+import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.TrustType
 
 
 case class Beneficiaries(individualBeneficiaries: Option[List[IndividualBeneficiary]] = None,
@@ -38,57 +35,10 @@ case class Beneficiaries(individualBeneficiaries: Option[List[IndividualBenefici
 object Beneficiaries {
   implicit val beneficiariesFormat = Json.format[Beneficiaries]
 
-
   val beneficiaryWritesToDes: Writes[TrustType] = (
     (JsPath \ "individualDetails").writeNullable[JsValue] and
       (JsPath \ "company").writeNullable[JsValue]
-    ) (b => (addIndividualBeneficiary(b), addCompanyBeneficiary(b)))
-
-  val companyBeneficiaryWritesToDes: Writes[CompanyBeneficiary] = (
-    (JsPath \ "organisationName").write[String] and
-      (JsPath \ "beneficiaryDiscretion").write[Boolean] and
-      (JsPath \ "beneficiaryShareOfIncome").writeNullable[String]
-    ) (c => (c.company.name, c.incomeDistribution.isIncomeAtTrusteeDiscretion, c.incomeDistribution.shareOfIncome.map(c => c.toString)))
-
-  val individualBeneficiaryWritesToDes: Writes[IndividualBeneficiary] = (
-    (JsPath \ "name").write[(String, Option[String], String)](nameWritesToDes) and
-      (JsPath \ "dateOfBirth").write[DateTime](jodaDateWrites("YYYY-MM-DD")) and
-      (JsPath \ "vulnerableBeneficiary").write[Boolean] and
-      (JsPath \ "beneficiaryType").write[String] and
-      (JsPath \ "beneficiaryDiscretion").write[Boolean] and
-      (JsPath \ "beneficiaryShareOfIncome").writeNullable[String] and
-      (JsPath \ "identification").write[Individual](Individual.identificationWritesToDes)
-    ) (i => ((i.individual.givenName, i.individual.otherName, i.individual.familyName),
-    i.individual.dateOfBirth,
-    i.isVulnerable,
-    i.beneficiaryType,
-    i.incomeDistribution.isIncomeAtTrusteeDiscretion,
-    i.incomeDistribution.shareOfIncome.map(c => c.toString),
-    i.individual))
-
-  private def addBeneficiaries[T](beneficiaries: Option[List[T]], writes: Writes[T]) ={
-    beneficiaries.map(b => JsArray(b.map(c => Json.toJson(c)(writes))))
-  }
-
-  private def addIndividualBeneficiary(trustType: TrustType): Option[JsValue] = {
-    trustType.definedTrusts.head match {
-      case empTrust: EmploymentTrust => {
-        addBeneficiaries(empTrust.beneficiaries.individualBeneficiaries,individualBeneficiaryWritesToDes)
-      }
-      case viviTrust : InterVivoTrust =>
-        addBeneficiaries(viviTrust.beneficiaries.individualBeneficiaries, individualBeneficiaryWritesToDes)
-      case _ => None
-    }
-  }
-
-  private def addCompanyBeneficiary(trustType: TrustType): Option[JsValue] = {
-    trustType.definedTrusts.head match {
-      case empTrust: EmploymentTrust => {
-        addBeneficiaries(empTrust.beneficiaries.companyBeneficiaries,companyBeneficiaryWritesToDes)
-      }
-      case _ => None
-    }
-  }
+    ) (b => (b.selectedTrust.addIndividualBeneficiary(), b.selectedTrust.addCompanyBeneficiaries()))
 }
 
 

@@ -16,12 +16,20 @@
 
 package uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsPath, Json, Writes}
 import uk.gov.hmrc.common.rest.resources.core.Company
+import play.api.libs.functional.syntax._
+
 
 case class CompanyBeneficiary(company: Company,
                               incomeDistribution: IncomeDistribution)
 
 object CompanyBeneficiary {
   implicit val companyBeneficiaryFormats = Json.format[CompanyBeneficiary]
+
+  val writesToDes: Writes[CompanyBeneficiary] = (
+    (JsPath \ "organisationName").write[String] and
+      (JsPath \ "beneficiaryDiscretion").write[Boolean] and
+      (JsPath \ "beneficiaryShareOfIncome").writeNullable[String]
+    ) (c => (c.company.name, c.incomeDistribution.isIncomeAtTrusteeDiscretion, c.incomeDistribution.shareOfIncome.map(c => c.toString)))
 }

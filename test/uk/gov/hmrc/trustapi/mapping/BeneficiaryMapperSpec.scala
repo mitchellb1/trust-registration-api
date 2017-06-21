@@ -39,7 +39,7 @@ class BeneficiaryMapperSpec extends PlaySpec with OneAppPerSuite with ScalaDataE
           (beneficiariesList \ "name" \ "firstName").get.as[String] mustBe domainTrust.trustType.employmentTrust.get.beneficiaries.individualBeneficiaries.get.head.individual.givenName
         }
 
-        "we have a name in an intervivo trust " in {
+       "we have a name in an intervivo trust " in {
           val domainTrust = trustWithInterVivoTrustDOV
           val json = Json.toJson(domainTrust)(Trust.trustWrites)
 

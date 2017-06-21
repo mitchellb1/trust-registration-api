@@ -44,6 +44,14 @@ case class TrustType(willIntestacyTrust: Option[WillIntestacyTrust] = None,
     case wi: WillIntestacyTrust =>  if (wi.isDovTypeAddition) "Deed of Variation Trust or Family Arrangement" else "Will Trust or Intestacy Trust"
   }
 
+  val selectedTrust = definedTrusts.head match {
+    case et : EmploymentTrust => et
+    case fm: FlatManagementSinkingFundTrust => fm
+    case ht: HeritageMaintenanceFundTrust => ht
+    case iv: InterVivoTrust => iv
+    case wl: WillIntestacyTrust => wl
+  }
+
 
 
 

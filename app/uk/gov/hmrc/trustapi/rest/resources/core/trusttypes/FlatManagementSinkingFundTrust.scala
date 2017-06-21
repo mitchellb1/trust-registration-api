@@ -16,13 +16,13 @@
 
 package uk.gov.hmrc.trustapi.rest.resources.core.trusttypes
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsArray, JsValue, Json}
 import uk.gov.hmrc.trustapi.rest.resources.core.assets.Assets
-import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.Beneficiaries
+import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.{Beneficiaries, CompanyBeneficiary, IndividualBeneficiary}
 import uk.gov.hmrc.trustapi.rest.resources.core.{NoAssetsException, NoBeneficiariesException, NoOtherTypeOfAssetsException, NoOtherTypeOfBeneficiariesException}
 
 
-case class FlatManagementSinkingFundTrust(assets: Assets, beneficiaries: Beneficiaries) {
+case class FlatManagementSinkingFundTrust(assets: Assets, beneficiaries: Beneficiaries) extends BaseTrust{
 
   private val atleastOneTypeOfRequiredAsset: Boolean = (assets.monetaryAssets.isDefined && assets.monetaryAssets.get.size > 0)
   require(atleastOneTypeOfRequiredAsset, NoAssetsException())
@@ -48,6 +48,14 @@ case class FlatManagementSinkingFundTrust(assets: Assets, beneficiaries: Benefic
     (beneficiaries.charityBeneficiaries.isDefined) ||
     (beneficiaries.largeNumbersCompanyBeneficiaries.isDefined))
   require(!noOtherTypesOfBeneficiaries, NoOtherTypeOfBeneficiariesException())
+
+  override def addIndividualBeneficiary(): Option[JsValue] = {
+    beneficiaries.individualBeneficiaries.map(b => JsArray(b.map(c => Json.toJson(c)(IndividualBeneficiary.writesToDes))))
+  }
+
+  override def addCompanyBeneficiaries(): Option[JsValue] = {
+    beneficiaries.companyBeneficiaries.map(b => JsArray(b.map(c => Json.toJson(c)(CompanyBeneficiary.writesToDes))))
+  }
 }
 
 object FlatManagementSinkingFundTrust {
