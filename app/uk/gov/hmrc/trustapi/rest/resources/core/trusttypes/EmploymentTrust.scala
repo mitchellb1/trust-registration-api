@@ -23,9 +23,15 @@ import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.{Beneficiaries, Co
 import uk.gov.hmrc.trustapi.rest.resources.core.{NoAssetsException, NoBeneficiariesException, NoOtherTypeOfAssetsException, NoOtherTypeOfBeneficiariesException}
 
 trait BaseTrust {
-  def addIndividualBeneficiary(): Option[JsValue]
-  def addCompanyBeneficiaries(): Option[JsValue]
+  val beneficiaries: Beneficiaries
 
+  def addIndividualBeneficiary(): Option[JsValue] = {
+    beneficiaries.individualBeneficiaries.map(b => JsArray(b.map(c => Json.toJson(c)(IndividualBeneficiary.writesToDes))))
+  }
+
+  def addCompanyBeneficiaries(): Option[JsValue] = {
+    beneficiaries.companyBeneficiaries.map(b => JsArray(b.map(c => Json.toJson(c)(CompanyBeneficiary.writesToDes))))
+  }
 }
 
 case class EmploymentTrust(assets: Assets,
@@ -56,15 +62,6 @@ case class EmploymentTrust(assets: Assets,
 
   private val noOtherTypesOfBeneficiaries: Boolean = beneficiaries.charityBeneficiaries.isDefined
   require(!noOtherTypesOfBeneficiaries, NoOtherTypeOfBeneficiariesException())
-
-
-  override def addIndividualBeneficiary(): Option[JsValue] = {
-    beneficiaries.individualBeneficiaries.map(b => JsArray(b.map(c => Json.toJson(c)(IndividualBeneficiary.writesToDes))))
-  }
-
-  override def addCompanyBeneficiaries(): Option[JsValue] = {
-    beneficiaries.companyBeneficiaries.map(b => JsArray(b.map(c => Json.toJson(c)(CompanyBeneficiary.writesToDes))))
-  }
 }
 
 object EmploymentTrust {

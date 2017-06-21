@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.trustapi.rest.resources.core.trusttypes
 
-import play.api.libs.json.{JsArray, JsValue, Json}
+import play.api.libs.json.Json
 import uk.gov.hmrc.trustapi.rest.resources.core._
 import uk.gov.hmrc.trustapi.rest.resources.core.assets.Assets
-import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.{Beneficiaries, CompanyBeneficiary, IndividualBeneficiary}
+import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.Beneficiaries
 
  case class InterVivoTrust(assets: Assets,
                                    beneficiaries: Beneficiaries,
@@ -53,14 +53,6 @@ import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.{Beneficiaries, Co
   require(noEmployeeOrDirectorBeneficiaries, NoOtherTypeOfBeneficiariesException())
   require(isHoldOverClaimedIsTrue,IsHoldOverClaimedException())
   require(noPartnershipAssetsIfDeedOfVariation,PartnershipAssetsNotAllowedException())
-
-  override def addIndividualBeneficiary(): Option[JsValue] = {
-   beneficiaries.individualBeneficiaries.map(b => JsArray(b.map(c => Json.toJson(c)(IndividualBeneficiary.writesToDes))))
-  }
-
-  override def addCompanyBeneficiaries(): Option[JsValue] = {
-   beneficiaries.companyBeneficiaries.map(b => JsArray(b.map(c => Json.toJson(c)(CompanyBeneficiary.writesToDes))))
-  }
  }
 
 

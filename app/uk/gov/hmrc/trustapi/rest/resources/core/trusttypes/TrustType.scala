@@ -52,9 +52,6 @@ case class TrustType(willIntestacyTrust: Option[WillIntestacyTrust] = None,
     case wl: WillIntestacyTrust => wl
   }
 
-
-
-
   val deedOfVariation: Option[String] = definedTrusts.head match {
     case iv : InterVivoTrust => {
       iv.dovType match {
