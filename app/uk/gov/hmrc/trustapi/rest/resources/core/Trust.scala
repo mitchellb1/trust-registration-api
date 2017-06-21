@@ -20,8 +20,9 @@ import org.joda.time.DateTime
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import uk.gov.hmrc.common.rest.resources.core._
-import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.Beneficiaries
+import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.{Beneficiaries, CompanyBeneficiary, IndividualBeneficiary}
 import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.TrustType
+
 
 case class Trust(name: String,
                  correspondenceAddress: Address,

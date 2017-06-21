@@ -17,22 +17,11 @@
 package uk.gov.hmrc.trustapi.rest.resources.core.trusttypes
 
 import org.joda.time.DateTime
-import play.api.libs.json.{JsArray, JsValue, Json, Reads}
+import play.api.libs.json.{Json, Reads}
 import uk.gov.hmrc.trustapi.rest.resources.core.assets.Assets
-import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.{Beneficiaries, CompanyBeneficiary, IndividualBeneficiary}
-import uk.gov.hmrc.trustapi.rest.resources.core.{NoAssetsException, NoBeneficiariesException, NoOtherTypeOfAssetsException, NoOtherTypeOfBeneficiariesException}
+import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.Beneficiaries
+import uk.gov.hmrc.trustapi.rest.resources.core._
 
-trait BaseTrust {
-  val beneficiaries: Beneficiaries
-
-  def addIndividualBeneficiary(): Option[JsValue] = {
-    beneficiaries.individualBeneficiaries.map(b => JsArray(b.map(c => Json.toJson(c)(IndividualBeneficiary.writesToDes))))
-  }
-
-  def addCompanyBeneficiaries(): Option[JsValue] = {
-    beneficiaries.companyBeneficiaries.map(b => JsArray(b.map(c => Json.toJson(c)(CompanyBeneficiary.writesToDes))))
-  }
-}
 
 case class EmploymentTrust(assets: Assets,
                            beneficiaries: Beneficiaries,

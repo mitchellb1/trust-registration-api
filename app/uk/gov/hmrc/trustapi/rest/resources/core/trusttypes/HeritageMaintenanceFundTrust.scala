@@ -20,7 +20,7 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.common.rest.resources.core.Individual
 import uk.gov.hmrc.trustapi.rest.resources.core.assets.Assets
 import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.Beneficiaries
-import uk.gov.hmrc.trustapi.rest.resources.core.{NoAssetsException, NoBeneficiariesException, NoOtherTypeOfAssetsException, NoOtherTypeOfBeneficiariesException}
+import uk.gov.hmrc.trustapi.rest.resources.core._
 
 case class HeritageMaintenanceFundTrust(assets: Assets,
                                         beneficiaries: Beneficiaries,

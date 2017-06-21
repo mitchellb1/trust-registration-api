@@ -19,7 +19,7 @@ package uk.gov.hmrc.trustapi.rest.resources.core.trusttypes
 import play.api.libs.json.Json
 import uk.gov.hmrc.trustapi.rest.resources.core.assets.Assets
 import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.Beneficiaries
-import uk.gov.hmrc.trustapi.rest.resources.core.{NoAssetsException, NoBeneficiariesException, NoOtherTypeOfAssetsException, NoOtherTypeOfBeneficiariesException}
+import uk.gov.hmrc.trustapi.rest.resources.core._
 
 
 case class FlatManagementSinkingFundTrust(assets: Assets, beneficiaries: Beneficiaries) extends BaseTrust{
