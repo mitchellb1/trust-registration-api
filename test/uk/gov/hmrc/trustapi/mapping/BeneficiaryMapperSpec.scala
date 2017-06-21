@@ -122,8 +122,11 @@ class BeneficiaryMapperSpec extends PlaySpec with OneAppPerSuite with ScalaDataE
           (companyBeneficaryList \ "beneficiaryShareOfIncome").get.as[String] mustBe  String.valueOf(domainTrust.trustType.employmentTrust.get.beneficiaries.companyBeneficiaries.get.head.incomeDistribution.shareOfIncome.get)
         }
 
+        "we have identification details having address details" in {
+          val companyBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "company")(0)
+          (companyBeneficaryList \ "identification" \ "address" \ "line1").get.as[String] mustBe  String.valueOf(domainTrust.trustType.employmentTrust.get.beneficiaries.companyBeneficiaries.get.head.company.correspondenceAddress.line1)
+        }
       }
-
     }
   }
 }
