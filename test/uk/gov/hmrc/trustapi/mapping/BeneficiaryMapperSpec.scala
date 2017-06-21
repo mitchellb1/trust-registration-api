@@ -39,6 +39,14 @@ class BeneficiaryMapperSpec extends PlaySpec with OneAppPerSuite with ScalaDataE
           (beneficiariesList \ "name" \ "firstName").get.as[String] mustBe domainTrust.trustType.employmentTrust.get.beneficiaries.individualBeneficiaries.get.head.individual.givenName
         }
 
+        "we have a name in an intervivo trust " in {
+          val domainTrust = trustWithInterVivoTrustDOV
+          val json = Json.toJson(domainTrust)(Trust.trustWrites)
+
+          val beneficiariesList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "individualDetails")(0)
+          (beneficiariesList \ "name" \ "firstName").get.as[String] mustBe domainTrust.trustType.interVivoTrust.get.beneficiaries.individualBeneficiaries.get.head.individual.givenName
+        }
+
         "we have a name with otherName/middelName" in {
           val employmentTrust = Some(EmploymentTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individualWithOtherName,false, incomeDistribution)))),Some(true),Some(new DateTime("1900-01-01"))))
           val domainTrust = trustWithEmploymentTrust.copy(trustType = TrustType(employmentTrust=employmentTrust))

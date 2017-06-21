@@ -22,7 +22,7 @@ import play.api.libs.json.Writes._
 import play.api.libs.json._
 import uk.gov.hmrc.common.rest.resources.core.Individual
 import uk.gov.hmrc.common.rest.resources.core.Individual.nameWritesToDes
-import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.{EmploymentTrust, TrustType}
+import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.{EmploymentTrust, InterVivoTrust, TrustType}
 
 
 case class Beneficiaries(individualBeneficiaries: Option[List[IndividualBeneficiary]] = None,
@@ -66,11 +66,17 @@ object Beneficiaries {
     i.incomeDistribution.shareOfIncome.map(c => c.toString),
     i.individual))
 
+  private def addBeneficiaries[T](beneficiaries: Option[List[T]], writes: Writes[T]) ={
+    beneficiaries.map(b => JsArray(b.map(c => Json.toJson(c)(writes))))
+  }
+
   private def addIndividualBeneficiary(trustType: TrustType): Option[JsValue] = {
     trustType.definedTrusts.head match {
       case empTrust: EmploymentTrust => {
-        empTrust.beneficiaries.individualBeneficiaries.map(ind => JsArray(ind.map(c => Json.toJson(c)(individualBeneficiaryWritesToDes))))
+        addBeneficiaries(empTrust.beneficiaries.individualBeneficiaries,individualBeneficiaryWritesToDes)
       }
+      case viviTrust : InterVivoTrust =>
+        addBeneficiaries(viviTrust.beneficiaries.individualBeneficiaries, individualBeneficiaryWritesToDes)
       case _ => None
     }
   }
@@ -78,7 +84,7 @@ object Beneficiaries {
   private def addCompanyBeneficiary(trustType: TrustType): Option[JsValue] = {
     trustType.definedTrusts.head match {
       case empTrust: EmploymentTrust => {
-        empTrust.beneficiaries.companyBeneficiaries.map(ind => JsArray(ind.map(c => Json.toJson(c)(companyBeneficiaryWritesToDes))))
+        addBeneficiaries(empTrust.beneficiaries.companyBeneficiaries,companyBeneficiaryWritesToDes)
       }
       case _ => None
     }
