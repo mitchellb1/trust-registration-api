@@ -20,7 +20,7 @@ import org.joda.time.DateTime
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
 import uk.gov.hmrc.trustapi.rest.resources.core.Trust
-import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.{Beneficiaries, IndividualBeneficiary}
+import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.{Beneficiaries, IncomeDistribution, IndividualBeneficiary}
 import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.{EmploymentTrust, TrustType}
 import uk.gov.hmrc.utils.ScalaDataExamples
 
@@ -116,10 +116,17 @@ class BeneficiaryMapperSpec extends PlaySpec with OneAppPerSuite with ScalaDataE
           (companyBeneficaryList \ "beneficiaryDiscretion").get.as[Boolean] mustBe domainTrust.trustType.employmentTrust.get.beneficiaries.companyBeneficiaries.get.head.incomeDistribution.isIncomeAtTrusteeDiscretion
         }
 
-
         "we have beneficiaryShareOfIncome details " in {
           val companyBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "company")(0)
           (companyBeneficaryList \ "beneficiaryShareOfIncome").get.as[String] mustBe  String.valueOf(domainTrust.trustType.employmentTrust.get.beneficiaries.companyBeneficiaries.get.head.incomeDistribution.shareOfIncome.get)
+        }
+
+        "we have no beneficiaryShareOfIncome " in {
+          val domainTrust = trustWithEmploymentTrustAndCompanyBen.copy(trustType = TrustType(employmentTrust = Some(EmploymentTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false, IncomeDistribution(true,None)))),None,None)))))
+          val json = Json.toJson(domainTrust)(Trust.trustWrites)
+          val companyBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "company")(0)
+
+          (companyBeneficaryList \ "beneficiaryShareOfIncome").validate[String].isError mustBe  true
         }
 
         "we have identification details having address details" in {
