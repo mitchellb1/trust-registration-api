@@ -108,16 +108,19 @@ class BeneficiaryMapperSpec extends PlaySpec with OneAppPerSuite with ScalaDataE
 
         "we have organisation name " in {
           val companyBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "company")(0)
+
           (companyBeneficaryList \ "organisationName").get.as[String] mustBe domainTrust.trustType.employmentTrust.get.beneficiaries.companyBeneficiaries.get.head.company.name
         }
 
         "we have beneficiaryDiscretion flag " in {
           val companyBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "company")(0)
+
           (companyBeneficaryList \ "beneficiaryDiscretion").get.as[Boolean] mustBe domainTrust.trustType.employmentTrust.get.beneficiaries.companyBeneficiaries.get.head.incomeDistribution.isIncomeAtTrusteeDiscretion
         }
 
         "we have beneficiaryShareOfIncome details " in {
           val companyBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "company")(0)
+
           (companyBeneficaryList \ "beneficiaryShareOfIncome").get.as[String] mustBe  String.valueOf(domainTrust.trustType.employmentTrust.get.beneficiaries.companyBeneficiaries.get.head.incomeDistribution.shareOfIncome.get)
         }
 
@@ -131,8 +134,25 @@ class BeneficiaryMapperSpec extends PlaySpec with OneAppPerSuite with ScalaDataE
 
         "we have identification details having address details" in {
           val companyBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "company")(0)
-          (companyBeneficaryList \ "identification" \ "address" \ "line1").get.as[String] mustBe  String.valueOf(domainTrust.trustType.employmentTrust.get.beneficiaries.companyBeneficiaries.get.head.company.correspondenceAddress.line1)
+
+          (companyBeneficaryList \ "identification" \ "address" \ "line1").get.as[String] mustBe  domainTrust.trustType.employmentTrust.get.beneficiaries.companyBeneficiaries.get.head.company.correspondenceAddress.line1
         }
+
+        "we have identification details having a utr and address" in {
+          val companyBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "company")(0)
+
+          (companyBeneficaryList \ "identification" \ "utr").get.as[String] mustBe  domainTrust.trustType.employmentTrust.get.beneficiaries.companyBeneficiaries.get.head.company.referenceNumber.get
+          (companyBeneficaryList \ "identification" \ "address" \ "line1").get.as[String] mustBe  domainTrust.trustType.employmentTrust.get.beneficiaries.companyBeneficiaries.get.head.company.correspondenceAddress.line1
+        }
+
+        "we have identification details without having utr and we have an address " in {
+          val domainTrust = trustWithEmploymentTrustAndCompanyBen.copy(trustType = TrustType(employmentTrust = Some(EmploymentTrust(assets,Beneficiaries(companyBeneficiaries = Some(List(companyBeneficiary.copy(company.copy(referenceNumber = None)))))))))
+          val json = Json.toJson(domainTrust)(Trust.trustWrites)
+          val companyBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "company")(0)
+          (companyBeneficaryList \ "identification" \ "utr").validate[String].isError mustBe true
+          (companyBeneficaryList \ "identification" \ "address" \ "line1").get.as[String] mustBe  domainTrust.trustType.employmentTrust.get.beneficiaries.companyBeneficiaries.get.head.company.correspondenceAddress.line1
+        }
+
       }
     }
   }
