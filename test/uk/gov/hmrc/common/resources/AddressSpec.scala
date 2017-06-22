@@ -17,7 +17,7 @@
 package uk.gov.hmrc.trustregistration.models
 
 import org.scalatestplus.play.PlaySpec
-import play.api.libs.json.Json
+import play.api.libs.json._
 import uk.gov.hmrc.common.rest.resources.core.Address
 import uk.gov.hmrc.utils.{JsonExamples, ScalaDataExamples}
 

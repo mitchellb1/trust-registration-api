@@ -36,7 +36,38 @@ case class TrustType(willIntestacyTrust: Option[WillIntestacyTrust] = None,
   require(numberOfSubmittedTrustTypes > 0, NoTrustTypeException())
   require(numberOfSubmittedTrustTypes == 1, OnlyOneTrustTypeAllowedException())
 
-  val currentTrustType = definedTrusts.head
+  val currentTrustType = definedTrusts.head match {
+    case _: EmploymentTrust => "Employment Related"
+    case _: FlatManagementSinkingFundTrust => "Flat Management Company or Sinking Fund"
+    case _: HeritageMaintenanceFundTrust => "Heritage Maintenance Fund"
+    case iv : InterVivoTrust => if (iv.dovType.isEmpty)  "Inter vivos Settlement" else "Deed of Variation Trust or Family Arrangement"
+    case wi: WillIntestacyTrust =>  if (wi.isDovTypeAddition) "Deed of Variation Trust or Family Arrangement" else "Will Trust or Intestacy Trust"
+  }
+
+  val selectedTrust = definedTrusts.head match {
+    case et : EmploymentTrust => et
+    case fm: FlatManagementSinkingFundTrust => fm
+    case ht: HeritageMaintenanceFundTrust => ht
+    case iv: InterVivoTrust => iv
+    case wl: WillIntestacyTrust => wl
+  }
+
+  val deedOfVariation: Option[String] = definedTrusts.head match {
+    case iv : InterVivoTrust => {
+      iv.dovType match {
+        case Some("dovTypeAbsolute") => Some("Previously there was only an absolute interest under the will")
+        case Some("dovTypeReplace") =>  Some("Replaced the will trust")
+        case _ => None
+      }
+    }
+    case wi: WillIntestacyTrust => if (wi.isDovTypeAddition) Some("Addition to the will trust") else None
+    case _ => None
+  }
+
+  val isInterVivo = definedTrusts.head match {
+    case _: InterVivoTrust => true
+    case _ => false
+  }
 }
 
 object TrustType {

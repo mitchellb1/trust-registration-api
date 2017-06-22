@@ -20,12 +20,13 @@ import org.joda.time.DateTime
 import play.api.libs.json.{Json, Reads}
 import uk.gov.hmrc.trustapi.rest.resources.core.assets.Assets
 import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.Beneficiaries
-import uk.gov.hmrc.trustapi.rest.resources.core.{NoAssetsException, NoBeneficiariesException, NoOtherTypeOfAssetsException, NoOtherTypeOfBeneficiariesException}
+import uk.gov.hmrc.trustapi.rest.resources.core._
+
 
 case class EmploymentTrust(assets: Assets,
                            beneficiaries: Beneficiaries,
                            isEmployerFinancedRetirementBenefitScheme: Option[Boolean] = None,
-                           employerFinancedRetirementBenefitSchemeStartDate: Option[DateTime] = None) {
+                           employerFinancedRetirementBenefitSchemeStartDate: Option[DateTime] = None) extends BaseTrust{
 
   private val atleastOneTypeOfRequiredAsset: Boolean = ((assets.monetaryAssets.isDefined && assets.monetaryAssets.get.size > 0) ||
     (assets.propertyAssets.isDefined && assets.propertyAssets.get.size > 0) ||

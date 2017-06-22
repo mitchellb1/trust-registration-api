@@ -20,12 +20,12 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.common.rest.resources.core.Individual
 import uk.gov.hmrc.trustapi.rest.resources.core.assets.Assets
 import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.Beneficiaries
-import uk.gov.hmrc.trustapi.rest.resources.core.{NoAssetsException, NoBeneficiariesException, NoOtherTypeOfAssetsException, NoOtherTypeOfBeneficiariesException}
+import uk.gov.hmrc.trustapi.rest.resources.core._
 
 case class HeritageMaintenanceFundTrust(assets: Assets,
                                         beneficiaries: Beneficiaries,
                                         isMultiPurposeIncome: Boolean,
-                                        deceased: Option[Individual] = None) {
+                                        deceased: Option[Individual] = None) extends BaseTrust{
 
   private val atleastOneTypeOfRequiredAsset: Boolean = ((assets.monetaryAssets.isDefined && assets.monetaryAssets.get.size > 0) ||
     (assets.propertyAssets.isDefined && assets.propertyAssets.get.size > 0) ||
@@ -51,7 +51,6 @@ case class HeritageMaintenanceFundTrust(assets: Assets,
     (beneficiaries.charityBeneficiaries.isDefined) ||
     (beneficiaries.largeNumbersCompanyBeneficiaries.isDefined))
   require(!noOtherTypesOfBeneficiaries, NoOtherTypeOfBeneficiariesException())
-
 }
 
 object HeritageMaintenanceFundTrust {

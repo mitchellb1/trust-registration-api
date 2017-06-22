@@ -16,7 +16,11 @@
 
 package uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries
 
-import play.api.libs.json.Json
+import play.api.libs.functional.syntax._
+import play.api.libs.json.Writes._
+import play.api.libs.json._
+import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.TrustType
+
 
 case class Beneficiaries(individualBeneficiaries: Option[List[IndividualBeneficiary]] = None,
                          employeeBeneficiaries: Option[List[EmployeeBeneficiary]] = None,
@@ -26,10 +30,15 @@ case class Beneficiaries(individualBeneficiaries: Option[List[IndividualBenefici
                          trustBeneficiaries: Option[List[TrustBeneficiary]] = None,
                          companyBeneficiaries: Option[List[CompanyBeneficiary]] = None,
                          unidentifiedBeneficiaries: Option[List[UnidentifiedBeneficiary]] = None,
-                         largeNumbersCompanyBeneficiaries : Option[List[LargeNumbersCompanyBeneficiaries]] = None)
+                         largeNumbersCompanyBeneficiaries: Option[List[LargeNumbersCompanyBeneficiaries]] = None)
 
 object Beneficiaries {
   implicit val beneficiariesFormat = Json.format[Beneficiaries]
+
+  val beneficiaryWritesToDes: Writes[TrustType] = (
+    (JsPath \ "individualDetails").writeNullable[JsValue] and
+      (JsPath \ "company").writeNullable[JsValue]
+    ) (b => (b.selectedTrust.addIndividualBeneficiary(), b.selectedTrust.addCompanyBeneficiaries()))
 }
 
 

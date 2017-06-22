@@ -17,9 +17,12 @@
 package uk.gov.hmrc.trustapi.rest.resources.core
 
 import org.joda.time.DateTime
-import play.api.libs.json.{JsString, Json, Reads, Writes}
-import uk.gov.hmrc.common.rest.resources.core.{Address, Declaration, Legality, YearsOfTaxConsequence}
+import play.api.libs.functional.syntax._
+import play.api.libs.json._
+import uk.gov.hmrc.common.rest.resources.core._
+import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.{Beneficiaries, CompanyBeneficiary, IndividualBeneficiary}
 import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.TrustType
+
 
 case class Trust(name: String,
                  correspondenceAddress: Address,
@@ -46,4 +49,51 @@ object Trust {
   implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
   implicit val dateWrites: Writes[DateTime] = Writes { (dt: DateTime) => JsString(dt.toString("yyyy-MM-dd")) }
   implicit val formats = Json.format[Trust]
+
+
+  def trustDetailsToDesWrites(isUkResident: Boolean): Writes[Trust] = (
+    (JsPath \ "startDate").write[DateTime] and
+      (JsPath \ "lawCountry").write[String] and
+      (JsPath \ "administrationCountry").writeNullable[String] and
+      (JsPath \ "typeOfTrust").write[String] and
+      (JsPath \ "deedOfVariation").writeNullable[String] and
+      (JsPath \ "interVivos").write[Boolean]  and
+      (JsPath \ "efrbsStartDate").writeNullable[DateTime] and
+      (JsPath).write[Legality](Legality.residentDetailsToDes(isUkResident))
+    )(trustDetails =>  (
+    trustDetails.commencementDate,
+    trustDetails.legality.governingCountryCode,
+    trustDetails.legality.administrationCountryCode,
+    trustDetails.trustType.currentTrustType,
+    trustDetails.trustType.deedOfVariation,
+    trustDetails.trustType.isInterVivo,
+    trustDetails.trustType.employmentTrust.flatMap(c=>c.employerFinancedRetirementBenefitSchemeStartDate),
+    trustDetails.legality
+  ))
+
+
+  val entitiesWrites : Writes[Trust] = (
+    (JsPath \ "naturalPerson").writeNullable[List[JsValue]] and
+      (JsPath \ "beneficiary").write[TrustType](Beneficiaries.beneficiaryWritesToDes)
+  )(t => (t.naturalPeople.flatMap(np=>np.individuals.map(inds => inds.map(i => Json.toJson(i)(Individual.writesToDes)))),
+    t.trustType))
+
+  val trustWrites = new Writes[Trust] {
+    def writes(trust: Trust) = {
+      val trustsMap =  Map("correspondence" -> Json.obj(
+        "abroadIndicator" -> JsBoolean(trust.correspondenceAddress.countryCode != "GB"),
+        "name" -> JsString(trust.name),
+        "phoneNumber" -> JsString(trust.telephoneNumber),
+        "address" -> Json.toJson(trust.correspondenceAddress)(Address.writesToDes)),
+        "declaration" -> Json.toJson(trust.declaration)(Declaration.writesToDes),
+        "details" -> Json.obj(
+          "trust"-> Json.obj(
+            "details"-> Json.toJson(trust)(Trust.trustDetailsToDesWrites(trust.isTrustUkResident)),
+            "entities" -> Json.toJson(trust)(entitiesWrites))))
+
+      JsObject(trustsMap ++
+          trust.utr.map(v => ("admin", Json.obj("utr" -> JsString(v)))) ++
+          trust.yearsOfTaxConsequence.map(v => ("yearsReturns",Json.toJson(v))))
+    }
+  }
 }

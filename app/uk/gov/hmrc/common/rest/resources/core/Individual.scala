@@ -17,7 +17,9 @@
 package uk.gov.hmrc.common.rest.resources.core
 
 import org.joda.time.DateTime
-import play.api.libs.json.{JsString, Json, Reads, Writes}
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
+
 
 case class Individual(givenName: String,
                       familyName: String,
@@ -32,4 +34,24 @@ object Individual {
   implicit val dateReads: Reads[DateTime] = Reads.of[String] map (new DateTime(_))
   implicit val dateWrites: Writes[DateTime] = Writes { (dt: DateTime) => JsString(dt.toString("yyyy-MM-dd")) }
   implicit val formats = Json.format[Individual]
+
+
+
+  val nameWritesToDes: Writes[(String,Option[String],String)] = (
+    (JsPath \ "firstName").write[String] and
+      (JsPath \ "middleName").writeNullable[String] and
+      (JsPath \ "lastName").write[String]
+    )(n => (n._1,n._2,n._3))
+
+  val writesToDes: Writes[Individual] = (
+    (JsPath \ "name").write[(String,Option[String],String)](nameWritesToDes) and
+      (JsPath \ "dateOfBirth").write[DateTime] and
+      (JsPath \ "identification" \ "nino").writeNullable[String]
+    ) (indv => ((indv.givenName, indv.otherName, indv.familyName), indv.dateOfBirth, indv.nino))
+
+  val identificationWritesToDes : Writes[Individual] = (
+    (JsPath \ "nino").writeNullable[String] and
+      (JsPath \ "passport").writeNullable[Passport](Passport.passportIdentificationWritesToDes) and
+      (JsPath \ "address").writeNullable[Address](Address.writesToDes)
+    )(id => (id.nino,id.passportOrIdCard,id.correspondenceAddress))
 }

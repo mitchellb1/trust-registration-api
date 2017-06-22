@@ -16,21 +16,18 @@
 
 package uk.gov.hmrc.trustapi.rest.resources.core
 
-import play.api.libs.json._
-import uk.gov.hmrc.common.rest.resources.core.Individual
+import play.api.libs.json.{JsArray, JsValue, Json}
+import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.{Beneficiaries, CompanyBeneficiary, IndividualBeneficiary}
 
-case class NaturalPeople(individuals: Option[List[Individual]]) {
-  val noMoreThanTwoNaturalPeople = (individuals.getOrElse(Nil).size <= 2)
 
-  require(noMoreThanTwoNaturalPeople,NoMoreThanTwoNaturalPeopleException())
-}
+trait BaseTrust {
+  val beneficiaries: Beneficiaries
 
-object NaturalPeople {
-  implicit val naturalPeopleFormats = Json.format[NaturalPeople]
+  def addIndividualBeneficiary(): Option[JsValue] = {
+    beneficiaries.individualBeneficiaries.map(b => JsArray(b.map(c => Json.toJson(c)(IndividualBeneficiary.writesToDes))))
+  }
 
-  def addDesNaturalPeople(ppl: Option[NaturalPeople]): JsValue = {
-    if (ppl.isEmpty) JsNull else JsObject(Map("naturalPerson" -> JsArray(
-      ppl.get.individuals.get.map(c=>Json.toJson(c)(Individual.writesToDes))
-    )))
+  def addCompanyBeneficiaries(): Option[JsValue] = {
+    beneficiaries.companyBeneficiaries.map(b => JsArray(b.map(c => Json.toJson(c)(CompanyBeneficiary.writesToDes))))
   }
 }

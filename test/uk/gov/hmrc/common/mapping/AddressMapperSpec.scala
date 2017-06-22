@@ -16,88 +16,79 @@
 
 package uk.gov.hmrc.common.mapping
 
-import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
-import uk.gov.hmrc.common.des.{DesAddress, MissingPropertyException}
+import org.scalatestplus.play.PlaySpec
+import play.api.libs.json.{JsString, Json}
 import uk.gov.hmrc.common.rest.resources.core.Address
-import uk.gov.hmrc.utils.{DesScalaExamples, ScalaDataExamples}
+import uk.gov.hmrc.utils.{JsonExamples, ScalaDataExamples}
 
-class AddressMapperSpec extends PlaySpec
-  with OneAppPerSuite
-  with ScalaDataExamples
-  with DesScalaExamples {
 
-  val SUT = AddressMapper
-  val domainAddressToMap = address
-  val desAddressToMap = desAddress
+class AddressMapperSpec extends PlaySpec with JsonExamples with ScalaDataExamples {
 
-  "Address mapper to Domain" must {
-    "map properties correctly" when {
-      "we have a correct line 1 on DES" in {
-        val output: Address = SUT.toDomain(desAddressToMap)
-        output.line1 mustBe desAddressToMap.line1
+  "Address" must {
+    "convert from a valid DES JSON body " when {
+      "we have a full address" in {
+        val address = Json.parse("""{"line1" : "Test", "line2" : "Test2", "line3" : "Test3", "line4" : "Test4", "postCode" : "WN1 2TT", "country" : "GB"}""")
+        val output = address.validate[Address](Address.readsFromDes).get
+
+        output.line1 mustBe (address \ "line1").as[String]
+        output.line2.get mustBe (address \ "line2").as[String]
+        output.line3.get mustBe (address \ "line3").as[String]
+        output.line4.get mustBe (address \ "line4").as[String]
+        output.postalCode.get mustBe (address \ "postCode").as[String]
+        output.countryCode mustBe (address \ "country").as[String]
       }
-      "we have a correct line 2 on DES" in {
-        val output: Address = SUT.toDomain(desAddressToMap)
-        output.line2.get mustBe desAddressToMap.line2
-      }
-      "we have a correct line 3 on DES" in {
-        val output: Address = SUT.toDomain(desAddressToMap)
-        output.line3 mustBe desAddressToMap.line3
-      }
-      "we have a correct line 4 on DES" in {
-        val output: Address = SUT.toDomain(desAddressToMap)
-        output.line4 mustBe desAddressToMap.line4
-      }
-      "we have a correct postcode on DES" in {
-        val output: Address = SUT.toDomain(desAddressToMap)
-        output.postalCode mustBe desAddressToMap.postCode
-      }
-      "we have a correct country on DES" in {
-        val output = SUT.toDomain(desAddressToMap)
-        output.countryCode mustBe desAddressToMap.country
+
+      "we have only required fields " in {
+        val address = Json.parse("""{"line1" : "line1Address", "line2" : "line2Address", "postCode" : "NE1 111", "country" : "GB"}""")
+        val output = address.validate[Address](Address.readsFromDes).get
+
+        output.line1 mustBe "line1Address"
+        output.line2.get mustBe "line2Address"
+        output.line3 mustBe None
+        output.line4 mustBe None
+        output.postalCode.get mustBe "NE1 111"
+        output.countryCode mustBe "GB"
       }
     }
-  }
 
-  "Address mapper to Des" must {
-    "map properties correctly" when {
-      "we have a correct line 1 on our domain" in {
-        val output: DesAddress = SUT.toDes(address)
-        output.line1 mustBe domainAddressToMap.line1
+    "convert to a valid DES Address JSON body" when {
+      "we have a full address" in {
+        val gbAddress = address.copy(countryCode = "GB", postalCode = Some("Test"))
+        val json = Json.toJson(gbAddress)(Address.writesToDes)
+
+        (json \ "line1").get mustBe JsString(gbAddress.line1)
+        (json \ "line2").get mustBe JsString(gbAddress.line2.get)
+        (json \ "line3").get mustBe JsString(gbAddress.line3.get)
+        (json \ "line4").get mustBe JsString(gbAddress.line4.get)
+        (json \ "postCode").get mustBe JsString(gbAddress.postalCode.get)
+        (json \ "country").get mustBe JsString(gbAddress.countryCode)
       }
-      "we have a correct line 2  on our domain" in {
-        val output = SUT.toDes(address)
-        output.line2 mustBe domainAddressToMap.line2.get
-      }
-      "we have a correct line 3  on our domain" in {
-        val output = SUT.toDes(address)
-        output.line3 mustBe domainAddressToMap.line3
-      }
-      "we have a correct line 4 on our domain" in {
-        val output = SUT.toDes(address)
-        output.line4 mustBe domainAddressToMap.line4
-      }
-      "we have a correct postcode on our domain" in {
-        val output = SUT.toDes(address)
-        output.postCode mustBe domainAddressToMap.postalCode
-      }
-      "we have a correct country on our domain" in {
-        val output = SUT.toDes(address)
-        output.country mustBe domainAddressToMap.countryCode
-      }
-    }
-    "thrown an exception" when {
-      "line 2 is not provided" in {
-        val invalidLine2ToMap = Address(
+
+      "we have a full valid address with missing optional properties" in {
+        val address = Address(
           line1 = "Line 1",
           line2 = None,
-          line3 = Some("Line 3"),
-          line4 = Some("Line 4"),
-          postalCode = None,
-          countryCode = "ES"
+          line3 = None,
+          line4 = None,
+          postalCode = Some("Test"),
+          countryCode = "GB"
         )
-        val ex = the[MissingPropertyException] thrownBy SUT.toDes(invalidLine2ToMap)
-        ex.getMessage must include("Missing address line 2")
+        val json = Json.toJson(address)(Address.writesToDes)
+
+        json.toString() mustNot include("line2")
+        json.toString() mustNot include("line3")
+        json.toString() mustNot include("line4")
+      }
+
+      "we have a foreign address" in {
+        val json = Json.toJson(address)(Address.writesToDes)
+
+        (json \ "line1").get mustBe JsString(address.line1)
+        (json \ "line2").get mustBe JsString(address.line2.get)
+        (json \ "line3").get mustBe JsString(address.line3.get)
+        (json \ "line4").get mustBe JsString(address.line4.get)
+        (json \ "country").get mustBe JsString(address.countryCode)
+        json.toString() mustNot include("postCode")
       }
     }
   }

@@ -21,10 +21,10 @@ import uk.gov.hmrc.trustapi.rest.resources.core._
 import uk.gov.hmrc.trustapi.rest.resources.core.assets.Assets
 import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.Beneficiaries
 
-case class InterVivoTrust(assets: Assets,
-                          beneficiaries: Beneficiaries,
-                          isHoldOverClaimed: Boolean,
-                          dovType: Option[String] = None) {
+ case class InterVivoTrust(assets: Assets,
+                                   beneficiaries: Beneficiaries,
+                                   isHoldOverClaimed: Boolean,
+                                   dovType: Option[String] = None) extends BaseTrust{
 
   private val atLeastOneTypeOfRequiredAsset: Boolean = (assets.monetaryAssets.isDefined && assets.monetaryAssets.get.size > 0) ||
     (assets.propertyAssets.isDefined && assets.propertyAssets.get.size > 0) ||
@@ -53,8 +53,7 @@ case class InterVivoTrust(assets: Assets,
   require(noEmployeeOrDirectorBeneficiaries, NoOtherTypeOfBeneficiariesException())
   require(isHoldOverClaimedIsTrue,IsHoldOverClaimedException())
   require(noPartnershipAssetsIfDeedOfVariation,PartnershipAssetsNotAllowedException())
-
-}
+ }
 
 
 object InterVivoTrust {

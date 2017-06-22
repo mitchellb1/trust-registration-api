@@ -20,10 +20,10 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.common.rest.resources.core.Deceased
 import uk.gov.hmrc.trustapi.rest.resources.core.assets.Assets
 import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.Beneficiaries
-import uk.gov.hmrc.trustapi.rest.resources.core.{NoAssetsException, NoBeneficiariesException, NoOtherTypeOfAssetsException, NoOtherTypeOfBeneficiariesException}
+import uk.gov.hmrc.trustapi.rest.resources.core._
 
 
-case class WillIntestacyTrust(assets: Assets, beneficiaries: Beneficiaries, deceased: Deceased, isDovTypeAddition: Boolean) {
+case class WillIntestacyTrust(assets: Assets, beneficiaries: Beneficiaries, deceased: Deceased, isDovTypeAddition: Boolean) extends BaseTrust{
 
   private val atleastOneTypeOfRequiredAsset: Boolean = (assets.monetaryAssets.isDefined && assets.monetaryAssets.get.size > 0) ||
     (assets.propertyAssets.isDefined && assets.propertyAssets.get.size > 0) ||
