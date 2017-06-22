@@ -16,19 +16,25 @@
 
 package uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsPath, Json, Writes}
 import uk.gov.hmrc.trustapi.rest.resources.core.{ShareOfIncomeMissingException, ShareOfIncomeNotRequiredException}
+import play.api.libs.functional.syntax._
 
 
 case class IncomeDistribution(isIncomeAtTrusteeDiscretion: Boolean, shareOfIncome: Option[Int]) {
 
   val shareOfIncomeMissingForTrusteeDiscretionFalse = !isIncomeAtTrusteeDiscretion && !shareOfIncome.isDefined
-  require(!shareOfIncomeMissingForTrusteeDiscretionFalse,ShareOfIncomeMissingException())
+  require(!shareOfIncomeMissingForTrusteeDiscretionFalse, ShareOfIncomeMissingException())
 
   val shareOfIncomeThereForTrusteeDiscretionTrue = isIncomeAtTrusteeDiscretion && shareOfIncome.isDefined && shareOfIncome.nonEmpty
-  require(!shareOfIncomeThereForTrusteeDiscretionTrue,ShareOfIncomeNotRequiredException())
+  require(!shareOfIncomeThereForTrusteeDiscretionTrue, ShareOfIncomeNotRequiredException())
 }
 
 object IncomeDistribution {
   implicit val incomeDistributionFormats = Json.format[IncomeDistribution]
+
+  val writesToDes: Writes[IncomeDistribution] = (
+    (JsPath \ "beneficiaryDiscretion").write[Boolean] and
+      (JsPath \ "beneficiaryShareOfIncome").writeNullable[String]
+    ) (i => (i.isIncomeAtTrusteeDiscretion, i.shareOfIncome.map(c => c.toString)))
 }

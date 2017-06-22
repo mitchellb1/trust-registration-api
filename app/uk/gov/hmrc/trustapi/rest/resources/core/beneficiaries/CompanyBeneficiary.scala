@@ -29,12 +29,10 @@ object CompanyBeneficiary {
 
   val writesToDes: Writes[CompanyBeneficiary] = (
     (JsPath \ "organisationName").write[String] and
-      (JsPath \ "beneficiaryDiscretion").write[Boolean] and
-      (JsPath \ "beneficiaryShareOfIncome").writeNullable[String] and
+      (JsPath).write[IncomeDistribution](IncomeDistribution.writesToDes) and
       (JsPath \ "identification" \ "address").write[Address](Address.writesToDes) and
       (JsPath \ "identification" \ "utr").writeNullable[String]
 
-    ) (c => (c.company.name, c.incomeDistribution.isIncomeAtTrusteeDiscretion,
-    c.incomeDistribution.shareOfIncome.map(c => c.toString),
+    ) (c => (c.company.name, c.incomeDistribution,
     c.company.correspondenceAddress, c.company.referenceNumber))
 }

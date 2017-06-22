@@ -31,12 +31,11 @@ object TrustBeneficiary {
 
   val writesToDes: Writes[TrustBeneficiary] = (
     (JsPath \ "organisationName").write[String] and
-      (JsPath \ "beneficiaryDiscretion").write[Boolean] and
-      (JsPath \ "beneficiaryShareOfIncome").writeNullable[String] and
+      (JsPath).write[IncomeDistribution](IncomeDistribution.writesToDes) and
       (JsPath \ "identification" \ "address").write[Address](Address.writesToDes) and
       (JsPath \ "identification" \ "utr").writeNullable[String]
-    ) (t => (t.trustBeneficiaryName, t.incomeDistribution.isIncomeAtTrusteeDiscretion,
-    t.incomeDistribution.shareOfIncome.map(c => c.toString),
+    ) (t => (t.trustBeneficiaryName,
+    t.incomeDistribution,
     t.correspondenceAddress, t.trustBeneficiaryUTR))
 
 }

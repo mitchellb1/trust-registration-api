@@ -212,7 +212,6 @@ class BeneficiaryMapperSpec extends PlaySpec with OneAppPerSuite with ScalaDataE
           (trustBeneficaryList \ "identification" \ "utr").validate[String].isError mustBe true
           (trustBeneficaryList \ "identification" \ "address" \ "line1").get.as[String] mustBe  domainTrust.trustType.willIntestacyTrust.get.beneficiaries.trustBeneficiaries.get.head.correspondenceAddress.line1
         }
-
       }
     }
   }
