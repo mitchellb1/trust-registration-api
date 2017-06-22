@@ -16,8 +16,10 @@
 
 package uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsPath, Json, Writes}
 import uk.gov.hmrc.common.rest.resources.core.Address
+import play.api.libs.functional.syntax._
+
 
 case class TrustBeneficiary(trustBeneficiaryName: String,
                             trustBeneficiaryUTR: Option[String] = None,
@@ -26,4 +28,15 @@ case class TrustBeneficiary(trustBeneficiaryName: String,
 
 object TrustBeneficiary {
   implicit val trustBeneficiaryFormats = Json.format[TrustBeneficiary]
+
+  val writesToDes: Writes[TrustBeneficiary] = (
+    (JsPath \ "organisationName").write[String] and
+      (JsPath \ "beneficiaryDiscretion").write[Boolean] and
+      (JsPath \ "beneficiaryShareOfIncome").writeNullable[String] and
+      (JsPath \ "identification" \ "address").write[Address](Address.writesToDes) and
+      (JsPath \ "identification" \ "utr").writeNullable[String]
+    ) (t => (t.trustBeneficiaryName, t.incomeDistribution.isIncomeAtTrusteeDiscretion,
+    t.incomeDistribution.shareOfIncome.map(c => c.toString),
+    t.correspondenceAddress, t.trustBeneficiaryUTR))
+
 }

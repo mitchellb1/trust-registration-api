@@ -21,7 +21,7 @@ import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
 import uk.gov.hmrc.trustapi.rest.resources.core.Trust
 import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.{Beneficiaries, IncomeDistribution, IndividualBeneficiary}
-import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.{EmploymentTrust, TrustType}
+import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.{EmploymentTrust, TrustType, WillIntestacyTrust}
 import uk.gov.hmrc.utils.ScalaDataExamples
 
 class BeneficiaryMapperSpec extends PlaySpec with OneAppPerSuite with ScalaDataExamples {
@@ -127,6 +127,7 @@ class BeneficiaryMapperSpec extends PlaySpec with OneAppPerSuite with ScalaDataE
         "we have no beneficiaryShareOfIncome " in {
           val domainTrust = trustWithEmploymentTrustAndCompanyBen.copy(trustType = TrustType(employmentTrust = Some(EmploymentTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false, IncomeDistribution(true,None)))),None,None)))))
           val json = Json.toJson(domainTrust)(Trust.trustWrites)
+
           val companyBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "company")(0)
 
           (companyBeneficaryList \ "beneficiaryShareOfIncome").validate[String].isError mustBe  true
@@ -148,9 +149,68 @@ class BeneficiaryMapperSpec extends PlaySpec with OneAppPerSuite with ScalaDataE
         "we have identification details without having utr and we have an address " in {
           val domainTrust = trustWithEmploymentTrustAndCompanyBen.copy(trustType = TrustType(employmentTrust = Some(EmploymentTrust(assets,Beneficiaries(companyBeneficiaries = Some(List(companyBeneficiary.copy(company.copy(referenceNumber = None)))))))))
           val json = Json.toJson(domainTrust)(Trust.trustWrites)
+
           val companyBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "company")(0)
+
           (companyBeneficaryList \ "identification" \ "utr").validate[String].isError mustBe true
           (companyBeneficaryList \ "identification" \ "address" \ "line1").get.as[String] mustBe  domainTrust.trustType.employmentTrust.get.beneficiaries.companyBeneficiaries.get.head.company.correspondenceAddress.line1
+        }
+      }
+
+      "we have trust beneficiaries" when {
+
+        val domainTrust = trustWithWillIntestacyTrust.copy(trustType = TrustType(willIntestacyTrust = Some(willIntestacyTrustWithTrustBeneficiary)))
+        val json = Json.toJson(domainTrust)(Trust.trustWrites)
+
+        "we have organisationName  details" in {
+          val trustBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "trust")(0)
+
+          (trustBeneficaryList \ "organisationName").get.as[String] mustBe domainTrust.trustType.willIntestacyTrust.get.beneficiaries.trustBeneficiaries.get.head.trustBeneficiaryName
+        }
+
+        "we have beneficiaryDiscretion flag " in {
+          val trustBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "trust")(0)
+
+          (trustBeneficaryList \ "beneficiaryDiscretion").get.as[Boolean] mustBe domainTrust.trustType.willIntestacyTrust.get.beneficiaries.trustBeneficiaries.get.head.incomeDistribution.isIncomeAtTrusteeDiscretion
+        }
+
+        "we have beneficiaryShareOfIncome details  " in {
+          val trustBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "trust")(0)
+
+          (trustBeneficaryList \ "beneficiaryShareOfIncome").get.as[String] mustBe  String.valueOf(domainTrust.trustType.willIntestacyTrust.get.beneficiaries.trustBeneficiaries.get.head.incomeDistribution.shareOfIncome.get)
+        }
+
+        "we have no beneficiaryShareOfIncome " in {
+          val trustBeneficiaryWithoutShareOfIncome =  trustBeneficiary.copy(incomeDistribution = incomeDistribution.copy(shareOfIncome = None,isIncomeAtTrusteeDiscretion = true))
+          val domainTrust = trustWithWillIntestacyTrust.copy(trustType = TrustType(willIntestacyTrust = Some(WillIntestacyTrust(assets,Beneficiaries(trustBeneficiaries = Some(List(trustBeneficiaryWithoutShareOfIncome))), deceased, false))))
+          val json = Json.toJson(domainTrust)(Trust.trustWrites)
+
+          val trustBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "trust")(0)
+
+          (trustBeneficaryList \ "beneficiaryShareOfIncome").validate[String].isError mustBe  true
+        }
+
+        "we have identification details having address details " in {
+          val trustBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "trust")(0)
+
+          (trustBeneficaryList \ "identification" \ "address" \ "line1").get.as[String] mustBe  domainTrust.trustType.willIntestacyTrust.get.beneficiaries.trustBeneficiaries.get.head.correspondenceAddress.line1
+        }
+
+        "we have identification details having a utr and address" in {
+          val trustBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "trust")(0)
+
+          (trustBeneficaryList \ "identification" \ "utr").get.as[String] mustBe  domainTrust.trustType.willIntestacyTrust.get.beneficiaries.trustBeneficiaries.get.head.trustBeneficiaryUTR.get
+          (trustBeneficaryList \ "identification" \ "address" \ "line1").get.as[String] mustBe  domainTrust.trustType.willIntestacyTrust.get.beneficiaries.trustBeneficiaries.get.head.correspondenceAddress.line1
+        }
+
+        "we have identification details without having utr and we have an address " in {
+          val domainTrust = trustWithWillIntestacyTrust.copy(trustType = TrustType(willIntestacyTrust = Some(WillIntestacyTrust(assets,Beneficiaries(trustBeneficiaries = Some(List(trustBeneficiary.copy(trustBeneficiaryUTR = None)))), deceased, false))))
+          val json = Json.toJson(domainTrust)(Trust.trustWrites)
+
+          val trustBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "trust")(0)
+
+          (trustBeneficaryList \ "identification" \ "utr").validate[String].isError mustBe true
+          (trustBeneficaryList \ "identification" \ "address" \ "line1").get.as[String] mustBe  domainTrust.trustType.willIntestacyTrust.get.beneficiaries.trustBeneficiaries.get.head.correspondenceAddress.line1
         }
 
       }

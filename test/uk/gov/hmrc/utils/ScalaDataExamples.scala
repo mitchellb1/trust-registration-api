@@ -204,6 +204,10 @@ trait ScalaDataExamples {
   val trustWithWillIntestacyTrust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1900-01-01"),yearsOfTaxConsequence,legality,true,leadTrusteeIndividual,Trustees(None, None),
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(Some(List(individual,individual)))), TrustType(willIntestacyTrust = Some(willIntestacyTrust)),declaration)
 
+  //val willIntestacyTrustWithCompanyBeneficiary =  WillIntestacyTrust(assets,Beneficiaries(trustBeneficiaries= Some(trustBeneficiary)), deceased, false)
+
+  val willIntestacyTrustWithTrustBeneficiary =  WillIntestacyTrust(assets,Beneficiaries(trustBeneficiaries = Some(List(trustBeneficiary))), deceased, false)
+
   val otherAsset = OtherAsset("This is a test description", None , new DateTime("1900-01-01"))
 
   val partnershipAsset = PartnershipAsset("This is a test description", "123456UTR" , new DateTime("1900-01-01"))

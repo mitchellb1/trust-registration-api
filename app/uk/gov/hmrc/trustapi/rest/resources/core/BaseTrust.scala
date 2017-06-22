@@ -17,7 +17,7 @@
 package uk.gov.hmrc.trustapi.rest.resources.core
 
 import play.api.libs.json.{JsArray, JsValue, Json}
-import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.{Beneficiaries, CompanyBeneficiary, IndividualBeneficiary}
+import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.{Beneficiaries, CompanyBeneficiary, IndividualBeneficiary, TrustBeneficiary}
 
 
 trait BaseTrust {
@@ -29,5 +29,9 @@ trait BaseTrust {
 
   def addCompanyBeneficiaries(): Option[JsValue] = {
     beneficiaries.companyBeneficiaries.map(b => JsArray(b.map(c => Json.toJson(c)(CompanyBeneficiary.writesToDes))))
+  }
+
+  def addTrustBeneficiaries(): Option[JsValue] = {
+    beneficiaries.trustBeneficiaries.map(b => JsArray(b.map(c=>Json.toJson(c)(TrustBeneficiary.writesToDes))))
   }
 }
