@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries
 
+import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Writes}
 import uk.gov.hmrc.common.rest.resources.core.Address
-import play.api.libs.functional.syntax._
 
 
 case class TrustBeneficiary(trustBeneficiaryName: String,
@@ -32,10 +32,8 @@ object TrustBeneficiary {
   val writesToDes: Writes[TrustBeneficiary] = (
     (JsPath \ "organisationName").write[String] and
       (JsPath).write[IncomeDistribution](IncomeDistribution.writesToDes) and
-      (JsPath \ "identification" \ "address").write[Address](Address.writesToDes) and
-      (JsPath \ "identification" \ "utr").writeNullable[String]
+      (JsPath).write[(Address, Option[String])](Beneficiaries.identificationWritesToDes)
     ) (t => (t.trustBeneficiaryName,
     t.incomeDistribution,
-    t.correspondenceAddress, t.trustBeneficiaryUTR))
-
+    (t.correspondenceAddress, t.trustBeneficiaryUTR)))
 }

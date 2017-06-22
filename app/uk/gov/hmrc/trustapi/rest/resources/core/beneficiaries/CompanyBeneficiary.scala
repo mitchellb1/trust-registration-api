@@ -30,9 +30,7 @@ object CompanyBeneficiary {
   val writesToDes: Writes[CompanyBeneficiary] = (
     (JsPath \ "organisationName").write[String] and
       (JsPath).write[IncomeDistribution](IncomeDistribution.writesToDes) and
-      (JsPath \ "identification" \ "address").write[Address](Address.writesToDes) and
-      (JsPath \ "identification" \ "utr").writeNullable[String]
-
+      (JsPath).write[(Address,Option[String])](Beneficiaries.identificationWritesToDes)
     ) (c => (c.company.name, c.incomeDistribution,
-    c.company.correspondenceAddress, c.company.referenceNumber))
+    (c.company.correspondenceAddress, c.company.referenceNumber)))
 }
