@@ -213,6 +213,17 @@ class BeneficiaryMapperSpec extends PlaySpec with OneAppPerSuite with ScalaDataE
           (trustBeneficaryList \ "identification" \ "address" \ "line1").get.as[String] mustBe  domainTrust.trustType.willIntestacyTrust.get.beneficiaries.trustBeneficiaries.get.head.correspondenceAddress.line1
         }
       }
+
+      "we have charity beneficiaries" when {
+
+        val domainTrust = trustWithWillIntestacyTrust.copy(trustType = TrustType(willIntestacyTrust = Some(willIntestacyTrustWithCharityBeneficiary)))
+        val json = Json.toJson(domainTrust)(Trust.trustWrites)
+
+        "we have organisationName  details" in {
+          val charityBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "charity") (0)
+          (charityBeneficaryList \ "organisationName").get.as[String] mustBe domainTrust.trustType.willIntestacyTrust.get.beneficiaries.charityBeneficiaries.get.head.charityName
+        }
+      }
     }
   }
 }

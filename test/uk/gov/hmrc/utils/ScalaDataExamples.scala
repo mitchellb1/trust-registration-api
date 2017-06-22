@@ -205,6 +205,8 @@ trait ScalaDataExamples {
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(Some(List(individual,individual)))), TrustType(willIntestacyTrust = Some(willIntestacyTrust)),declaration)
   
   val willIntestacyTrustWithTrustBeneficiary =  WillIntestacyTrust(assets,Beneficiaries(trustBeneficiaries = Some(List(trustBeneficiary))), deceased, false)
+  val willIntestacyTrustWithCharityBeneficiary =  WillIntestacyTrust(assets,Beneficiaries(charityBeneficiaries = Some(List(charityBeneficiary))), deceased, false)
+
 
   val otherAsset = OtherAsset("This is a test description", None , new DateTime("1900-01-01"))
 

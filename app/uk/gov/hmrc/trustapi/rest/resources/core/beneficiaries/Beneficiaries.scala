@@ -45,8 +45,9 @@ object Beneficiaries {
   val beneficiaryWritesToDes: Writes[TrustType] = (
     (JsPath \ "individualDetails").writeNullable[JsValue] and
       (JsPath \ "company").writeNullable[JsValue] and
-      (JsPath \ "trust").writeNullable[JsValue]
-    ) (b => (b.selectedTrust.addIndividualBeneficiary(), b.selectedTrust.addCompanyBeneficiaries(), b.selectedTrust.addTrustBeneficiaries()))
+      (JsPath \ "trust").writeNullable[JsValue] and
+      (JsPath \ "charity").writeNullable[JsValue]
+    ) (b => (b.selectedTrust.addIndividualBeneficiary(), b.selectedTrust.addCompanyBeneficiaries(), b.selectedTrust.addTrustBeneficiaries(),b.selectedTrust.addCharityBeneficiaries()))
 }
 
 
