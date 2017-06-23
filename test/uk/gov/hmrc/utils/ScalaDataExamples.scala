@@ -21,7 +21,7 @@ import uk.gov.hmrc.common.rest.resources.core._
 import uk.gov.hmrc.estateapi.rest.resources.core.{Estate, PersonalRepresentative}
 import uk.gov.hmrc.trustapi.rest.resources.core._
 import uk.gov.hmrc.trustapi.rest.resources.core.assets._
-import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries._
+import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.{UnidentifiedBeneficiary, _}
 import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes._
 
 
@@ -169,6 +169,11 @@ trait ScalaDataExamples {
   val otherBeneficiary = OtherBeneficiary(
     beneficiaryDescription = "Beneficiary Description",
     correspondenceAddress = address,
+    incomeDistribution = incomeDistribution
+  )
+
+  val unidentifiedBeneficiary = UnidentifiedBeneficiary(
+    description = "unidentifiedBeneficiary Description",
     incomeDistribution = incomeDistribution
   )
 

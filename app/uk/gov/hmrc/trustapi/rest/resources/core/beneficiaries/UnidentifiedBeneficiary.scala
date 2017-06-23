@@ -16,11 +16,17 @@
 
 package uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries
 
-import play.api.libs.json.Json
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Writes}
 
 case class UnidentifiedBeneficiary(description: String,
                                    incomeDistribution: IncomeDistribution)
 
 object UnidentifiedBeneficiary {
   implicit val unidentifiedBeneficiaryFormats = Json.format[UnidentifiedBeneficiary]
+
+  val writesToDes: Writes[UnidentifiedBeneficiary] = (
+    (JsPath \ "description").write[String] and
+      (JsPath).write[IncomeDistribution](IncomeDistribution.writesToDes)
+    ) (un => (un.description, un.incomeDistribution))
 }

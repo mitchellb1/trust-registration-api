@@ -20,8 +20,8 @@ import org.joda.time.DateTime
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
 import uk.gov.hmrc.trustapi.rest.resources.core.Trust
-import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.{Beneficiaries, IncomeDistribution, IndividualBeneficiary}
-import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.{EmploymentTrust, TrustType, WillIntestacyTrust}
+import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries._
+import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.{EmploymentTrust, HeritageMaintenanceFundTrust, TrustType, WillIntestacyTrust}
 import uk.gov.hmrc.utils.ScalaDataExamples
 
 class BeneficiaryMapperSpec extends PlaySpec with ScalaDataExamples {
@@ -268,6 +268,40 @@ class BeneficiaryMapperSpec extends PlaySpec with ScalaDataExamples {
           (charityBeneficaryList \ "identification" \ "utr").get.as[String] mustBe ""
           (charityBeneficaryList \ "identification" \ "address" \ "line1").get.as[String] mustBe  domainTrust.trustType.willIntestacyTrust.get.beneficiaries.charityBeneficiaries.get.head.correspondenceAddress.line1
         }
+      }
+
+      "we have unidentifiedType beneficiaries" when {
+        val empTrustWithUnidentifiedBeneficiary = Some(EmploymentTrust(assets,Beneficiaries(unidentifiedBeneficiaries = Some(List(unidentifiedBeneficiary))),Some(true),Some(new DateTime("1900-01-01"))))
+
+        val domainTrust = trustWithEmploymentTrust.copy(trustType = TrustType(employmentTrust=empTrustWithUnidentifiedBeneficiary))
+        val json = Json.toJson(domainTrust)(Trust.trustWrites)
+
+        "we have description  details" in {
+          val unidentifiedBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "unidentified") (0)
+          (unidentifiedBeneficaryList \ "description").get.as[String] mustBe domainTrust.trustType.employmentTrust.get.beneficiaries.unidentifiedBeneficiaries.get.head.description
+        }
+
+        "we have beneficiaryDiscretion flag " in {
+          val unidentifiedBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "unidentified") (0)
+          (unidentifiedBeneficaryList \ "beneficiaryDiscretion").get.as[Boolean] mustBe domainTrust.trustType.employmentTrust.get.beneficiaries.unidentifiedBeneficiaries.get.head.incomeDistribution.isIncomeAtTrusteeDiscretion
+        }
+
+        "we have beneficiaryShareOfIncome details  " in {
+          val unidentifiedBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "unidentified") (0)
+          (unidentifiedBeneficaryList \ "beneficiaryShareOfIncome").get.as[String] mustBe
+            String.valueOf(domainTrust.trustType.employmentTrust.get.beneficiaries.unidentifiedBeneficiaries.get.head.incomeDistribution.shareOfIncome.get)
+        }
+
+        "we have no beneficiaryShareOfIncome " in {
+          val unidentifiedBeneficiaryWithoutShareOfIncome = unidentifiedBeneficiary.copy(incomeDistribution = incomeDistribution.copy(shareOfIncome = None, isIncomeAtTrusteeDiscretion = true))
+          val empTrustWithUnidentifiedBeneficiary = Some(EmploymentTrust(assets,Beneficiaries(unidentifiedBeneficiaries = Some(List(unidentifiedBeneficiaryWithoutShareOfIncome))),Some(true),Some(new DateTime("1900-01-01"))))
+          val domainTrust = trustWithEmploymentTrust.copy(trustType = TrustType(employmentTrust=empTrustWithUnidentifiedBeneficiary))
+          val json = Json.toJson(domainTrust)(Trust.trustWrites)
+          val unidentifiedBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "unidentified") (0)
+
+          (unidentifiedBeneficaryList \ "beneficiaryShareOfIncome").validate[String].isError mustBe true
+        }
+
       }
     }
   }

@@ -39,4 +39,9 @@ trait BaseTrust {
   def addCharityBeneficiaries(): Option[JsValue] = {
     beneficiaries.charityBeneficiaries.map(b => JsArray(b.map(c=>Json.toJson(c)(CharityBeneficiary.writesToDes))))
   }
+
+  def addUnidentifiedBeneficiaries(): Option[JsValue] = {
+    beneficiaries.unidentifiedBeneficiaries.map(b => JsArray(b.map(c=>Json.toJson(c)(UnidentifiedBeneficiary.writesToDes))))
+  }
+
 }
