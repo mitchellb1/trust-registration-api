@@ -23,7 +23,7 @@ import uk.gov.hmrc.trustapi.rest.resources.core.{NaturalPeople, Trust}
 import uk.gov.hmrc.utils.ScalaDataExamples
 
 
-class NaturalPersonMapperSpec extends PlaySpec with OneAppPerSuite with ScalaDataExamples {
+class NaturalPersonMapperSpec extends PlaySpec with ScalaDataExamples {
 
   "Natural Persons" should {
     "Map to a valid DES Natural Person JSON Body" when {

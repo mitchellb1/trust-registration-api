@@ -19,6 +19,7 @@ package uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Writes._
 import play.api.libs.json._
+import uk.gov.hmrc.common.rest.resources.core.Address
 import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.TrustType
 
 
@@ -33,12 +34,23 @@ case class Beneficiaries(individualBeneficiaries: Option[List[IndividualBenefici
                          largeNumbersCompanyBeneficiaries: Option[List[LargeNumbersCompanyBeneficiaries]] = None)
 
 object Beneficiaries {
+
+  val identificationWritesToDes : Writes[(Address,Option[String])] = (
+    (JsPath \ "identification" \ "address").write[Address](Address.writesToDes) and
+      (JsPath \ "identification" \ "utr").writeNullable[String]
+    )(i=>(i._1,i._2))
+
   implicit val beneficiariesFormat = Json.format[Beneficiaries]
 
   val beneficiaryWritesToDes: Writes[TrustType] = (
     (JsPath \ "individualDetails").writeNullable[JsValue] and
-      (JsPath \ "company").writeNullable[JsValue]
-    ) (b => (b.selectedTrust.addIndividualBeneficiary(), b.selectedTrust.addCompanyBeneficiaries()))
+      (JsPath \ "company").writeNullable[JsValue] and
+      (JsPath \ "trust").writeNullable[JsValue] and
+      (JsPath \ "charity").writeNullable[JsValue] and
+      (JsPath \ "unidentified").writeNullable[JsValue]
+    ) (b => (b.selectedTrust.addIndividualBeneficiary(), b.selectedTrust.addCompanyBeneficiaries(), b.selectedTrust.addTrustBeneficiaries(),
+    b.selectedTrust.addCharityBeneficiaries(),
+    b.selectedTrust.addUnidentifiedBeneficiaries()))
 }
 
 

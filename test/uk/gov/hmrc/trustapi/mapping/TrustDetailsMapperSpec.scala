@@ -26,7 +26,7 @@ import uk.gov.hmrc.utils.ScalaDataExamples
 
 
 
-class TrustDetailsMapperSpec extends PlaySpec with OneAppPerSuite with ScalaDataExamples {
+class TrustDetailsMapperSpec extends PlaySpec with ScalaDataExamples {
 
   "A domain representation of a Trust" should {
     "map its properties to a JSON Des representation of Trust Details" when {

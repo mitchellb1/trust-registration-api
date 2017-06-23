@@ -28,13 +28,11 @@ object CompanyBeneficiary {
   implicit val companyBeneficiaryFormats = Json.format[CompanyBeneficiary]
 
   val writesToDes: Writes[CompanyBeneficiary] = (
-    (JsPath \ "organisationName").write[String] and
-      (JsPath \ "beneficiaryDiscretion").write[Boolean] and
-      (JsPath \ "beneficiaryShareOfIncome").writeNullable[String] and
-      (JsPath \ "identification" \ "address").write[Address](Address.writesToDes) and
-      (JsPath \ "identification" \ "utr").writeNullable[String]
 
-    ) (c => (c.company.name, c.incomeDistribution.isIncomeAtTrusteeDiscretion,
-    c.incomeDistribution.shareOfIncome.map(c => c.toString),
-    c.company.correspondenceAddress, c.company.referenceNumber))
+    (JsPath \ "organisationName").write[String] and
+      (JsPath).write[IncomeDistribution](IncomeDistribution.writesToDes) and
+      (JsPath).write[(Address, Option[String])](Beneficiaries.identificationWritesToDes)
+    ) (c => (c.company.name,
+    c.incomeDistribution,
+    (c.company.correspondenceAddress, c.company.referenceNumber)))
 }

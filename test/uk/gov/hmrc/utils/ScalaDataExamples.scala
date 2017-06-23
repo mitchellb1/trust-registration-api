@@ -21,7 +21,7 @@ import uk.gov.hmrc.common.rest.resources.core._
 import uk.gov.hmrc.estateapi.rest.resources.core.{Estate, PersonalRepresentative}
 import uk.gov.hmrc.trustapi.rest.resources.core._
 import uk.gov.hmrc.trustapi.rest.resources.core.assets._
-import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries._
+import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.{UnidentifiedBeneficiary, _}
 import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes._
 
 
@@ -172,6 +172,11 @@ trait ScalaDataExamples {
     incomeDistribution = incomeDistribution
   )
 
+  val unidentifiedBeneficiary = UnidentifiedBeneficiary(
+    description = "unidentifiedBeneficiary Description",
+    incomeDistribution = incomeDistribution
+  )
+
   val beneficiaries = Beneficiaries(
     individualBeneficiaries = Some(List(individualBeneficiary)),
     employeeBeneficiaries = Some(List(employeeBeneficiary)),
@@ -203,6 +208,10 @@ trait ScalaDataExamples {
   val willIntestacyTrust = WillIntestacyTrust(assets,Beneficiaries(Some(List(IndividualBeneficiary(individual,false, incomeDistribution)))), deceased, false)
   val trustWithWillIntestacyTrust = Trust("Test Trust",address,"0044 1234 1234","1970",new DateTime("1900-01-01"),yearsOfTaxConsequence,legality,true,leadTrusteeIndividual,Trustees(None, None),
     Protectors(Some(List(individual,individual))),Settlors(Some(List(individual,individual))),Some(NaturalPeople(Some(List(individual,individual)))), TrustType(willIntestacyTrust = Some(willIntestacyTrust)),declaration)
+  
+  val willIntestacyTrustWithTrustBeneficiary =  WillIntestacyTrust(assets,Beneficiaries(trustBeneficiaries = Some(List(trustBeneficiary))), deceased, false)
+  val willIntestacyTrustWithCharityBeneficiary =  WillIntestacyTrust(assets,Beneficiaries(charityBeneficiaries = Some(List(charityBeneficiary))), deceased, false)
+
 
   val otherAsset = OtherAsset("This is a test description", None , new DateTime("1900-01-01"))
 
