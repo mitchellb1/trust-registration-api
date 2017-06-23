@@ -15,6 +15,7 @@
  */
 
 package uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries
+
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Writes}
 import uk.gov.hmrc.common.rest.resources.core.Address
@@ -33,5 +34,5 @@ object CharityBeneficiary {
       (JsPath).write[(Address, Option[String])](Beneficiaries.identificationWritesToDes)
     ) (ch => (ch.charityName,
     ch.incomeDistribution,
-    (ch.correspondenceAddress, None)))
+    (ch.correspondenceAddress, Some(ch.charityNumber))))
 }
