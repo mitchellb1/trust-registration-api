@@ -77,7 +77,7 @@ object ApiGlobal extends DefaultMicroserviceGlobal with RunMode with ServiceLoca
 
   override val slConnector = ServiceLocatorConnector
 
-  override val registrationEnabled = true
+  override lazy val registrationEnabled = AppContext.registrationEnabled
 
   override val auditConnector = MicroserviceAuditConnector
 
@@ -91,11 +91,13 @@ object ApiGlobal extends DefaultMicroserviceGlobal with RunMode with ServiceLoca
 
   override implicit val hc: HeaderCarrier = HeaderCarrier()
 
+
 }
 
 object AppContext extends ServicesConfig {
   lazy val appName = current.configuration.getString("appName").getOrElse(throw new RuntimeException("appName is not configured"))
   lazy val appUrl = current.configuration.getString("appUrl").getOrElse(throw new RuntimeException("appUrl is not configured"))
   lazy val serviceLocatorUrl: String = baseUrl("service-locator")
-  lazy val registrationEnabled: Boolean = current.configuration.getBoolean(s"${env}.microservice.protected.mdtp.service-locator.enabled").getOrElse(true)
+  lazy val registrationEnabled : Boolean = getConfBool("service-locator.enabled",true)
+
 }
