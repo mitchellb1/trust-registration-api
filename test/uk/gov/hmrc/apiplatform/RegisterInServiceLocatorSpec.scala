@@ -20,12 +20,18 @@ import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.OneAppPerSuite
+import play.api.Application
 import uk.gov.hmrc.config.ServiceLocatorRegistration
 import uk.gov.hmrc.connectors.ServiceLocatorConnector
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
+import play.api.inject.guice.GuiceApplicationBuilder
+
+import scala.concurrent.Future
 
 class RegisterInServiceLocatorSpec extends UnitSpec with MockitoSugar with OneAppPerSuite {
+
+  override implicit lazy val app: Application = new GuiceApplicationBuilder().build()
 
   trait Setup extends ServiceLocatorRegistration {
     val mockConnector = mock[ServiceLocatorConnector]
@@ -34,9 +40,19 @@ class RegisterInServiceLocatorSpec extends UnitSpec with MockitoSugar with OneAp
   }
 
   "onStart" should {
+
+    "register the microservice in service locator when registration is enabled" in new Setup {
+      override val registrationEnabled: Boolean = true
+      onStart(app)
+      when(mockConnector.register(any())).thenReturn(Future.successful(true))
+      verify(mockConnector).register(any())
+    }
+
     "not register the microservice in service locator when registration is disabled" in new Setup {
       override val registrationEnabled: Boolean = false
-      verify(mockConnector,never()).register(any())
+      verify(mockConnector, never()).register(any())
     }
+
+
   }
 }
