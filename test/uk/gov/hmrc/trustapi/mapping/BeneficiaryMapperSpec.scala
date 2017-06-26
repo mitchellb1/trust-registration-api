@@ -344,6 +344,26 @@ class BeneficiaryMapperSpec extends PlaySpec with ScalaDataExamples {
           (largeNumberCompanyBeneficaryList \ "identification" \ "utr").validate[String].isError mustBe true
           (largeNumberCompanyBeneficaryList \ "identification" \ "address" \ "line1").get.as[String] mustBe  domainTrust.trustType.willIntestacyTrust.get.beneficiaries.largeNumbersCompanyBeneficiaries.get.head.company.correspondenceAddress.line1
         }
+
+        "we have beneficiaryDiscretion flag " in {
+          val largeNumberCompanyBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "large")(0)
+          (largeNumberCompanyBeneficaryList \ "beneficiaryDiscretion").get.as[Boolean] mustBe domainTrust.trustType.willIntestacyTrust.get.beneficiaries.largeNumbersCompanyBeneficiaries.get.head.incomeDistribution.isIncomeAtTrusteeDiscretion
+        }
+
+        "we have beneficiaryShareOfIncome details " in {
+          val largeNumberCompanyBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "large")(0)
+          (largeNumberCompanyBeneficaryList \ "beneficiaryShareOfIncome").get.as[String] mustBe String.valueOf(domainTrust.trustType.willIntestacyTrust.get.beneficiaries.largeNumbersCompanyBeneficiaries.get.head.incomeDistribution.shareOfIncome.get)
+        }
+
+        "we have no beneficiaryShareOfIncome " in {
+          val largeBeneficiaryWithoutShareOfIncome = largeNumbersCompanyBeneficiary.copy(incomeDistribution = incomeDistribution.copy(shareOfIncome = None, isIncomeAtTrusteeDiscretion = true))
+          val willIntestacyTrustWithLargeBeneficiary = Some(WillIntestacyTrust(assets,Beneficiaries(largeNumbersCompanyBeneficiaries = Some(List(largeBeneficiaryWithoutShareOfIncome))),deceased,true))
+          val domainTrust = trustWithWillIntestacyTrust.copy(trustType = TrustType(willIntestacyTrust=willIntestacyTrustWithLargeBeneficiary))
+          val json = Json.toJson(domainTrust)(Trust.trustWrites)
+          val largeNumberCompanyBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "large") (0)
+
+          (largeNumberCompanyBeneficaryList \ "beneficiaryShareOfIncome").validate[String].isError mustBe true
+        }
       }
     }
   }

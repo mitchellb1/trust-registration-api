@@ -34,10 +34,12 @@ object LargeNumbersCompanyBeneficiaries {
     (JsPath \ "organisationName").write[String] and
     (JsPath \ "description").write[String] and
     (JsPath \ "numberOfBeneficiary").write[String] and
-      (JsPath).write[(Address, Option[String])](Beneficiaries.identificationWritesToDes)
-  )(lc => (lc.company.name,
+      (JsPath).write[(Address, Option[String])](Beneficiaries.identificationWritesToDes) and
+      (JsPath).write[IncomeDistribution](IncomeDistribution.writesToDes)
+
+    )(lc => (lc.company.name,
     lc.description,
     lc.numberOfBeneficiaries.toString,
-    (lc.company.correspondenceAddress, lc.company.referenceNumber)))
+    (lc.company.correspondenceAddress, lc.company.referenceNumber), lc.incomeDistribution))
 
 }
