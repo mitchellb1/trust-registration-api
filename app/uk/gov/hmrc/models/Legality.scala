@@ -16,8 +16,8 @@
 
 package uk.gov.hmrc.models
 
-import play.api.libs.json.{JsPath, Json, Writes}
 import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Writes}
 
 case class Legality(governingCountryCode: String,
                     administrationCountryCode: Option[String] = None,

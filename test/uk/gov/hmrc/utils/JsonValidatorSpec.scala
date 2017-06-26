@@ -19,9 +19,8 @@ package uk.gov.hmrc.trustregistration.utils
 import com.fasterxml.jackson.databind.JsonNode
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
-import uk.gov.hmrc.utils._
 import uk.gov.hmrc.models.TrustRequest
-import uk.gov.hmrc.utils.{ScalaDataExamples, SchemaValidationExamples}
+import uk.gov.hmrc.utils.{ScalaDataExamples, SchemaValidationExamples, _}
 
 class SchemaValidatorSpec extends PlaySpec
     with OneAppPerSuite

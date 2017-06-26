@@ -17,7 +17,6 @@
 package uk.gov.hmrc.models
 
 import play.api.libs.json._
-import uk.gov.hmrc.models.Individual
 
 case class NaturalPeople(individuals: Option[List[Individual]]) {
   val noMoreThanTwoNaturalPeople = (individuals.getOrElse(Nil).size <= 2)

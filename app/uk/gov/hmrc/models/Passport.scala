@@ -17,9 +17,8 @@
 package uk.gov.hmrc.models
 
 import org.joda.time.DateTime
-import play.api.libs.functional.syntax.unlift
+import play.api.libs.functional.syntax.{unlift, _}
 import play.api.libs.json._
-import play.api.libs.functional.syntax._
 
 
 case class Passport(referenceNumber: String,

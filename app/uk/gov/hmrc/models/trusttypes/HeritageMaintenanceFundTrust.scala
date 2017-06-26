@@ -17,10 +17,9 @@
 package uk.gov.hmrc.models.trusttypes
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.models.Individual
+import uk.gov.hmrc.models.{Individual, _}
 import uk.gov.hmrc.models.assets.Assets
 import uk.gov.hmrc.models.beneficiaries.Beneficiaries
-import uk.gov.hmrc.models._
 
 case class HeritageMaintenanceFundTrust(assets: Assets,
                                         beneficiaries: Beneficiaries,

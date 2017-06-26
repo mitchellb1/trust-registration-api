@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc
+package uk.gov.hmrc.utils
 
 import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
@@ -23,12 +23,14 @@ import org.mockito.Matchers.any
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
+import play.api.Play
+import play.api.test.FakeRequest
+import play.api.test.Helpers._
 import uk.gov.hmrc.connectors.ServiceLocatorConnector
 import uk.gov.hmrc.controllers.TrustDocumentationController
 import uk.gov.hmrc.play.http.{HeaderCarrier, HttpPost}
 
 import scala.concurrent.Future
-
 
 class PlatformIntegrationSpec extends PlaySpec
   with MockitoSugar

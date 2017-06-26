@@ -17,7 +17,6 @@
 package uk.gov.hmrc.models
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.models.{Individual}
 
 
 case class Settlors(individuals: Option[List[Individual]] = None, settlorCompanies: Option[List[SettlorCompany]] = None) {

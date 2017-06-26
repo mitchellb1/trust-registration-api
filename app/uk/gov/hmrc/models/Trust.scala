@@ -19,7 +19,6 @@ package uk.gov.hmrc.models
 import org.joda.time.DateTime
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
-import uk.gov.hmrc.models._
 import uk.gov.hmrc.models.beneficiaries.Beneficiaries
 import uk.gov.hmrc.models.trusttypes.TrustType
 

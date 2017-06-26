@@ -10,7 +10,6 @@ trait MicroService {
   import uk.gov.hmrc._
   import DefaultBuildSettings._
   import TestPhases._
-  import play.sbt.PlayScala
 
   lazy val appDependencies: Seq[ModuleID] = ???
   lazy val plugins: Seq[Plugins] = Seq(play.sbt.PlayScala)

@@ -27,14 +27,14 @@ class TrustDocumentationController @Inject()(errorHandler: HttpErrorHandler)
     with BaseController {
 
   def documentation(version: String, endpointName: String) = {
-    super.at(s"/public/api/trusts/documentation/$version", "Sample-Trusts.xml")
+    super.at(s"/public/api/documentation/$version", "Sample-Trusts.xml")
   }
 
   def definition() = {
-    super.at(s"/public/api/trusts", "definition.json")
+    super.at(s"/public/api", "definition.json")
   }
 
   def raml(version: String, file: String) = {
-    super.at(s"/public/api/trusts/conf/$version", file)
+    super.at(s"/public/api/conf/$version", file)
   }
 }

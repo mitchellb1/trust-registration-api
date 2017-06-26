@@ -25,14 +25,12 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{RequestHeader, Result}
 import play.api.test.Helpers._
 import play.api.test.{FakeHeaders, FakeRequest}
-import uk.gov.hmrc.metrics.ApplicationMetrics
-import uk.gov.hmrc.models.{SuccessResponse, TRN}
-import uk.gov.hmrc.utils.JsonSchemaValidator
-import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.controllers.RegisterTrustSandboxController
-import uk.gov.hmrc.models.Trust
+import uk.gov.hmrc.metrics.ApplicationMetrics
+import uk.gov.hmrc.models.{SuccessResponse, TRN, Trust}
+import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.services.{RegisterTrustService, TrustExistenceService}
-import uk.gov.hmrc.utils.{JsonExamples, ScalaDataExamples}
+import uk.gov.hmrc.utils.{JsonExamples, JsonSchemaValidator, ScalaDataExamples}
 
 import scala.concurrent.Future
 

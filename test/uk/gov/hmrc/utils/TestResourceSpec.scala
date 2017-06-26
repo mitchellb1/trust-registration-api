@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc
+package uk.gov.hmrc.utils
 
-
+import play.api.libs.json.Json
 import uk.gov.hmrc.models.{Individual, Passport}
 import uk.gov.hmrc.play.test.UnitSpec
 

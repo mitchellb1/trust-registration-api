@@ -19,8 +19,8 @@ package uk.gov.hmrc.controllers
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.metrics.ApplicationMetrics
-import uk.gov.hmrc.utils.{JsonSchemaValidator, TrustSchemaValidator}
 import uk.gov.hmrc.services.{RegisterTrustService, TrustExistenceService}
+import uk.gov.hmrc.utils.{JsonSchemaValidator, TrustSchemaValidator}
 
 trait RegisterTrustController extends TrustBaseController {
 

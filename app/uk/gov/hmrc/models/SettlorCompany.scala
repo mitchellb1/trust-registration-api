@@ -17,7 +17,6 @@
 package uk.gov.hmrc.models
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.models.Company
 
 
 case class SettlorCompany (company: Company, typeOfSettlorCompany: String, twoYearTrading: Boolean){

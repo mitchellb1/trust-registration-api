@@ -17,9 +17,9 @@
 package uk.gov.hmrc.models.trusttypes
 
 import play.api.libs.json.Json
+import uk.gov.hmrc.models._
 import uk.gov.hmrc.models.assets.Assets
 import uk.gov.hmrc.models.beneficiaries.Beneficiaries
-import uk.gov.hmrc.models._
 
 
 case class FlatManagementSinkingFundTrust(assets: Assets, beneficiaries: Beneficiaries) extends BaseTrust{

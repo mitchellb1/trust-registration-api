@@ -17,7 +17,6 @@
 package uk.gov.hmrc.models
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.models.{Company, Individual}
 
 
 case class LeadTrustee(individual: Option[Individual] = None, company: Option[Company] = None, telephoneNumber: String, email: String) {

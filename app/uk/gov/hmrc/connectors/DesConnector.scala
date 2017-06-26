@@ -22,10 +22,9 @@ import uk.gov.hmrc.audit.Auditor
 import uk.gov.hmrc.config.WSHttp
 import uk.gov.hmrc.metrics.ApplicationMetrics
 import uk.gov.hmrc.models._
+import uk.gov.hmrc.models.beneficiaries.Beneficiaries
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http._
-import uk.gov.hmrc.models._
-import uk.gov.hmrc.models.beneficiaries.Beneficiaries
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

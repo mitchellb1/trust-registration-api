@@ -18,9 +18,9 @@ package uk.gov.hmrc.models.trusttypes
 
 import org.joda.time.DateTime
 import play.api.libs.json.{Json, Reads}
+import uk.gov.hmrc.models._
 import uk.gov.hmrc.models.assets.Assets
 import uk.gov.hmrc.models.beneficiaries.Beneficiaries
-import uk.gov.hmrc.models._
 
 
 case class EmploymentTrust(assets: Assets,

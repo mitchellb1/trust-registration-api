@@ -17,11 +17,11 @@
 package uk.gov.hmrc.models.beneficiaries
 
 import org.joda.time.DateTime
+import play.api.libs.functional.syntax._
 import play.api.libs.json.Writes.jodaDateWrites
 import play.api.libs.json.{JsPath, Json, Writes}
 import uk.gov.hmrc.models.Individual
 import uk.gov.hmrc.models.Individual.nameWritesToDes
-import play.api.libs.functional.syntax._
 
 
 case class IndividualBeneficiary(individual: Individual,

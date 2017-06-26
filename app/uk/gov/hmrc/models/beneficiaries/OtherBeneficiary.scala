@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.models.beneficiaries
 
+import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Writes}
 import uk.gov.hmrc.models.Address
-import play.api.libs.functional.syntax._
 
 
 case class OtherBeneficiary(beneficiaryDescription: String,

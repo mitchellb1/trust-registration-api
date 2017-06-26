@@ -17,7 +17,6 @@
 package uk.gov.hmrc.models
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.models.{Company, Individual}
 
 case class Protectors(individuals: Option[List[Individual]] = None, companies: Option[List[Company]] = None) {
   val noMoreThanTwoProtectors = (individuals.getOrElse(Nil).size + companies.getOrElse(Nil).size <= 2)

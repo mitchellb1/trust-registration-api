@@ -18,7 +18,6 @@ package uk.gov.hmrc.models
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
-import uk.gov.hmrc.models.{PostCodeMissingForGBAddressException, PostalCodeNotPresentForNonGbAddressException}
 
 case class Address(
                     line1: String,

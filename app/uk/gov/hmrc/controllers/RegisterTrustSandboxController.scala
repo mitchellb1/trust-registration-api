@@ -20,8 +20,8 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.metrics.ApplicationMetrics
 import uk.gov.hmrc.models.TRN
-import uk.gov.hmrc.utils.TrustSchemaValidator
 import uk.gov.hmrc.services.{RegisterTrustService, TrustExistenceService}
+import uk.gov.hmrc.utils.TrustSchemaValidator
 
 import scala.concurrent.Future
 
