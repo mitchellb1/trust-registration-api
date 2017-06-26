@@ -44,4 +44,7 @@ trait BaseTrust {
     beneficiaries.unidentifiedBeneficiaries.map(b => JsArray(b.map(c=>Json.toJson(c)(UnidentifiedBeneficiary.writesToDes))))
   }
 
+  def addLargeTypeBeneficiaries(): Option[JsValue] = {
+    beneficiaries.largeNumbersCompanyBeneficiaries.map(b => JsArray(b.map(c=>Json.toJson(c)(LargeNumbersCompanyBeneficiaries.writesToDes))))
+  }
 }

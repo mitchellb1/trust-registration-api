@@ -16,8 +16,10 @@
 
 package uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries
 
-import play.api.libs.json.Json
-import uk.gov.hmrc.common.rest.resources.core.Company
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Writes}
+import uk.gov.hmrc.common.rest.resources.core.{Address, Company}
+
 
 
 case class LargeNumbersCompanyBeneficiaries(description: String,
@@ -27,4 +29,15 @@ case class LargeNumbersCompanyBeneficiaries(description: String,
 
 object LargeNumbersCompanyBeneficiaries {
   implicit val largeNumbersCompanyBeneficiaryFormats = Json.format[LargeNumbersCompanyBeneficiaries]
+
+  val writesToDes: Writes[LargeNumbersCompanyBeneficiaries] = (
+    (JsPath \ "organisationName").write[String] and
+    (JsPath \ "description").write[String] and
+    (JsPath \ "numberOfBeneficiary").write[String] and
+      (JsPath).write[(Address, Option[String])](Beneficiaries.identificationWritesToDes)
+  )(lc => (lc.company.name,
+    lc.description,
+    lc.numberOfBeneficiaries.toString,
+    (lc.company.correspondenceAddress, lc.company.referenceNumber)))
+
 }

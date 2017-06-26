@@ -17,11 +17,11 @@
 package uk.gov.hmrc.trustapi.mapping
 
 import org.joda.time.DateTime
-import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
+import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 import uk.gov.hmrc.trustapi.rest.resources.core.Trust
 import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries._
-import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.{EmploymentTrust, HeritageMaintenanceFundTrust, TrustType, WillIntestacyTrust}
+import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes.{EmploymentTrust, TrustType, WillIntestacyTrust}
 import uk.gov.hmrc.utils.ScalaDataExamples
 
 class BeneficiaryMapperSpec extends PlaySpec with ScalaDataExamples {
@@ -301,7 +301,49 @@ class BeneficiaryMapperSpec extends PlaySpec with ScalaDataExamples {
 
           (unidentifiedBeneficaryList \ "beneficiaryShareOfIncome").validate[String].isError mustBe true
         }
+      }
 
+      "we have large type beneficiaries" when {
+        val willIntestacyTrustWithLargeBeneficiary =  WillIntestacyTrust(assets,Beneficiaries(largeNumbersCompanyBeneficiaries = Some(List(largeNumbersCompanyBeneficiary))), deceased, false)
+        val domainTrust = trustWithWillIntestacyTrust.copy(trustType = TrustType(willIntestacyTrust = Some(willIntestacyTrustWithLargeBeneficiary)))
+        val json = Json.toJson(domainTrust)(Trust.trustWrites)
+
+        "we have organisationName  details" in {
+          val largeNumberCompanyBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "large") (0)
+          (largeNumberCompanyBeneficaryList \ "organisationName").get.as[String] mustBe domainTrust.trustType.willIntestacyTrust.get.beneficiaries.largeNumbersCompanyBeneficiaries.get.head.company.name
+        }
+
+        "we have a description" in {
+          val largeNumberCompanyBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "large") (0)
+          (largeNumberCompanyBeneficaryList \ "description").get.as[String] mustBe domainTrust.trustType.willIntestacyTrust.get.beneficiaries.largeNumbersCompanyBeneficiaries.get.head.description
+        }
+
+        "we have numberOfBeneficiary details" in {
+          val largeNumberCompanyBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "large") (0)
+          (largeNumberCompanyBeneficaryList \ "numberOfBeneficiary").get.as[String] mustBe String.valueOf(domainTrust.trustType.willIntestacyTrust.get.beneficiaries.largeNumbersCompanyBeneficiaries.get.head.numberOfBeneficiaries)
+        }
+
+        "we have identification details having address details" in {
+          val largeNumberCompanyBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "large")(0)
+
+          (largeNumberCompanyBeneficaryList \ "identification" \ "address" \ "line1").get.as[String] mustBe  domainTrust.trustType.willIntestacyTrust.get.beneficiaries.largeNumbersCompanyBeneficiaries.get.head.company.correspondenceAddress.line1
+        }
+
+        "we have identification details having UTR details" in {
+          val largeNumberCompanyBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "large")(0)
+
+          (largeNumberCompanyBeneficaryList \ "identification" \ "utr").get.as[String] mustBe  domainTrust.trustType.willIntestacyTrust.get.beneficiaries.largeNumbersCompanyBeneficiaries.get.head.company.referenceNumber.get
+        }
+
+        "we have identification details without having a UTR and we have an address" in {
+          val domainTrust = trustWithWillIntestacyTrust.copy(trustType = TrustType(willIntestacyTrust = Some(WillIntestacyTrust(assets,Beneficiaries(largeNumbersCompanyBeneficiaries = Some(List(largeNumbersCompanyBeneficiary.copy(company = company.copy(referenceNumber = None))))), deceased, false))))
+          val json = Json.toJson(domainTrust)(Trust.trustWrites)
+
+          val largeNumberCompanyBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "large")(0)
+
+          (largeNumberCompanyBeneficaryList \ "identification" \ "utr").validate[String].isError mustBe true
+          (largeNumberCompanyBeneficaryList \ "identification" \ "address" \ "line1").get.as[String] mustBe  domainTrust.trustType.willIntestacyTrust.get.beneficiaries.largeNumbersCompanyBeneficiaries.get.head.company.correspondenceAddress.line1
+        }
       }
     }
   }
