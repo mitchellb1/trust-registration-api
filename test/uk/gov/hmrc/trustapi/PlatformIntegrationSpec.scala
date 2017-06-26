@@ -138,7 +138,6 @@ class PlatformIntegrationSpec extends PlaySpec
     }
   }
 
-  //def normalizeEndpointName(endpointName: String): String = endpointName.replaceAll(" ", "-")
 
   def verifyTrustDocumentationPresent(version: String, endpointName: String) {
     withClue(s"Getting documentation version '$version' of endpoint '$endpointName'") {

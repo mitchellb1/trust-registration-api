@@ -16,8 +16,10 @@
 
 package uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsPath, Json, Writes}
 import uk.gov.hmrc.common.rest.resources.core.Address
+import play.api.libs.functional.syntax._
+
 
 case class OtherBeneficiary(beneficiaryDescription: String,
                             correspondenceAddress: Address,
@@ -25,4 +27,12 @@ case class OtherBeneficiary(beneficiaryDescription: String,
 
 object OtherBeneficiary {
   implicit val otherBeneficiaryFormats = Json.format[OtherBeneficiary]
+
+
+  val writesToDes: Writes[OtherBeneficiary] = (
+      (JsPath \ "description").write[String] and
+        (JsPath \ "address").write[Address](Address.writesToDes) and
+        (JsPath \ "numberOfBeneficiary").writeNullable[String] and
+        (JsPath).write[IncomeDistribution](IncomeDistribution.writesToDes)
+    )(o => (o.beneficiaryDescription, o.correspondenceAddress, None, o.incomeDistribution)) //TODO: Mapping property numberOfBeneficiary missing
 }
