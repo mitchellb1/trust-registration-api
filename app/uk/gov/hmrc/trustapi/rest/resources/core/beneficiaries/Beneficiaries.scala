@@ -48,11 +48,13 @@ object Beneficiaries {
       (JsPath \ "trust").writeNullable[JsValue] and
       (JsPath \ "charity").writeNullable[JsValue] and
       (JsPath \ "unidentified").writeNullable[JsValue] and
-      (JsPath \ "large").writeNullable[JsValue]
+      (JsPath \ "large").writeNullable[JsValue] and
+      (JsPath \ "other").writeNullable[JsValue]
     ) (b => (b.selectedTrust.addIndividualBeneficiary(), b.selectedTrust.addCompanyBeneficiaries(), b.selectedTrust.addTrustBeneficiaries(),
     b.selectedTrust.addCharityBeneficiaries(),
     b.selectedTrust.addUnidentifiedBeneficiaries(),
-    b.selectedTrust.addLargeTypeBeneficiaries()))
+    b.selectedTrust.addLargeTypeBeneficiaries(),
+    b.selectedTrust.addOtherBeneficiaries()))
 }
 
 

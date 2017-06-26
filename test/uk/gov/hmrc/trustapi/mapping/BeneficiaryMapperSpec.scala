@@ -365,6 +365,46 @@ class BeneficiaryMapperSpec extends PlaySpec with ScalaDataExamples {
           (largeNumberCompanyBeneficaryList \ "beneficiaryShareOfIncome").validate[String].isError mustBe true
         }
       }
+
+      "we have other beneficiaries" when {
+        val willIntestacyTrustWithOtherBeneficiary =  WillIntestacyTrust(assets,Beneficiaries(otherBeneficiaries = Some(List(otherBeneficiary))), deceased, false)
+        val domainTrust = trustWithWillIntestacyTrust.copy(trustType = TrustType(willIntestacyTrust = Some(willIntestacyTrustWithOtherBeneficiary)))
+        val json = Json.toJson(domainTrust)(Trust.trustWrites)
+
+
+        "we have a description" in {
+          val otherBeneficiaries = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "other") (0)
+          (otherBeneficiaries \ "description").get.as[String] mustBe domainTrust.trustType.willIntestacyTrust.get.beneficiaries.otherBeneficiaries.get.head.beneficiaryDescription
+        }
+        "we have an address" in {
+          val otherBeneficiaries = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "other") (0)
+          (otherBeneficiaries \ "address" \ "line1").get.as[String] mustBe domainTrust.trustType.willIntestacyTrust.get.beneficiaries.otherBeneficiaries.get.head.correspondenceAddress.line1
+        }
+        "we have number of Beneficiaries" in {
+          val numberOfBeneficiaries = "Test" //TODO: Mapping property numberOfBeneficiary missing
+          val otherBeneficiaries = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "other") (0)
+          (otherBeneficiaries \ "numberOfBeneficiary").get.as[String] mustBe numberOfBeneficiaries
+        }
+        "we have beneficiaryDiscretion flag " in {
+          val otherBeneficiaries = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "other")(0)
+          (otherBeneficiaries \ "beneficiaryDiscretion").get.as[Boolean] mustBe domainTrust.trustType.willIntestacyTrust.get.beneficiaries.otherBeneficiaries.get.head.incomeDistribution.isIncomeAtTrusteeDiscretion
+        }
+        "we have beneficiaryShareOfIncome details " in {
+          val otherBeneficiaries = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "other")(0)
+          (otherBeneficiaries \ "beneficiaryShareOfIncome").get.as[String] mustBe String.valueOf(domainTrust.trustType.willIntestacyTrust.get.beneficiaries.otherBeneficiaries.get.head.incomeDistribution.shareOfIncome.get)
+        }
+
+        "we have no beneficiaryShareOfIncome " in {
+          val otherBeneficiaryWithoutShareOfIncome = otherBeneficiary.copy(incomeDistribution = incomeDistribution.copy(shareOfIncome = None, isIncomeAtTrusteeDiscretion = true))
+          val willIntestacyTrustWithOtherBeneficiary = Some(WillIntestacyTrust(assets,Beneficiaries(otherBeneficiaries = Some(List(otherBeneficiaryWithoutShareOfIncome))),deceased,true))
+          val domainTrust = trustWithWillIntestacyTrust.copy(trustType = TrustType(willIntestacyTrust=willIntestacyTrustWithOtherBeneficiary))
+          val json = Json.toJson(domainTrust)(Trust.trustWrites)
+          val largeNumberCompanyBeneficaryList = (json \ "details" \ "trust" \ "entities" \ "beneficiary" \ "other") (0)
+
+          (largeNumberCompanyBeneficaryList \ "beneficiaryShareOfIncome").validate[String].isError mustBe true
+        }
+
+      }
     }
   }
 }
