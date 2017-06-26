@@ -49,5 +49,4 @@ class DeceasedSpec extends PlaySpec with JsonExamples {
       }
     }
   }
-
 }

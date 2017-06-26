@@ -34,15 +34,6 @@ class RegisterInServiceLocatorSpec extends UnitSpec with MockitoSugar with OneAp
   }
 
   "onStart" should {
-    /*
-    "register the microservice in service locator when registration is enabled" in new Setup {
-      override val registrationEnabled: Boolean = true
-
-      when(mockConnector.register(any())).thenReturn(Future.successful(true))
-      verify(mockConnector).register(any())
-    }
-    */
-
     "not register the microservice in service locator when registration is disabled" in new Setup {
       override val registrationEnabled: Boolean = false
       verify(mockConnector,never()).register(any())
