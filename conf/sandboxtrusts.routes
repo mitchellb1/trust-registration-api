@@ -1,3 +1,0 @@
-POST       /                         uk.gov.hmrc.trustapi.rest.controllers.RegisterTrustSandboxController.register()
-PUT        /:identifier/no-change   uk.gov.hmrc.trustapi.rest.controllers.RegisterTrustSandboxController.noChange(identifier: String)
-PUT        /:identifier/close       uk.gov.hmrc.trustapi.rest.controllers.RegisterTrustSandboxController.closeTrust(identifier: String)

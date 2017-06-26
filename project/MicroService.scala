@@ -28,8 +28,8 @@ trait MicroService {
       "estates.*",
       "app",
       "testOnlyDoNotUseInAppConf.*",
-      "uk.gov.hmrc.common.config",
-      "uk.gov.hmrc.common.metrics",
+      "uk.gov.hmrc.config",
+      "uk.gov.hmrc.metrics",
       "uk.gov.hmrc.BuildInfo")
 
     Seq(

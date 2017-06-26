@@ -20,8 +20,8 @@ import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.OneAppPerSuite
-import uk.gov.hmrc.common.config.ServiceLocatorRegistration
-import uk.gov.hmrc.common.connectors.ServiceLocatorConnector
+import uk.gov.hmrc.config.ServiceLocatorRegistration
+import uk.gov.hmrc.connectors.ServiceLocatorConnector
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 
