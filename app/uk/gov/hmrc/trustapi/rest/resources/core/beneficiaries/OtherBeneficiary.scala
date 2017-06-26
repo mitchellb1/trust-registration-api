@@ -34,5 +34,5 @@ object OtherBeneficiary {
         (JsPath \ "address").write[Address](Address.writesToDes) and
         (JsPath \ "numberOfBeneficiary").writeNullable[String] and
         (JsPath).write[IncomeDistribution](IncomeDistribution.writesToDes)
-    )(o => (o.beneficiaryDescription, o.correspondenceAddress, Some("Test"), o.incomeDistribution)) //TODO: Mapping property numberOfBeneficiary missing
+    )(o => (o.beneficiaryDescription, o.correspondenceAddress, None, o.incomeDistribution)) //TODO: Mapping property numberOfBeneficiary missing
 }
