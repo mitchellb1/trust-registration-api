@@ -17,12 +17,10 @@
 package uk.gov.hmrc.utils
 
 import org.joda.time.DateTime
-import uk.gov.hmrc.common.rest.resources.core._
-import uk.gov.hmrc.estateapi.rest.resources.core.{Estate, PersonalRepresentative}
-import uk.gov.hmrc.trustapi.rest.resources.core._
-import uk.gov.hmrc.trustapi.rest.resources.core.assets._
-import uk.gov.hmrc.trustapi.rest.resources.core.beneficiaries.{UnidentifiedBeneficiary, _}
-import uk.gov.hmrc.trustapi.rest.resources.core.trusttypes._
+import uk.gov.hmrc.models._
+import uk.gov.hmrc.models.assets._
+import uk.gov.hmrc.models.beneficiaries.{UnidentifiedBeneficiary, _}
+import uk.gov.hmrc.models.trusttypes._
 
 
 trait ScalaDataExamples {
@@ -97,8 +95,6 @@ trait ScalaDataExamples {
     email = "test@test.com"
   )
 
-  val personalRepresentative = PersonalRepresentative(individual,"01913651234","test@test.com")
-
   val declaration = Declaration(correspondenceAddress = address,
     confirmation = true,
     givenName = "george",
@@ -107,17 +103,6 @@ trait ScalaDataExamples {
     otherName = Some("joe"))
 
   val yearsOfTaxConsequence: Option[YearsOfTaxConsequence] = Some(YearsOfTaxConsequence(Some(false), Some(List(YearReturn("15",true),YearReturn("16",false),YearReturn("17",true)))))
-
-  val validEstateWithPersonalRepresentative = Estate(estateName = "Test Estate",
-    correspondenceAddress = address,
-    personalRepresentative = personalRepresentative,
-    adminPeriodFinishedDate = Some(new DateTime("1900-01-01")),
-    reasonEstateSetup = "incomeTaxDueMoreThan10000",
-    declaration = declaration,
-    deceased = deceased,
-    telephoneNumber = "0191 365 1234",
-    yearsOfTaxConsequence = yearsOfTaxConsequence,
-    utr = Some("1234567890"))
 
   val incomeDistribution = IncomeDistribution(
     isIncomeAtTrusteeDiscretion = false,

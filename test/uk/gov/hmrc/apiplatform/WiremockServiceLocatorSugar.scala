@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.utils
+package uk.gov.hmrc.apiplatform
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration._
 import play.api.libs.json.Json
-import uk.gov.hmrc.common.rest.resources.core.TrustApiServiceRegistration
+import uk.gov.hmrc.models.TrustApiServiceRegistration
 
 
 trait WiremockServiceLocatorSugar {

@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.utils
+package uk.gov.hmrc.utils
 
 import com.fasterxml.jackson.databind.JsonNode
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.libs.json.Json
-import uk.gov.hmrc.common.utils._
-import uk.gov.hmrc.estateapi.rest.resources.core.EstateRequest
-import uk.gov.hmrc.trustapi.rest.resources.core.TrustRequest
-import uk.gov.hmrc.utils.{ScalaDataExamples, SchemaValidationExamples}
+import uk.gov.hmrc.models.TrustRequest
 
 class SchemaValidatorSpec extends PlaySpec
     with OneAppPerSuite
@@ -35,17 +32,6 @@ class SchemaValidatorSpec extends PlaySpec
       "we have a non required field missing" in {
         val jsonTrust = Json.toJson(TrustRequest(trustWithInterVivoTrustDOV)).toString()
         val result = TrustSchemaValidator.validateAgainstSchema(jsonTrust)
-
-        result mustBe SuccessfulValidation
-      }
-    }
-  }
-
-  "EstatesSchemaValidator" must {
-    "read the schema and return a SuccessfulValidation for a valid json estate" when {
-      "we have a non required field missing" in {
-        val jsonEstate = Json.toJson(EstateRequest(validEstateWithPersonalRepresentative)).toString()
-        val result = EstateSchemaValidator.validateAgainstSchema(jsonEstate)
 
         result mustBe SuccessfulValidation
       }
