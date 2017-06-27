@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.controllers
+package uk.gov.hmrc.controllers
 
 
 import org.joda.time.DateTime
@@ -32,7 +32,7 @@ import uk.gov.hmrc.metrics.ApplicationMetrics
 import uk.gov.hmrc.models._
 import uk.gov.hmrc.models.beneficiaries.Beneficiaries
 import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.services.{RegisterTrustService, TrustExistenceService}
+import uk.gov.hmrc.services.{RegisterTrustService, RegisterTrustServiceMocks, TrustExistenceService}
 import uk.gov.hmrc.utils._
 
 import scala.concurrent.Future

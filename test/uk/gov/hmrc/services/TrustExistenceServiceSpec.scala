@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.estateapi.rest.controllers.services
+package uk.gov.hmrc.services
 
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -22,7 +22,6 @@ import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import uk.gov.hmrc.connectors.DesConnector
 import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.services.TrustExistenceService
 import uk.gov.hmrc.utils.ScalaDataExamples
 
 import scala.concurrent.duration.Duration

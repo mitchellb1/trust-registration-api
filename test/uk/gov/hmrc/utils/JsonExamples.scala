@@ -49,14 +49,6 @@ trait JsonExamples {
     .mkString
     .replace("\"{ADDRESS}\"", validAddressJson)
 
-  lazy val invalidEstateJson = Source.fromFile(getClass.getResource("/InvalidEstate.json").getPath).mkString
-    .replace("\"{INDIVIDUAL}\"", validIndividualJson)
-
-  lazy val validEstateWithPersonalRepresentativeJson = Source.fromFile(getClass.getResource("/ValidEstateWithPersonalRepresentative.json").getPath).mkString
-    .replace("\"{INDIVIDUAL}\"", validIndividualJson)
-    .replace("\"{DECLARATION}\"", validDeclarationJson)
-
-
   lazy val validLeadTrusteeIndividualJson = s"""{"individual":$validIndividualJson,"company":null,"telephoneNumber":"1234567890","email":"test@test.com"}"""
   lazy val validLeadTrusteeCompanyJson = s"""{"individual":null,"company":$validCompanyJson,"telephoneNumber":"1234567890","email":"test@test.com"}"""
 

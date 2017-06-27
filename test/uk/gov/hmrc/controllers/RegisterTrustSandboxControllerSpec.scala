@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.controllers
+package uk.gov.hmrc.controllers
 
 import org.mockito.Matchers._
 import org.mockito.Mockito._
@@ -25,11 +25,10 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{RequestHeader, Result}
 import play.api.test.Helpers._
 import play.api.test.{FakeHeaders, FakeRequest}
-import uk.gov.hmrc.controllers.RegisterTrustSandboxController
 import uk.gov.hmrc.metrics.ApplicationMetrics
 import uk.gov.hmrc.models.{SuccessResponse, TRN, Trust}
 import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.services.{RegisterTrustService, TrustExistenceService}
+import uk.gov.hmrc.services.{RegisterTrustService, RegisterTrustServiceMocks, TrustExistenceService}
 import uk.gov.hmrc.utils.{JsonExamples, JsonSchemaValidator, ScalaDataExamples}
 
 import scala.concurrent.Future

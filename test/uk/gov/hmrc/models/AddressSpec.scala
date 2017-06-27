@@ -24,7 +24,7 @@ class  AddressSpec extends PlaySpec with JsonExamples with ScalaDataExamples {
 
   val addressGb = """{"addressGB": {"line1": "123 Easy Street", "postalCode": "AB1 1AB", "countryCode":"GB"}}"""
   val addressNonGb = """{"addressNonGB": {"line1": "123 Easy Street", "countryCode":"ES"}}"""
-  val addressLegacy = """{"line1": "123 Easy Street", "countryCode":"ES"}""" // TODO: Take this out once we've ported over to new address style
+  val addressLegacy = """{"line1": "123 Easy Street", "countryCode":"ES"}"""
 
   "Address" must {
     "serialize from Json" when {

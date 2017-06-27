@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.trustregistration.controllers
+package uk.gov.hmrc.services
 
 import org.mockito.Matchers._
 import org.mockito.Mockito._
@@ -25,7 +25,6 @@ import play.api.test.Helpers._
 import play.api.test.{FakeHeaders, FakeRequest}
 import uk.gov.hmrc.metrics.ApplicationMetrics
 import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.services.{RegisterTrustService, TrustExistenceService}
 
 
 trait RegisterTrustServiceMocks extends MockitoSugar {

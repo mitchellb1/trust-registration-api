@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package unit.config
+package uk.gov.hmrc.apiplatform
 
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.Application
+import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.config.ServiceLocatorRegistration
 import uk.gov.hmrc.connectors.ServiceLocatorConnector
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
-import play.api.inject.guice.GuiceApplicationBuilder
 
 import scala.concurrent.Future
 
